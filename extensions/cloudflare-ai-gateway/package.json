@@ -1,0 +1,12 @@
+{
+  "name": "@civitas/cloudflare-ai-gateway-provider",
+  "version": "2026.4.4",
+  "private": true,
+  "description": "OpenClaw Cloudflare AI Gateway provider plugin",
+  "type": "module",
+  "civitas": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}

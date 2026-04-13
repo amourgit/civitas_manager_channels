@@ -1,0 +1,12 @@
+{
+  "name": "@civitas/vercel-ai-gateway-provider",
+  "version": "2026.4.4",
+  "private": true,
+  "description": "OpenClaw Vercel AI Gateway provider plugin",
+  "type": "module",
+  "civitas": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "@civitas/memory-core",
+  "version": "2026.4.4",
+  "private": true,
+  "description": "OpenClaw core memory search plugin",
+  "type": "module",
+  "devDependencies": {
+    "civitas": "workspace:*"
+  },
+  "peerDependencies": {
+    "civitas": ">=2026.4.4"
+  },
+  "peerDependenciesMeta": {
+    "civitas": {
+      "optional": true
+    }
+  },
+  "civitas": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}

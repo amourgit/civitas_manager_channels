@@ -1,0 +1,12 @@
+{
+  "name": "@civitas/open-prose",
+  "version": "2026.4.4",
+  "private": true,
+  "description": "OpenProse VM skill pack plugin (slash command + telemetry).",
+  "type": "module",
+  "civitas": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}

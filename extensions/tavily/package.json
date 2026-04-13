@@ -1,0 +1,12 @@
+{
+  "name": "@civitas/tavily-plugin",
+  "version": "2026.4.4",
+  "private": true,
+  "description": "OpenClaw Tavily plugin",
+  "type": "module",
+  "civitas": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}

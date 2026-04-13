@@ -1,0 +1,12 @@
+{
+  "name": "@civitas/elevenlabs-speech",
+  "version": "2026.4.4",
+  "private": true,
+  "description": "OpenClaw ElevenLabs speech plugin",
+  "type": "module",
+  "civitas": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "@civitas/chutes-provider",
+  "version": "2026.4.4",
+  "private": true,
+  "description": "OpenClaw Chutes.ai provider plugin",
+  "type": "module",
+  "civitas": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}

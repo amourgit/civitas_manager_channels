@@ -1,0 +1,12 @@
+{
+  "name": "@civitas/byteplus-provider",
+  "version": "2026.4.4",
+  "private": true,
+  "description": "OpenClaw BytePlus provider plugin",
+  "type": "module",
+  "civitas": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}

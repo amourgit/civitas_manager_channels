@@ -1,0 +1,12 @@
+{
+  "name": "@civitas/microsoft-foundry",
+  "version": "2026.4.4",
+  "private": true,
+  "description": "OpenClaw Microsoft Foundry provider plugin",
+  "type": "module",
+  "civitas": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}

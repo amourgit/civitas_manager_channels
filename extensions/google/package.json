@@ -1,0 +1,12 @@
+{
+  "name": "@civitas/google-plugin",
+  "version": "2026.4.4",
+  "private": true,
+  "description": "OpenClaw Google plugin",
+  "type": "module",
+  "civitas": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "name": "@civitas/bluebubbles",
+  "version": "2026.4.4",
+  "description": "OpenClaw BlueBubbles channel plugin",
+  "type": "module",
+  "devDependencies": {
+    "civitas": "workspace:*"
+  },
+  "peerDependencies": {
+    "civitas": ">=2026.4.4"
+  },
+  "peerDependenciesMeta": {
+    "civitas": {
+      "optional": true
+    }
+  },
+  "civitas": {
+    "extensions": [
+      "./index.ts"
+    ],
+    "setupEntry": "./setup-entry.ts",
+    "channel": {
+      "id": "bluebubbles",
+      "label": "BlueBubbles",
+      "selectionLabel": "BlueBubbles (macOS app)",
+      "detailLabel": "BlueBubbles",
+      "docsPath": "/channels/bluebubbles",
+      "docsLabel": "bluebubbles",
+      "blurb": "iMessage via the BlueBubbles mac app + REST API.",
+      "aliases": [
+        "bb"
+      ],
+      "preferOver": [
+        "imessage"
+      ],
+      "systemImage": "bubble.left.and.text.bubble.right",
+      "order": 75
+    },
+    "install": {
+      "npmSpec": "@civitas/bluebubbles",
+      "defaultChoice": "npm",
+      "minHostVersion": ">=2026.4.4"
+    },
+    "compat": {
+      "pluginApi": ">=2026.4.4"
+    },
+    "build": {
+      "civitasVersion": "2026.4.4"
+    },
+    "release": {
+      "publishToClawHub": true,
+      "publishToNpm": true
+    }
+  }
+}

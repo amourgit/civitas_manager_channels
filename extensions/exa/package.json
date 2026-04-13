@@ -1,0 +1,12 @@
+{
+  "name": "@civitas/exa-plugin",
+  "version": "2026.4.4",
+  "private": true,
+  "description": "OpenClaw Exa plugin",
+  "type": "module",
+  "civitas": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}
