@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import type { MessageEvent, PostbackEvent } from "@line/bot-sdk";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { getSessionBindingService } from "civitas/plugin-sdk/conversation-runtime";
 import { __testing as sessionBindingTesting } from "civitas/plugin-sdk/conversation-runtime";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
@@ -14,12 +14,12 @@ import { buildLineMessageContext, buildLinePostbackContext } from "./bot-message
 import { linePlugin } from "./channel.js";
 import type { ResolvedLineAccount } from "./types.js";
 
-type AgentBinding = NonNullable<OpenClawConfig["bindings"]>[number];
+type AgentBinding = NonNullable<CIVITASConfig["bindings"]>[number];
 
 describe("buildLineMessageContext", () => {
   let tmpDir: string;
   let storePath: string;
-  let cfg: OpenClawConfig;
+  let cfg: CIVITASConfig;
   const account: ResolvedLineAccount = {
     accountId: "default",
     enabled: true,
@@ -243,7 +243,7 @@ describe("buildLineMessageContext", () => {
 
   it("group peer binding matches raw groupId without prefix (#21907)", async () => {
     const groupId = "Cc7e3bece1234567890abcdef"; // pragma: allowlist secret
-    const bindingCfg: OpenClawConfig = {
+    const bindingCfg: CIVITASConfig = {
       session: { store: storePath },
       agents: {
         list: [{ id: "main" }, { id: "line-group-agent" }],
@@ -281,7 +281,7 @@ describe("buildLineMessageContext", () => {
 
   it("room peer binding matches raw roomId without prefix (#21907)", async () => {
     const roomId = "Rr1234567890abcdef";
-    const bindingCfg: OpenClawConfig = {
+    const bindingCfg: CIVITASConfig = {
       session: { store: storePath },
       agents: {
         list: [{ id: "main" }, { id: "line-room-agent" }],

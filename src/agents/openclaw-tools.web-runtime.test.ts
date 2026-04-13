@@ -1,5 +1,5 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import type {
   RuntimeWebFetchMetadata,
   RuntimeWebSearchMetadata,
@@ -83,15 +83,15 @@ vi.mock("./tools/tts-tool.js", () => ({
   createTtsTool: mockToolFactory("tts_stub"),
 }));
 
-function asConfig(value: unknown): OpenClawConfig {
-  return value as OpenClawConfig;
+function asConfig(value: unknown): CIVITASConfig {
+  return value as CIVITASConfig;
 }
 
 let secretsRuntime: typeof import("../secrets/runtime.js");
 let createWebSearchTool: typeof import("./tools/web-tools.js").createWebSearchTool;
 let createWebFetchTool: typeof import("./tools/web-tools.js").createWebFetchTool;
 
-function requireWebSearchTool(config: OpenClawConfig, runtimeWebSearch?: RuntimeWebSearchMetadata) {
+function requireWebSearchTool(config: CIVITASConfig, runtimeWebSearch?: RuntimeWebSearchMetadata) {
   const tool = createWebSearchTool({
     config,
     sandboxed: true,
@@ -104,7 +104,7 @@ function requireWebSearchTool(config: OpenClawConfig, runtimeWebSearch?: Runtime
   return tool;
 }
 
-function requireWebFetchTool(config: OpenClawConfig, runtimeWebFetch?: RuntimeWebFetchMetadata) {
+function requireWebFetchTool(config: CIVITASConfig, runtimeWebFetch?: RuntimeWebFetchMetadata) {
   const tool = createWebFetchTool({
     config,
     sandboxed: true,
@@ -123,7 +123,7 @@ function makeHeaders(map: Record<string, string>): { get: (key: string) => strin
   };
 }
 
-async function prepareAndActivate(params: { config: OpenClawConfig; env?: NodeJS.ProcessEnv }) {
+async function prepareAndActivate(params: { config: CIVITASConfig; env?: NodeJS.ProcessEnv }) {
   const snapshot = await secretsRuntime.prepareSecretsRuntimeSnapshot({
     config: params.config,
     env: params.env,

@@ -2,7 +2,7 @@ import type {
   ChannelDoctorConfigMutation,
   ChannelDoctorLegacyConfigRule,
 } from "civitas/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import {
   formatSlackStreamingBooleanMigrationMessage,
   formatSlackStreamModeMigrationMessage,
@@ -107,7 +107,7 @@ export const legacyConfigRules: ChannelDoctorLegacyConfigRule[] = [
 export function normalizeCompatibilityConfig({
   cfg,
 }: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
 }): ChannelDoctorConfigMutation {
   const rawEntry = asObjectRecord((cfg.channels as Record<string, unknown> | undefined)?.slack);
   if (!rawEntry) {
@@ -159,8 +159,8 @@ export function normalizeCompatibilityConfig({
       ...cfg,
       channels: {
         ...cfg.channels,
-        slack: updated as unknown as NonNullable<OpenClawConfig["channels"]>["slack"],
-      } as OpenClawConfig["channels"],
+        slack: updated as unknown as NonNullable<CIVITASConfig["channels"]>["slack"],
+      } as CIVITASConfig["channels"],
     },
     changes,
   };

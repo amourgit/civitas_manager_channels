@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { RuntimeEnv } from "civitas/plugin-sdk/runtime-env";
 import { WEBHOOK_IN_FLIGHT_DEFAULTS } from "civitas/plugin-sdk/webhook-request-guards";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -127,7 +127,7 @@ describe("monitorLineProvider lifecycle", () => {
     const task = monitorLineProvider({
       channelAccessToken: "token",
       channelSecret: "secret", // pragma: allowlist secret
-      config: {} as OpenClawConfig,
+      config: {} as CIVITASConfig,
       runtime: {} as RuntimeEnv,
       abortSignal: abort.signal,
     }).then((monitor) => {
@@ -153,7 +153,7 @@ describe("monitorLineProvider lifecycle", () => {
     await monitorLineProvider({
       channelAccessToken: "token",
       channelSecret: "secret", // pragma: allowlist secret
-      config: {} as OpenClawConfig,
+      config: {} as CIVITASConfig,
       runtime: {} as RuntimeEnv,
       abortSignal: abort.signal,
     });
@@ -165,7 +165,7 @@ describe("monitorLineProvider lifecycle", () => {
     const monitor = await monitorLineProvider({
       channelAccessToken: "token",
       channelSecret: "secret", // pragma: allowlist secret
-      config: {} as OpenClawConfig,
+      config: {} as CIVITASConfig,
       runtime: {} as RuntimeEnv,
     });
 
@@ -191,7 +191,7 @@ describe("monitorLineProvider lifecycle", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
       runtime: {} as RuntimeEnv,
     });
 
@@ -229,7 +229,7 @@ describe("monitorLineProvider lifecycle", () => {
     const monitor = await monitorLineProvider({
       channelAccessToken: "token",
       channelSecret: "secret", // pragma: allowlist secret
-      config: {} as OpenClawConfig,
+      config: {} as CIVITASConfig,
       runtime: {} as RuntimeEnv,
     });
 

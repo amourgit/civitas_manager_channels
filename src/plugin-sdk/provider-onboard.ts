@@ -4,7 +4,7 @@
 import { DEFAULT_PROVIDER } from "../agents/defaults.js";
 import { resolveStaticAllowlistModelKey } from "../agents/model-ref-shared.js";
 import { findNormalizedProviderKey } from "../agents/provider-id.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import type { AgentModelEntryConfig } from "../config/types.agent-defaults.js";
 import type {
   ModelApi,
@@ -12,7 +12,7 @@ import type {
   ModelProviderConfig,
 } from "../config/types.models.js";
 
-export type { OpenClawConfig, ModelApi, ModelDefinitionConfig, ModelProviderConfig };
+export type { CIVITASConfig, ModelApi, ModelDefinitionConfig, ModelProviderConfig };
 export {
   resolveAgentModelFallbackValues,
   resolveAgentModelPrimaryValue,
@@ -26,8 +26,8 @@ export type AgentModelAliasEntry =
     };
 
 export type ProviderOnboardPresetAppliers<TArgs extends unknown[]> = {
-  applyProviderConfig: (cfg: OpenClawConfig, ...args: TArgs) => OpenClawConfig;
-  applyConfig: (cfg: OpenClawConfig, ...args: TArgs) => OpenClawConfig;
+  applyProviderConfig: (cfg: CIVITASConfig, ...args: TArgs) => CIVITASConfig;
+  applyConfig: (cfg: CIVITASConfig, ...args: TArgs) => CIVITASConfig;
 };
 
 function extractAgentDefaultModelFallbacks(model: unknown): string[] | undefined {
@@ -58,7 +58,7 @@ type ProviderModelMergeState = {
 };
 
 function resolveProviderModelMergeState(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   providerId: string,
 ): ProviderModelMergeState {
   const providers = { ...cfg.models?.providers } as Record<string, ModelProviderConfig>;
@@ -98,7 +98,7 @@ function buildProviderConfig(params: {
 }
 
 function applyProviderConfigWithMergedModels(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   params: {
     agentModels: Record<string, AgentModelEntryConfig>;
     providerId: string;
@@ -108,7 +108,7 @@ function applyProviderConfigWithMergedModels(
     mergedModels: ModelDefinitionConfig[];
     fallbackModels: ModelDefinitionConfig[];
   },
-): OpenClawConfig {
+): CIVITASConfig {
   params.providerState.providers[params.providerId] = buildProviderConfig({
     existingProvider: params.providerState.existingProvider,
     api: params.api,
@@ -129,10 +129,10 @@ function createProviderPresetAppliers<
   },
 >(params: {
   resolveParams: (
-    cfg: OpenClawConfig,
+    cfg: CIVITASConfig,
     ...args: TArgs
   ) => Omit<TParams, "primaryModelRef"> | null | undefined;
-  applyPreset: (cfg: OpenClawConfig, preset: TParams) => OpenClawConfig;
+  applyPreset: (cfg: CIVITASConfig, preset: TParams) => CIVITASConfig;
   primaryModelRef: string;
 }): ProviderOnboardPresetAppliers<TArgs> {
   return {
@@ -169,12 +169,12 @@ export function withAgentModelAliases(
 }
 
 export function applyOnboardAuthAgentModelsAndProviders(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   params: {
     agentModels: Record<string, AgentModelEntryConfig>;
     providers: Record<string, ModelProviderConfig>;
   },
-): OpenClawConfig {
+): CIVITASConfig {
   return {
     ...cfg,
     agents: {
@@ -192,9 +192,9 @@ export function applyOnboardAuthAgentModelsAndProviders(
 }
 
 export function applyAgentDefaultModelPrimary(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   primary: string,
-): OpenClawConfig {
+): CIVITASConfig {
   const existingFallbacks = extractAgentDefaultModelFallbacks(cfg.agents?.defaults?.model);
   return {
     ...cfg,
@@ -212,7 +212,7 @@ export function applyAgentDefaultModelPrimary(
 }
 
 export function applyProviderConfigWithDefaultModels(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   params: {
     agentModels: Record<string, AgentModelEntryConfig>;
     providerId: string;
@@ -221,7 +221,7 @@ export function applyProviderConfigWithDefaultModels(
     defaultModels: ModelDefinitionConfig[];
     defaultModelId?: string;
   },
-): OpenClawConfig {
+): CIVITASConfig {
   const providerState = resolveProviderModelMergeState(cfg, params.providerId);
   const defaultModels = params.defaultModels;
   const defaultModelId = params.defaultModelId ?? defaultModels[0]?.id;
@@ -246,7 +246,7 @@ export function applyProviderConfigWithDefaultModels(
 }
 
 export function applyProviderConfigWithDefaultModel(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   params: {
     agentModels: Record<string, AgentModelEntryConfig>;
     providerId: string;
@@ -255,7 +255,7 @@ export function applyProviderConfigWithDefaultModel(
     defaultModel: ModelDefinitionConfig;
     defaultModelId?: string;
   },
-): OpenClawConfig {
+): CIVITASConfig {
   return applyProviderConfigWithDefaultModels(cfg, {
     agentModels: params.agentModels,
     providerId: params.providerId,
@@ -267,7 +267,7 @@ export function applyProviderConfigWithDefaultModel(
 }
 
 export function applyProviderConfigWithDefaultModelPreset(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   params: {
     providerId: string;
     api: ModelApi;
@@ -277,7 +277,7 @@ export function applyProviderConfigWithDefaultModelPreset(
     aliases?: readonly AgentModelAliasEntry[];
     primaryModelRef?: string;
   },
-): OpenClawConfig {
+): CIVITASConfig {
   const next = applyProviderConfigWithDefaultModel(cfg, {
     agentModels: withAgentModelAliases(cfg.agents?.defaults?.models, params.aliases ?? []),
     providerId: params.providerId,
@@ -293,7 +293,7 @@ export function applyProviderConfigWithDefaultModelPreset(
 
 export function createDefaultModelPresetAppliers<TArgs extends unknown[]>(params: {
   resolveParams: (
-    cfg: OpenClawConfig,
+    cfg: CIVITASConfig,
     ...args: TArgs
   ) =>
     | Omit<Parameters<typeof applyProviderConfigWithDefaultModelPreset>[1], "primaryModelRef">
@@ -309,7 +309,7 @@ export function createDefaultModelPresetAppliers<TArgs extends unknown[]>(params
 }
 
 export function applyProviderConfigWithDefaultModelsPreset(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   params: {
     providerId: string;
     api: ModelApi;
@@ -319,7 +319,7 @@ export function applyProviderConfigWithDefaultModelsPreset(
     aliases?: readonly AgentModelAliasEntry[];
     primaryModelRef?: string;
   },
-): OpenClawConfig {
+): CIVITASConfig {
   const next = applyProviderConfigWithDefaultModels(cfg, {
     agentModels: withAgentModelAliases(cfg.agents?.defaults?.models, params.aliases ?? []),
     providerId: params.providerId,
@@ -335,7 +335,7 @@ export function applyProviderConfigWithDefaultModelsPreset(
 
 export function createDefaultModelsPresetAppliers<TArgs extends unknown[]>(params: {
   resolveParams: (
-    cfg: OpenClawConfig,
+    cfg: CIVITASConfig,
     ...args: TArgs
   ) =>
     | Omit<Parameters<typeof applyProviderConfigWithDefaultModelsPreset>[1], "primaryModelRef">
@@ -351,7 +351,7 @@ export function createDefaultModelsPresetAppliers<TArgs extends unknown[]>(param
 }
 
 export function applyProviderConfigWithModelCatalog(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   params: {
     agentModels: Record<string, AgentModelEntryConfig>;
     providerId: string;
@@ -359,7 +359,7 @@ export function applyProviderConfigWithModelCatalog(
     baseUrl: string;
     catalogModels: ModelDefinitionConfig[];
   },
-): OpenClawConfig {
+): CIVITASConfig {
   const providerState = resolveProviderModelMergeState(cfg, params.providerId);
   const catalogModels = params.catalogModels;
   const mergedModels =
@@ -383,7 +383,7 @@ export function applyProviderConfigWithModelCatalog(
 }
 
 export function applyProviderConfigWithModelCatalogPreset(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   params: {
     providerId: string;
     api: ModelApi;
@@ -392,7 +392,7 @@ export function applyProviderConfigWithModelCatalogPreset(
     aliases?: readonly AgentModelAliasEntry[];
     primaryModelRef?: string;
   },
-): OpenClawConfig {
+): CIVITASConfig {
   const next = applyProviderConfigWithModelCatalog(cfg, {
     agentModels: withAgentModelAliases(cfg.agents?.defaults?.models, params.aliases ?? []),
     providerId: params.providerId,
@@ -407,7 +407,7 @@ export function applyProviderConfigWithModelCatalogPreset(
 
 export function createModelCatalogPresetAppliers<TArgs extends unknown[]>(params: {
   resolveParams: (
-    cfg: OpenClawConfig,
+    cfg: CIVITASConfig,
     ...args: TArgs
   ) =>
     | Omit<Parameters<typeof applyProviderConfigWithModelCatalogPreset>[1], "primaryModelRef">
@@ -423,10 +423,10 @@ export function createModelCatalogPresetAppliers<TArgs extends unknown[]>(params
 }
 
 export function ensureModelAllowlistEntry(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   modelRef: string;
   defaultProvider?: string;
-}): OpenClawConfig {
+}): CIVITASConfig {
   const rawModelRef = params.modelRef.trim();
   if (!rawModelRef) {
     return params.cfg;

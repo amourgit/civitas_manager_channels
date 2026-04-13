@@ -2,7 +2,7 @@
   "name": "@civitas/fal-provider",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw fal provider plugin",
+  "description": "CIVITAS fal provider plugin",
   "type": "module",
   "civitas": {
     "extensions": [

@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import * as conversationRuntime from "civitas/plugin-sdk/conversation-runtime";
 import type { ResolvedAgentRoute } from "civitas/plugin-sdk/routing";
 import {
@@ -26,7 +26,7 @@ export type DiscordNativeInteractionRouteState = {
 };
 
 export async function resolveDiscordNativeInteractionRouteState(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
   guildId?: string;
   memberRoleIds?: string[];

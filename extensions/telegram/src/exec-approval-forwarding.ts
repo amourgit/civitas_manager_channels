@@ -3,13 +3,13 @@ import {
   resolveExecApprovalRequestAllowedDecisions,
   resolveExecApprovalCommandDisplay,
 } from "civitas/plugin-sdk/approval-reply-runtime";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { ExecApprovalRequest } from "civitas/plugin-sdk/infra-runtime";
 import { normalizeMessageChannel } from "civitas/plugin-sdk/routing";
 import { isTelegramExecApprovalClientEnabled } from "./exec-approvals.js";
 
 export function shouldSuppressTelegramExecApprovalForwardingFallback(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   target: { channel: string; accountId?: string | null };
   request: ExecApprovalRequest;
 }): boolean {

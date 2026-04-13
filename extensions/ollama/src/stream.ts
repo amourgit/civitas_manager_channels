@@ -10,7 +10,7 @@ import type {
 } from "@mariozechner/pi-ai";
 import { createAssistantMessageEventStream, streamSimple } from "@mariozechner/pi-ai";
 import type {
-  OpenClawConfig,
+  CIVITASConfig,
   ProviderRuntimeModel,
   ProviderWrapStreamFnContext,
 } from "civitas/plugin-sdk/plugin-entry";
@@ -51,7 +51,7 @@ export function resolveOllamaBaseUrlForRun(params: {
 }
 
 function resolveConfiguredOllamaProviderConfig(params: {
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
   providerId?: string;
 }) {
   const providerId = params.providerId?.trim();
@@ -111,7 +111,7 @@ export function isOllamaCompatProvider(model: {
 }
 
 export function resolveOllamaCompatNumCtxEnabled(params: {
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
   providerId?: string;
 }): boolean {
   return resolveConfiguredOllamaProviderConfig(params)?.injectNumCtxForOpenAICompat ?? true;
@@ -119,7 +119,7 @@ export function resolveOllamaCompatNumCtxEnabled(params: {
 
 export function shouldInjectOllamaCompatNumCtx(params: {
   model: { api?: string; provider?: string; baseUrl?: string };
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
   providerId?: string;
 }): boolean {
   if (params.model.api !== "openai-completions") {

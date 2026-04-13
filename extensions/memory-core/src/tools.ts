@@ -3,7 +3,7 @@ import {
   readNumberParam,
   readStringParam,
   type AnyAgentTool,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "civitas/plugin-sdk/memory-core-host-runtime-core";
 import type { MemorySearchResult } from "civitas/plugin-sdk/memory-core-host-runtime-files";
 import { recordShortTermRecalls } from "./short-term-promotion.js";
@@ -63,7 +63,7 @@ function queueShortTermRecallTracking(params: {
 }
 
 export function createMemorySearchTool(options: {
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
   agentSessionKey?: string;
 }): AnyAgentTool | null {
   return createMemoryTool({
@@ -126,7 +126,7 @@ export function createMemorySearchTool(options: {
 }
 
 export function createMemoryGetTool(options: {
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
   agentSessionKey?: string;
 }): AnyAgentTool | null {
   return createMemoryTool({

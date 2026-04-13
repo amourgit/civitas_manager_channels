@@ -1,5 +1,5 @@
 import path from "node:path";
-import { buildPluginConfigSchema, type OpenClawPluginConfigSchema } from "civitas/plugin-sdk/core";
+import { buildPluginConfigSchema, type CIVITASPluginConfigSchema } from "civitas/plugin-sdk/core";
 import { z } from "civitas/plugin-sdk/zod";
 
 export type OpenShellPluginConfig = {
@@ -128,7 +128,7 @@ export function normalizeOpenShellRemotePath(
   return normalized;
 }
 
-export function createOpenShellPluginConfigSchema(): OpenClawPluginConfigSchema {
+export function createOpenShellPluginConfigSchema(): CIVITASPluginConfigSchema {
   return buildPluginConfigSchema(OpenShellPluginConfigSchema, {
     safeParse(value) {
       if (value === undefined) {

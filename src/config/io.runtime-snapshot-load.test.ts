@@ -9,14 +9,14 @@ import {
   setRuntimeConfigSnapshotRefreshHandler,
   writeConfigFile,
 } from "./io.js";
-import type { OpenClawConfig } from "./types.js";
+import type { CIVITASConfig } from "./types.js";
 
 function resetRuntimeConfigState(): void {
   setRuntimeConfigSnapshotRefreshHandler(null);
   resetConfigRuntimeState();
 }
 
-async function writeConfig(home: string, config: OpenClawConfig): Promise<string> {
+async function writeConfig(home: string, config: CIVITASConfig): Promise<string> {
   const configPath = path.join(home, ".civitas", "civitas.json");
   await fs.mkdir(path.dirname(configPath), { recursive: true });
   await fs.writeFile(configPath, `${JSON.stringify(config, null, 2)}\n`, "utf8");

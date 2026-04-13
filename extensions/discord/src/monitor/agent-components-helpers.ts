@@ -12,7 +12,7 @@ import type { APIStringSelectComponent } from "discord-api-types/v10";
 import { ChannelType } from "discord-api-types/v10";
 import { createChannelPairingChallengeIssuer } from "civitas/plugin-sdk/channel-pairing";
 import { resolveCommandAuthorizedFromAuthorizers } from "civitas/plugin-sdk/command-auth-native";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { DiscordAccountConfig } from "civitas/plugin-sdk/config-runtime";
 import { isDangerousNameMatchingEnabled } from "civitas/plugin-sdk/dangerous-name-runtime";
 import { resolveAgentRoute } from "civitas/plugin-sdk/routing";
@@ -69,7 +69,7 @@ export type DiscordChannelContext = {
 };
 
 export type AgentComponentContext = {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
   discordConfig?: DiscordAccountConfig;
   runtime?: import("civitas/plugin-sdk/runtime-env").RuntimeEnv;

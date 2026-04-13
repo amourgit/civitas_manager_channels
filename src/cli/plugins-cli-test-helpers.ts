@@ -1,13 +1,13 @@
 import { Command } from "commander";
 import type { Mock } from "vitest";
 import { vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import { createCliRuntimeCapture } from "./test-runtime-capture.js";
 
 type UnknownMock = Mock<(...args: unknown[]) => unknown>;
 type AsyncUnknownMock = Mock<(...args: unknown[]) => Promise<unknown>>;
 type LoadConfigFn = (typeof import("../config/config.js"))["loadConfig"];
-type ParseClawHubPluginSpecFn = (typeof import("../infra/clawhub.js"))["parseClawHubPluginSpec"];
+type ParseChannelHubPluginSpecFn = (typeof import("../infra/CIVITAS Channelhub.js"))["parseChannelHubPluginSpec"];
 type InstallPluginFromMarketplaceFn =
   (typeof import("../plugins/marketplace.js"))["installPluginFromMarketplace"];
 type ListMarketplacePluginsFn =
@@ -19,11 +19,11 @@ function invokeMock<TArgs extends unknown[], TResult>(mock: unknown, ...args: TA
   return (mock as (...args: TArgs) => TResult)(...args);
 }
 
-export const loadConfig: Mock<LoadConfigFn> = vi.fn<LoadConfigFn>(() => ({}) as OpenClawConfig);
+export const loadConfig: Mock<LoadConfigFn> = vi.fn<LoadConfigFn>(() => ({}) as CIVITASConfig);
 export const readConfigFileSnapshot: AsyncUnknownMock = vi.fn();
 export const writeConfigFile: AsyncUnknownMock = vi.fn(async () => undefined);
 export const replaceConfigFile: AsyncUnknownMock = vi.fn(
-  async (params: { nextConfig: OpenClawConfig }) => await writeConfigFile(params.nextConfig),
+  async (params: { nextConfig: CIVITASConfig }) => await writeConfigFile(params.nextConfig),
 ) as AsyncUnknownMock;
 export const resolveStateDir: Mock<() => string> = vi.fn(() => "/tmp/civitas-state");
 export const installPluginFromMarketplace: Mock<InstallPluginFromMarketplaceFn> = vi.fn();
@@ -43,8 +43,8 @@ export const updateNpmInstalledHookPacks: AsyncUnknownMock = vi.fn();
 export const promptYesNo: AsyncUnknownMock = vi.fn();
 export const installPluginFromNpmSpec: AsyncUnknownMock = vi.fn();
 export const installPluginFromPath: AsyncUnknownMock = vi.fn();
-export const installPluginFromClawHub: AsyncUnknownMock = vi.fn();
-export const parseClawHubPluginSpec: Mock<ParseClawHubPluginSpecFn> = vi.fn();
+export const installPluginFromChannelHub: AsyncUnknownMock = vi.fn();
+export const parseChannelHubPluginSpec: Mock<ParseChannelHubPluginSpecFn> = vi.fn();
 export const installHooksFromNpmSpec: AsyncUnknownMock = vi.fn();
 export const installHooksFromPath: AsyncUnknownMock = vi.fn();
 export const recordHookInstall: UnknownMock = vi.fn();
@@ -70,9 +70,9 @@ vi.mock("../config/config.js", () => ({
       readConfigFileSnapshot,
       ...args,
     )) as (typeof import("../config/config.js"))["readConfigFileSnapshot"],
-  writeConfigFile: ((config: OpenClawConfig) =>
+  writeConfigFile: ((config: CIVITASConfig) =>
     invokeMock<
-      [OpenClawConfig],
+      [CIVITASConfig],
       ReturnType<(typeof import("../config/config.js"))["writeConfigFile"]>
     >(writeConfigFile, config)) as (typeof import("../config/config.js"))["writeConfigFile"],
   replaceConfigFile: ((
@@ -98,8 +98,8 @@ vi.mock("../plugins/marketplace.js", () => ({
 }));
 
 vi.mock("../plugins/enable.js", () => ({
-  enablePluginInConfig: ((cfg: OpenClawConfig, pluginId: string) =>
-    invokeMock<[OpenClawConfig, string], unknown>(
+  enablePluginInConfig: ((cfg: CIVITASConfig, pluginId: string) =>
+    invokeMock<[CIVITASConfig, string], unknown>(
       enablePluginInConfig,
       cfg,
       pluginId,
@@ -282,36 +282,36 @@ vi.mock("../hooks/installs.js", () => ({
     >(recordHookInstall, ...args)) as (typeof import("../hooks/installs.js"))["recordHookInstall"],
 }));
 
-vi.mock("../plugins/clawhub.js", () => ({
-  CLAWHUB_INSTALL_ERROR_CODE: {
+vi.mock("../plugins/CIVITAS Channelhub.js", () => ({
+  CHANNELHUB_INSTALL_ERROR_CODE: {
     PACKAGE_NOT_FOUND: "package_not_found",
     VERSION_NOT_FOUND: "version_not_found",
   },
-  installPluginFromClawHub: ((
-    ...args: Parameters<(typeof import("../plugins/clawhub.js"))["installPluginFromClawHub"]>
+  installPluginFromChannelHub: ((
+    ...args: Parameters<(typeof import("../plugins/CIVITAS Channelhub.js"))["installPluginFromChannelHub"]>
   ) =>
     invokeMock<
-      Parameters<(typeof import("../plugins/clawhub.js"))["installPluginFromClawHub"]>,
-      ReturnType<(typeof import("../plugins/clawhub.js"))["installPluginFromClawHub"]>
+      Parameters<(typeof import("../plugins/CIVITAS Channelhub.js"))["installPluginFromChannelHub"]>,
+      ReturnType<(typeof import("../plugins/CIVITAS Channelhub.js"))["installPluginFromChannelHub"]>
     >(
-      installPluginFromClawHub,
+      installPluginFromChannelHub,
       ...args,
-    )) as (typeof import("../plugins/clawhub.js"))["installPluginFromClawHub"],
-  formatClawHubSpecifier: ({ name, version }: { name: string; version?: string }) =>
-    `clawhub:${name}${version ? `@${version}` : ""}`,
+    )) as (typeof import("../plugins/CIVITAS Channelhub.js"))["installPluginFromChannelHub"],
+  formatChannelHubSpecifier: ({ name, version }: { name: string; version?: string }) =>
+    `CIVITAS Channelhub:${name}${version ? `@${version}` : ""}`,
 }));
 
-vi.mock("../infra/clawhub.js", () => ({
-  parseClawHubPluginSpec: ((
-    ...args: Parameters<(typeof import("../infra/clawhub.js"))["parseClawHubPluginSpec"]>
+vi.mock("../infra/CIVITAS Channelhub.js", () => ({
+  parseChannelHubPluginSpec: ((
+    ...args: Parameters<(typeof import("../infra/CIVITAS Channelhub.js"))["parseChannelHubPluginSpec"]>
   ) =>
     invokeMock<
-      Parameters<(typeof import("../infra/clawhub.js"))["parseClawHubPluginSpec"]>,
-      ReturnType<(typeof import("../infra/clawhub.js"))["parseClawHubPluginSpec"]>
+      Parameters<(typeof import("../infra/CIVITAS Channelhub.js"))["parseChannelHubPluginSpec"]>,
+      ReturnType<(typeof import("../infra/CIVITAS Channelhub.js"))["parseChannelHubPluginSpec"]>
     >(
-      parseClawHubPluginSpec,
+      parseChannelHubPluginSpec,
       ...args,
-    )) as (typeof import("../infra/clawhub.js"))["parseClawHubPluginSpec"],
+    )) as (typeof import("../infra/CIVITAS Channelhub.js"))["parseChannelHubPluginSpec"],
 }));
 
 const { registerPluginsCli } = await import("./plugins-cli.js");
@@ -349,13 +349,13 @@ export function resetPluginsCliTestState() {
   promptYesNo.mockReset();
   installPluginFromNpmSpec.mockReset();
   installPluginFromPath.mockReset();
-  installPluginFromClawHub.mockReset();
-  parseClawHubPluginSpec.mockReset();
+  installPluginFromChannelHub.mockReset();
+  parseChannelHubPluginSpec.mockReset();
   installHooksFromNpmSpec.mockReset();
   installHooksFromPath.mockReset();
   recordHookInstall.mockReset();
 
-  loadConfig.mockReturnValue({} as OpenClawConfig);
+  loadConfig.mockReturnValue({} as CIVITASConfig);
   readConfigFileSnapshot.mockImplementation(async () => {
     const config = loadConfig();
     return {
@@ -376,7 +376,7 @@ export function resetPluginsCliTestState() {
   });
   writeConfigFile.mockResolvedValue(undefined);
   replaceConfigFile.mockImplementation(
-    (async (params: { nextConfig: OpenClawConfig }) =>
+    (async (params: { nextConfig: CIVITASConfig }) =>
       await writeConfigFile(params.nextConfig)) as (...args: unknown[]) => Promise<unknown>,
   );
   resolveStateDir.mockReturnValue("/tmp/civitas-state");
@@ -385,11 +385,11 @@ export function resetPluginsCliTestState() {
     ok: false,
     error: "marketplace install failed",
   });
-  enablePluginInConfig.mockImplementation(((cfg: OpenClawConfig) => ({ config: cfg })) as (
+  enablePluginInConfig.mockImplementation(((cfg: CIVITASConfig) => ({ config: cfg })) as (
     ...args: unknown[]
   ) => unknown);
   recordPluginInstall.mockImplementation(
-    ((cfg: OpenClawConfig) => cfg) as (...args: unknown[]) => unknown,
+    ((cfg: CIVITASConfig) => cfg) as (...args: unknown[]) => unknown,
   );
   loadPluginManifestRegistry.mockReturnValue({
     plugins: [],
@@ -402,13 +402,13 @@ export function resetPluginsCliTestState() {
   buildPluginSnapshotReport.mockReturnValue(defaultPluginReport);
   buildPluginDiagnosticsReport.mockReturnValue(defaultPluginReport);
   buildPluginCompatibilityNotices.mockReturnValue([]);
-  applyExclusiveSlotSelection.mockImplementation((({ config }: { config: OpenClawConfig }) => ({
+  applyExclusiveSlotSelection.mockImplementation((({ config }: { config: CIVITASConfig }) => ({
     config,
     warnings: [],
   })) as (...args: unknown[]) => unknown);
   uninstallPlugin.mockResolvedValue({
     ok: true,
-    config: {} as OpenClawConfig,
+    config: {} as CIVITASConfig,
     warnings: [],
     actions: {
       entry: false,
@@ -422,12 +422,12 @@ export function resetPluginsCliTestState() {
   updateNpmInstalledPlugins.mockResolvedValue({
     outcomes: [],
     changed: false,
-    config: {} as OpenClawConfig,
+    config: {} as CIVITASConfig,
   });
   updateNpmInstalledHookPacks.mockResolvedValue({
     outcomes: [],
     changed: false,
-    config: {} as OpenClawConfig,
+    config: {} as CIVITASConfig,
   });
   promptYesNo.mockResolvedValue(true);
   installPluginFromPath.mockResolvedValue({ ok: false, error: "path install disabled in test" });
@@ -435,11 +435,11 @@ export function resetPluginsCliTestState() {
     ok: false,
     error: "npm install disabled in test",
   });
-  installPluginFromClawHub.mockResolvedValue({
+  installPluginFromChannelHub.mockResolvedValue({
     ok: false,
-    error: "clawhub install disabled in test",
+    error: "CIVITAS Channelhub install disabled in test",
   });
-  parseClawHubPluginSpec.mockReturnValue(null);
+  parseChannelHubPluginSpec.mockReturnValue(null);
   installHooksFromPath.mockResolvedValue({
     ok: false,
     error: "hook path install disabled in test",
@@ -449,6 +449,6 @@ export function resetPluginsCliTestState() {
     error: "hook npm install disabled in test",
   });
   recordHookInstall.mockImplementation(
-    ((cfg: OpenClawConfig) => cfg) as (...args: unknown[]) => unknown,
+    ((cfg: CIVITASConfig) => cfg) as (...args: unknown[]) => unknown,
   );
 }

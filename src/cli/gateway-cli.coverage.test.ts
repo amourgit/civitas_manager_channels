@@ -173,7 +173,7 @@ describe("gateway-cli coverage", () => {
     discoverGatewayBeacons.mockClear();
     discoverGatewayBeacons.mockResolvedValueOnce([
       {
-        instanceName: "Studio (OpenClaw)",
+        instanceName: "Studio (CIVITAS)",
         displayName: "Studio",
         domain: "civitas.internal.",
         host: "studio.civitas.internal",
@@ -257,14 +257,14 @@ describe("gateway-cli coverage", () => {
         LAUNCH_JOB_LABEL: undefined,
         LAUNCH_JOB_NAME: undefined,
         XPC_SERVICE_NAME: undefined,
-        OPENCLAW_LAUNCHD_LABEL: undefined,
-        OPENCLAW_SYSTEMD_UNIT: undefined,
+        CIVITAS_LAUNCHD_LABEL: undefined,
+        CIVITAS_SYSTEMD_UNIT: undefined,
         INVOCATION_ID: undefined,
         SYSTEMD_EXEC_PID: undefined,
         JOURNAL_STREAM: undefined,
-        OPENCLAW_WINDOWS_TASK_NAME: undefined,
-        OPENCLAW_SERVICE_MARKER: undefined,
-        OPENCLAW_SERVICE_KIND: undefined,
+        CIVITAS_WINDOWS_TASK_NAME: undefined,
+        CIVITAS_SERVICE_MARKER: undefined,
+        CIVITAS_SERVICE_KIND: undefined,
       },
       async () => {
         serviceIsLoaded.mockResolvedValue(true);
@@ -309,7 +309,7 @@ describe("gateway-cli coverage", () => {
   });
 
   it("uses env/config port when --port is omitted", async () => {
-    await withEnvOverride({ OPENCLAW_GATEWAY_PORT: "19001" }, async () => {
+    await withEnvOverride({ CIVITAS_GATEWAY_PORT: "19001" }, async () => {
       runtimeLogs.length = 0;
       runtimeErrors.length = 0;
       startGatewayServer.mockClear();

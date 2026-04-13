@@ -1,7 +1,7 @@
 {
   "name": "@civitas/msteams",
   "version": "2026.4.4",
-  "description": "OpenClaw Microsoft Teams channel plugin",
+  "description": "CIVITAS Microsoft Teams channel plugin",
   "type": "module",
   "dependencies": {
     "@microsoft/teams.api": "2.0.6",
@@ -48,7 +48,7 @@
       "civitasVersion": "2026.4.4"
     },
     "release": {
-      "publishToClawHub": true,
+      "publishToChannelHub": true,
       "publishToNpm": true
     }
   }

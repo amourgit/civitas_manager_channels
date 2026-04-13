@@ -1,7 +1,7 @@
 import { EventEmitter } from "node:events";
 import { RateLimitError } from "@buape/carbon";
 import { AcpRuntimeError } from "civitas/plugin-sdk/acp-runtime";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   baseConfig,
@@ -59,7 +59,7 @@ function createCompatRateLimitError(
   return new RateLimitErrorCtor(response, body, compatRequest);
 }
 
-function createConfigWithDiscordAccount(overrides: Record<string, unknown> = {}): OpenClawConfig {
+function createConfigWithDiscordAccount(overrides: Record<string, unknown> = {}): CIVITASConfig {
   return {
     channels: {
       discord: {
@@ -71,7 +71,7 @@ function createConfigWithDiscordAccount(overrides: Record<string, unknown> = {})
         },
       },
     },
-  } as OpenClawConfig;
+  } as CIVITASConfig;
 }
 
 vi.mock("../voice/manager.runtime.js", () => {
@@ -83,7 +83,7 @@ vi.mock("../voice/manager.runtime.js", () => {
 });
 describe("monitorDiscordProvider", () => {
   type ReconcileHealthProbeParams = {
-    cfg: OpenClawConfig;
+    cfg: CIVITASConfig;
     accountId: string;
     sessionKey: string;
     binding: unknown;
@@ -91,7 +91,7 @@ describe("monitorDiscordProvider", () => {
   };
 
   type ReconcileStartupParams = {
-    cfg: OpenClawConfig;
+    cfg: CIVITASConfig;
     healthProbe?: (
       params: ReconcileHealthProbeParams,
     ) => Promise<{ status: string; reason?: string }>;

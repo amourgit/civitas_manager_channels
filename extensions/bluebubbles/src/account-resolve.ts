@@ -1,6 +1,6 @@
 import { isBlockedHostnameOrIp } from "civitas/plugin-sdk/ssrf-runtime";
 import { resolveBlueBubblesAccount } from "./accounts.js";
-import type { OpenClawConfig } from "./runtime-api.js";
+import type { CIVITASConfig } from "./runtime-api.js";
 import { normalizeResolvedSecretInputString } from "./secret-input.js";
 import { normalizeBlueBubblesServerUrl } from "./types.js";
 
@@ -8,7 +8,7 @@ export type BlueBubblesAccountResolveOpts = {
   serverUrl?: string;
   password?: string;
   accountId?: string;
-  cfg?: OpenClawConfig;
+  cfg?: CIVITASConfig;
 };
 
 export function resolveBlueBubblesServerAccount(params: BlueBubblesAccountResolveOpts): {

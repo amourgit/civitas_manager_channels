@@ -1,6 +1,6 @@
 import type { ButtonInteraction, ComponentData, StringSelectMenuInteraction } from "@buape/carbon";
 import { ChannelType } from "discord-api-types/v10";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { DiscordAccountConfig } from "civitas/plugin-sdk/config-runtime";
 import { buildAgentSessionKey } from "civitas/plugin-sdk/routing";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -29,7 +29,7 @@ describe("agent components", () => {
     peer: { kind: "group", id: "group-dm-channel" },
   });
 
-  const createCfg = (): OpenClawConfig => ({}) as OpenClawConfig;
+  const createCfg = (): CIVITASConfig => ({}) as CIVITASConfig;
   const createBaseDmInteraction = (overrides: Record<string, unknown> = {}) => {
     const reply = vi.fn().mockResolvedValue(undefined);
     const defer = vi.fn().mockResolvedValue(undefined);

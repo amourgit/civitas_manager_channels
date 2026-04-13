@@ -4,14 +4,14 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import {
-  collectClawHubPublishablePluginPackages,
-  collectClawHubVersionGateErrors,
-  collectPluginClawHubReleasePathsFromGitRange,
-  collectPluginClawHubReleasePlan,
-  resolveChangedClawHubPublishablePluginPackages,
-  resolveSelectedClawHubPublishablePluginPackages,
+  collectChannelHubPublishablePluginPackages,
+  collectChannelHubVersionGateErrors,
+  collectPluginChannelHubReleasePathsFromGitRange,
+  collectPluginChannelHubReleasePlan,
+  resolveChangedChannelHubPublishablePluginPackages,
+  resolveSelectedChannelHubPublishablePluginPackages,
   type PublishablePluginPackage,
-} from "../scripts/lib/plugin-clawhub-release.ts";
+} from "../scripts/lib/plugin-CIVITAS Channelhub-release.ts";
 
 const tempDirs: string[] = [];
 
@@ -24,7 +24,7 @@ afterEach(() => {
   }
 });
 
-describe("resolveChangedClawHubPublishablePluginPackages", () => {
+describe("resolveChangedChannelHubPublishablePluginPackages", () => {
   const publishablePlugins: PublishablePluginPackage[] = [
     {
       extensionId: "feishu",
@@ -46,7 +46,7 @@ describe("resolveChangedClawHubPublishablePluginPackages", () => {
 
   it("ignores shared release-tooling changes", () => {
     expect(
-      resolveChangedClawHubPublishablePluginPackages({
+      resolveChangedChannelHubPublishablePluginPackages({
         plugins: publishablePlugins,
         changedPaths: ["pnpm-lock.yaml"],
       }),
@@ -54,14 +54,14 @@ describe("resolveChangedClawHubPublishablePluginPackages", () => {
   });
 });
 
-describe("collectClawHubPublishablePluginPackages", () => {
-  it("requires the ClawHub external plugin contract", () => {
+describe("collectChannelHubPublishablePluginPackages", () => {
+  it("requires the ChannelHub external plugin contract", () => {
     const repoDir = createTempPluginRepo({
-      includeClawHubContract: false,
+      includeChannelHubContract: false,
     });
 
-    expect(() => collectClawHubPublishablePluginPackages(repoDir)).toThrow(
-      "civitas.compat.pluginApi is required for external code plugins published to ClawHub.",
+    expect(() => collectChannelHubPublishablePluginPackages(repoDir)).toThrow(
+      "civitas.compat.pluginApi is required for external code plugins published to ChannelHub.",
     );
   });
 
@@ -70,13 +70,13 @@ describe("collectClawHubPublishablePluginPackages", () => {
       extensionId: "Demo Plugin",
     });
 
-    expect(() => collectClawHubPublishablePluginPackages(repoDir)).toThrow(
+    expect(() => collectChannelHubPublishablePluginPackages(repoDir)).toThrow(
       "Demo Plugin: extension directory name must match",
     );
   });
 });
 
-describe("collectClawHubVersionGateErrors", () => {
+describe("collectChannelHubVersionGateErrors", () => {
   it("requires a version bump when a publishable plugin changes", () => {
     const repoDir = createTempPluginRepo();
     const baseRef = git(repoDir, ["rev-parse", "HEAD"]);
@@ -97,9 +97,9 @@ describe("collectClawHubVersionGateErrors", () => {
     ]);
     const headRef = git(repoDir, ["rev-parse", "HEAD"]);
 
-    const errors = collectClawHubVersionGateErrors({
+    const errors = collectChannelHubVersionGateErrors({
       rootDir: repoDir,
-      plugins: collectClawHubPublishablePluginPackages(repoDir),
+      plugins: collectChannelHubPublishablePluginPackages(repoDir),
       gitRange: { baseRef, headRef },
     });
 
@@ -108,9 +108,9 @@ describe("collectClawHubVersionGateErrors", () => {
     ]);
   });
 
-  it("does not require a version bump for the first ClawHub opt-in", () => {
+  it("does not require a version bump for the first ChannelHub opt-in", () => {
     const repoDir = createTempPluginRepo({
-      publishToClawHub: false,
+      publishToChannelHub: false,
     });
     const baseRef = git(repoDir, ["rev-parse", "HEAD"]);
 
@@ -129,7 +129,7 @@ describe("collectClawHubVersionGateErrors", () => {
               civitasVersion: "2026.4.1",
             },
             release: {
-              publishToClawHub: true,
+              publishToChannelHub: true,
             },
           },
         },
@@ -149,9 +149,9 @@ describe("collectClawHubVersionGateErrors", () => {
     ]);
     const headRef = git(repoDir, ["rev-parse", "HEAD"]);
 
-    const errors = collectClawHubVersionGateErrors({
+    const errors = collectChannelHubVersionGateErrors({
       rootDir: repoDir,
-      plugins: collectClawHubPublishablePluginPackages(repoDir),
+      plugins: collectChannelHubPublishablePluginPackages(repoDir),
       gitRange: { baseRef, headRef },
     });
 
@@ -163,7 +163,7 @@ describe("collectClawHubVersionGateErrors", () => {
     const baseRef = git(repoDir, ["rev-parse", "HEAD"]);
 
     mkdirSync(join(repoDir, "scripts"), { recursive: true });
-    writeFileSync(join(repoDir, "scripts", "plugin-clawhub-publish.sh"), "#!/usr/bin/env bash\n");
+    writeFileSync(join(repoDir, "scripts", "plugin-CIVITAS Channelhub-publish.sh"), "#!/usr/bin/env bash\n");
     git(repoDir, ["add", "."]);
     git(repoDir, [
       "-c",
@@ -176,9 +176,9 @@ describe("collectClawHubVersionGateErrors", () => {
     ]);
     const headRef = git(repoDir, ["rev-parse", "HEAD"]);
 
-    const errors = collectClawHubVersionGateErrors({
+    const errors = collectChannelHubVersionGateErrors({
       rootDir: repoDir,
-      plugins: collectClawHubPublishablePluginPackages(repoDir),
+      plugins: collectChannelHubPublishablePluginPackages(repoDir),
       gitRange: { baseRef, headRef },
     });
 
@@ -186,7 +186,7 @@ describe("collectClawHubVersionGateErrors", () => {
   });
 });
 
-describe("resolveSelectedClawHubPublishablePluginPackages", () => {
+describe("resolveSelectedChannelHubPublishablePluginPackages", () => {
   it("selects all publishable plugins when shared release tooling changes", () => {
     const repoDir = createTempPluginRepo({
       extraExtensionIds: ["demo-two"],
@@ -194,7 +194,7 @@ describe("resolveSelectedClawHubPublishablePluginPackages", () => {
     const baseRef = git(repoDir, ["rev-parse", "HEAD"]);
 
     mkdirSync(join(repoDir, "scripts"), { recursive: true });
-    writeFileSync(join(repoDir, "scripts", "plugin-clawhub-publish.sh"), "#!/usr/bin/env bash\n");
+    writeFileSync(join(repoDir, "scripts", "plugin-CIVITAS Channelhub-publish.sh"), "#!/usr/bin/env bash\n");
     git(repoDir, ["add", "."]);
     git(repoDir, [
       "-c",
@@ -207,9 +207,9 @@ describe("resolveSelectedClawHubPublishablePluginPackages", () => {
     ]);
     const headRef = git(repoDir, ["rev-parse", "HEAD"]);
 
-    const selected = resolveSelectedClawHubPublishablePluginPackages({
+    const selected = resolveSelectedChannelHubPublishablePluginPackages({
       rootDir: repoDir,
-      plugins: collectClawHubPublishablePluginPackages(repoDir),
+      plugins: collectChannelHubPublishablePluginPackages(repoDir),
       gitRange: { baseRef, headRef },
     });
 
@@ -239,9 +239,9 @@ describe("resolveSelectedClawHubPublishablePluginPackages", () => {
     ]);
     const headRef = git(repoDir, ["rev-parse", "HEAD"]);
 
-    const selected = resolveSelectedClawHubPublishablePluginPackages({
+    const selected = resolveSelectedChannelHubPublishablePluginPackages({
       rootDir: repoDir,
-      plugins: collectClawHubPublishablePluginPackages(repoDir),
+      plugins: collectChannelHubPublishablePluginPackages(repoDir),
       gitRange: { baseRef, headRef },
     });
 
@@ -249,15 +249,15 @@ describe("resolveSelectedClawHubPublishablePluginPackages", () => {
   });
 });
 
-describe("collectPluginClawHubReleasePlan", () => {
-  it("skips versions that already exist on ClawHub", async () => {
+describe("collectPluginChannelHubReleasePlan", () => {
+  it("skips versions that already exist on ChannelHub", async () => {
     const repoDir = createTempPluginRepo();
 
-    const plan = await collectPluginClawHubReleasePlan({
+    const plan = await collectPluginChannelHubReleasePlan({
       rootDir: repoDir,
       selection: ["@civitas/demo-plugin"],
       fetchImpl: async () => new Response("{}", { status: 200 }),
-      registryBaseUrl: "https://clawhub.ai",
+      registryBaseUrl: "https://CIVITAS Channelhub.ai",
     });
 
     expect(plan.candidates).toEqual([]);
@@ -269,13 +269,13 @@ describe("collectPluginClawHubReleasePlan", () => {
   });
 });
 
-describe("collectPluginClawHubReleasePathsFromGitRange", () => {
+describe("collectPluginChannelHubReleasePathsFromGitRange", () => {
   it("rejects unsafe git refs", () => {
     const repoDir = createTempPluginRepo();
     const headRef = git(repoDir, ["rev-parse", "HEAD"]);
 
     expect(() =>
-      collectPluginClawHubReleasePathsFromGitRange({
+      collectPluginChannelHubReleasePathsFromGitRange({
         rootDir: repoDir,
         gitRange: {
           baseRef: "--not-a-ref",
@@ -290,11 +290,11 @@ function createTempPluginRepo(
   options: {
     extensionId?: string;
     extraExtensionIds?: string[];
-    publishToClawHub?: boolean;
-    includeClawHubContract?: boolean;
+    publishToChannelHub?: boolean;
+    includeChannelHubContract?: boolean;
   } = {},
 ) {
-  const repoDir = mkdtempSync(join(tmpdir(), "civitas-clawhub-release-"));
+  const repoDir = mkdtempSync(join(tmpdir(), "civitas-CIVITAS Channelhub-release-"));
   tempDirs.push(repoDir);
   const extensionId = options.extensionId ?? "demo-plugin";
   const extensionIds = [extensionId, ...(options.extraExtensionIds ?? [])];
@@ -314,7 +314,7 @@ function createTempPluginRepo(
           version: "2026.4.1",
           civitas: {
             extensions: ["./index.ts"],
-            ...(options.includeClawHubContract === false
+            ...(options.includeChannelHubContract === false
               ? {}
               : {
                   compat: {
@@ -325,7 +325,7 @@ function createTempPluginRepo(
                   },
                 }),
             release: {
-              publishToClawHub: options.publishToClawHub ?? true,
+              publishToChannelHub: options.publishToChannelHub ?? true,
             },
           },
         },

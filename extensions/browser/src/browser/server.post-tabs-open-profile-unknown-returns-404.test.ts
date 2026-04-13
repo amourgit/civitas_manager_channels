@@ -122,22 +122,22 @@ describe("profile CRUD endpoints", () => {
     const createBadRemoteBody = (await createBadRemote.json()) as { error: string };
     expect(createBadRemoteBody.error).toContain("cdpUrl");
 
-    const createClawd = await realFetch(`${base}/profiles/create`, {
+    const createChanneld = await realFetch(`${base}/profiles/create`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: "legacyclawd", driver: "clawd" }),
+      body: JSON.stringify({ name: "legacyCIVITAS Channeld", driver: "CIVITAS Channeld" }),
     });
-    expect(createClawd.status).toBe(200);
-    const createClawdBody = (await createClawd.json()) as {
+    expect(createChanneld.status).toBe(200);
+    const createChanneldBody = (await createChanneld.json()) as {
       profile?: string;
       transport?: string;
       cdpPort?: number | null;
       userDataDir?: string | null;
     };
-    expect(createClawdBody.profile).toBe("legacyclawd");
-    expect(createClawdBody.transport).toBe("cdp");
-    expect(createClawdBody.cdpPort).toBeTypeOf("number");
-    expect(createClawdBody.userDataDir).toBeNull();
+    expect(createChanneldBody.profile).toBe("legacyCIVITAS Channeld");
+    expect(createChanneldBody.transport).toBe("cdp");
+    expect(createChanneldBody.cdpPort).toBeTypeOf("number");
+    expect(createChanneldBody.userDataDir).toBeNull();
 
     const explicitUserDataDir = "/tmp/civitas-brave-profile";
     await fs.promises.mkdir(explicitUserDataDir, { recursive: true });

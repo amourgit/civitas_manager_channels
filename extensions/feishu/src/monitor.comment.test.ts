@@ -5,7 +5,7 @@ import {
 } from "civitas/plugin-sdk/reply-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createNonExitingTypedRuntimeEnv } from "../../../test/helpers/plugins/runtime-env.js";
-import type { ClawdbotConfig, PluginRuntime, RuntimeEnv } from "../runtime-api.js";
+import type { ChanneldbotConfig, PluginRuntime, RuntimeEnv } from "../runtime-api.js";
 import * as dedup from "./dedup.js";
 import { monitorSingleAccount } from "./monitor.account.js";
 import {
@@ -43,14 +43,14 @@ vi.mock("./thread-bindings.js", () => ({
   createFeishuThreadBindingManager: createFeishuThreadBindingManagerMock,
 }));
 
-function buildMonitorConfig(): ClawdbotConfig {
+function buildMonitorConfig(): ChanneldbotConfig {
   return {
     channels: {
       feishu: {
         enabled: true,
       },
     },
-  } as ClawdbotConfig;
+  } as ChanneldbotConfig;
 }
 
 function buildMonitorAccount(): ResolvedFeishuAccount {

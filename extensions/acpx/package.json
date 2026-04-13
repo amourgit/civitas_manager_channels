@@ -1,7 +1,7 @@
 {
   "name": "@civitas/acpx",
   "version": "2026.4.4",
-  "description": "OpenClaw ACP runtime backend via acpx",
+  "description": "CIVITAS ACP runtime backend via acpx",
   "type": "module",
   "dependencies": {
     "acpx": "0.4.1"

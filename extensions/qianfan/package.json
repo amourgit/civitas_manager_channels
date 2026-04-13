@@ -2,7 +2,7 @@
   "name": "@civitas/qianfan-provider",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw Qianfan provider plugin",
+  "description": "CIVITAS Qianfan provider plugin",
   "type": "module",
   "civitas": {
     "extensions": [

@@ -4,8 +4,8 @@
 export type {
   ChannelAccountSnapshot,
   ChannelPlugin,
-  OpenClawConfig,
-  OpenClawPluginApi,
+  CIVITASConfig,
+  CIVITASPluginApi,
   PluginRuntime,
 } from "civitas/plugin-sdk/core";
 export type {

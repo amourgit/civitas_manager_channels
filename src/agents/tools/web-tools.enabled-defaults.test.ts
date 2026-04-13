@@ -788,7 +788,7 @@ describe("web_search kimi provider", () => {
               },
             ],
             search_results: [
-              { title: "OpenClaw", url: "https://civitas.ai/docs", content: "docs" },
+              { title: "CIVITAS", url: "https://civitas.ai/docs", content: "docs" },
             ],
           }),
           { status: 200, headers: { "content-type": "application/json" } },

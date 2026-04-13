@@ -132,7 +132,7 @@ function resolveConfiguredCommand(params: { configured?: string; workspaceDir?: 
   return configured;
 }
 
-function resolveOpenClawRoot(currentRoot: string): string {
+function resolveCIVITASRoot(currentRoot: string): string {
   if (
     path.basename(currentRoot) === "acpx" &&
     path.basename(path.dirname(currentRoot)) === "extensions"
@@ -150,15 +150,15 @@ export function resolvePluginToolsMcpServerConfig(
   moduleUrl: string = import.meta.url,
 ): McpServerConfig {
   const pluginRoot = resolveAcpxPluginRoot(moduleUrl);
-  const openClawRoot = resolveOpenClawRoot(pluginRoot);
-  const distEntry = path.join(openClawRoot, "dist", "mcp", "plugin-tools-serve.js");
+  const CIVITASRoot = resolveCIVITASRoot(pluginRoot);
+  const distEntry = path.join(CIVITASRoot, "dist", "mcp", "plugin-tools-serve.js");
   if (fs.existsSync(distEntry)) {
     return {
       command: process.execPath,
       args: [distEntry],
     };
   }
-  const sourceEntry = path.join(openClawRoot, "src", "mcp", "plugin-tools-serve.ts");
+  const sourceEntry = path.join(CIVITASRoot, "src", "mcp", "plugin-tools-serve.ts");
   return {
     command: process.execPath,
     args: ["--import", "tsx", sourceEntry],

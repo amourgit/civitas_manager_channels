@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { serializePayload, type MessagePayloadObject, type RequestClient } from "@buape/carbon";
 import { ChannelType, Routes } from "discord-api-types/v10";
-import { loadConfig, type OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import { loadConfig, type CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { resolveMarkdownTableMode } from "civitas/plugin-sdk/config-runtime";
 import { recordChannelActivity } from "civitas/plugin-sdk/infra-runtime";
 import { maxBytesForKind } from "civitas/plugin-sdk/media-runtime";
@@ -12,7 +12,7 @@ import { unlinkIfExists } from "civitas/plugin-sdk/media-runtime";
 import type { PollInput } from "civitas/plugin-sdk/media-runtime";
 import { resolveChunkMode } from "civitas/plugin-sdk/reply-chunking";
 import type { RetryConfig } from "civitas/plugin-sdk/retry-runtime";
-import { resolvePreferredOpenClawTmpDir } from "civitas/plugin-sdk/temp-path";
+import { resolvePreferredCIVITASTmpDir } from "civitas/plugin-sdk/temp-path";
 import { convertMarkdownTables } from "civitas/plugin-sdk/text-runtime";
 import { loadWebMediaRaw } from "civitas/plugin-sdk/web-media";
 import { resolveDiscordAccount } from "./accounts.js";
@@ -45,7 +45,7 @@ import {
 } from "./voice-message.js";
 
 type DiscordSendOpts = {
-  cfg?: OpenClawConfig;
+  cfg?: CIVITASConfig;
   token?: string;
   accountId?: string;
   mediaUrl?: string;
@@ -328,7 +328,7 @@ export async function sendMessageDiscord(
 }
 
 type DiscordWebhookSendOpts = {
-  cfg?: OpenClawConfig;
+  cfg?: CIVITASConfig;
   webhookId: string;
   webhookToken: string;
   accountId?: string;
@@ -493,7 +493,7 @@ export async function sendPollDiscord(
 }
 
 type VoiceMessageOpts = {
-  cfg?: OpenClawConfig;
+  cfg?: CIVITASConfig;
   token?: string;
   accountId?: string;
   verbose?: boolean;
@@ -510,7 +510,7 @@ async function materializeVoiceMessageInput(mediaUrl: string): Promise<{ filePat
   const extFromName = media.fileName ? path.extname(media.fileName) : "";
   const extFromMime = media.contentType ? extensionForMime(media.contentType) : "";
   const ext = extFromName || extFromMime || ".bin";
-  const tempDir = resolvePreferredOpenClawTmpDir();
+  const tempDir = resolvePreferredCIVITASTmpDir();
   const filePath = path.join(tempDir, `voice-src-${crypto.randomUUID()}${ext}`);
   await fs.writeFile(filePath, media.buffer, { mode: 0o600 });
   return { filePath };

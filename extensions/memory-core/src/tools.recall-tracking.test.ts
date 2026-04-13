@@ -5,7 +5,7 @@ import {
   setMemoryBackend,
   setMemorySearchImpl,
 } from "../../../test/helpers/memory-tool-manager-mock.js";
-import type { OpenClawConfig } from "../api.js";
+import type { CIVITASConfig } from "../api.js";
 import { createMemorySearchTool } from "./tools.js";
 
 type RecordShortTermRecallsFn = (params: {
@@ -23,11 +23,11 @@ vi.mock("./short-term-promotion.js", () => ({
   recordShortTermRecalls: recallTrackingMock.recordShortTermRecalls,
 }));
 
-function asOpenClawConfig(config: Partial<OpenClawConfig>): OpenClawConfig {
-  return config as OpenClawConfig;
+function asCIVITASConfig(config: Partial<CIVITASConfig>): CIVITASConfig {
+  return config as CIVITASConfig;
 }
 
-function createSearchTool(config: OpenClawConfig) {
+function createSearchTool(config: CIVITASConfig) {
   const tool = createMemorySearchTool({ config });
   if (!tool) {
     throw new Error("memory_search tool missing");
@@ -64,7 +64,7 @@ describe("memory_search recall tracking", () => {
     ]);
 
     const tool = createSearchTool(
-      asOpenClawConfig({
+      asCIVITASConfig({
         agents: { list: [{ id: "main", default: true }] },
         memory: {
           backend: "qmd",
@@ -98,7 +98,7 @@ describe("memory_search recall tracking", () => {
     );
 
     const tool = createSearchTool(
-      asOpenClawConfig({
+      asCIVITASConfig({
         agents: { list: [{ id: "main", default: true }] },
       }),
     );

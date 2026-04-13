@@ -1,12 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import {
   clearMemoryEmbeddingProviders,
   registerMemoryEmbeddingProvider,
 } from "../plugins/memory-embedding-providers.js";
 import { resolveMemorySearchConfig } from "./memory-search.js";
 
-const asConfig = (cfg: OpenClawConfig): OpenClawConfig => cfg;
+const asConfig = (cfg: CIVITASConfig): CIVITASConfig => cfg;
 
 describe("memory search config", () => {
   beforeEach(() => {
@@ -58,7 +58,7 @@ describe("memory search config", () => {
     clearMemoryEmbeddingProviders();
   });
 
-  function configWithDefaultProvider(provider: string): OpenClawConfig {
+  function configWithDefaultProvider(provider: string): CIVITASConfig {
     return asConfig({
       agents: {
         defaults: {

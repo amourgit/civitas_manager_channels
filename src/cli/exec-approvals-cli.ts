@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import type { Command } from "commander";
 import JSON5 from "json5";
-import { readBestEffortConfig, type OpenClawConfig } from "../config/config.js";
+import { readBestEffortConfig, type CIVITASConfig } from "../config/config.js";
 import {
   collectExecPolicyScopeSnapshots,
   type ExecPolicyScopeSnapshot,
@@ -30,7 +30,7 @@ type ExecApprovalsSnapshot = {
 };
 
 type ConfigSnapshotLike = {
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
 };
 type ApprovalsTargetSource = "gateway" | "node" | "local";
 type EffectivePolicyReport = {
@@ -164,7 +164,7 @@ function formatCliError(err: unknown): string {
 async function loadConfigForApprovalsTarget(params: {
   opts: ExecApprovalsCliOpts;
   source: ApprovalsTargetSource;
-}): Promise<OpenClawConfig | null> {
+}): Promise<CIVITASConfig | null> {
   try {
     if (params.source === "local") {
       return await readBestEffortConfig();
@@ -181,7 +181,7 @@ async function loadConfigForApprovalsTarget(params: {
 }
 
 function buildEffectivePolicyReport(params: {
-  cfg: OpenClawConfig | null;
+  cfg: CIVITASConfig | null;
   source: ApprovalsTargetSource;
   approvals: ExecApprovalsFile;
   hostPath: string;

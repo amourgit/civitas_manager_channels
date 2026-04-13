@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../../src/config/config.js";
+import type { CIVITASConfig } from "../../../src/config/config.js";
 import type { ModelApi } from "../../../src/config/types.models.js";
 
 export const EXPECTED_FALLBACKS = ["anthropic/claude-opus-4-5"] as const;
@@ -10,7 +10,7 @@ export function createLegacyProviderConfig(params: {
   modelName?: string;
   baseUrl?: string;
   apiKey?: string;
-}): OpenClawConfig {
+}): CIVITASConfig {
   return {
     models: {
       providers: {
@@ -32,10 +32,10 @@ export function createLegacyProviderConfig(params: {
         },
       },
     },
-  } as OpenClawConfig;
+  } as CIVITASConfig;
 }
 
-export function createConfigWithFallbacks(): OpenClawConfig {
+export function createConfigWithFallbacks(): CIVITASConfig {
   return {
     agents: {
       defaults: {

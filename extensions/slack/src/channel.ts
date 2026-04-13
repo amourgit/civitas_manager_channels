@@ -50,7 +50,7 @@ import {
   projectCredentialSnapshotFields,
   resolveConfiguredFromRequiredCredentialStatuses,
   type ChannelPlugin,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "./channel-api.js";
 import { resolveSlackChannelType } from "./channel-type.js";
 import { shouldSuppressLocalSlackExecApprovalPrompt } from "./exec-approvals.js";
@@ -181,7 +181,7 @@ function parseSlackExplicitTarget(raw: string) {
 }
 
 function buildSlackBaseSessionKey(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   agentId: string;
   accountId?: string | null;
   peer: RoutePeer;
@@ -190,7 +190,7 @@ function buildSlackBaseSessionKey(params: {
 }
 
 async function resolveSlackOutboundSessionRoute(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   agentId: string;
   accountId?: string | null;
   target: string;
@@ -410,7 +410,7 @@ export const slackPlugin: ChannelPlugin<ResolvedSlackAccount, SlackProbe> = crea
       invoke: async (action, cfg, toolContext) =>
         await (
           await resolveSlackHandleAction()
-        )(action, cfg as OpenClawConfig, toolContext as SlackActionContext | undefined),
+        )(action, cfg as CIVITASConfig, toolContext as SlackActionContext | undefined),
     }),
     status: createComputedAccountStatusAdapter<ResolvedSlackAccount, SlackProbe>({
       defaultRuntime: createDefaultChannelRuntimeState(DEFAULT_ACCOUNT_ID),

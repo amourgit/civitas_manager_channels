@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
-import type { OpenClawConfig } from "civitas/plugin-sdk/memory-core-host-engine-foundation";
+import type { CIVITASConfig } from "civitas/plugin-sdk/memory-core-host-engine-foundation";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import "./test-runtime-mocks.js";
 import type { MemoryIndexManager } from "./index.js";
@@ -63,7 +63,7 @@ describe("memory manager cache hydration", () => {
     await fs.rm(workspaceDir, { recursive: true, force: true });
   });
 
-  function createMemoryConcurrencyConfig(indexPath: string): OpenClawConfig {
+  function createMemoryConcurrencyConfig(indexPath: string): CIVITASConfig {
     return {
       agents: {
         defaults: {
@@ -77,7 +77,7 @@ describe("memory manager cache hydration", () => {
         },
         list: [{ id: "main", default: true }],
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
   }
 
   it("deduplicates concurrent manager creation for the same cache key", async () => {

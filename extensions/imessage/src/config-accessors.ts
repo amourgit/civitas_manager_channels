@@ -1,15 +1,15 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { resolveIMessageAccount } from "./accounts.js";
 
 export function resolveIMessageConfigAllowFrom(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
 }): string[] {
   return (resolveIMessageAccount(params).config.allowFrom ?? []).map((entry) => String(entry));
 }
 
 export function resolveIMessageConfigDefaultTo(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
 }): string | undefined {
   const defaultTo = resolveIMessageAccount(params).config.defaultTo;

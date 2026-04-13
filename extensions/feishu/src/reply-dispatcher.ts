@@ -12,7 +12,7 @@ import type { MentionTarget } from "./mention.js";
 import { buildMentionedCardContent } from "./mention.js";
 import {
   createReplyPrefixContext,
-  type ClawdbotConfig,
+  type ChanneldbotConfig,
   type OutboundIdentity,
   type ReplyPayload,
   type RuntimeEnv,
@@ -73,7 +73,7 @@ function resolveCardNote(
 }
 
 export type CreateFeishuReplyDispatcherParams = {
-  cfg: ClawdbotConfig;
+  cfg: ChanneldbotConfig;
   agentId: string;
   runtime: RuntimeEnv;
   chatId: string;

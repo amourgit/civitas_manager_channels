@@ -13,7 +13,7 @@ vi.mock("civitas/plugin-sdk/config-runtime", async () => {
   };
 });
 
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import {
   getSessionBindingService,
   registerSessionBindingAdapter,
@@ -49,7 +49,7 @@ const baseCfg = {
       },
     },
   },
-} satisfies OpenClawConfig;
+} satisfies CIVITASConfig;
 
 function createDmClient(channelId: string): DiscordClient {
   return {

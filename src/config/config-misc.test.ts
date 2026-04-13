@@ -6,12 +6,12 @@ import {
   unsetConfigValueAtPath,
 } from "./config-paths.js";
 import { readConfigFileSnapshot, validateConfigObject } from "./config.js";
-import { buildWebSearchProviderConfig, withTempHome, writeOpenClawConfig } from "./test-helpers.js";
-import { OpenClawSchema } from "./zod-schema.js";
+import { buildWebSearchProviderConfig, withTempHome, writeCIVITASConfig } from "./test-helpers.js";
+import { CIVITASSchema } from "./zod-schema.js";
 
 describe("$schema key in config (#14998)", () => {
   it("accepts config with $schema string", () => {
-    const result = OpenClawSchema.safeParse({
+    const result = CIVITASSchema.safeParse({
       $schema: "https://civitas.ai/config.json",
     });
     expect(result.success).toBe(true);
@@ -21,12 +21,12 @@ describe("$schema key in config (#14998)", () => {
   });
 
   it("accepts config without $schema", () => {
-    const result = OpenClawSchema.safeParse({});
+    const result = CIVITASSchema.safeParse({});
     expect(result.success).toBe(true);
   });
 
   it("rejects non-string $schema", () => {
-    const result = OpenClawSchema.safeParse({ $schema: 123 });
+    const result = CIVITASSchema.safeParse({ $schema: 123 });
     expect(result.success).toBe(false);
   });
 
@@ -41,7 +41,7 @@ describe("$schema key in config (#14998)", () => {
 
 describe("plugins.slots.contextEngine", () => {
   it("accepts a contextEngine slot id", () => {
-    const result = OpenClawSchema.safeParse({
+    const result = CIVITASSchema.safeParse({
       plugins: {
         slots: {
           contextEngine: "my-context-engine",
@@ -54,7 +54,7 @@ describe("plugins.slots.contextEngine", () => {
 
 describe("auth.cooldowns auth_permanent backoff config", () => {
   it("accepts auth_permanent backoff knobs", () => {
-    const result = OpenClawSchema.safeParse({
+    const result = CIVITASSchema.safeParse({
       auth: {
         cooldowns: {
           authPermanentBackoffMinutes: 10,
@@ -85,7 +85,7 @@ describe("ui.seamColor", () => {
 
 describe("plugins.entries.*.hooks.allowPromptInjection", () => {
   it("accepts boolean values", () => {
-    const result = OpenClawSchema.safeParse({
+    const result = CIVITASSchema.safeParse({
       plugins: {
         entries: {
           "voice-call": {
@@ -100,7 +100,7 @@ describe("plugins.entries.*.hooks.allowPromptInjection", () => {
   });
 
   it("rejects non-boolean values", () => {
-    const result = OpenClawSchema.safeParse({
+    const result = CIVITASSchema.safeParse({
       plugins: {
         entries: {
           "voice-call": {
@@ -117,7 +117,7 @@ describe("plugins.entries.*.hooks.allowPromptInjection", () => {
 
 describe("plugins.entries.*.subagent", () => {
   it("accepts trusted subagent override settings", () => {
-    const result = OpenClawSchema.safeParse({
+    const result = CIVITASSchema.safeParse({
       plugins: {
         entries: {
           "voice-call": {
@@ -133,7 +133,7 @@ describe("plugins.entries.*.subagent", () => {
   });
 
   it("rejects invalid trusted subagent override settings", () => {
-    const result = OpenClawSchema.safeParse({
+    const result = CIVITASSchema.safeParse({
       plugins: {
         entries: {
           "voice-call": {
@@ -169,10 +169,10 @@ describe("web search provider config", () => {
 describe("talk.voiceAliases", () => {
   it("accepts a string map of voice aliases via legacy talk migration", async () => {
     await withTempHome(async (home) => {
-      await writeOpenClawConfig(home, {
+      await writeCIVITASConfig(home, {
         talk: {
           voiceAliases: {
-            Clawd: "EXAVITQu4vr4xnSDxMaL",
+            Channeld: "EXAVITQu4vr4xnSDxMaL",
             Roger: "CwhRBWXzGAHq8TQ4Fs17",
           },
         },
@@ -183,7 +183,7 @@ describe("talk.voiceAliases", () => {
       expect(snap.valid).toBe(true);
       expect(snap.legacyIssues.some((issue) => issue.path === "talk")).toBe(true);
       expect(snap.sourceConfig.talk?.providers?.elevenlabs?.voiceAliases).toEqual({
-        Clawd: "EXAVITQu4vr4xnSDxMaL",
+        Channeld: "EXAVITQu4vr4xnSDxMaL",
         Roger: "CwhRBWXzGAHq8TQ4Fs17",
       });
     });
@@ -193,7 +193,7 @@ describe("talk.voiceAliases", () => {
     const res = validateConfigObject({
       talk: {
         voiceAliases: {
-          Clawd: 123,
+          Channeld: 123,
         },
       },
     });
@@ -325,7 +325,7 @@ describe("gateway.channelHealthCheckMinutes", () => {
 
 describe("cron webhook schema", () => {
   it("accepts cron.webhookToken and legacy cron.webhook", () => {
-    const res = OpenClawSchema.safeParse({
+    const res = CIVITASSchema.safeParse({
       cron: {
         enabled: true,
         webhook: "https://example.invalid/legacy-cron-webhook",
@@ -337,7 +337,7 @@ describe("cron webhook schema", () => {
   });
 
   it("accepts cron.webhookToken SecretRef values", () => {
-    const res = OpenClawSchema.safeParse({
+    const res = CIVITASSchema.safeParse({
       cron: {
         webhook: "https://example.invalid/legacy-cron-webhook",
         webhookToken: {
@@ -352,7 +352,7 @@ describe("cron webhook schema", () => {
   });
 
   it("rejects non-http cron.webhook URLs", () => {
-    const res = OpenClawSchema.safeParse({
+    const res = CIVITASSchema.safeParse({
       cron: {
         webhook: "ftp://example.invalid/legacy-cron-webhook",
       },
@@ -362,7 +362,7 @@ describe("cron webhook schema", () => {
   });
 
   it("accepts cron.retry config", () => {
-    const res = OpenClawSchema.safeParse({
+    const res = CIVITASSchema.safeParse({
       cron: {
         retry: {
           maxAttempts: 5,
@@ -499,7 +499,7 @@ describe("config strict validation", () => {
 
   it("accepts top-level memorySearch via auto-migration and reports legacyIssues", async () => {
     await withTempHome(async (home) => {
-      await writeOpenClawConfig(home, {
+      await writeCIVITASConfig(home, {
         memorySearch: {
           provider: "local",
           fallback: "none",
@@ -522,7 +522,7 @@ describe("config strict validation", () => {
 
   it("accepts top-level heartbeat agent settings via auto-migration and reports legacyIssues", async () => {
     await withTempHome(async (home) => {
-      await writeOpenClawConfig(home, {
+      await writeCIVITASConfig(home, {
         heartbeat: {
           every: "30m",
           model: "anthropic/claude-3-5-haiku-20241022",
@@ -543,7 +543,7 @@ describe("config strict validation", () => {
 
   it("accepts top-level heartbeat visibility via auto-migration and reports legacyIssues", async () => {
     await withTempHome(async (home) => {
-      await writeOpenClawConfig(home, {
+      await writeCIVITASConfig(home, {
         heartbeat: {
           showOk: true,
           showAlerts: false,
@@ -566,7 +566,7 @@ describe("config strict validation", () => {
 
   it("accepts legacy messages.tts provider keys via auto-migration and reports legacyIssues", async () => {
     await withTempHome(async (home) => {
-      await writeOpenClawConfig(home, {
+      await writeCIVITASConfig(home, {
         messages: {
           tts: {
             provider: "elevenlabs",
@@ -594,7 +594,7 @@ describe("config strict validation", () => {
 
   it("accepts legacy talk flat fields via auto-migration and reports legacyIssues", async () => {
     await withTempHome(async (home) => {
-      await writeOpenClawConfig(home, {
+      await writeCIVITASConfig(home, {
         talk: {
           voiceId: "voice-1",
           modelId: "eleven_v3",
@@ -625,7 +625,7 @@ describe("config strict validation", () => {
 
   it("accepts legacy sandbox perSession via auto-migration and reports legacyIssues", async () => {
     await withTempHome(async (home) => {
-      await writeOpenClawConfig(home, {
+      await writeCIVITASConfig(home, {
         agents: {
           defaults: {
             sandbox: {
@@ -661,7 +661,7 @@ describe("config strict validation", () => {
 
   it("accepts legacy x_search auth via auto-migration and reports legacyIssues", async () => {
     await withTempHome(async (home) => {
-      await writeOpenClawConfig(home, {
+      await writeCIVITASConfig(home, {
         tools: {
           web: {
             x_search: {
@@ -688,7 +688,7 @@ describe("config strict validation", () => {
 
   it("accepts legacy thread binding ttlHours via auto-migration and reports legacyIssues", async () => {
     await withTempHome(async (home) => {
-      await writeOpenClawConfig(home, {
+      await writeCIVITASConfig(home, {
         session: {
           threadBindings: {
             ttlHours: 24,
@@ -744,7 +744,7 @@ describe("config strict validation", () => {
 
   it("accepts legacy channel streaming aliases via auto-migration and reports legacyIssues", async () => {
     await withTempHome(async (home) => {
-      await writeOpenClawConfig(home, {
+      await writeCIVITASConfig(home, {
         channels: {
           telegram: {
             streamMode: "block",
@@ -815,7 +815,7 @@ describe("config strict validation", () => {
 
   it("accepts legacy nested channel allow aliases via auto-migration and reports legacyIssues", async () => {
     await withTempHome(async (home) => {
-      await writeOpenClawConfig(home, {
+      await writeCIVITASConfig(home, {
         channels: {
           slack: {
             channels: {
@@ -925,7 +925,7 @@ describe("config strict validation", () => {
 
   it("accepts telegram groupMentionsOnly via auto-migration and reports legacyIssues", async () => {
     await withTempHome(async (home) => {
-      await writeOpenClawConfig(home, {
+      await writeCIVITASConfig(home, {
         channels: {
           telegram: {
             groupMentionsOnly: true,
@@ -951,7 +951,7 @@ describe("config strict validation", () => {
 
   it("accepts legacy plugins.entries.*.config.tts provider keys via auto-migration", async () => {
     await withTempHome(async (home) => {
-      await writeOpenClawConfig(home, {
+      await writeCIVITASConfig(home, {
         plugins: {
           entries: {
             "voice-call": {
@@ -998,7 +998,7 @@ describe("config strict validation", () => {
 
   it("accepts legacy discord voice tts provider keys via auto-migration and reports legacyIssues", async () => {
     await withTempHome(async (home) => {
-      await writeOpenClawConfig(home, {
+      await writeCIVITASConfig(home, {
         channels: {
           discord: {
             voice: {
@@ -1057,12 +1057,12 @@ describe("config strict validation", () => {
 
   it("does not treat resolved-only gateway.bind aliases as source-literal legacy or invalid", async () => {
     await withTempHome(async (home) => {
-      await writeOpenClawConfig(home, {
-        gateway: { bind: "${OPENCLAW_BIND}" },
+      await writeCIVITASConfig(home, {
+        gateway: { bind: "${CIVITAS_BIND}" },
       });
 
-      const prev = process.env.OPENCLAW_BIND;
-      process.env.OPENCLAW_BIND = "0.0.0.0";
+      const prev = process.env.CIVITAS_BIND;
+      process.env.CIVITAS_BIND = "0.0.0.0";
       try {
         const snap = await readConfigFileSnapshot();
         expect(snap.valid).toBe(true);
@@ -1070,9 +1070,9 @@ describe("config strict validation", () => {
         expect(snap.issues).toHaveLength(0);
       } finally {
         if (prev === undefined) {
-          delete process.env.OPENCLAW_BIND;
+          delete process.env.CIVITAS_BIND;
         } else {
-          process.env.OPENCLAW_BIND = prev;
+          process.env.CIVITAS_BIND = prev;
         }
       }
     });
@@ -1080,7 +1080,7 @@ describe("config strict validation", () => {
 
   it("still marks literal gateway.bind host aliases as legacy", async () => {
     await withTempHome(async (home) => {
-      await writeOpenClawConfig(home, {
+      await writeCIVITASConfig(home, {
         gateway: { bind: "0.0.0.0" },
       });
 

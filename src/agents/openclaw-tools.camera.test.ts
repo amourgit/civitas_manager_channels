@@ -14,7 +14,7 @@ vi.mock("../media/image-ops.js", () => ({
   resizeToJpeg: vi.fn(async () => Buffer.from("jpeg")),
 }));
 
-let createOpenClawTools: typeof import("./civitas-tools.js").createOpenClawTools;
+let createCIVITASTools: typeof import("./civitas-tools.js").createCIVITASTools;
 
 const NODE_ID = "mac-1";
 const JPG_PAYLOAD = {
@@ -58,7 +58,7 @@ function getNodesTool(options?: { modelHasVision?: boolean; allowMediaInvokeComm
   if (options?.allowMediaInvokeCommands !== undefined) {
     toolOptions.allowMediaInvokeCommands = options.allowMediaInvokeCommands;
   }
-  const tool = createOpenClawTools(toolOptions).find((candidate) => candidate.name === "nodes");
+  const tool = createCIVITASTools(toolOptions).find((candidate) => candidate.name === "nodes");
   if (!tool) {
     throw new Error("missing nodes tool");
   }
@@ -169,7 +169,7 @@ beforeEach(async () => {
 });
 
 beforeAll(async () => {
-  await loadOpenClawToolsForTest();
+  await loadCIVITASToolsForTest();
 });
 
 describe("nodes camera_snap", () => {
@@ -753,8 +753,8 @@ describe("nodes invoke", () => {
     });
   });
 });
-async function loadOpenClawToolsForTest(): Promise<void> {
+async function loadCIVITASToolsForTest(): Promise<void> {
   vi.resetModules();
   await import("./test-helpers/fast-core-tools.js");
-  ({ createOpenClawTools } = await import("./civitas-tools.js"));
+  ({ createCIVITASTools } = await import("./civitas-tools.js"));
 }

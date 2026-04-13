@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/provider-auth";
+import type { CIVITASConfig } from "civitas/plugin-sdk/provider-auth";
 import { normalizeOptionalSecretInput } from "civitas/plugin-sdk/provider-auth";
 import { resolveEnvApiKey } from "civitas/plugin-sdk/provider-auth-runtime";
 import {
@@ -21,7 +21,7 @@ export type OllamaEmbeddingProvider = {
 };
 
 type OllamaEmbeddingOptions = {
-  config: OpenClawConfig;
+  config: CIVITASConfig;
   agentDir?: string;
   provider?: string;
   remote?: {

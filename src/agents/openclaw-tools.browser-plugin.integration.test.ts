@@ -1,11 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createBundledBrowserPluginFixture } from "../../test/helpers/browser-bundled-plugin-fixture.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import { clearPluginDiscoveryCache } from "../plugins/discovery.js";
 import { clearPluginLoaderCache } from "../plugins/loader.js";
 import { clearPluginManifestRegistryCache } from "../plugins/manifest-registry.js";
 import { resetPluginRuntimeStateForTest } from "../plugins/runtime.js";
-import { createOpenClawTools } from "./civitas-tools.js";
+import { createCIVITASTools } from "./civitas-tools.js";
 
 function resetPluginState() {
   clearPluginLoaderCache();
@@ -14,12 +14,12 @@ function resetPluginState() {
   resetPluginRuntimeStateForTest();
 }
 
-describe("createOpenClawTools browser plugin integration", () => {
+describe("createCIVITASTools browser plugin integration", () => {
   let bundledFixture: ReturnType<typeof createBundledBrowserPluginFixture> | null = null;
 
   beforeEach(() => {
     bundledFixture = createBundledBrowserPluginFixture();
-    vi.stubEnv("OPENCLAW_BUNDLED_PLUGINS_DIR", bundledFixture.rootDir);
+    vi.stubEnv("CIVITAS_BUNDLED_PLUGINS_DIR", bundledFixture.rootDir);
     resetPluginState();
   });
 
@@ -31,19 +31,19 @@ describe("createOpenClawTools browser plugin integration", () => {
   });
 
   it("loads the bundled browser plugin through normal plugin resolution", () => {
-    const tools = createOpenClawTools({
+    const tools = createCIVITASTools({
       config: {
         plugins: {
           allow: ["browser"],
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
     });
 
     expect(tools.map((tool) => tool.name)).toContain("browser");
   });
 
   it("omits the browser tool when the bundled browser plugin is disabled", () => {
-    const tools = createOpenClawTools({
+    const tools = createCIVITASTools({
       config: {
         plugins: {
           allow: ["browser"],
@@ -53,7 +53,7 @@ describe("createOpenClawTools browser plugin integration", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
     });
 
     expect(tools.map((tool) => tool.name)).not.toContain("browser");

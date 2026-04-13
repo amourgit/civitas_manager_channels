@@ -105,6 +105,6 @@ export type {
   GatewayRpcOpts,
   NodeListNode,
   NodeSession,
-  OpenClawConfig,
-  OpenClawPluginService,
+  CIVITASConfig,
+  CIVITASPluginService,
 } from "civitas/plugin-sdk/browser-support";

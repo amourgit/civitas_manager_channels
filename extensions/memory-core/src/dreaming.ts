@@ -1,4 +1,4 @@
-import type { OpenClawConfig, OpenClawPluginApi } from "civitas/plugin-sdk/memory-core";
+import type { CIVITASConfig, CIVITASPluginApi } from "civitas/plugin-sdk/memory-core";
 import {
   applyShortTermPromotions,
   DEFAULT_PROMOTION_MIN_RECALL_COUNT,
@@ -55,7 +55,7 @@ const DREAMING_PRESET_DEFAULTS: Record<
   },
 };
 
-type Logger = Pick<OpenClawPluginApi["logger"], "info" | "warn" | "error">;
+type Logger = Pick<CIVITASPluginApi["logger"], "info" | "warn" | "error">;
 
 type CronSchedule = { kind: "cron"; expr: string; tz?: string };
 type CronPayload = { kind: "systemEvent"; text: string };
@@ -186,7 +186,7 @@ function formatErrorMessage(err: unknown): string {
   return String(err);
 }
 
-function resolveTimezoneFallback(cfg: OpenClawConfig | undefined): string | undefined {
+function resolveTimezoneFallback(cfg: CIVITASConfig | undefined): string | undefined {
   const agents = asRecord(cfg?.agents);
   const defaults = asRecord(agents?.defaults);
   return normalizeTrimmedString(defaults?.userTimezone);
@@ -338,7 +338,7 @@ function resolveCronServiceFromStartupEvent(event: unknown): CronServiceLike | n
 
 export function resolveShortTermPromotionDreamingConfig(params: {
   pluginConfig?: Record<string, unknown>;
-  cfg?: OpenClawConfig;
+  cfg?: CIVITASConfig;
 }): ShortTermPromotionDreamingConfig {
   const dreaming = asRecord(params.pluginConfig?.dreaming);
   const mode = normalizeDreamingMode(dreaming?.mode);
@@ -502,7 +502,7 @@ export async function runShortTermDreamingPromotionIfTriggered(params: {
   return { handled: true, reason: "memory-core: short-term dreaming processed" };
 }
 
-export function registerShortTermPromotionDreaming(api: OpenClawPluginApi): void {
+export function registerShortTermPromotionDreaming(api: CIVITASPluginApi): void {
   api.registerHook(
     "gateway:startup",
     async (event: unknown) => {

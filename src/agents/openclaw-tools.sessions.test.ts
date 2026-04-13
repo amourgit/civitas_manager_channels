@@ -1,6 +1,6 @@
 import path from "node:path";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import {
   addSubagentRunForTests,
   listSubagentRunsForRequester,
@@ -33,7 +33,7 @@ vi.mock("../config/config.js", async () => {
 });
 
 import "./test-helpers/fast-core-tools.js";
-import { __testing as openClawToolsTesting, createOpenClawTools } from "./civitas-tools.js";
+import { __testing as CIVITASToolsTesting, createCIVITASTools } from "./civitas-tools.js";
 import { __testing as subagentControlTesting } from "./subagent-control.js";
 import { __testing as agentStepTesting } from "./tools/agent-step.js";
 import { __testing as sessionsResolutionTesting } from "./tools/sessions-resolution.js";
@@ -49,7 +49,7 @@ const TEST_CONFIG = {
     sessions: { visibility: "all" },
     agentToAgent: { enabled: true },
   },
-} as OpenClawConfig;
+} as CIVITASConfig;
 
 const waitForCalls = async (getCount: () => number, count: number, timeoutMs = 2000) => {
   await vi.waitFor(
@@ -69,7 +69,7 @@ describe("sessions tools", () => {
 
   beforeEach(() => {
     callGatewayMock.mockClear();
-    openClawToolsTesting.setDepsForTest({
+    CIVITASToolsTesting.setDepsForTest({
       callGateway: (opts: unknown) => callGatewayMock(opts),
       config: TEST_CONFIG,
     });
@@ -88,7 +88,7 @@ describe("sessions tools", () => {
   });
 
   it("uses number (not integer) in tool schemas for Gemini compatibility", () => {
-    const tools = createOpenClawTools();
+    const tools = createCIVITASTools();
     const byName = (name: string) => {
       const tool = tools.find((candidate) => candidate.name === name);
       expect(tool).toBeDefined();
@@ -199,7 +199,7 @@ describe("sessions tools", () => {
       return {};
     });
 
-    const tool = createOpenClawTools().find((candidate) => candidate.name === "sessions_list");
+    const tool = createCIVITASTools().find((candidate) => candidate.name === "sessions_list");
     expect(tool).toBeDefined();
     if (!tool) {
       throw new Error("missing sessions_list tool");
@@ -266,7 +266,7 @@ describe("sessions tools", () => {
       return {};
     });
 
-    const tool = createOpenClawTools().find((candidate) => candidate.name === "sessions_list");
+    const tool = createCIVITASTools().find((candidate) => candidate.name === "sessions_list");
     expect(tool).toBeDefined();
     if (!tool) {
       throw new Error("missing sessions_list tool");
@@ -301,7 +301,7 @@ describe("sessions tools", () => {
       return {};
     });
 
-    const tool = createOpenClawTools().find((candidate) => candidate.name === "sessions_history");
+    const tool = createCIVITASTools().find((candidate) => candidate.name === "sessions_history");
     expect(tool).toBeDefined();
     if (!tool) {
       throw new Error("missing sessions_history tool");
@@ -350,7 +350,7 @@ describe("sessions tools", () => {
       return {};
     });
 
-    const tool = createOpenClawTools().find((candidate) => candidate.name === "sessions_history");
+    const tool = createCIVITASTools().find((candidate) => candidate.name === "sessions_history");
     expect(tool).toBeDefined();
     if (!tool) {
       throw new Error("missing sessions_history tool");
@@ -414,7 +414,7 @@ describe("sessions tools", () => {
       return {};
     });
 
-    const tool = createOpenClawTools().find((candidate) => candidate.name === "sessions_history");
+    const tool = createCIVITASTools().find((candidate) => candidate.name === "sessions_history");
     expect(tool).toBeDefined();
     if (!tool) {
       throw new Error("missing sessions_history tool");
@@ -463,7 +463,7 @@ describe("sessions tools", () => {
       return {};
     });
 
-    const tool = createOpenClawTools().find((candidate) => candidate.name === "sessions_history");
+    const tool = createCIVITASTools().find((candidate) => candidate.name === "sessions_history");
     expect(tool).toBeDefined();
     if (!tool) {
       throw new Error("missing sessions_history tool");
@@ -504,7 +504,7 @@ describe("sessions tools", () => {
       return {};
     });
 
-    const tool = createOpenClawTools().find((candidate) => candidate.name === "sessions_history");
+    const tool = createCIVITASTools().find((candidate) => candidate.name === "sessions_history");
     expect(tool).toBeDefined();
     if (!tool) {
       throw new Error("missing sessions_history tool");
@@ -542,7 +542,7 @@ describe("sessions tools", () => {
       return {};
     });
 
-    const tool = createOpenClawTools().find((candidate) => candidate.name === "sessions_history");
+    const tool = createCIVITASTools().find((candidate) => candidate.name === "sessions_history");
     expect(tool).toBeDefined();
     if (!tool) {
       throw new Error("missing sessions_history tool");
@@ -570,7 +570,7 @@ describe("sessions tools", () => {
       return {};
     });
 
-    const tool = createOpenClawTools().find((candidate) => candidate.name === "sessions_history");
+    const tool = createCIVITASTools().find((candidate) => candidate.name === "sessions_history");
     expect(tool).toBeDefined();
     if (!tool) {
       throw new Error("missing sessions_history tool");
@@ -643,7 +643,7 @@ describe("sessions tools", () => {
       return {};
     });
 
-    const tool = createOpenClawTools({
+    const tool = createCIVITASTools({
       agentSessionKey: requesterKey,
       agentChannel: "discord",
     }).find((candidate) => candidate.name === "sessions_send");
@@ -748,7 +748,7 @@ describe("sessions tools", () => {
       return {};
     });
 
-    const tool = createOpenClawTools({
+    const tool = createCIVITASTools({
       agentSessionKey: "main",
       agentChannel: "discord",
     }).find((candidate) => candidate.name === "sessions_send");
@@ -839,7 +839,7 @@ describe("sessions tools", () => {
       return {};
     });
 
-    const tool = createOpenClawTools({
+    const tool = createCIVITASTools({
       agentSessionKey: requesterKey,
       agentChannel: "discord",
     }).find((candidate) => candidate.name === "sessions_send");
@@ -938,7 +938,7 @@ describe("sessions tools", () => {
       outcome: { status: "ok" },
     });
 
-    const tool = createOpenClawTools({
+    const tool = createCIVITASTools({
       agentSessionKey: "agent:main:main",
     }).find((candidate) => candidate.name === "subagents");
     expect(tool).toBeDefined();
@@ -990,7 +990,7 @@ describe("sessions tools", () => {
       startedAt: now - 60_000,
     });
 
-    const tool = createOpenClawTools({
+    const tool = createCIVITASTools({
       agentSessionKey: "agent:main:main",
     }).find((candidate) => candidate.name === "subagents");
     expect(tool).toBeDefined();
@@ -1061,7 +1061,7 @@ describe("sessions tools", () => {
       startedAt: now - 60_000,
     });
 
-    const tool = createOpenClawTools({
+    const tool = createCIVITASTools({
       agentSessionKey: "agent:main:main",
     }).find((candidate) => candidate.name === "subagents");
     expect(tool).toBeDefined();
@@ -1142,7 +1142,7 @@ describe("sessions tools", () => {
       startedAt: now - 1_500,
     });
 
-    const tool = createOpenClawTools({
+    const tool = createCIVITASTools({
       agentSessionKey: "agent:main:main",
     }).find((candidate) => candidate.name === "subagents");
     expect(tool).toBeDefined();
@@ -1205,7 +1205,7 @@ describe("sessions tools", () => {
       outcome: { status: "ok" },
     });
 
-    const tool = createOpenClawTools({
+    const tool = createCIVITASTools({
       agentSessionKey: "agent:main:main",
     }).find((candidate) => candidate.name === "subagents");
     expect(tool).toBeDefined();
@@ -1263,7 +1263,7 @@ describe("sessions tools", () => {
       }));
 
     try {
-      const tool = createOpenClawTools({
+      const tool = createCIVITASTools({
         agentSessionKey: "agent:main:main",
       }).find((candidate) => candidate.name === "subagents");
       expect(tool).toBeDefined();
@@ -1315,7 +1315,7 @@ describe("sessions tools", () => {
       }));
 
     try {
-      const tool = createOpenClawTools({
+      const tool = createCIVITASTools({
         agentSessionKey: "agent:main:main",
       }).find((candidate) => candidate.name === "subagents");
       expect(tool).toBeDefined();
@@ -1392,7 +1392,7 @@ describe("sessions tools", () => {
       outcome: { status: "ok" },
     });
 
-    const tool = createOpenClawTools({
+    const tool = createCIVITASTools({
       agentSessionKey: "agent:main:main",
     }).find((candidate) => candidate.name === "subagents");
     expect(tool).toBeDefined();
@@ -1446,7 +1446,7 @@ describe("sessions tools", () => {
       startedAt: now - 20_000,
     });
 
-    const tool = createOpenClawTools({
+    const tool = createCIVITASTools({
       agentSessionKey: "agent:main:main",
     }).find((candidate) => candidate.name === "subagents");
     expect(tool).toBeDefined();
@@ -1491,7 +1491,7 @@ describe("sessions tools", () => {
       startedAt: Date.now() - 60_000,
     });
 
-    const tool = createOpenClawTools({
+    const tool = createCIVITASTools({
       agentSessionKey: "agent:main:main",
     }).find((candidate) => candidate.name === "subagents");
     expect(tool).toBeDefined();
@@ -1536,7 +1536,7 @@ describe("sessions tools", () => {
       startedAt: now - 30_000,
     });
 
-    const tool = createOpenClawTools({
+    const tool = createCIVITASTools({
       agentSessionKey: "agent:main:main",
     }).find((candidate) => candidate.name === "subagents");
     expect(tool).toBeDefined();

@@ -2,7 +2,7 @@ export type {
   ChannelMessageActionName,
   ChannelMeta,
   ChannelPlugin,
-  ClawdbotConfig,
+  ChanneldbotConfig,
 } from "../runtime-api.js";
 
 export { DEFAULT_ACCOUNT_ID } from "civitas/plugin-sdk/account-resolution";

@@ -1,4 +1,4 @@
-import type { OpenClawPluginApi } from "civitas/plugin-sdk/core";
+import type { CIVITASPluginApi } from "civitas/plugin-sdk/core";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   getRequiredHookHandler,
@@ -60,7 +60,7 @@ function registerHandlersForTest(
     },
   },
 ) {
-  return registerHookHandlersForTest<OpenClawPluginApi>({
+  return registerHookHandlersForTest<CIVITASPluginApi>({
     config,
     register: registerDiscordSubagentHooks,
   });

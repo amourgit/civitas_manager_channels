@@ -1,7 +1,7 @@
 {
   "name": "@civitas/feishu",
   "version": "2026.4.4",
-  "description": "OpenClaw Feishu/Lark channel plugin (community maintained by @m1heng)",
+  "description": "CIVITAS Feishu/Lark channel plugin (community maintained by @m1heng)",
   "type": "module",
   "dependencies": {
     "@larksuiteoapi/node-sdk": "^1.60.0",
@@ -52,7 +52,7 @@
       "stageRuntimeDependencies": true
     },
     "release": {
-      "publishToClawHub": true,
+      "publishToChannelHub": true,
       "publishToNpm": true
     }
   }

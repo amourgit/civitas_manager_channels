@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import type { ChannelAccountSnapshot } from "civitas/plugin-sdk/channel-contract";
 import type { ChannelOutboundAdapter } from "civitas/plugin-sdk/channel-send-result";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { ChannelPlugin } from "civitas/plugin-sdk/core";
 import { createLoggerBackedRuntime } from "civitas/plugin-sdk/runtime";
 import { monitorTlonProvider } from "./monitor/index.js";
@@ -90,7 +90,7 @@ async function createHttpPokeApi(params: {
 }
 
 function resolveOutboundContext(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
   to: string;
 }) {

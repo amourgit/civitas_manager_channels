@@ -1,7 +1,7 @@
 import "./lifecycle.test-support.js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createNonExitingRuntimeEnv } from "../../../test/helpers/plugins/runtime-env.js";
-import type { ClawdbotConfig, RuntimeEnv } from "../runtime-api.js";
+import type { ChanneldbotConfig, RuntimeEnv } from "../runtime-api.js";
 import { FeishuConfigSchema } from "./config-schema.js";
 import { getFeishuLifecycleTestMocks } from "./lifecycle.test-support.js";
 import {
@@ -29,9 +29,9 @@ const {
 
 let handlersByAccount = new Map<string, Record<string, (data: unknown) => Promise<void>>>();
 let runtimesByAccount = new Map<string, RuntimeEnv>();
-const originalStateDir = process.env.OPENCLAW_STATE_DIR;
+const originalStateDir = process.env.CIVITAS_STATE_DIR;
 
-function createLifecycleConfig(): ClawdbotConfig {
+function createLifecycleConfig(): ChanneldbotConfig {
   return {
     broadcast: {
       oc_broadcast_group: ["susan", "main"],
@@ -85,7 +85,7 @@ function createLifecycleConfig(): ClawdbotConfig {
         },
       },
     },
-  } as ClawdbotConfig;
+  } as ChanneldbotConfig;
 }
 
 function createLifecycleAccount(accountId: "account-A" | "account-B"): ResolvedFeishuAccount {

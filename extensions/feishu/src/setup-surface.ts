@@ -9,7 +9,7 @@ import {
   splitSetupEntries,
   type ChannelSetupDmPolicy,
   type ChannelSetupWizard,
-  type OpenClawConfig,
+  type CIVITASConfig,
   type SecretInput,
 } from "civitas/plugin-sdk/setup";
 import {
@@ -34,7 +34,7 @@ function normalizeString(value: unknown): string | undefined {
 
 type ScopedFeishuConfig = Partial<FeishuConfig> & Partial<FeishuAccountConfig>;
 
-function getScopedFeishuConfig(cfg: OpenClawConfig, accountId: string): ScopedFeishuConfig {
+function getScopedFeishuConfig(cfg: CIVITASConfig, accountId: string): ScopedFeishuConfig {
   const feishuCfg = cfg.channels?.feishu as FeishuConfig | undefined;
   if (accountId === DEFAULT_ACCOUNT_ID) {
     return feishuCfg ?? {};
@@ -43,10 +43,10 @@ function getScopedFeishuConfig(cfg: OpenClawConfig, accountId: string): ScopedFe
 }
 
 function patchFeishuConfig(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId: string,
   patch: Record<string, unknown>,
-): OpenClawConfig {
+): CIVITASConfig {
   const feishuCfg = cfg.channels?.feishu as FeishuConfig | undefined;
   if (accountId === DEFAULT_ACCOUNT_ID) {
     return patchTopLevelChannelConfigSection({
@@ -75,30 +75,30 @@ function patchFeishuConfig(
 }
 
 function setFeishuAllowFrom(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId: string,
   allowFrom: string[],
-): OpenClawConfig {
+): CIVITASConfig {
   return patchFeishuConfig(cfg, accountId, { allowFrom });
 }
 
 function setFeishuGroupPolicy(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId: string,
   groupPolicy: "open" | "allowlist" | "disabled",
-): OpenClawConfig {
+): CIVITASConfig {
   return patchFeishuConfig(cfg, accountId, { groupPolicy });
 }
 
 function setFeishuGroupAllowFrom(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId: string,
   groupAllowFrom: string[],
-): OpenClawConfig {
+): CIVITASConfig {
   return patchFeishuConfig(cfg, accountId, { groupAllowFrom });
 }
 
-function isFeishuConfigured(cfg: OpenClawConfig, accountId?: string | null): boolean {
+function isFeishuConfigured(cfg: CIVITASConfig, accountId?: string | null): boolean {
   const feishuCfg = ((cfg.channels?.feishu as FeishuConfig | undefined) ?? {}) as FeishuConfig;
   const resolvedAccountId = normalizeString(accountId) ?? resolveDefaultFeishuAccountId(cfg);
 
@@ -145,10 +145,10 @@ function isFeishuConfigured(cfg: OpenClawConfig, accountId?: string | null): boo
 }
 
 async function promptFeishuAllowFrom(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
   prompter: Parameters<NonNullable<ChannelSetupDmPolicy["promptAllowFrom"]>>[0]["prompter"];
-}): Promise<OpenClawConfig> {
+}): Promise<CIVITASConfig> {
   const existingAllowFrom =
     resolveFeishuAccount({
       cfg: params.cfg,

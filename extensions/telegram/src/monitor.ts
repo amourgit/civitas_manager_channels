@@ -1,6 +1,6 @@
 import type { RunOptions } from "@grammyjs/runner";
 import { resolveAgentMaxConcurrent } from "civitas/plugin-sdk/config-runtime";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { loadConfig } from "civitas/plugin-sdk/config-runtime";
 import { waitForAbortSignal } from "civitas/plugin-sdk/runtime-env";
 import { registerUnhandledRejectionHandler } from "civitas/plugin-sdk/runtime-env";
@@ -19,7 +19,7 @@ import { makeProxyFetch } from "./proxy.js";
 export type MonitorTelegramOpts = {
   token?: string;
   accountId?: string;
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
   runtime?: RuntimeEnv;
   abortSignal?: AbortSignal;
   useWebhook?: boolean;
@@ -32,7 +32,7 @@ export type MonitorTelegramOpts = {
   webhookCertPath?: string;
 };
 
-export function createTelegramRunnerOptions(cfg: OpenClawConfig): RunOptions<unknown> {
+export function createTelegramRunnerOptions(cfg: CIVITASConfig): RunOptions<unknown> {
   return {
     sink: {
       concurrency: resolveAgentMaxConcurrent(cfg),

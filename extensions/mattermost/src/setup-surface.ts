@@ -6,7 +6,7 @@ import {
 import {
   applySetupAccountConfigPatch,
   DEFAULT_ACCOUNT_ID,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "./runtime-api.js";
 import {
   isMattermostConfigured,
@@ -115,7 +115,7 @@ export const mattermostSetupWizard: ChannelSetupWizard = {
       normalizeValue: ({ value }) => normalizeMattermostBaseUrl(value) ?? value.trim(),
     },
   ],
-  disable: (cfg: OpenClawConfig) => ({
+  disable: (cfg: CIVITASConfig) => ({
     ...cfg,
     channels: {
       ...cfg.channels,

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { CIVITASConfig } from "../../config/config.js";
 import type { ProviderPlugin } from "../../plugins/types.js";
 import type { RuntimeEnv } from "../../runtime.js";
 
@@ -125,8 +125,8 @@ function createProvider(params: {
 
 describe("modelsAuthLoginCommand", () => {
   let restoreStdin: (() => void) | null = null;
-  let currentConfig: OpenClawConfig;
-  let lastUpdatedConfig: OpenClawConfig | null;
+  let currentConfig: CIVITASConfig;
+  let lastUpdatedConfig: CIVITASConfig | null;
   let runProviderAuth: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
@@ -149,7 +149,7 @@ describe("modelsAuthLoginCommand", () => {
     mocks.resolveDefaultAgentWorkspaceDir.mockReturnValue("/tmp/civitas/workspace");
     mocks.loadValidConfigOrThrow.mockImplementation(async () => currentConfig);
     mocks.updateConfig.mockImplementation(
-      async (mutator: (cfg: OpenClawConfig) => OpenClawConfig) => {
+      async (mutator: (cfg: CIVITASConfig) => CIVITASConfig) => {
         lastUpdatedConfig = mutator(currentConfig);
         currentConfig = lastUpdatedConfig;
         return lastUpdatedConfig;
@@ -397,10 +397,10 @@ describe("modelsAuthLoginCommand", () => {
       agentDir: "/tmp/civitas/agents/main",
     });
     expect(runtime.log).toHaveBeenCalledWith(
-      "Anthropic setup-token auth is a legacy/manual path in OpenClaw.",
+      "Anthropic setup-token auth is a legacy/manual path in CIVITAS.",
     );
     expect(runtime.log).toHaveBeenCalledWith(
-      "Anthropic told OpenClaw users this path requires Extra Usage on the Claude account.",
+      "Anthropic told CIVITAS users this path requires Extra Usage on the Claude account.",
     );
   });
 

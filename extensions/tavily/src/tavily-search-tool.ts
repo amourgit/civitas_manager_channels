@@ -1,5 +1,5 @@
 import { Type } from "@sinclair/typebox";
-import type { OpenClawPluginApi } from "civitas/plugin-sdk/plugin-runtime";
+import type { CIVITASPluginApi } from "civitas/plugin-sdk/plugin-runtime";
 import {
   jsonResult,
   readNumberParam,
@@ -58,7 +58,7 @@ const TavilySearchToolSchema = Type.Object(
   { additionalProperties: false },
 );
 
-export function createTavilySearchTool(api: OpenClawPluginApi) {
+export function createTavilySearchTool(api: CIVITASPluginApi) {
   return {
     name: "tavily_search",
     label: "Tavily Search",

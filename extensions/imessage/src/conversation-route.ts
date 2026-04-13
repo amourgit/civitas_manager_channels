@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import {
   getSessionBindingService,
   isPluginOwnedSessionBindingRecord,
@@ -13,7 +13,7 @@ import { logVerbose } from "civitas/plugin-sdk/runtime-env";
 import { resolveIMessageInboundConversationId } from "./conversation-id.js";
 
 export function resolveIMessageConversationRoute(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
   isGroup: boolean;
   peerId: string;

@@ -8,7 +8,7 @@ import {
   ThreadUpdateListener,
   type User,
 } from "@buape/carbon";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { enqueueSystemEvent } from "civitas/plugin-sdk/infra-runtime";
 import { resolveAgentRoute } from "civitas/plugin-sdk/routing";
 import {
@@ -732,7 +732,7 @@ type ThreadUpdateEvent = Parameters<ThreadUpdateListener["handle"]>[0];
 
 export class DiscordThreadUpdateListener extends ThreadUpdateListener {
   constructor(
-    private cfg: OpenClawConfig,
+    private cfg: CIVITASConfig,
     private accountId: string,
     private logger?: Logger,
   ) {

@@ -1,5 +1,5 @@
 import { rmSync } from "node:fs";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import type { ResolvedTtsConfig } from "../tts/tts.js";
 
 // Public speech helpers for bundled or third-party plugins.
@@ -102,7 +102,7 @@ export function scheduleCleanup(
 export async function summarizeText(params: {
   text: string;
   targetLength: number;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   config: ResolvedTtsConfig;
   timeoutMs: number;
 }) {

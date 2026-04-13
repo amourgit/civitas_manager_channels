@@ -24,14 +24,14 @@ function applyAndCapture(params: {
 }
 
 describe("extra-params: OpenAI attribution", () => {
-  const envSnapshot = captureEnv(["OPENCLAW_VERSION"]);
+  const envSnapshot = captureEnv(["CIVITAS_VERSION"]);
 
   afterEach(() => {
     envSnapshot.restore();
   });
 
   it("injects originator and release-based user agent for native OpenAI", () => {
-    process.env.OPENCLAW_VERSION = "2026.3.22";
+    process.env.CIVITAS_VERSION = "2026.3.22";
 
     const { headers } = applyAndCapture({
       provider: "openai",
@@ -47,7 +47,7 @@ describe("extra-params: OpenAI attribution", () => {
   });
 
   it("overrides caller-supplied OpenAI attribution headers", () => {
-    process.env.OPENCLAW_VERSION = "2026.3.22";
+    process.env.CIVITAS_VERSION = "2026.3.22";
 
     const { headers } = applyAndCapture({
       provider: "openai",
@@ -69,7 +69,7 @@ describe("extra-params: OpenAI attribution", () => {
   });
 
   it("does not inject attribution on non-native OpenAI-compatible base URLs", () => {
-    process.env.OPENCLAW_VERSION = "2026.3.22";
+    process.env.CIVITAS_VERSION = "2026.3.22";
 
     const { headers } = applyAndCapture({
       provider: "openai",
@@ -81,7 +81,7 @@ describe("extra-params: OpenAI attribution", () => {
   });
 
   it("injects attribution for ChatGPT-backed OpenAI Codex traffic", () => {
-    process.env.OPENCLAW_VERSION = "2026.3.22";
+    process.env.CIVITAS_VERSION = "2026.3.22";
 
     const { headers } = applyAndCapture({
       provider: "openai-codex",

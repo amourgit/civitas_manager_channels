@@ -50,7 +50,7 @@ import {
   setRuntimeConfigSnapshot as setRuntimeConfigSnapshotState,
   setRuntimeConfigSnapshotRefreshHandler as setRuntimeConfigSnapshotRefreshHandlerState,
 } from "./runtime-snapshot.js";
-import type { OpenClawConfig, ConfigFileSnapshot, LegacyConfigIssue } from "./types.js";
+import type { CIVITASConfig, ConfigFileSnapshot, LegacyConfigIssue } from "./types.js";
 import {
   validateConfigObjectRawWithPlugins,
   validateConfigObjectWithPlugins,
@@ -89,8 +89,8 @@ const SHELL_ENV_EXPECTED_KEYS = [
   "DISCORD_BOT_TOKEN",
   "SLACK_BOT_TOKEN",
   "SLACK_APP_TOKEN",
-  "OPENCLAW_GATEWAY_TOKEN",
-  "OPENCLAW_GATEWAY_PASSWORD",
+  "CIVITAS_GATEWAY_TOKEN",
+  "CIVITAS_GATEWAY_PASSWORD",
 ];
 
 const OPEN_DM_POLICY_ALLOW_FROM_RE =
@@ -249,8 +249,8 @@ export type ReadConfigFileSnapshotForWriteResult = {
 
 export type ConfigWriteNotification = {
   configPath: string;
-  sourceConfig: OpenClawConfig;
-  runtimeConfig: OpenClawConfig;
+  sourceConfig: CIVITASConfig;
+  runtimeConfig: CIVITASConfig;
   persistedHash: string;
   writtenAtMs: number;
 };
@@ -405,9 +405,9 @@ function unsetPathForWriteAt(
 }
 
 function unsetPathForWrite(
-  root: OpenClawConfig,
+  root: CIVITASConfig,
   pathSegments: string[],
-): { changed: boolean; next: OpenClawConfig } {
+): { changed: boolean; next: CIVITASConfig } {
   if (pathSegments.length === 0) {
     return { changed: false, next: root };
   }
@@ -440,11 +440,11 @@ export function resolveConfigSnapshotHash(snapshot: {
   return hashConfigRaw(snapshot.raw);
 }
 
-function coerceConfig(value: unknown): OpenClawConfig {
+function coerceConfig(value: unknown): CIVITASConfig {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     return {};
   }
-  return value as OpenClawConfig;
+  return value as CIVITASConfig;
 }
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
@@ -1507,7 +1507,7 @@ function warnOnConfigMiskeys(raw: unknown, logger: Pick<typeof console, "warn">)
   }
 }
 
-function stampConfigVersion(cfg: OpenClawConfig): OpenClawConfig {
+function stampConfigVersion(cfg: CIVITASConfig): CIVITASConfig {
   const now = new Date().toISOString();
   return {
     ...cfg,
@@ -1519,14 +1519,14 @@ function stampConfigVersion(cfg: OpenClawConfig): OpenClawConfig {
   };
 }
 
-function warnIfConfigFromFuture(cfg: OpenClawConfig, logger: Pick<typeof console, "warn">): void {
+function warnIfConfigFromFuture(cfg: CIVITASConfig, logger: Pick<typeof console, "warn">): void {
   const touched = cfg.meta?.lastTouchedVersion;
   if (!touched) {
     return;
   }
   if (shouldWarnOnTouchedVersion(VERSION, touched)) {
     logger.warn(
-      `Config was last written by a newer OpenClaw (${touched}); current version is ${VERSION}.`,
+      `Config was last written by a newer CIVITAS (${touched}); current version is ${VERSION}.`,
     );
   }
 }
@@ -1605,7 +1605,7 @@ function resolveConfigForRead(
 ): ConfigReadResolution {
   // Apply config.env to process.env BEFORE substitution so ${VAR} can reference config-defined vars.
   if (resolvedIncludes && typeof resolvedIncludes === "object" && "env" in resolvedIncludes) {
-    applyConfigEnvVars(resolvedIncludes as OpenClawConfig, env);
+    applyConfigEnvVars(resolvedIncludes as CIVITASConfig, env);
   }
 
   // Collect missing env var references as warnings instead of throwing,
@@ -1646,9 +1646,9 @@ function createConfigFileSnapshot(params: {
   exists: boolean;
   raw: string | null;
   parsed: unknown;
-  sourceConfig: OpenClawConfig;
+  sourceConfig: CIVITASConfig;
   valid: boolean;
-  runtimeConfig: OpenClawConfig;
+  runtimeConfig: CIVITASConfig;
   hash?: string;
   issues: ConfigFileSnapshot["issues"];
   warnings: ConfigFileSnapshot["warnings"];
@@ -1690,7 +1690,7 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
     return snapshot;
   }
 
-  function loadConfig(): OpenClawConfig {
+  function loadConfig(): CIVITASConfig {
     try {
       maybeLoadDotEnvForConfig(deps.env);
       if (!deps.fs.existsSync(configPath)) {
@@ -1747,7 +1747,7 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
         });
         return {};
       }
-      const preValidationDuplicates = findDuplicateAgentDirs(effectiveConfigRaw as OpenClawConfig, {
+      const preValidationDuplicates = findDuplicateAgentDirs(effectiveConfigRaw as CIVITASConfig, {
         env: deps.env,
         homedir: deps.homedir,
       });
@@ -2076,7 +2076,7 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
   }
 
   async function writeConfigFile(
-    cfg: OpenClawConfig,
+    cfg: CIVITASConfig,
     options: ConfigWriteOptions = {},
   ): Promise<{ persistedHash: string }> {
     clearConfigCache();
@@ -2138,7 +2138,7 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
     // persisted to disk (issue #56772).
     // Apply legacy web-search normalization so that migration results are still
     // persisted even though we bypass validated.config.
-    let cfgToWrite = persistCandidate as OpenClawConfig;
+    let cfgToWrite = persistCandidate as CIVITASConfig;
     try {
       if (deps.fs.existsSync(configPath)) {
         const currentRaw = await deps.fs.promises.readFile(configPath, "utf-8");
@@ -2152,7 +2152,7 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
             cfgToWrite,
             parsedRes.parsed,
             envForRestore,
-          ) as OpenClawConfig;
+          ) as CIVITASConfig;
         }
       }
     } catch {
@@ -2169,7 +2169,7 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
     });
     const outputConfigBase =
       envRefMap && changedPaths
-        ? (restoreEnvRefsFromMap(cfgToWrite, "", envRefMap, changedPaths) as OpenClawConfig)
+        ? (restoreEnvRefsFromMap(cfgToWrite, "", envRefMap, changedPaths) as CIVITASConfig)
         : cfgToWrite;
     let outputConfig = outputConfigBase;
     if (options.unsetPaths?.length) {
@@ -2213,7 +2213,7 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
         return;
       }
       const isVitest = deps.env.VITEST === "true";
-      const shouldLogInVitest = deps.env.OPENCLAW_TEST_CONFIG_OVERWRITE_LOG === "1";
+      const shouldLogInVitest = deps.env.CIVITAS_TEST_CONFIG_OVERWRITE_LOG === "1";
       if (isVitest && !shouldLogInVitest) {
         return;
       }
@@ -2229,7 +2229,7 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
       }
       // Tests often write minimal configs (missing meta, etc); keep output quiet unless requested.
       const isVitest = deps.env.VITEST === "true";
-      const shouldLogInVitest = deps.env.OPENCLAW_TEST_CONFIG_WRITE_ANOMALY_LOG === "1";
+      const shouldLogInVitest = deps.env.CIVITAS_TEST_CONFIG_WRITE_ANOMALY_LOG === "1";
       if (isVitest && !shouldLogInVitest) {
         return;
       }
@@ -2245,16 +2245,16 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
       cwd: process.cwd(),
       argv: process.argv.slice(0, 8),
       execArgv: process.execArgv.slice(0, 8),
-      watchMode: deps.env.OPENCLAW_WATCH_MODE === "1",
+      watchMode: deps.env.CIVITAS_WATCH_MODE === "1",
       watchSession:
-        typeof deps.env.OPENCLAW_WATCH_SESSION === "string" &&
-        deps.env.OPENCLAW_WATCH_SESSION.trim().length > 0
-          ? deps.env.OPENCLAW_WATCH_SESSION.trim()
+        typeof deps.env.CIVITAS_WATCH_SESSION === "string" &&
+        deps.env.CIVITAS_WATCH_SESSION.trim().length > 0
+          ? deps.env.CIVITAS_WATCH_SESSION.trim()
           : null,
       watchCommand:
-        typeof deps.env.OPENCLAW_WATCH_COMMAND === "string" &&
-        deps.env.OPENCLAW_WATCH_COMMAND.trim().length > 0
-          ? deps.env.OPENCLAW_WATCH_COMMAND.trim()
+        typeof deps.env.CIVITAS_WATCH_COMMAND === "string" &&
+        deps.env.CIVITAS_WATCH_COMMAND.trim().length > 0
+          ? deps.env.CIVITAS_WATCH_COMMAND.trim()
           : null,
       existsBefore: snapshot.exists,
       previousHash: previousHash ?? null,
@@ -2376,7 +2376,7 @@ export function createConfigIO(overrides: ConfigIoDeps = {}) {
 }
 
 // NOTE: These wrappers intentionally do *not* cache the resolved config path at
-// module scope. `OPENCLAW_CONFIG_PATH` (and friends) are expected to work even
+// module scope. `CIVITAS_CONFIG_PATH` (and friends) are expected to work even
 // when set after the module has been imported (tests, one-off scripts, etc.).
 const AUTO_OWNER_DISPLAY_SECRET_BY_PATH = new Map<string, string>();
 const AUTO_OWNER_DISPLAY_SECRET_PERSIST_IN_FLIGHT = new Set<string>();
@@ -2407,8 +2407,8 @@ export function registerConfigWriteListener(
 }
 
 function isCompatibleTopLevelRuntimeProjectionShape(params: {
-  runtimeSnapshot: OpenClawConfig;
-  candidate: OpenClawConfig;
+  runtimeSnapshot: CIVITASConfig;
+  candidate: CIVITASConfig;
 }): boolean {
   const runtime = params.runtimeSnapshot as Record<string, unknown>;
   const candidate = params.candidate as Record<string, unknown>;
@@ -2435,7 +2435,7 @@ function isCompatibleTopLevelRuntimeProjectionShape(params: {
   return true;
 }
 
-export function projectConfigOntoRuntimeSourceSnapshot(config: OpenClawConfig): OpenClawConfig {
+export function projectConfigOntoRuntimeSourceSnapshot(config: CIVITASConfig): CIVITASConfig {
   const runtimeConfigSnapshot = getRuntimeConfigSnapshotState();
   const runtimeConfigSourceSnapshot = getRuntimeConfigSourceSnapshotState();
   if (!runtimeConfigSnapshot || !runtimeConfigSourceSnapshot) {
@@ -2460,7 +2460,7 @@ export function projectConfigOntoRuntimeSourceSnapshot(config: OpenClawConfig): 
   return coerceConfig(applyMergePatch(runtimeConfigSourceSnapshot, runtimePatch));
 }
 
-export function loadConfig(): OpenClawConfig {
+export function loadConfig(): CIVITASConfig {
   const runtimeConfigSnapshot = getRuntimeConfigSnapshotState();
   if (runtimeConfigSnapshot) {
     return runtimeConfigSnapshot;
@@ -2473,11 +2473,11 @@ export function loadConfig(): OpenClawConfig {
   return getRuntimeConfigSnapshotState() ?? config;
 }
 
-export function getRuntimeConfig(): OpenClawConfig {
+export function getRuntimeConfig(): CIVITASConfig {
   return loadConfig();
 }
 
-export async function readBestEffortConfig(): Promise<OpenClawConfig> {
+export async function readBestEffortConfig(): Promise<CIVITASConfig> {
   const snapshot = await readConfigFileSnapshot();
   return snapshot.valid ? loadConfig() : snapshot.config;
 }
@@ -2499,7 +2499,7 @@ export async function readSourceConfigSnapshotForWrite(): Promise<ReadConfigFile
 }
 
 export async function writeConfigFile(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   options: ConfigWriteOptions = {},
 ): Promise<void> {
   const io = createConfigIO();

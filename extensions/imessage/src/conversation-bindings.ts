@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import {
   registerSessionBindingAdapter,
   resolveThreadBindingConversationIdFromBindingId,
@@ -119,7 +119,7 @@ function toSessionBindingRecord(
 
 export function createIMessageConversationBindingManager(params: {
   accountId?: string;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
 }): IMessageConversationBindingManager {
   const accountId = normalizeAccountId(params.accountId);
   const existing = getState().managersByAccountId.get(accountId);

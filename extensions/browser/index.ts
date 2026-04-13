@@ -1,7 +1,7 @@
 import {
   definePluginEntry,
-  type OpenClawPluginToolContext,
-  type OpenClawPluginToolFactory,
+  type CIVITASPluginToolContext,
+  type CIVITASPluginToolFactory,
 } from "civitas/plugin-sdk/plugin-entry";
 import {
   createBrowserPluginService,
@@ -15,12 +15,12 @@ export default definePluginEntry({
   name: "Browser",
   description: "Default browser tool plugin",
   register(api) {
-    api.registerTool(((ctx: OpenClawPluginToolContext) =>
+    api.registerTool(((ctx: CIVITASPluginToolContext) =>
       createBrowserTool({
         sandboxBridgeUrl: ctx.browser?.sandboxBridgeUrl,
         allowHostControl: ctx.browser?.allowHostControl,
         agentSessionKey: ctx.sessionKey,
-      })) as OpenClawPluginToolFactory);
+      })) as CIVITASPluginToolFactory);
     api.registerCli(({ program }) => registerBrowserCli(program), { commands: ["browser"] });
     api.registerGatewayMethod("browser.request", handleBrowserGatewayRequest, {
       scope: "operator.write",

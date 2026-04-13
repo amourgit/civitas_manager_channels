@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/provider-auth";
+import type { CIVITASConfig } from "civitas/plugin-sdk/provider-auth";
 import { upsertAuthProfileWithLock } from "civitas/plugin-sdk/provider-auth";
 import { applyAgentDefaultModelPrimary } from "civitas/plugin-sdk/provider-onboard";
 import type { RuntimeEnv } from "civitas/plugin-sdk/runtime";
@@ -251,11 +251,11 @@ function buildOllamaModelsConfig(
 }
 
 function applyOllamaProviderConfig(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   baseUrl: string,
   modelNames: string[],
   discoveredModelsByName?: Map<string, OllamaModelWithContext>,
-): OpenClawConfig {
+): CIVITASConfig {
   return {
     ...cfg,
     models: {
@@ -304,11 +304,11 @@ export async function buildOllamaProvider(
 }
 
 export async function promptAndConfigureOllama(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   prompter: WizardPrompter;
   isRemote: boolean;
   openUrl: (url: string) => Promise<void>;
-}): Promise<{ config: OpenClawConfig }> {
+}): Promise<{ config: CIVITASConfig }> {
   const baseUrlRaw = await params.prompter.text({
     message: "Ollama base URL",
     initialValue: OLLAMA_DEFAULT_BASE_URL,
@@ -406,11 +406,11 @@ export async function promptAndConfigureOllama(params: {
 }
 
 export async function configureOllamaNonInteractive(params: {
-  nextConfig: OpenClawConfig;
+  nextConfig: CIVITASConfig;
   opts: OllamaSetupOptions;
   runtime: RuntimeEnv;
   agentDir?: string;
-}): Promise<OpenClawConfig> {
+}): Promise<CIVITASConfig> {
   const baseUrl = resolveOllamaApiBase(
     (params.opts.customBaseUrl?.trim() || OLLAMA_DEFAULT_BASE_URL).replace(/\/+$/, ""),
   );
@@ -499,7 +499,7 @@ export async function configureOllamaNonInteractive(params: {
 }
 
 export async function ensureOllamaModelPulled(params: {
-  config: OpenClawConfig;
+  config: CIVITASConfig;
   model: string;
   prompter: WizardPrompter;
 }): Promise<void> {

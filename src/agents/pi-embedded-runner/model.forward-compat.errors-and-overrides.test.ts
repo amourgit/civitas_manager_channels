@@ -34,7 +34,7 @@ vi.mock("../pi-model-discovery.js", () => ({
   discoverModels: vi.fn(() => ({ find: vi.fn(() => null) })),
 }));
 
-import type { OpenClawConfig } from "../../config/config.js";
+import type { CIVITASConfig } from "../../config/config.js";
 import {
   expectResolvedForwardCompatFallbackResult,
   expectUnknownModelErrorResult,
@@ -61,7 +61,7 @@ function resolveModelForTest(
   provider: string,
   modelId: string,
   agentDir?: string,
-  cfg?: OpenClawConfig,
+  cfg?: CIVITASConfig,
 ) {
   return resolveModel(provider, modelId, agentDir, cfg, {
     runtimeHooks: createRuntimeHooks(),
@@ -96,7 +96,7 @@ function resolveAnthropicModelWithProviderOverrides(overrides: Partial<ModelProv
         anthropic: overrides,
       },
     },
-  } as unknown as OpenClawConfig);
+  } as unknown as CIVITASConfig);
 }
 
 describe("resolveModel forward-compat errors and overrides", () => {
@@ -149,7 +149,7 @@ describe("resolveModel forward-compat errors and overrides", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     const result = resolveModelForTest("openai", "gpt-5.3-codex-spark", "/tmp/agent", cfg);
 
@@ -173,7 +173,7 @@ describe("resolveModel forward-compat errors and overrides", () => {
   });
 
   it("uses codex fallback even when openai-codex provider is configured", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: CIVITASConfig = {
       models: {
         providers: {
           "openai-codex": {
@@ -181,7 +181,7 @@ describe("resolveModel forward-compat errors and overrides", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     expectResolvedForwardCompatFallbackResult({
       result: resolveModelForTest("openai-codex", "gpt-5.4", "/tmp/agent", cfg),
@@ -196,7 +196,7 @@ describe("resolveModel forward-compat errors and overrides", () => {
   it("uses codex fallback when inline model omits api (#39682)", () => {
     mockOpenAICodexTemplateModel(discoverModels);
 
-    const cfg: OpenClawConfig = {
+    const cfg: CIVITASConfig = {
       models: {
         providers: {
           "openai-codex": {
@@ -206,7 +206,7 @@ describe("resolveModel forward-compat errors and overrides", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     const result = resolveModelForTest("openai-codex", "gpt-5.4", "/tmp/agent", cfg);
     expect(result.error).toBeUndefined();
@@ -222,7 +222,7 @@ describe("resolveModel forward-compat errors and overrides", () => {
   it("normalizes openai-codex gpt-5.4 overrides away from /v1/responses", () => {
     mockOpenAICodexTemplateModel(discoverModels);
 
-    const cfg: OpenClawConfig = {
+    const cfg: CIVITASConfig = {
       models: {
         providers: {
           "openai-codex": {
@@ -231,7 +231,7 @@ describe("resolveModel forward-compat errors and overrides", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     expectResolvedForwardCompatFallbackResult({
       result: resolveModelForTest("openai-codex", "gpt-5.4", "/tmp/agent", cfg),
@@ -247,7 +247,7 @@ describe("resolveModel forward-compat errors and overrides", () => {
   it("normalizes openai-codex gpt-5.4 back to codex transport", () => {
     mockOpenAICodexTemplateModel(discoverModels);
 
-    const cfg: OpenClawConfig = {
+    const cfg: CIVITASConfig = {
       models: {
         providers: {
           "openai-codex": {
@@ -256,7 +256,7 @@ describe("resolveModel forward-compat errors and overrides", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     expectResolvedForwardCompatFallbackResult({
       result: resolveModelForTest("openai-codex", "gpt-5.4", "/tmp/agent", cfg),
@@ -341,7 +341,7 @@ describe("resolveModel forward-compat errors and overrides", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     const result = resolveModelForTest("kimi", "kimi-code", "/tmp/agent", cfg);
     expect(result.error).toBeUndefined();

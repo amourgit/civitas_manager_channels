@@ -4,9 +4,9 @@
 export type { ChannelMessageActionAdapter } from "civitas/plugin-sdk/channel-contract";
 export { buildChannelConfigSchema, SignalConfigSchema } from "../config-api.js";
 export { PAIRING_APPROVED_MESSAGE } from "civitas/plugin-sdk/channel-status";
-import type { OpenClawConfig as RuntimeOpenClawConfig } from "civitas/plugin-sdk/config-runtime";
-export type { RuntimeOpenClawConfig as OpenClawConfig };
-export type { OpenClawPluginApi, PluginRuntime } from "civitas/plugin-sdk/core";
+import type { CIVITASConfig as RuntimeCIVITASConfig } from "civitas/plugin-sdk/config-runtime";
+export type { RuntimeCIVITASConfig as CIVITASConfig };
+export type { CIVITASPluginApi, PluginRuntime } from "civitas/plugin-sdk/core";
 export type { ChannelPlugin } from "civitas/plugin-sdk/core";
 export {
   DEFAULT_ACCOUNT_ID,
@@ -50,6 +50,6 @@ export { sendMessageSignal } from "./send.js";
 export { signalMessageActions } from "./message-actions.js";
 export type { ResolvedSignalAccount } from "./accounts.js";
 export type SignalAccountConfig = Omit<
-  Exclude<NonNullable<RuntimeOpenClawConfig["channels"]>["signal"], undefined>,
+  Exclude<NonNullable<RuntimeCIVITASConfig["channels"]>["signal"], undefined>,
   "accounts"
 >;

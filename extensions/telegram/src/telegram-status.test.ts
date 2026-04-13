@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { PluginRuntime } from "../../../src/plugins/runtime/types.js";
 import type { ResolvedTelegramAccount } from "./accounts.js";
@@ -19,7 +19,7 @@ vi.mock("./audit.js", () => ({
   auditTelegramGroupMembership: auditTelegramGroupMembershipMock,
 }));
 
-function createCfg(): OpenClawConfig {
+function createCfg(): CIVITASConfig {
   return {
     channels: {
       telegram: {
@@ -31,10 +31,10 @@ function createCfg(): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as CIVITASConfig;
 }
 
-function resolveAccount(cfg: OpenClawConfig, accountId: string): ResolvedTelegramAccount {
+function resolveAccount(cfg: CIVITASConfig, accountId: string): ResolvedTelegramAccount {
   return telegramPlugin.config.resolveAccount(cfg, accountId) as ResolvedTelegramAccount;
 }
 

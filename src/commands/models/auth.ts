@@ -21,7 +21,7 @@ import { normalizeProviderId } from "../../agents/model-selection.js";
 import { resolveDefaultAgentWorkspaceDir } from "../../agents/workspace.js";
 import { formatCliCommand } from "../../cli/command-format.js";
 import { parseDurationMs } from "../../cli/parse-duration.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { CIVITASConfig } from "../../config/config.js";
 import { logConfigUpdated } from "../../config/logging.js";
 import { applyAuthProfileConfig } from "../../plugins/provider-auth-helpers.js";
 import { resolvePluginProviders } from "../../plugins/providers.runtime.js";
@@ -83,7 +83,7 @@ function resolveDefaultTokenProfileId(provider: string): string {
 }
 
 type ResolvedModelsAuthContext = {
-  config: OpenClawConfig;
+  config: CIVITASConfig;
   agentDir: string;
   workspaceDir: string;
   providers: ProviderPlugin[];
@@ -264,7 +264,7 @@ async function persistProviderAuthResult(params: {
 }
 
 async function runProviderAuthMethod(params: {
-  config: OpenClawConfig;
+  config: CIVITASConfig;
   agentDir: string;
   workspaceDir: string;
   provider: ProviderPlugin;
@@ -407,9 +407,9 @@ export async function modelsAuthPasteTokenCommand(
   logConfigUpdated(runtime);
   runtime.log(`Auth profile: ${profileId} (${provider}/token)`);
   if (provider === "anthropic") {
-    runtime.log("Anthropic setup-token auth is a legacy/manual path in OpenClaw.");
+    runtime.log("Anthropic setup-token auth is a legacy/manual path in CIVITAS.");
     runtime.log(
-      "Anthropic told OpenClaw users this path requires Extra Usage on the Claude account.",
+      "Anthropic told CIVITAS users this path requires Extra Usage on the Claude account.",
     );
   }
 }

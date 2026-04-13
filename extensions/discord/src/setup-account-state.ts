@@ -1,6 +1,6 @@
 import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "civitas/plugin-sdk/account-id";
 import { listCombinedAccountIds } from "civitas/plugin-sdk/account-resolution";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import {
   hasConfiguredSecretInput,
   normalizeSecretInputString,
@@ -43,7 +43,7 @@ function inspectConfiguredToken(value: unknown): {
   return null;
 }
 
-export function listDiscordSetupAccountIds(cfg: OpenClawConfig): string[] {
+export function listDiscordSetupAccountIds(cfg: CIVITASConfig): string[] {
   const accounts = cfg.channels?.discord?.accounts;
   return listCombinedAccountIds({
     configuredAccountIds:
@@ -54,12 +54,12 @@ export function listDiscordSetupAccountIds(cfg: OpenClawConfig): string[] {
   });
 }
 
-export function resolveDefaultDiscordSetupAccountId(cfg: OpenClawConfig): string {
+export function resolveDefaultDiscordSetupAccountId(cfg: CIVITASConfig): string {
   return resolveDefaultDiscordAccountId(cfg);
 }
 
 export function resolveDiscordSetupAccountConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
 }): { accountId: string; config: DiscordAccountConfig } {
   const accountId = normalizeAccountId(
@@ -72,7 +72,7 @@ export function resolveDiscordSetupAccountConfig(params: {
 }
 
 export function inspectDiscordSetupAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
 }): InspectedDiscordSetupAccount {
   const { accountId, config } = resolveDiscordSetupAccountConfig(params);

@@ -78,8 +78,8 @@ function createDeps(
     maybeRestoreLegacyMatrixBackup: vi.fn(async () => createLegacyCryptoRestoreResult()),
     summarizeMatrixDeviceHealth: vi.fn(() => ({
       currentDeviceId: null,
-      staleOpenClawDevices: [] as MatrixManagedDeviceInfo[],
-      currentOpenClawDevices: [] as MatrixManagedDeviceInfo[],
+      staleCIVITASDevices: [] as MatrixManagedDeviceInfo[],
+      currentCIVITASDevices: [] as MatrixManagedDeviceInfo[],
     })),
     syncMatrixOwnProfile: vi.fn(async () => createProfileSyncResult()),
     ensureMatrixStartupVerification: vi.fn(async () =>
@@ -175,10 +175,10 @@ describe("runMatrixStartupMaintenance", () => {
     params.auth.encryption = true;
     vi.mocked(deps.summarizeMatrixDeviceHealth).mockReturnValue({
       currentDeviceId: null,
-      staleOpenClawDevices: [
-        { deviceId: "DEV123", displayName: "OpenClaw Device", current: false },
+      staleCIVITASDevices: [
+        { deviceId: "DEV123", displayName: "CIVITAS Device", current: false },
       ],
-      currentOpenClawDevices: [],
+      currentCIVITASDevices: [],
     });
     vi.mocked(deps.ensureMatrixStartupVerification).mockResolvedValue(
       createStartupVerificationOutcome("pending"),
@@ -195,7 +195,7 @@ describe("runMatrixStartupMaintenance", () => {
     await runMatrixStartupMaintenance(params, deps);
 
     expect(params.logger.warn).toHaveBeenCalledWith(
-      "matrix: stale OpenClaw devices detected for @bot:example.org: DEV123. Run 'civitas matrix devices prune-stale --account ops' to keep encrypted-room trust healthy.",
+      "matrix: stale CIVITAS devices detected for @bot:example.org: DEV123. Run 'civitas matrix devices prune-stale --account ops' to keep encrypted-room trust healthy.",
     );
     expect(params.logger.info).toHaveBeenCalledWith(
       "matrix: device not verified — run 'civitas matrix verify device <key>' to enable E2EE",

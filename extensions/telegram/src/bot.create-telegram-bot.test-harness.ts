@@ -1,5 +1,5 @@
 import { resolveDefaultModelForAgent } from "civitas/plugin-sdk/agent-runtime";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import {
   createReplyDispatcher,
   resetInboundDedupe,
@@ -117,7 +117,7 @@ const replySpyHoisted = vi.hoisted(() => ({
     (
       ctx: MsgContext,
       opts?: GetReplyOptions,
-      configOverride?: OpenClawConfig,
+      configOverride?: CIVITASConfig,
     ) => Promise<ReplyPayload | ReplyPayload[] | undefined>
   >,
 }));
@@ -200,7 +200,7 @@ function parseModelRef(raw: string): { provider?: string; model: string } {
   return { model: trimmed };
 }
 
-function createModelsProviderDataFromConfig(cfg: OpenClawConfig): {
+function createModelsProviderDataFromConfig(cfg: CIVITASConfig): {
   byProvider: Map<string, Set<string>>;
   providers: string[];
   resolvedDefault: { provider: string; model: string };
@@ -390,7 +390,7 @@ export const getOnHandler = (event: string) => {
   return handler as (ctx: Record<string, unknown>) => Promise<void>;
 };
 
-const DEFAULT_TELEGRAM_TEST_CONFIG: OpenClawConfig = {
+const DEFAULT_TELEGRAM_TEST_CONFIG: CIVITASConfig = {
   agents: {
     defaults: {
       envelopeTimezone: "utc",
@@ -524,7 +524,7 @@ beforeEach(() => {
   listSkillCommandsForAgents.mockReset();
   listSkillCommandsForAgents.mockReturnValue([]);
   buildModelsProviderData.mockReset();
-  buildModelsProviderData.mockImplementation(async (cfg: OpenClawConfig) => {
+  buildModelsProviderData.mockImplementation(async (cfg: CIVITASConfig) => {
     return createModelsProviderDataFromConfig(cfg);
   });
   middlewareUseSpy.mockReset();

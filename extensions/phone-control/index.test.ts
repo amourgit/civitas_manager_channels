@@ -5,8 +5,8 @@ import { describe, expect, it, vi } from "vitest";
 import { createTestPluginApi } from "../../test/helpers/plugins/plugin-api.js";
 import registerPhoneControl from "./index.js";
 import type {
-  OpenClawPluginApi,
-  OpenClawPluginCommandDefinition,
+  CIVITASPluginApi,
+  CIVITASPluginCommandDefinition,
   PluginCommandContext,
 } from "./runtime-api.js";
 
@@ -17,8 +17,8 @@ function createApi(params: {
   stateDir: string;
   getConfig: () => Record<string, unknown>;
   writeConfig: (next: Record<string, unknown>) => Promise<void>;
-  registerCommand: (command: OpenClawPluginCommandDefinition) => void;
-}): OpenClawPluginApi {
+  registerCommand: (command: CIVITASPluginCommandDefinition) => void;
+}): CIVITASPluginApi {
   return createTestPluginApi({
     id: "phone-control",
     name: "phone-control",
@@ -33,9 +33,9 @@ function createApi(params: {
         loadConfig: () => params.getConfig(),
         writeConfigFile: (next: Record<string, unknown>) => params.writeConfig(next),
       },
-    } as OpenClawPluginApi["runtime"],
+    } as CIVITASPluginApi["runtime"],
     registerCommand: params.registerCommand,
-  }) as OpenClawPluginApi;
+  }) as CIVITASPluginApi;
 }
 
 function createCommandContext(args: string): PluginCommandContext {
@@ -67,7 +67,7 @@ function createPhoneControlConfig(): Record<string, unknown> {
 
 async function withRegisteredPhoneControl(
   run: (params: {
-    command: OpenClawPluginCommandDefinition;
+    command: CIVITASPluginCommandDefinition;
     writeConfigFile: ReturnType<typeof vi.fn>;
     getConfig: () => Record<string, unknown>;
   }) => Promise<void>,
@@ -79,7 +79,7 @@ async function withRegisteredPhoneControl(
       config = next;
     });
 
-    let command: OpenClawPluginCommandDefinition | undefined;
+    let command: CIVITASPluginCommandDefinition | undefined;
     registerPhoneControl.register(
       createApi({
         stateDir,

@@ -72,7 +72,7 @@ async function runLegacyRestoreScenario(params: {
       stateDir,
       env: {
         ...process.env,
-        OPENCLAW_STATE_DIR: stateDir,
+        CIVITAS_STATE_DIR: stateDir,
         HOME: home,
       },
     });

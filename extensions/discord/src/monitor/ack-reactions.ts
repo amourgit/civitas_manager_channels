@@ -4,7 +4,7 @@ import {
   logAckFailure,
   type StatusReactionAdapter,
 } from "civitas/plugin-sdk/channel-feedback";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { logVerbose } from "civitas/plugin-sdk/runtime-env";
 import { createDiscordRuntimeAccountContext } from "../client.js";
 import { reactMessageDiscord, removeReactionDiscord } from "../send.js";
@@ -12,7 +12,7 @@ import type { DiscordReactionRuntimeContext } from "../send.types.js";
 
 export function createDiscordAckReactionContext(params: {
   rest: RequestClient;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
 }): DiscordReactionRuntimeContext {
   return {

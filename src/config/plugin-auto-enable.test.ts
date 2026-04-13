@@ -476,9 +476,9 @@ describe("applyPluginAutoEnable", () => {
       },
       env: {
         ...process.env,
-        OPENCLAW_HOME: undefined,
-        OPENCLAW_STATE_DIR: stateDir,
-        OPENCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+        CIVITAS_HOME: undefined,
+        CIVITAS_STATE_DIR: stateDir,
+        CIVITAS_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
       },
     });
 
@@ -524,7 +524,7 @@ describe("applyPluginAutoEnable", () => {
       },
       env: {
         ...process.env,
-        OPENCLAW_STATE_DIR: stateDir,
+        CIVITAS_STATE_DIR: stateDir,
       },
       manifestRegistry: makeRegistry([]),
     });
@@ -922,9 +922,9 @@ describe("applyPluginAutoEnable", () => {
         config: makeApnChannelConfig(),
         env: {
           ...process.env,
-          OPENCLAW_HOME: undefined,
-          OPENCLAW_STATE_DIR: stateDir,
-          OPENCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+          CIVITAS_HOME: undefined,
+          CIVITAS_STATE_DIR: stateDir,
+          CIVITAS_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
         },
       });
 

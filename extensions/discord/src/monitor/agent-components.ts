@@ -23,7 +23,7 @@ import {
   formatInboundEnvelope,
   resolveEnvelopeFormatOptions,
 } from "civitas/plugin-sdk/channel-inbound";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { DiscordAccountConfig } from "civitas/plugin-sdk/config-runtime";
 import { isDangerousNameMatchingEnabled } from "civitas/plugin-sdk/dangerous-name-runtime";
 import { resolveMarkdownTableMode } from "civitas/plugin-sdk/markdown-table-runtime";
@@ -1238,7 +1238,7 @@ class DiscordComponentChannelSelect extends ChannelSelectMenu {
 }
 
 class DiscordComponentModal extends Modal {
-  title = "OpenClaw form";
+  title = "CIVITAS form";
   customId = "__civitas_discord_component_modal_wildcard__";
   components = [];
   customIdParser = parseDiscordModalCustomIdForCarbon;

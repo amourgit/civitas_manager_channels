@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { OpenClawConfig } from "civitas/plugin-sdk/memory-core";
+import type { CIVITASConfig } from "civitas/plugin-sdk/memory-core";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   __testing,
@@ -104,7 +104,7 @@ describe("short-term dreaming config", () => {
           userTimezone: "America/Los_Angeles",
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const resolved = resolveShortTermPromotionDreamingConfig({
       pluginConfig: {},
       cfg,

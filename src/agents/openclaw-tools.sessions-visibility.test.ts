@@ -19,9 +19,9 @@ vi.mock("../config/config.js", async () => {
 
 import "./test-helpers/fast-core-tools.js";
 
-let createOpenClawTools: typeof import("./civitas-tools.js").createOpenClawTools;
+let createCIVITASTools: typeof import("./civitas-tools.js").createCIVITASTools;
 
-async function loadFreshOpenClawToolsModuleForTest() {
+async function loadFreshCIVITASToolsModuleForTest() {
   vi.resetModules();
   vi.doMock("../gateway/call.js", () => ({
     callGateway: (opts: unknown) => callGatewayMock(opts),
@@ -35,11 +35,11 @@ async function loadFreshOpenClawToolsModuleForTest() {
       resolveGatewayPort: () => 18789,
     };
   });
-  ({ createOpenClawTools } = await import("./civitas-tools.js"));
+  ({ createCIVITASTools } = await import("./civitas-tools.js"));
 }
 
 function getSessionsHistoryTool(options?: { sandboxed?: boolean }) {
-  const tool = createOpenClawTools({
+  const tool = createCIVITASTools({
     agentSessionKey: "main",
     sandboxed: options?.sandboxed,
   }).find((candidate) => candidate.name === "sessions_history");
@@ -69,7 +69,7 @@ function mockGatewayWithHistory(
 
 describe("sessions tools visibility", () => {
   beforeEach(async () => {
-    await loadFreshOpenClawToolsModuleForTest();
+    await loadFreshCIVITASToolsModuleForTest();
   });
 
   it("defaults to tree visibility (self + spawned) for sessions_history", async () => {

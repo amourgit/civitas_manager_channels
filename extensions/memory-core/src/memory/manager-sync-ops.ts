@@ -15,7 +15,7 @@ import {
   resolveAgentDir,
   resolveSessionTranscriptsDirForAgent,
   resolveUserPath,
-  type OpenClawConfig,
+  type CIVITASConfig,
   type ResolvedMemorySearchConfig,
 } from "civitas/plugin-sdk/memory-core-host-engine-foundation";
 import {
@@ -110,7 +110,7 @@ export function runDetachedMemorySync(sync: () => Promise<void>, reason: "interv
 }
 
 export abstract class MemoryManagerSyncOps {
-  protected abstract readonly cfg: OpenClawConfig;
+  protected abstract readonly cfg: CIVITASConfig;
   protected abstract readonly agentId: string;
   protected abstract readonly workspaceDir: string;
   protected abstract readonly settings: ResolvedMemorySearchConfig;
@@ -993,8 +993,8 @@ export abstract class MemoryManagerSyncOps {
           this.shouldFallbackOnError(reason) && (await this.activateFallbackProvider(reason));
         if (activated) {
           if (
-            process.env.OPENCLAW_TEST_FAST === "1" &&
-            process.env.OPENCLAW_TEST_MEMORY_UNSAFE_REINDEX === "1"
+            process.env.CIVITAS_TEST_FAST === "1" &&
+            process.env.CIVITAS_TEST_MEMORY_UNSAFE_REINDEX === "1"
           ) {
             await this.runUnsafeReindex({
               reason: params?.reason,
@@ -1030,8 +1030,8 @@ export abstract class MemoryManagerSyncOps {
     try {
       if (needsFullReindex) {
         if (
-          process.env.OPENCLAW_TEST_FAST === "1" &&
-          process.env.OPENCLAW_TEST_MEMORY_UNSAFE_REINDEX === "1"
+          process.env.CIVITAS_TEST_FAST === "1" &&
+          process.env.CIVITAS_TEST_MEMORY_UNSAFE_REINDEX === "1"
         ) {
           await this.runUnsafeReindex({
             reason: params?.reason,

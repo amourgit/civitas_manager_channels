@@ -12,7 +12,7 @@ export type {
   ChannelStatusIssue,
 } from "civitas/plugin-sdk/channel-contract";
 export type {
-  OpenClawConfig,
+  CIVITASConfig,
   GroupToolPolicyConfig,
   MarkdownTableMode,
 } from "civitas/plugin-sdk/config-runtime";
@@ -20,7 +20,7 @@ export type {
   PluginRuntime,
   AnyAgentTool,
   ChannelPlugin,
-  OpenClawPluginToolContext,
+  CIVITASPluginToolContext,
 } from "civitas/plugin-sdk/core";
 export type { RuntimeEnv } from "civitas/plugin-sdk/runtime";
 export {
@@ -57,4 +57,4 @@ export {
   sendPayloadWithChunkedTextAndMedia,
   type OutboundReplyPayload,
 } from "civitas/plugin-sdk/reply-payload";
-export { resolvePreferredOpenClawTmpDir } from "civitas/plugin-sdk/browser-support";
+export { resolvePreferredCIVITASTmpDir } from "civitas/plugin-sdk/browser-support";

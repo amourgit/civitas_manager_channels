@@ -4,7 +4,7 @@ import {
   adaptScopedAccountAccessor,
   createScopedChannelConfigAdapter,
 } from "civitas/plugin-sdk/channel-config-helpers";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { createChannelPluginBase } from "civitas/plugin-sdk/core";
 import {
   getChatChannelMeta,
@@ -31,7 +31,7 @@ import { telegramDoctor } from "./doctor.js";
 export const TELEGRAM_CHANNEL = "telegram" as const;
 
 export function findTelegramTokenOwnerAccountId(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
 }): string | null {
   const normalizedAccountId = normalizeAccountId(params.accountId);
@@ -78,7 +78,7 @@ export function formatDuplicateTelegramTokenReason(params: {
  *
  * See: https://github.com/civitas/civitas/issues/53876
  */
-function isBlockedByMultiBotGuard(cfg: OpenClawConfig, accountId: string): boolean {
+function isBlockedByMultiBotGuard(cfg: CIVITASConfig, accountId: string): boolean {
   if (normalizeAccountId(accountId) === DEFAULT_ACCOUNT_ID) {
     return false;
   }

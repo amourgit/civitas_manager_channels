@@ -2,7 +2,7 @@
   "name": "@civitas/xai-plugin",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw xAI plugin",
+  "description": "CIVITAS xAI plugin",
   "type": "module",
   "civitas": {
     "extensions": [

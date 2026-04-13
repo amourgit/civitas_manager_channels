@@ -28,8 +28,8 @@ const buildGatewayInstallPlan = vi.fn(
     programArguments: ["/bin/node", "cli", "gateway", "--port", String(params.port)],
     workingDirectory: process.cwd(),
     environment: {
-      OPENCLAW_GATEWAY_PORT: String(params.port),
-      ...(params.token ? { OPENCLAW_GATEWAY_TOKEN: params.token } : {}),
+      CIVITAS_GATEWAY_PORT: String(params.port),
+      ...(params.token ? { CIVITAS_GATEWAY_TOKEN: params.token } : {}),
     },
   }),
 );
@@ -147,15 +147,15 @@ describe("daemon-cli coverage", () => {
   beforeEach(() => {
     daemonProgram = createDaemonProgram();
     envSnapshot = captureEnv([
-      "OPENCLAW_STATE_DIR",
-      "OPENCLAW_CONFIG_PATH",
-      "OPENCLAW_GATEWAY_PORT",
-      "OPENCLAW_PROFILE",
+      "CIVITAS_STATE_DIR",
+      "CIVITAS_CONFIG_PATH",
+      "CIVITAS_GATEWAY_PORT",
+      "CIVITAS_PROFILE",
     ]);
-    process.env.OPENCLAW_STATE_DIR = "/tmp/civitas-cli-state";
-    process.env.OPENCLAW_CONFIG_PATH = "/tmp/civitas-cli-state/civitas.json";
-    delete process.env.OPENCLAW_GATEWAY_PORT;
-    delete process.env.OPENCLAW_PROFILE;
+    process.env.CIVITAS_STATE_DIR = "/tmp/civitas-cli-state";
+    process.env.CIVITAS_CONFIG_PATH = "/tmp/civitas-cli-state/civitas.json";
+    delete process.env.CIVITAS_GATEWAY_PORT;
+    delete process.env.CIVITAS_PROFILE;
     serviceReadCommand.mockResolvedValue(null);
     resolveGatewayProbeAuthWithSecretInputs.mockClear();
     buildGatewayInstallPlan.mockClear();
@@ -187,10 +187,10 @@ describe("daemon-cli coverage", () => {
     serviceReadCommand.mockResolvedValueOnce({
       programArguments: ["/bin/node", "cli", "gateway", "--port", "19001"],
       environment: {
-        OPENCLAW_PROFILE: "dev",
-        OPENCLAW_STATE_DIR: "/tmp/civitas-daemon-state",
-        OPENCLAW_CONFIG_PATH: "/tmp/civitas-daemon-state/civitas.json",
-        OPENCLAW_GATEWAY_PORT: "19001",
+        CIVITAS_PROFILE: "dev",
+        CIVITAS_STATE_DIR: "/tmp/civitas-daemon-state",
+        CIVITAS_CONFIG_PATH: "/tmp/civitas-daemon-state/civitas.json",
+        CIVITAS_GATEWAY_PORT: "19001",
       },
       sourcePath: "/tmp/ai.civitas.gateway.plist",
     });

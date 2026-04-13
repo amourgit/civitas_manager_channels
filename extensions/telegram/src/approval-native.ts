@@ -7,7 +7,7 @@ import {
   createChannelNativeOriginTargetResolver,
 } from "civitas/plugin-sdk/approval-native-runtime";
 import type { ChannelApprovalCapability } from "civitas/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { ExecApprovalRequest, PluginApprovalRequest } from "civitas/plugin-sdk/infra-runtime";
 import { listTelegramAccountIds } from "./accounts.js";
 import {

@@ -6,7 +6,7 @@ import {
   matchesApprovalRequestFilters,
 } from "civitas/plugin-sdk/approval-client-runtime";
 import { resolveApprovalRequestChannelAccountId } from "civitas/plugin-sdk/approval-native-runtime";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { TelegramExecApprovalConfig } from "civitas/plugin-sdk/config-runtime";
 import type { ExecApprovalRequest, PluginApprovalRequest } from "civitas/plugin-sdk/infra-runtime";
 import type { ReplyPayload } from "civitas/plugin-sdk/reply-runtime";
@@ -29,7 +29,7 @@ function normalizeTelegramDirectApproverId(value: string | number): string | und
 }
 
 export function resolveTelegramExecApprovalConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
 }): TelegramExecApprovalConfig | undefined {
   const account = resolveTelegramAccount(params);
@@ -44,7 +44,7 @@ export function resolveTelegramExecApprovalConfig(params: {
 }
 
 export function getTelegramExecApprovalApprovers(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
 }): string[] {
   const account = resolveTelegramAccount(params).config;
@@ -57,7 +57,7 @@ export function getTelegramExecApprovalApprovers(params: {
 }
 
 export function isTelegramExecApprovalTargetRecipient(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   senderId?: string | null;
   accountId?: string | null;
 }): boolean {
@@ -75,7 +75,7 @@ export function isTelegramExecApprovalTargetRecipient(params: {
 }
 
 function countTelegramExecApprovalEligibleAccounts(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   request: ExecApprovalRequest | PluginApprovalRequest;
 }): number {
   return listTelegramAccountIds(params.cfg).filter((accountId) => {
@@ -103,7 +103,7 @@ function countTelegramExecApprovalEligibleAccounts(params: {
 }
 
 function matchesTelegramRequestAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
   request: ExecApprovalRequest | PluginApprovalRequest;
 }): boolean {
@@ -147,7 +147,7 @@ export const shouldHandleTelegramExecApprovalRequest =
   telegramExecApprovalProfile.shouldHandleRequest;
 
 export function shouldInjectTelegramExecApprovalButtons(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
   to: string;
 }): boolean {
@@ -166,7 +166,7 @@ export function shouldInjectTelegramExecApprovalButtons(params: {
 }
 
 function resolveExecApprovalButtonsExplicitlyDisabled(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
 }): boolean {
   const capabilities = resolveTelegramAccount(params).config.capabilities;
@@ -174,7 +174,7 @@ function resolveExecApprovalButtonsExplicitlyDisabled(params: {
 }
 
 export function shouldEnableTelegramExecApprovalButtons(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
   to: string;
 }): boolean {
@@ -185,7 +185,7 @@ export function shouldEnableTelegramExecApprovalButtons(params: {
 }
 
 export function shouldSuppressLocalTelegramExecApprovalPrompt(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
   payload: ReplyPayload;
 }): boolean {
@@ -193,7 +193,7 @@ export function shouldSuppressLocalTelegramExecApprovalPrompt(params: {
 }
 
 export function isTelegramExecApprovalHandlerConfigured(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
 }): boolean {
   return isChannelExecApprovalClientEnabledFromConfig({

@@ -4,7 +4,7 @@ export const InstallSourceSchema = z.union([
   z.literal("npm"),
   z.literal("archive"),
   z.literal("path"),
-  z.literal("clawhub"),
+  z.literal("CIVITAS Channelhub"),
 ]);
 
 export const PluginInstallSourceSchema = z.union([InstallSourceSchema, z.literal("marketplace")]);
@@ -22,10 +22,10 @@ export const InstallRecordShape = {
   shasum: z.string().optional(),
   resolvedAt: z.string().optional(),
   installedAt: z.string().optional(),
-  clawhubUrl: z.string().optional(),
-  clawhubPackage: z.string().optional(),
-  clawhubFamily: z.union([z.literal("code-plugin"), z.literal("bundle-plugin")]).optional(),
-  clawhubChannel: z
+  CIVITAS ChannelhubUrl: z.string().optional(),
+  CIVITAS ChannelhubPackage: z.string().optional(),
+  CIVITAS ChannelhubFamily: z.union([z.literal("code-plugin"), z.literal("bundle-plugin")]).optional(),
+  CIVITAS ChannelhubChannel: z
     .union([z.literal("official"), z.literal("community"), z.literal("private")])
     .optional(),
 } as const;

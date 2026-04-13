@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type {
   DmPolicy,
   GroupPolicy,
@@ -77,7 +77,7 @@ export type SignalReceivePayload = {
 
 export type SignalEventHandlerDeps = {
   runtime: RuntimeEnv;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   baseUrl: string;
   account?: string;
   accountUuid?: string;

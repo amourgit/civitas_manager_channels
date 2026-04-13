@@ -2,7 +2,7 @@ import type {
   ChannelDoctorConfigMutation,
   ChannelDoctorLegacyConfigRule,
 } from "civitas/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { resolveDiscordPreviewStreamMode } from "./preview-streaming.js";
 
 function asObjectRecord(value: unknown): Record<string, unknown> | null {
@@ -208,7 +208,7 @@ export const legacyConfigRules: ChannelDoctorLegacyConfigRule[] = [
 export function normalizeCompatibilityConfig({
   cfg,
 }: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
 }): ChannelDoctorConfigMutation {
   const rawEntry = asObjectRecord((cfg.channels as Record<string, unknown> | undefined)?.discord);
   if (!rawEntry) {
@@ -285,7 +285,7 @@ export function normalizeCompatibilityConfig({
       channels: {
         ...cfg.channels,
         discord: updated,
-      } as OpenClawConfig["channels"],
+      } as CIVITASConfig["channels"],
     },
     changes,
   };

@@ -1,7 +1,7 @@
 {
   "name": "@civitas/nextcloud-talk",
   "version": "2026.4.4",
-  "description": "OpenClaw Nextcloud Talk channel plugin",
+  "description": "CIVITAS Nextcloud Talk channel plugin",
   "type": "module",
   "devDependencies": {
     "civitas": "workspace:*"
@@ -45,7 +45,7 @@
       "civitasVersion": "2026.4.4"
     },
     "release": {
-      "publishToClawHub": true,
+      "publishToChannelHub": true,
       "publishToNpm": true
     }
   }

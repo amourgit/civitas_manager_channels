@@ -2,14 +2,14 @@ import {
   createAttachedChannelResultAdapter,
   type ChannelOutboundAdapter,
 } from "civitas/plugin-sdk/channel-send-result";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { resolveOutboundSendDep, sanitizeForPlainText } from "civitas/plugin-sdk/infra-runtime";
 import { WHATSAPP_LEGACY_OUTBOUND_SEND_DEP_KEYS } from "./outbound-send-deps.js";
 
 type WhatsAppChunker = NonNullable<ChannelOutboundAdapter["chunker"]>;
 type WhatsAppSendTextOptions = {
   verbose: boolean;
-  cfg?: OpenClawConfig;
+  cfg?: CIVITASConfig;
   mediaUrl?: string;
   mediaAccess?: {
     localRoots?: readonly string[];
@@ -28,7 +28,7 @@ type WhatsAppSendMessage = (
 type WhatsAppSendPoll = (
   to: string,
   poll: Parameters<NonNullable<ChannelOutboundAdapter["sendPoll"]>>[0]["poll"],
-  options: { verbose: boolean; accountId?: string; cfg?: OpenClawConfig },
+  options: { verbose: boolean; accountId?: string; cfg?: CIVITASConfig },
 ) => Promise<{ messageId: string; toJid: string }>;
 
 type CreateWhatsAppOutboundBaseParams = {

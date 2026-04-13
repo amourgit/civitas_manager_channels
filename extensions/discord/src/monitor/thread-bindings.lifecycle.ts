@@ -1,5 +1,5 @@
 import { readAcpSessionEntry, type AcpSessionStoreEntry } from "civitas/plugin-sdk/acp-runtime";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { normalizeAccountId } from "civitas/plugin-sdk/routing";
 import { parseDiscordTarget } from "../targets.js";
 import { resolveChannelIdForBinding } from "./thread-bindings.discord-api.js";
@@ -32,7 +32,7 @@ export type AcpThreadBindingReconciliationResult = {
 export type AcpThreadBindingHealthStatus = "healthy" | "stale" | "uncertain";
 
 export type AcpThreadBindingHealthProbe = (params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
   sessionKey: string;
   binding: ThreadBindingRecord;
@@ -142,7 +142,7 @@ export function listThreadBindingsBySessionKey(params: {
 }
 
 export async function autoBindSpawnedDiscordSubagent(params: {
-  cfg?: OpenClawConfig;
+  cfg?: CIVITASConfig;
   accountId?: string;
   channel?: string;
   to?: string;
@@ -306,7 +306,7 @@ function resolveStoredAcpBindingHealth(params: {
 }
 
 export async function reconcileAcpThreadBindingsOnStartup(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string;
   sendFarewell?: boolean;
   healthProbe?: AcpThreadBindingHealthProbe;

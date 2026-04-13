@@ -1,6 +1,6 @@
 import type { RequestClient } from "@buape/carbon";
 import { resolveAgentAvatar } from "civitas/plugin-sdk/agent-runtime";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { MarkdownTableMode, ReplyToMode } from "civitas/plugin-sdk/config-runtime";
 import type { ChunkMode } from "civitas/plugin-sdk/reply-chunking";
 import type { ReplyPayload } from "civitas/plugin-sdk/reply-dispatch-runtime";
@@ -114,7 +114,7 @@ function resolveBoundThreadBinding(params: {
 }
 
 function resolveBindingPersona(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   binding: DiscordThreadBindingLookupRecord | undefined,
 ): {
   username?: string;
@@ -139,7 +139,7 @@ function resolveBindingPersona(
 }
 
 async function sendDiscordChunkWithFallback(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   target: string;
   text: string;
   token: string;
@@ -216,7 +216,7 @@ async function sendDiscordChunkWithFallback(params: {
 }
 
 export async function deliverDiscordReply(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   replies: ReplyPayload[];
   target: string;
   token: string;

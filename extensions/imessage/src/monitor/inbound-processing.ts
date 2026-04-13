@@ -9,7 +9,7 @@ import {
 } from "civitas/plugin-sdk/channel-inbound";
 import { hasControlCommand } from "civitas/plugin-sdk/command-auth";
 import { resolveDualTextControlCommandGate } from "civitas/plugin-sdk/command-auth";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import {
   resolveChannelContextVisibilityMode,
   resolveChannelGroupPolicy,
@@ -137,7 +137,7 @@ export type IMessageInboundDecision =
   | IMessageInboundDispatchDecision;
 
 export function resolveIMessageInboundDecision(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
   message: IMessagePayload;
   opts?: Pick<MonitorIMessageOpts, "requireMention">;
@@ -511,7 +511,7 @@ export function resolveIMessageInboundDecision(params: {
 }
 
 export function buildIMessageInboundContext(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   decision: IMessageInboundDispatchDecision;
   message: IMessagePayload;
   envelopeOptions?: EnvelopeFormatOptions;

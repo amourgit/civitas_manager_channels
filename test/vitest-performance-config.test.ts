@@ -14,7 +14,7 @@ describe("loadVitestExperimentalConfig", () => {
     expect(
       loadVitestExperimentalConfig(
         {
-          OPENCLAW_VITEST_FS_MODULE_CACHE: "1",
+          CIVITAS_VITEST_FS_MODULE_CACHE: "1",
         },
         "linux",
       ),
@@ -29,7 +29,7 @@ describe("loadVitestExperimentalConfig", () => {
     expect(
       loadVitestExperimentalConfig(
         {
-          OPENCLAW_VITEST_FS_MODULE_CACHE_PATH: "/tmp/civitas-vitest-cache",
+          CIVITAS_VITEST_FS_MODULE_CACHE_PATH: "/tmp/civitas-vitest-cache",
         },
         "linux",
       ),
@@ -49,7 +49,7 @@ describe("loadVitestExperimentalConfig", () => {
     expect(
       loadVitestExperimentalConfig(
         {
-          OPENCLAW_VITEST_FS_MODULE_CACHE: "1",
+          CIVITAS_VITEST_FS_MODULE_CACHE: "1",
         },
         "win32",
       ),
@@ -64,7 +64,7 @@ describe("loadVitestExperimentalConfig", () => {
     expect(
       loadVitestExperimentalConfig(
         {
-          OPENCLAW_VITEST_FS_MODULE_CACHE: "0",
+          CIVITAS_VITEST_FS_MODULE_CACHE: "0",
         },
         "linux",
       ),
@@ -75,8 +75,8 @@ describe("loadVitestExperimentalConfig", () => {
     expect(
       loadVitestExperimentalConfig(
         {
-          OPENCLAW_VITEST_IMPORT_DURATIONS: "true",
-          OPENCLAW_VITEST_PRINT_IMPORT_BREAKDOWN: "1",
+          CIVITAS_VITEST_IMPORT_DURATIONS: "true",
+          CIVITAS_VITEST_PRINT_IMPORT_BREAKDOWN: "1",
         },
         "linux",
       ),

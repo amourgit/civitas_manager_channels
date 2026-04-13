@@ -4,7 +4,7 @@ import {
   normalizeAccountId,
   resolveMergedAccountConfig,
 } from "civitas/plugin-sdk/account-resolution";
-import type { OpenClawConfig } from "../runtime-api.js";
+import type { CIVITASConfig } from "../runtime-api.js";
 import type { ResolvedZalouserAccount, ZalouserAccountConfig, ZalouserConfig } from "./types.js";
 
 let zalouserAccountsRuntimePromise: Promise<typeof import("./accounts.runtime.js")> | undefined;
@@ -20,7 +20,7 @@ const {
 } = createAccountListHelpers("zalouser");
 export { listZalouserAccountIds, resolveDefaultZalouserAccountId };
 
-function mergeZalouserAccountConfig(cfg: OpenClawConfig, accountId: string): ZalouserAccountConfig {
+function mergeZalouserAccountConfig(cfg: CIVITASConfig, accountId: string): ZalouserAccountConfig {
   const merged = resolveMergedAccountConfig<ZalouserAccountConfig>({
     channelConfig: cfg.channels?.zalouser as ZalouserAccountConfig | undefined,
     accounts: (cfg.channels?.zalouser as ZalouserConfig | undefined)?.accounts as
@@ -52,7 +52,7 @@ function resolveProfile(config: ZalouserAccountConfig, accountId: string): strin
   return "default";
 }
 
-function resolveZalouserAccountBase(params: { cfg: OpenClawConfig; accountId?: string | null }) {
+function resolveZalouserAccountBase(params: { cfg: CIVITASConfig; accountId?: string | null }) {
   const accountId = normalizeAccountId(
     params.accountId ?? resolveDefaultZalouserAccountId(params.cfg),
   );
@@ -68,7 +68,7 @@ function resolveZalouserAccountBase(params: { cfg: OpenClawConfig; accountId?: s
 }
 
 export async function resolveZalouserAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
 }): Promise<ResolvedZalouserAccount> {
   const { accountId, enabled, merged, profile } = resolveZalouserAccountBase(params);
@@ -85,7 +85,7 @@ export async function resolveZalouserAccount(params: {
 }
 
 export function resolveZalouserAccountSync(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
 }): ResolvedZalouserAccount {
   const { accountId, enabled, merged, profile } = resolveZalouserAccountBase(params);
@@ -101,7 +101,7 @@ export function resolveZalouserAccountSync(params: {
 }
 
 export async function listEnabledZalouserAccounts(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
 ): Promise<ResolvedZalouserAccount[]> {
   const ids = listZalouserAccountIds(cfg);
   const accounts = await Promise.all(

@@ -1,4 +1,4 @@
-import type { OpenClawConfig, SlackSlashCommandConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig, SlackSlashCommandConfig } from "civitas/plugin-sdk/config-runtime";
 import type { RuntimeEnv } from "civitas/plugin-sdk/runtime-env";
 import type { SlackFile, SlackMessageEvent } from "../types.js";
 
@@ -7,7 +7,7 @@ export type MonitorSlackOpts = {
   appToken?: string;
   accountId?: string;
   mode?: "socket" | "http";
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
   runtime?: RuntimeEnv;
   abortSignal?: AbortSignal;
   mediaMaxMb?: number;

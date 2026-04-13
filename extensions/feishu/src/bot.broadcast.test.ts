@@ -1,6 +1,6 @@
 import type { EnvelopeFormatOptions } from "civitas/plugin-sdk/channel-inbound";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { ClawdbotConfig, PluginRuntime } from "../runtime-api.js";
+import type { ChanneldbotConfig, PluginRuntime } from "../runtime-api.js";
 import type { FeishuMessageEvent } from "./bot.js";
 import { handleFeishuMessage } from "./bot.js";
 import { setFeishuRuntime } from "./runtime.js";
@@ -116,7 +116,7 @@ describe("broadcast dispatch", () => {
     },
   } as unknown as PluginRuntime;
 
-  function createBroadcastConfig(): ClawdbotConfig {
+  function createBroadcastConfig(): ChanneldbotConfig {
     return {
       broadcast: { "oc-broadcast-group": ["susan", "main"] },
       agents: { list: [{ id: "main" }, { id: "susan" }] },
@@ -244,7 +244,7 @@ describe("broadcast dispatch", () => {
   });
 
   it("preserves single-agent dispatch when no broadcast config", async () => {
-    const cfg: ClawdbotConfig = {
+    const cfg: ChanneldbotConfig = {
       channels: {
         feishu: {
           groups: {
@@ -283,7 +283,7 @@ describe("broadcast dispatch", () => {
   });
 
   it("cross-account broadcast dedup: second account skips dispatch", async () => {
-    const cfg: ClawdbotConfig = {
+    const cfg: ChanneldbotConfig = {
       broadcast: { "oc-broadcast-group": ["susan", "main"] },
       agents: { list: [{ id: "main" }, { id: "susan" }] },
       channels: {
@@ -329,7 +329,7 @@ describe("broadcast dispatch", () => {
   });
 
   it("skips unknown agents not in agents.list", async () => {
-    const cfg: ClawdbotConfig = {
+    const cfg: ChanneldbotConfig = {
       broadcast: { "oc-broadcast-group": ["susan", "unknown-agent"] },
       agents: { list: [{ id: "main" }, { id: "susan" }] },
       channels: {

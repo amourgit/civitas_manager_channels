@@ -2,7 +2,7 @@
   "name": "@civitas/together-provider",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw Together provider plugin",
+  "description": "CIVITAS Together provider plugin",
   "type": "module",
   "civitas": {
     "extensions": [

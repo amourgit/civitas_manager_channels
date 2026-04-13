@@ -2,7 +2,7 @@
   "name": "@civitas/vllm-provider",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw vLLM provider plugin",
+  "description": "CIVITAS vLLM provider plugin",
   "type": "module",
   "civitas": {
     "extensions": [

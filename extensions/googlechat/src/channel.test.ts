@@ -3,7 +3,7 @@ import {
   createDirectoryTestRuntime,
   expectDirectorySurface,
 } from "../../../test/helpers/plugins/directory.ts";
-import type { OpenClawConfig, PluginRuntime } from "../runtime-api.js";
+import type { CIVITASConfig, PluginRuntime } from "../runtime-api.js";
 
 const uploadGoogleChatAttachmentMock = vi.hoisted(() => vi.fn());
 const sendGoogleChatMessageMock = vi.hoisted(() => vi.fn());
@@ -38,7 +38,7 @@ function normalizeGoogleChatTarget(raw?: string | null): string | undefined {
   return normalized;
 }
 
-function resolveGoogleChatAccountImpl(params: { cfg: OpenClawConfig; accountId?: string | null }) {
+function resolveGoogleChatAccountImpl(params: { cfg: CIVITASConfig; accountId?: string | null }) {
   const accountId = params.accountId?.trim() || DEFAULT_ACCOUNT_ID;
   const channelConfig = (params.cfg.channels?.googlechat ?? {}) as Record<string, unknown>;
   const accounts =
@@ -95,7 +95,7 @@ vi.mock("./channel.deps.runtime.js", () => {
     getChatChannelMeta: (id: string) => ({ id, name: id }),
     isGoogleChatSpaceTarget: (value: string) => value.toLowerCase().startsWith("spaces/"),
     isGoogleChatUserTarget: (value: string) => value.toLowerCase().startsWith("users/"),
-    listGoogleChatAccountIds: (cfg: OpenClawConfig) => {
+    listGoogleChatAccountIds: (cfg: CIVITASConfig) => {
       const ids = Object.keys(cfg.channels?.googlechat?.accounts ?? {});
       return ids.length > 0 ? ids : ["default"];
     },
@@ -105,9 +105,9 @@ vi.mock("./channel.deps.runtime.js", () => {
     normalizeGoogleChatTarget,
     PAIRING_APPROVED_MESSAGE: "approved",
     resolveChannelMediaMaxBytes: (params: {
-      cfg: OpenClawConfig;
+      cfg: CIVITASConfig;
       resolveChannelLimitMb: (args: {
-        cfg: OpenClawConfig;
+        cfg: CIVITASConfig;
         accountId?: string;
       }) => number | undefined;
       accountId?: string;
@@ -175,7 +175,7 @@ afterEach(() => {
   }));
 });
 
-function createGoogleChatCfg(): OpenClawConfig {
+function createGoogleChatCfg(): CIVITASConfig {
   return {
     channels: {
       googlechat: {
@@ -339,7 +339,7 @@ describe("googlechatPlugin threading", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     expect(resolveReplyToMode({ cfg, accountId: "work" })).toBe("first");
     expect(resolveReplyToMode({ cfg, accountId: "default" })).toBe("all");
@@ -626,7 +626,7 @@ describe("googlechat directory", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     const directory = expectDirectorySurface(googlechatPlugin.directory);
 
@@ -669,7 +669,7 @@ describe("googlechat directory", () => {
           dm: { allowFrom: [" users/alice ", " googlechat:user:Bob@Example.com "] },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     const directory = expectDirectorySurface(googlechatPlugin.directory);
 
@@ -711,7 +711,7 @@ describe("googlechatPlugin security", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     const account = googlechatPlugin.config.resolveAccount(cfg, "default");
     const resolved = resolveDmPolicy!({ cfg, account });

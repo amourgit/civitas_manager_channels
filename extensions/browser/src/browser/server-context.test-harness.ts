@@ -57,11 +57,11 @@ export function makeBrowserServerState(params?: {
 }
 
 export function mockLaunchedChrome(
-  launchOpenClawChrome: { mockResolvedValue: (value: RunningChrome) => unknown },
+  launchCIVITASChrome: { mockResolvedValue: (value: RunningChrome) => unknown },
   pid: number,
 ) {
   const proc = new EventEmitter() as unknown as ChildProcessWithoutNullStreams;
-  launchOpenClawChrome.mockResolvedValue({
+  launchCIVITASChrome.mockResolvedValue({
     pid,
     exe: { kind: "chromium", path: "/usr/bin/chromium" },
     userDataDir: "/tmp/civitas-test",

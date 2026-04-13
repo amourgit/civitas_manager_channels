@@ -2,7 +2,7 @@
   "name": "@civitas/searxng-plugin",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw SearXNG plugin",
+  "description": "CIVITAS SearXNG plugin",
   "type": "module",
   "civitas": {
     "extensions": [

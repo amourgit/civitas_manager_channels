@@ -2,7 +2,7 @@
   "name": "@civitas/volcengine-provider",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw Volcengine provider plugin",
+  "description": "CIVITAS Volcengine provider plugin",
   "type": "module",
   "civitas": {
     "extensions": [

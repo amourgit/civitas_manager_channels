@@ -1,6 +1,6 @@
 import { readSourceConfigSnapshot } from "./io.js";
 import { replaceConfigFile } from "./mutate.js";
-import type { OpenClawConfig } from "./types.civitas.js";
+import type { CIVITASConfig } from "./types.civitas.js";
 import { validateConfigObjectWithPlugins } from "./validation.js";
 
 export type ConfigMcpServers = Record<string, Record<string, unknown>>;
@@ -9,7 +9,7 @@ type ConfigMcpReadResult =
   | {
       ok: true;
       path: string;
-      config: OpenClawConfig;
+      config: CIVITASConfig;
       mcpServers: ConfigMcpServers;
       baseHash?: string;
     }
@@ -19,7 +19,7 @@ type ConfigMcpWriteResult =
   | {
       ok: true;
       path: string;
-      config: OpenClawConfig;
+      config: CIVITASConfig;
       mcpServers: ConfigMcpServers;
       removed?: boolean;
     }

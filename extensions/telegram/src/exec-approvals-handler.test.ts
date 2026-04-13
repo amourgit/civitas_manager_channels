@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../../src/config/config.js";
+import type { CIVITASConfig } from "../../../src/config/config.js";
 import { updateSessionStore } from "../../../src/config/sessions.js";
 import { TelegramExecApprovalHandler } from "./exec-approvals-handler.js";
 
@@ -38,7 +38,7 @@ const pluginRequest = {
   expiresAtMs: 61_000,
 };
 
-function createHandler(cfg: OpenClawConfig, accountId = "default") {
+function createHandler(cfg: CIVITASConfig, accountId = "default") {
   const normalizedCfg = {
     ...cfg,
     channels: {
@@ -48,7 +48,7 @@ function createHandler(cfg: OpenClawConfig, accountId = "default") {
         botToken: cfg.channels?.telegram?.botToken ?? "tg-token",
       },
     },
-  } as OpenClawConfig;
+  } as CIVITASConfig;
   const sendTyping = vi.fn().mockResolvedValue({ ok: true });
   const sendMessage = vi
     .fn()
@@ -83,7 +83,7 @@ describe("TelegramExecApprovalHandler", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const { handler, sendTyping, sendMessage } = createHandler(cfg);
 
     await handler.handleRequested(baseRequest);
@@ -135,7 +135,7 @@ describe("TelegramExecApprovalHandler", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const { handler, sendMessage } = createHandler(cfg);
 
     await handler.handleRequested({
@@ -179,7 +179,7 @@ describe("TelegramExecApprovalHandler", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const { handler, sendMessage } = createHandler(cfg);
 
     await handler.handleRequested({
@@ -219,7 +219,7 @@ describe("TelegramExecApprovalHandler", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const defaultHandler = createHandler(cfg, "default");
     const secondaryHandler = createHandler(cfg, "secondary");
     const request = {
@@ -252,7 +252,7 @@ describe("TelegramExecApprovalHandler", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const { handler, sendMessage } = createHandler(cfg);
 
     await handler.handleRequested({
@@ -286,7 +286,7 @@ describe("TelegramExecApprovalHandler", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const { handler, editReplyMarkup } = createHandler(cfg);
 
     await handler.handleRequested(baseRequest);
@@ -319,7 +319,7 @@ describe("TelegramExecApprovalHandler", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const { handler, sendMessage } = createHandler(cfg);
 
     await handler.handleRequested(pluginRequest);
@@ -353,7 +353,7 @@ describe("TelegramExecApprovalHandler", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const { handler, sendMessage } = createHandler(cfg);
 
     await handler.handleRequested({
@@ -389,7 +389,7 @@ describe("TelegramExecApprovalHandler", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const { handler, sendMessage } = createHandler(cfg);
 
     await handler.handleRequested({
@@ -440,7 +440,7 @@ describe("TelegramExecApprovalHandler", () => {
             },
           },
         },
-      } as OpenClawConfig;
+      } as CIVITASConfig;
       const defaultHandler = createHandler(cfg, "default");
       const secondaryHandler = createHandler(cfg, "secondary");
       const request = {
@@ -505,7 +505,7 @@ describe("TelegramExecApprovalHandler", () => {
             },
           },
         },
-      } as OpenClawConfig;
+      } as CIVITASConfig;
       const defaultHandler = createHandler(cfg, "default");
       const secondaryHandler = createHandler(cfg, "secondary");
 

@@ -2,7 +2,7 @@
   "name": "@civitas/line",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw LINE channel plugin",
+  "description": "CIVITAS LINE channel plugin",
   "type": "module",
   "devDependencies": {
     "civitas": "workspace:*"

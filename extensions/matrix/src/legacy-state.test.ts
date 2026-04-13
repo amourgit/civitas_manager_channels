@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { describe, expect, it } from "vitest";
 import { withTempHome } from "../../../test/helpers/temp-home.js";
 import { autoMigrateLegacyMatrixState, detectLegacyMatrixState } from "./legacy-state.js";
@@ -17,7 +17,7 @@ describe("matrix legacy state migration", () => {
       writeFile(path.join(stateDir, "matrix", "bot-storage.json"), '{"next_batch":"s1"}');
       writeFile(path.join(stateDir, "matrix", "crypto", "store.db"), "crypto");
 
-      const cfg: OpenClawConfig = {
+      const cfg: CIVITASConfig = {
         channels: {
           matrix: {
             homeserver: "https://matrix.example.org",
@@ -60,7 +60,7 @@ describe("matrix legacy state migration", () => {
         ),
       );
 
-      const cfg: OpenClawConfig = {
+      const cfg: CIVITASConfig = {
         channels: {
           matrix: {
             homeserver: "https://matrix.example.org",

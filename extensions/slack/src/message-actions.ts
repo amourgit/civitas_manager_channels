@@ -1,11 +1,11 @@
 import { createActionGate } from "civitas/plugin-sdk/channel-actions";
 import type { ChannelMessageActionName } from "civitas/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { ChannelToolSend } from "civitas/plugin-sdk/tool-send";
 import { listEnabledSlackAccounts, resolveSlackAccount } from "./accounts.js";
 
 export function listSlackMessageActions(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId?: string | null,
 ): ChannelMessageActionName[] {
   const accounts = (

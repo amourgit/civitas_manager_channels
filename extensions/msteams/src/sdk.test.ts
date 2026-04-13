@@ -141,7 +141,7 @@ describe("createMSTeamsAdapter", () => {
     );
   });
 
-  it("passes the OpenClaw User-Agent to the Bot Framework connector client", async () => {
+  it("passes the CIVITAS User-Agent to the Bot Framework connector client", async () => {
     const creds = {
       appId: "app-id",
       appPassword: "secret",
@@ -172,7 +172,7 @@ describe("createMSTeamsAdapter", () => {
       serviceUrl: "https://service.example.com/",
       options: {
         headers: {
-          "User-Agent": expect.stringMatching(/^teams\.ts\[apps\]\/.+ OpenClaw\/.+$/),
+          "User-Agent": expect.stringMatching(/^teams\.ts\[apps\]\/.+ CIVITAS\/.+$/),
         },
       },
     });

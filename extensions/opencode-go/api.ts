@@ -21,9 +21,9 @@ function resolveCurrentPrimaryModel(model: unknown): string | undefined {
 }
 
 export function applyOpencodeGoModelDefault(
-  cfg: import("civitas/plugin-sdk/provider-onboard").OpenClawConfig,
+  cfg: import("civitas/plugin-sdk/provider-onboard").CIVITASConfig,
 ): {
-  next: import("civitas/plugin-sdk/provider-onboard").OpenClawConfig;
+  next: import("civitas/plugin-sdk/provider-onboard").CIVITASConfig;
   changed: boolean;
 } {
   const current = resolveCurrentPrimaryModel(cfg.agents?.defaults?.model);

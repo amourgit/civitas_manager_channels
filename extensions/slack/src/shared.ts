@@ -14,7 +14,7 @@ import {
   resolveSlackAccount,
   type ResolvedSlackAccount,
 } from "./accounts.js";
-import { getChatChannelMeta, type ChannelPlugin, type OpenClawConfig } from "./channel-api.js";
+import { getChatChannelMeta, type ChannelPlugin, type CIVITASConfig } from "./channel-api.js";
 import { SlackChannelConfigSchema } from "./config-schema.js";
 import { slackDoctor } from "./doctor.js";
 import { isSlackInteractiveRepliesEnabled } from "./interactive-replies.js";
@@ -22,11 +22,11 @@ import { isSlackInteractiveRepliesEnabled } from "./interactive-replies.js";
 export const SLACK_CHANNEL = "slack" as const;
 
 function buildSlackManifest(botName: string) {
-  const safeName = botName.trim() || "OpenClaw";
+  const safeName = botName.trim() || "CIVITAS";
   const manifest = {
     display_information: {
       name: safeName,
-      description: `${safeName} connector for OpenClaw`,
+      description: `${safeName} connector for CIVITAS`,
     },
     features: {
       bot_user: {
@@ -40,7 +40,7 @@ function buildSlackManifest(botName: string) {
       slash_commands: [
         {
           command: "/civitas",
-          description: "Send a message to OpenClaw",
+          description: "Send a message to CIVITAS",
           should_escape: false,
         },
       ],
@@ -96,7 +96,7 @@ function buildSlackManifest(botName: string) {
   return JSON.stringify(manifest, null, 2);
 }
 
-export function buildSlackSetupLines(botName = "OpenClaw"): string[] {
+export function buildSlackSetupLines(botName = "CIVITAS"): string[] {
   return [
     "1) Slack API -> Create App -> From scratch or From manifest (with the JSON below)",
     "2) Add Socket Mode + enable it to get the app-level token (xapp-...)",
@@ -112,10 +112,10 @@ export function buildSlackSetupLines(botName = "OpenClaw"): string[] {
 }
 
 export function setSlackChannelAllowlist(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId: string,
   channelKeys: string[],
-): OpenClawConfig {
+): CIVITASConfig {
   const channels = Object.fromEntries(channelKeys.map((key) => [key, { enabled: true }]));
   return patchChannelConfigForAccount({
     cfg,

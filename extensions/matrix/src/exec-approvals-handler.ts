@@ -3,7 +3,7 @@ import {
   getExecApprovalApproverDmNoticeText,
   resolveExecApprovalCommandDisplay,
 } from "civitas/plugin-sdk/approval-reply-runtime";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import {
   createChannelNativeApprovalRuntime,
   type ExecApprovalChannelRuntime,
@@ -39,7 +39,7 @@ type PreparedMatrixTarget = {
 export type MatrixExecApprovalHandlerOpts = {
   client: MatrixClient;
   accountId: string;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   gatewayUrl?: string;
 };
 
@@ -51,7 +51,7 @@ export type MatrixExecApprovalHandlerDeps = {
   repairDirectRooms?: typeof repairMatrixDirectRooms;
 };
 
-function isHandlerConfigured(params: { cfg: OpenClawConfig; accountId: string }): boolean {
+function isHandlerConfigured(params: { cfg: CIVITASConfig; accountId: string }): boolean {
   return isMatrixExecApprovalClientEnabled(params);
 }
 

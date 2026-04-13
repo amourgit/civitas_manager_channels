@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import { resolveBrewExecutable } from "../infra/brew.js";
 import {
   type InstallSafetyOverrides,
@@ -26,7 +26,7 @@ export type SkillInstallRequest = InstallSafetyOverrides & {
   skillName: string;
   installId: string;
   timeoutMs?: number;
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
 };
 
 export type SkillInstallResult = {

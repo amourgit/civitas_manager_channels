@@ -3,7 +3,7 @@ import {
   type ChannelDoctorConfigMutation,
   type ChannelDoctorLegacyConfigRule,
 } from "civitas/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import {
   detectPluginInstallPathIssue,
   formatPluginInstallPathIssue,
@@ -75,7 +75,7 @@ function normalizeMatrixRoomAllowAliases(params: {
   return { rooms: nextRooms, changed };
 }
 
-function normalizeMatrixCompatibilityConfig(cfg: OpenClawConfig): ChannelDoctorConfigMutation {
+function normalizeMatrixCompatibilityConfig(cfg: CIVITASConfig): ChannelDoctorConfigMutation {
   const channels = isRecord(cfg.channels) ? cfg.channels : null;
   const matrix = isRecord(channels?.matrix) ? channels.matrix : null;
   if (!matrix) {
@@ -150,7 +150,7 @@ function normalizeMatrixCompatibilityConfig(cfg: OpenClawConfig): ChannelDoctorC
       ...cfg,
       channels: {
         ...(cfg.channels ?? {}),
-        matrix: updatedMatrix as NonNullable<OpenClawConfig["channels"]>["matrix"],
+        matrix: updatedMatrix as NonNullable<CIVITASConfig["channels"]>["matrix"],
       },
     },
     changes,
@@ -178,12 +178,12 @@ const MATRIX_LEGACY_CONFIG_RULES: ChannelDoctorLegacyConfigRule[] = [
   },
 ];
 
-function hasConfiguredMatrixChannel(cfg: OpenClawConfig): boolean {
+function hasConfiguredMatrixChannel(cfg: CIVITASConfig): boolean {
   const channels = cfg.channels as Record<string, unknown> | undefined;
   return isRecord(channels?.matrix);
 }
 
-function hasConfiguredMatrixPluginSurface(cfg: OpenClawConfig): boolean {
+function hasConfiguredMatrixPluginSurface(cfg: CIVITASConfig): boolean {
   return Boolean(
     cfg.plugins?.installs?.matrix ||
     cfg.plugins?.entries?.matrix ||
@@ -198,7 +198,7 @@ function hasConfiguredMatrixEnv(env: NodeJS.ProcessEnv): boolean {
   );
 }
 
-function configMayNeedMatrixDoctorSequence(cfg: OpenClawConfig, env: NodeJS.ProcessEnv): boolean {
+function configMayNeedMatrixDoctorSequence(cfg: CIVITASConfig, env: NodeJS.ProcessEnv): boolean {
   return (
     hasConfiguredMatrixChannel(cfg) ||
     hasConfiguredMatrixPluginSurface(cfg) ||
@@ -239,7 +239,7 @@ export function formatMatrixLegacyCryptoPreview(
   return notes;
 }
 
-export async function collectMatrixInstallPathWarnings(cfg: OpenClawConfig): Promise<string[]> {
+export async function collectMatrixInstallPathWarnings(cfg: CIVITASConfig): Promise<string[]> {
   const issue = await detectPluginInstallPathIssue({
     pluginId: "matrix",
     install: cfg.plugins?.installs?.matrix,
@@ -254,7 +254,7 @@ export async function collectMatrixInstallPathWarnings(cfg: OpenClawConfig): Pro
   }).map((entry) => `- ${entry}`);
 }
 
-export async function cleanStaleMatrixPluginConfig(cfg: OpenClawConfig) {
+export async function cleanStaleMatrixPluginConfig(cfg: CIVITASConfig) {
   const issue = await detectPluginInstallPathIssue({
     pluginId: "matrix",
     install: cfg.plugins?.installs?.matrix,
@@ -288,7 +288,7 @@ export async function cleanStaleMatrixPluginConfig(cfg: OpenClawConfig) {
 }
 
 export async function applyMatrixDoctorRepair(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   env: NodeJS.ProcessEnv;
 }): Promise<{ changes: string[]; warnings: string[] }> {
   const changes: string[] = [];
@@ -368,7 +368,7 @@ export async function applyMatrixDoctorRepair(params: {
 }
 
 export async function runMatrixDoctorSequence(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   env: NodeJS.ProcessEnv;
   shouldRepair: boolean;
 }): Promise<{ changeNotes: string[]; warningNotes: string[] }> {

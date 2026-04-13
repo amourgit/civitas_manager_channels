@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import type { CliBackendConfig } from "../config/types.js";
 import { createEmptyPluginRegistry } from "../plugins/registry.js";
 import { setActivePluginRegistry } from "../plugins/runtime.js";
@@ -172,7 +172,7 @@ describe("resolveCliBackendConfig reliability merge", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies CIVITASConfig;
 
     const resolved = resolveCliBackendConfig("codex-cli", cfg);
 
@@ -218,7 +218,7 @@ describe("resolveCliBackendConfig claude-cli defaults", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies CIVITASConfig;
 
     const resolved = resolveCliBackendConfig("claude-cli", cfg);
 
@@ -250,7 +250,7 @@ describe("resolveCliBackendConfig claude-cli defaults", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies CIVITASConfig;
 
     const resolved = resolveCliBackendConfig("claude-cli", cfg);
 
@@ -282,7 +282,7 @@ describe("resolveCliBackendConfig claude-cli defaults", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies CIVITASConfig;
 
     const resolved = resolveCliBackendConfig("claude-cli", cfg);
 
@@ -315,7 +315,7 @@ describe("resolveCliBackendConfig claude-cli defaults", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies CIVITASConfig;
 
     const resolved = resolveCliBackendConfig("claude-cli", cfg);
 
@@ -375,7 +375,7 @@ describe("resolveCliBackendConfig alias precedence", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies CIVITASConfig;
 
     const resolved = resolveCliBackendConfig("kimi", cfg);
 

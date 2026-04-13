@@ -151,7 +151,7 @@ function createBasePreflightParams(overrides?: Record<string, unknown>) {
       discordConfig: {
         allowBots: true,
       } as NonNullable<
-        import("civitas/plugin-sdk/config-runtime").OpenClawConfig["channels"]
+        import("civitas/plugin-sdk/config-runtime").CIVITASConfig["channels"]
       >["discord"],
       data: createGuildEvent({
         channelId: CHANNEL_ID,
@@ -165,7 +165,7 @@ function createBasePreflightParams(overrides?: Record<string, unknown>) {
     discordConfig: {
       allowBots: true,
     } as NonNullable<
-      import("civitas/plugin-sdk/config-runtime").OpenClawConfig["channels"]
+      import("civitas/plugin-sdk/config-runtime").CIVITASConfig["channels"]
     >["discord"],
     ...overrides,
   } satisfies Parameters<typeof preflightDiscordMessage>[0];

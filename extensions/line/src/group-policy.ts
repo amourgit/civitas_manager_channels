@@ -1,8 +1,8 @@
 import { resolveChannelGroupRequireMention } from "civitas/plugin-sdk/channel-policy";
-import { resolveExactLineGroupConfigKey, type OpenClawConfig } from "./channel-api.js";
+import { resolveExactLineGroupConfigKey, type CIVITASConfig } from "./channel-api.js";
 
 type LineGroupContext = {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
   groupId?: string | null;
 };

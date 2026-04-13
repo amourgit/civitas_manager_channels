@@ -134,7 +134,7 @@ const installRunEmbeddedMocks = () => {
     const mod = await vi.importActual<typeof import("./models-config.js")>("./models-config.js");
     return {
       ...mod,
-      ensureOpenClawModelsJson: vi.fn(async () => ({ wrote: false })),
+      ensureCIVITASModelsJson: vi.fn(async () => ({ wrote: false })),
     };
   });
 };

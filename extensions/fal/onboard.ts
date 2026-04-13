@@ -1,8 +1,8 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/provider-onboard";
+import type { CIVITASConfig } from "civitas/plugin-sdk/provider-onboard";
 
 export const FAL_DEFAULT_IMAGE_MODEL_REF = "fal/fal-ai/flux/dev";
 
-export function applyFalConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyFalConfig(cfg: CIVITASConfig): CIVITASConfig {
   if (cfg.agents?.defaults?.imageGenerationModel) {
     return cfg;
   }

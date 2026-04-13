@@ -2,7 +2,7 @@ import {
   type ChannelDoctorAdapter,
   type ChannelDoctorConfigMutation,
 } from "civitas/plugin-sdk/channel-contract";
-import { type OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import { type CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { collectProviderDangerousNameMatchingScopes } from "civitas/plugin-sdk/runtime";
 import { DISCORD_LEGACY_CONFIG_RULES } from "./doctor-shared.js";
 import { resolveDiscordPreviewStreamMode } from "./preview-streaming.js";
@@ -182,7 +182,7 @@ function normalizeDiscordStreamingAliases(params: {
   return { entry: updated, changed };
 }
 
-function normalizeDiscordCompatibilityConfig(cfg: OpenClawConfig): ChannelDoctorConfigMutation {
+function normalizeDiscordCompatibilityConfig(cfg: CIVITASConfig): ChannelDoctorConfigMutation {
   const rawEntry = asObjectRecord((cfg.channels as Record<string, unknown> | undefined)?.discord);
   if (!rawEntry) {
     return { config: cfg, changes: [] };
@@ -253,14 +253,14 @@ function normalizeDiscordCompatibilityConfig(cfg: OpenClawConfig): ChannelDoctor
       channels: {
         ...cfg.channels,
         discord: updated,
-      } as OpenClawConfig["channels"],
+      } as CIVITASConfig["channels"],
     },
     changes,
   };
 }
 
 function collectDiscordAccountScopes(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
 ): Array<{ prefix: string; account: Record<string, unknown> }> {
   const scopes: Array<{ prefix: string; account: Record<string, unknown> }> = [];
   const discord = asObjectRecord(cfg.channels?.discord);
@@ -337,7 +337,7 @@ function collectDiscordIdLists(
   return refs;
 }
 
-export function scanDiscordNumericIdEntries(cfg: OpenClawConfig): DiscordNumericIdHit[] {
+export function scanDiscordNumericIdEntries(cfg: CIVITASConfig): DiscordNumericIdHit[] {
   const hits: DiscordNumericIdHit[] = [];
   const scanList = (pathLabel: string, list: unknown) => {
     if (!Array.isArray(list)) {
@@ -410,9 +410,9 @@ export function collectDiscordNumericIdWarnings(params: {
 }
 
 export function maybeRepairDiscordNumericIds(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   doctorFixCommand: string,
-): { config: OpenClawConfig; changes: string[]; warnings?: string[] } {
+): { config: CIVITASConfig; changes: string[]; warnings?: string[] } {
   const hits = scanDiscordNumericIdEntries(cfg);
   if (hits.length === 0) {
     return { config: cfg, changes: [] };
@@ -470,7 +470,7 @@ export function maybeRepairDiscordNumericIds(
   };
 }
 
-function collectDiscordMutableAllowlistWarnings(cfg: OpenClawConfig): string[] {
+function collectDiscordMutableAllowlistWarnings(cfg: CIVITASConfig): string[] {
   const hits: Array<{ path: string; entry: string }> = [];
   const addHits = (pathLabel: string, list: unknown) => {
     if (!Array.isArray(list)) {

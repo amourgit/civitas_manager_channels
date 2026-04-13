@@ -1,7 +1,7 @@
 import "./test-helpers.js";
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { setLoggerOverride } from "civitas/plugin-sdk/runtime-env";
 import { withEnvAsync } from "civitas/plugin-sdk/testing";
 import { beforeAll, describe, expect, it, vi } from "vitest";
@@ -397,7 +397,7 @@ describe("web auto-reply connection", () => {
       return { text: "final reply" };
     });
 
-    const mockConfig: OpenClawConfig = {
+    const mockConfig: CIVITASConfig = {
       channels: { whatsapp: { allowFrom: ["*"] } },
     };
 

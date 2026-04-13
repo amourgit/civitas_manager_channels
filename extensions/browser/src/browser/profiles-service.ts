@@ -1,11 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { BrowserProfileConfig, OpenClawConfig } from "../config/config.js";
+import type { BrowserProfileConfig, CIVITASConfig } from "../config/config.js";
 import { loadConfig, writeConfigFile } from "../config/config.js";
 import { deriveDefaultBrowserCdpPortRange } from "../config/port-defaults.js";
 import { resolveUserPath } from "../utils.js";
 import { assertCdpEndpointAllowed } from "./cdp.helpers.js";
-import { resolveOpenClawUserDataDir } from "./chrome.js";
+import { resolveCIVITASUserDataDir } from "./chrome.js";
 import { parseHttpUrl, resolveProfile } from "./config.js";
 import {
   BrowserConflictError,
@@ -163,7 +163,7 @@ export function createBrowserProfilesService(ctx: BrowserRouteContext) {
       }
     }
 
-    const nextConfig: OpenClawConfig = {
+    const nextConfig: CIVITASConfig = {
       ...cfg,
       browser: {
         ...cfg.browser,
@@ -227,7 +227,7 @@ export function createBrowserProfilesService(ctx: BrowserRouteContext) {
         // ignore
       }
 
-      const userDataDir = resolveOpenClawUserDataDir(name);
+      const userDataDir = resolveCIVITASUserDataDir(name);
       const profileDir = path.dirname(userDataDir);
       if (fs.existsSync(profileDir)) {
         await movePathToTrash(profileDir);
@@ -236,7 +236,7 @@ export function createBrowserProfilesService(ctx: BrowserRouteContext) {
     }
 
     const { [name]: _removed, ...remainingProfiles } = profiles;
-    const nextConfig: OpenClawConfig = {
+    const nextConfig: CIVITASConfig = {
       ...cfg,
       browser: {
         ...cfg.browser,

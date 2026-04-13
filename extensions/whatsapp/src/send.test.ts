@@ -2,7 +2,7 @@ import crypto from "node:crypto";
 import fsSync from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { redactIdentifier } from "civitas/plugin-sdk/logging-core";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -104,7 +104,7 @@ describe("web outbound", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
     });
 
     expect(result).toEqual({
@@ -260,7 +260,7 @@ describe("web outbound", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     await sendMessageWhatsApp("+1555", "pic", {
       verbose: false,

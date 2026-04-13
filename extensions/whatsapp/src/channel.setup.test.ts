@@ -3,7 +3,7 @@ import type { RuntimeEnv } from "civitas/plugin-sdk/runtime-env";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createQueuedWizardPrompter } from "../../../test/helpers/plugins/setup-wizard.js";
 import { whatsappPlugin } from "./channel.js";
-import type { OpenClawConfig } from "./runtime-api.js";
+import type { CIVITASConfig } from "./runtime-api.js";
 import { finalizeWhatsAppSetup } from "./setup-finalize.js";
 
 const hoisted = vi.hoisted(() => ({
@@ -44,12 +44,12 @@ vi.mock("civitas/plugin-sdk/setup", async () => {
         .split(",")
         .map((entry) => entry.trim())
         .filter(Boolean),
-    setSetupChannelEnabled: (cfg: OpenClawConfig, channel: string, enabled: boolean) => ({
+    setSetupChannelEnabled: (cfg: CIVITASConfig, channel: string, enabled: boolean) => ({
       ...cfg,
       channels: {
         ...cfg.channels,
         [channel]: {
-          ...(cfg.channels?.[channel as keyof NonNullable<OpenClawConfig["channels"]>] as object),
+          ...(cfg.channels?.[channel as keyof NonNullable<CIVITASConfig["channels"]>] as object),
           enabled,
         },
       },
@@ -73,12 +73,12 @@ function createRuntime(): RuntimeEnv {
 
 async function runConfigureWithHarness(params: {
   harness: ReturnType<typeof createQueuedWizardPrompter>;
-  cfg?: OpenClawConfig;
+  cfg?: CIVITASConfig;
   runtime?: RuntimeEnv;
   forceAllowFrom?: boolean;
 }) {
   const result = await finalizeWhatsAppSetup({
-    cfg: params.cfg ?? ({} as OpenClawConfig),
+    cfg: params.cfg ?? ({} as CIVITASConfig),
     accountId: DEFAULT_ACCOUNT_ID,
     forceAllowFrom: params.forceAllowFrom ?? false,
     prompter: params.harness.prompter,
@@ -267,7 +267,7 @@ describe("whatsapp setup wizard", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
       deps: {
         webAuthExists: async () => true,
         hasActiveWebListener: (accountId?: string) => accountId === "work",

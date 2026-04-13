@@ -11,7 +11,7 @@ import {
   type WizardPrompter,
 } from "../../../test/helpers/plugins/setup-wizard.js";
 import { createStartAccountContext } from "../../../test/helpers/plugins/start-account-context.js";
-import type { OpenClawConfig, PluginRuntime, ResolvedLineAccount } from "../api.js";
+import type { CIVITASConfig, PluginRuntime, ResolvedLineAccount } from "../api.js";
 import { linePlugin } from "./channel.js";
 import { clearLineRuntime, setLineRuntime } from "./runtime.js";
 
@@ -164,7 +164,7 @@ describe("line setup wizard", () => {
 
     const result = await runSetupWizardConfigure({
       configure: lineConfigure,
-      cfg: {} as OpenClawConfig,
+      cfg: {} as CIVITASConfig,
       prompter,
       options: {},
     });
@@ -193,7 +193,7 @@ describe("line setup wizard", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as CIVITASConfig,
         "work",
       ),
     ).toBe("allowlist");
@@ -202,7 +202,7 @@ describe("line setup wizard", () => {
   it("reports account-scoped config keys for named accounts", async () => {
     const { lineSetupWizard } = await import("./setup-surface.js");
 
-    expect(lineSetupWizard.dmPolicy?.resolveConfigKeys?.({} as OpenClawConfig, "work")).toEqual({
+    expect(lineSetupWizard.dmPolicy?.resolveConfigKeys?.({} as CIVITASConfig, "work")).toEqual({
       policyKey: "channels.line.accounts.work.dmPolicy",
       allowFromKey: "channels.line.accounts.work.allowFrom",
     });
@@ -226,7 +226,7 @@ describe("line setup wizard", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     expect(lineSetupWizard.dmPolicy?.getCurrent(cfg)).toBe("allowlist");
     expect(lineSetupWizard.dmPolicy?.resolveConfigKeys?.(cfg)).toEqual({
@@ -255,7 +255,7 @@ describe("line setup wizard", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
       "open",
       "work",
     );
@@ -288,7 +288,7 @@ describe("line setup wizard", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
     });
 
     expect(configured).toBe(false);
@@ -328,7 +328,7 @@ describe("probeLineBot", () => {
 
   it("returns bot info when available", async () => {
     getBotInfoMock.mockResolvedValue({
-      displayName: "OpenClaw",
+      displayName: "CIVITAS",
       userId: "U123",
       basicId: "@civitas",
       pictureUrl: "https://example.com/bot.png",
@@ -348,14 +348,14 @@ describe("linePlugin status.probeAccount", () => {
       return { getBotInfo: getBotInfoMock };
     });
     getBotInfoMock.mockResolvedValue({
-      displayName: "OpenClaw",
+      displayName: "CIVITAS",
       userId: "U123",
       basicId: "@civitas",
       pictureUrl: "https://example.com/bot.png",
     });
 
     const params = {
-      cfg: {} as OpenClawConfig,
+      cfg: {} as CIVITASConfig,
       account: {
         accountId: "default",
         enabled: true,

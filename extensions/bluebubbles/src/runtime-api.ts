@@ -26,7 +26,7 @@ export type {
 } from "civitas/plugin-sdk/channel-contract";
 export type {
   ChannelPlugin,
-  OpenClawConfig,
+  CIVITASConfig,
   PluginRuntime,
 } from "civitas/plugin-sdk/channel-core";
 export { parseFiniteNumber } from "civitas/plugin-sdk/infra-runtime";

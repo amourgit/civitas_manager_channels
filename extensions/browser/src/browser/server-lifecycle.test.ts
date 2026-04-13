@@ -1,7 +1,7 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
-const { stopOpenClawChromeMock } = vi.hoisted(() => ({
-  stopOpenClawChromeMock: vi.fn(async () => {}),
+const { stopCIVITASChromeMock } = vi.hoisted(() => ({
+  stopCIVITASChromeMock: vi.fn(async () => {}),
 }));
 
 const { createBrowserRouteContextMock, listKnownProfileNamesMock } = vi.hoisted(() => ({
@@ -10,7 +10,7 @@ const { createBrowserRouteContextMock, listKnownProfileNamesMock } = vi.hoisted(
 }));
 
 vi.mock("./chrome.js", () => ({
-  stopOpenClawChrome: stopOpenClawChromeMock,
+  stopCIVITASChrome: stopCIVITASChromeMock,
 }));
 
 vi.mock("./server-context.js", () => ({
@@ -29,7 +29,7 @@ beforeAll(async () => {
 beforeEach(() => {
   createBrowserRouteContextMock.mockClear();
   listKnownProfileNamesMock.mockClear();
-  stopOpenClawChromeMock.mockClear();
+  stopCIVITASChromeMock.mockClear();
 });
 
 describe("ensureExtensionRelayForProfiles", () => {
@@ -99,7 +99,7 @@ describe("stopKnownBrowserProfiles", () => {
       onWarn: vi.fn(),
     });
 
-    expect(stopOpenClawChromeMock).toHaveBeenCalledWith(launchedBrowser);
+    expect(stopCIVITASChromeMock).toHaveBeenCalledWith(launchedBrowser);
     expect(localRuntime.running).toBeNull();
   });
 

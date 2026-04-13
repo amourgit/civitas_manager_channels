@@ -1,6 +1,6 @@
 import http from "node:http";
 import { URL } from "node:url";
-import type { OpenClawConfig } from "civitas/plugin-sdk/core";
+import type { CIVITASConfig } from "civitas/plugin-sdk/core";
 import {
   createWebhookInFlightLimiter,
   WEBHOOK_BODY_READ_DEFAULTS,
@@ -159,14 +159,14 @@ export class VoiceCallWebhookServer {
    */
   private async initializeMediaStreaming(): Promise<void> {
     const streaming = this.config.streaming;
-    const pluginConfig = this.coreConfig as unknown as OpenClawConfig | undefined;
+    const pluginConfig = this.coreConfig as unknown as CIVITASConfig | undefined;
     const { getRealtimeTranscriptionProvider, listRealtimeTranscriptionProviders } =
       await import("./realtime-transcription.runtime.js");
     const resolution = resolveConfiguredCapabilityProvider({
       configuredProviderId: streaming.provider,
       providerConfigs: streaming.providers,
       cfg: pluginConfig,
-      cfgForResolve: pluginConfig ?? ({} as OpenClawConfig),
+      cfgForResolve: pluginConfig ?? ({} as CIVITASConfig),
       getConfiguredProvider: (providerId) =>
         getRealtimeTranscriptionProvider(providerId, pluginConfig),
       listProviders: () => listRealtimeTranscriptionProviders(pluginConfig),

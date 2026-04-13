@@ -1,7 +1,7 @@
 {
   "name": "@civitas/nostr",
   "version": "2026.4.4",
-  "description": "OpenClaw Nostr channel plugin for NIP-04 encrypted DMs",
+  "description": "CIVITAS Nostr channel plugin for NIP-04 encrypted DMs",
   "type": "module",
   "dependencies": {
     "nostr-tools": "^2.23.3"
@@ -44,7 +44,7 @@
       "civitasVersion": "2026.4.4"
     },
     "release": {
-      "publishToClawHub": true,
+      "publishToChannelHub": true,
       "publishToNpm": true
     }
   }

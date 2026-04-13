@@ -43,7 +43,7 @@ import {
   PAIRING_APPROVED_MESSAGE,
   projectCredentialSnapshotFields,
   resolveConfiguredFromCredentialStatuses,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "./channel-api.js";
 import { shouldSuppressLocalDiscordExecApprovalPrompt } from "./exec-approvals.js";
 import {
@@ -186,7 +186,7 @@ const discordMessageActions = {
   },
 };
 
-function resolveDiscordStartupDelayMs(cfg: OpenClawConfig, accountId: string): number {
+function resolveDiscordStartupDelayMs(cfg: CIVITASConfig, accountId: string): number {
   const startupAccountIds = listDiscordAccountIds(cfg).filter((candidateId) => {
     const candidate = resolveDiscordAccount({ cfg, accountId: candidateId });
     return (
@@ -228,7 +228,7 @@ function formatDiscordIntents(intents?: {
 function buildDiscordCrossContextComponents(params: {
   originLabel: string;
   message: string;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
 }) {
   const { Separator, TextDisplay } = loadDiscordCarbonModule();
@@ -443,7 +443,7 @@ export const discordPlugin: ChannelPlugin<ResolvedDiscordAccount, DiscordProbe> 
       agentPrompt: {
         messageToolHints: () => [
           "- Discord components: set `components` when sending messages to include buttons, selects, or v2 containers.",
-          "- Forms: add `components.modal` (title, fields). OpenClaw adds a trigger button and routes submissions as new messages.",
+          "- Forms: add `components.modal` (title, fields). CIVITAS adds a trigger button and routes submissions as new messages.",
         ],
       },
       messaging: {

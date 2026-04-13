@@ -4,7 +4,7 @@ import { URL } from "node:url";
 import { assertNoWindowsNetworkPath, safeFileURLToPath } from "../infra/local-file-access.js";
 import { assertNoPathAliasEscape, type PathAliasPolicy } from "../infra/path-alias-guards.js";
 import { isPathInside } from "../infra/path-guards.js";
-import { resolvePreferredOpenClawTmpDir } from "../infra/tmp-civitas-dir.js";
+import { resolvePreferredCIVITASTmpDir } from "../infra/tmp-civitas-dir.js";
 
 const UNICODE_SPACES = /[\u00A0\u2000-\u200A\u202F\u205F\u3000]/g;
 const HTTP_URL_RE = /^https?:\/\//i;
@@ -194,11 +194,11 @@ async function resolveAllowedTmpMediaPath(params: {
     return undefined;
   }
   const resolved = path.resolve(resolveSandboxInputPath(params.candidate, params.sandboxRoot));
-  const openClawTmpDir = path.resolve(resolvePreferredOpenClawTmpDir());
-  if (!isPathInside(openClawTmpDir, resolved)) {
+  const CIVITASTmpDir = path.resolve(resolvePreferredCIVITASTmpDir());
+  if (!isPathInside(CIVITASTmpDir, resolved)) {
     return undefined;
   }
-  await assertNoTmpAliasEscape({ filePath: resolved, tmpRoot: openClawTmpDir });
+  await assertNoTmpAliasEscape({ filePath: resolved, tmpRoot: CIVITASTmpDir });
   return resolved;
 }
 

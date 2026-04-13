@@ -1,4 +1,4 @@
-export type { OpenClawConfig } from "civitas/plugin-sdk/memory-core";
+export type { CIVITASConfig } from "civitas/plugin-sdk/memory-core";
 export type {
   MemoryEmbeddingProbeResult,
   MemoryProviderStatus,

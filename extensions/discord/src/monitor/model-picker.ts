@@ -12,7 +12,7 @@ import {
 import type { APISelectMenuOption } from "discord-api-types/v10";
 import { ButtonStyle } from "discord-api-types/v10";
 import { normalizeProviderId } from "civitas/plugin-sdk/agent-runtime";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { ModelsProviderData } from "civitas/plugin-sdk/models-provider-runtime";
 
 export const DISCORD_MODEL_PICKER_CUSTOM_ID_KEY = "mdlpk";
@@ -547,7 +547,7 @@ function buildModelRows(params: {
  * same provider/model resolver used by text and Telegram model commands.
  */
 export async function loadDiscordModelPickerData(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   agentId?: string,
 ): Promise<ModelsProviderData> {
   const { buildModelsProviderData } = await loadModelsProviderRuntime();

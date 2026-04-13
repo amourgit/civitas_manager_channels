@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { RuntimeEnv } from "civitas/plugin-sdk/runtime-env";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
@@ -66,7 +66,7 @@ describe("deliverDiscordReply", () => {
   const runtime = {} as RuntimeEnv;
   const cfg = {
     channels: { discord: { token: "test-token" } },
-  } as OpenClawConfig;
+  } as CIVITASConfig;
   const expectBotSendRetrySuccess = async (status: number, message: string) => {
     sendMessageDiscordMock
       .mockRejectedValueOnce(Object.assign(new Error(message), { status }))

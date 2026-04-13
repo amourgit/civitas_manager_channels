@@ -1,5 +1,5 @@
 export type InstallRecordBase = {
-  source: "npm" | "archive" | "path" | "clawhub";
+  source: "npm" | "archive" | "path" | "CIVITAS Channelhub";
   spec?: string;
   sourcePath?: string;
   installPath?: string;
@@ -11,8 +11,8 @@ export type InstallRecordBase = {
   shasum?: string;
   resolvedAt?: string;
   installedAt?: string;
-  clawhubUrl?: string;
-  clawhubPackage?: string;
-  clawhubFamily?: "code-plugin" | "bundle-plugin";
-  clawhubChannel?: "official" | "community" | "private";
+  CIVITAS ChannelhubUrl?: string;
+  CIVITAS ChannelhubPackage?: string;
+  CIVITAS ChannelhubFamily?: "code-plugin" | "bundle-plugin";
+  CIVITAS ChannelhubChannel?: "official" | "community" | "private";
 };

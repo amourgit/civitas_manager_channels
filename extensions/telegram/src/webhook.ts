@@ -3,7 +3,7 @@ import type { IncomingMessage } from "node:http";
 import net from "node:net";
 import * as grammy from "grammy";
 import { safeEqualSecret } from "civitas/plugin-sdk/browser-support";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { isDiagnosticsEnabled } from "civitas/plugin-sdk/diagnostic-runtime";
 import type { RuntimeEnv } from "civitas/plugin-sdk/runtime-env";
 import { defaultRuntime } from "civitas/plugin-sdk/runtime-env";
@@ -198,7 +198,7 @@ function resolveForwardedClientIp(
   return undefined;
 }
 
-function resolveTelegramWebhookClientIp(req: IncomingMessage, config?: OpenClawConfig): string {
+function resolveTelegramWebhookClientIp(req: IncomingMessage, config?: CIVITASConfig): string {
   const remoteAddress = parseIpLiteral(req.socket.remoteAddress);
   const trustedProxies = config?.gateway?.trustedProxies;
   if (!remoteAddress) {
@@ -226,7 +226,7 @@ function resolveTelegramWebhookClientIp(req: IncomingMessage, config?: OpenClawC
 function resolveTelegramWebhookRateLimitKey(
   req: IncomingMessage,
   path: string,
-  config?: OpenClawConfig,
+  config?: CIVITASConfig,
 ): string {
   return `${path}:${resolveTelegramWebhookClientIp(req, config)}`;
 }
@@ -234,7 +234,7 @@ function resolveTelegramWebhookRateLimitKey(
 export async function startTelegramWebhook(opts: {
   token: string;
   accountId?: string;
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
   path?: string;
   port?: number;
   host?: string;

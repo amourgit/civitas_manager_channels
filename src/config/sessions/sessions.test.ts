@@ -5,7 +5,7 @@ import path from "node:path";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { upsertAcpSessionMeta } from "../../acp/runtime/session-meta.js";
 import * as jsonFiles from "../../infra/json-files.js";
-import type { OpenClawConfig } from "../config.js";
+import type { CIVITASConfig } from "../config.js";
 import type { SessionConfig } from "../types.base.js";
 import {
   resolveSessionFilePath,
@@ -358,7 +358,7 @@ describe("session store lock (Promise chain mutex)", () => {
       session: {
         store: storePath,
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     const result = await upsertAcpSessionMeta({
       cfg,

@@ -63,7 +63,7 @@ export function getQQBotDataDir(...subPaths: string[]): string {
 /**
  * Return a path under `~/.civitas/media/qqbot`, creating it on demand.
  *
- * Unlike `getQQBotDataDir`, this lives under OpenClaw's core media allowlist so
+ * Unlike `getQQBotDataDir`, this lives under CIVITAS's core media allowlist so
  * downloaded images and audio can be accessed by framework media tooling.
  */
 export function getQQBotMediaDir(...subPaths: string[]): string {

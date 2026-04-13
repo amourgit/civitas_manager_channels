@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import { withEnvAsync } from "../test-utils/env.js";
 import { createDoctorPrompter } from "./doctor-prompter.js";
 import {
@@ -101,7 +101,7 @@ import {
 } from "./doctor-gateway-services.js";
 
 const originalStdinIsTTY = process.stdin.isTTY;
-const originalUpdateInProgress = process.env.OPENCLAW_UPDATE_IN_PROGRESS;
+const originalUpdateInProgress = process.env.CIVITAS_UPDATE_IN_PROGRESS;
 
 function makeDoctorIo() {
   return { log: vi.fn(), error: vi.fn(), exit: vi.fn() };
@@ -126,12 +126,12 @@ function makeDoctorPrompts() {
   };
 }
 
-async function runRepair(cfg: OpenClawConfig) {
+async function runRepair(cfg: CIVITASConfig) {
   await maybeRepairGatewayServiceConfig(cfg, "local", makeDoctorIo(), makeDoctorPrompts());
 }
 
 async function runNonInteractiveRepair(params: {
-  cfg?: OpenClawConfig;
+  cfg?: CIVITASConfig;
   updateInProgress?: boolean;
 }) {
   Object.defineProperty(process.stdin, "isTTY", {
@@ -139,9 +139,9 @@ async function runNonInteractiveRepair(params: {
     configurable: true,
   });
   if (params.updateInProgress) {
-    process.env.OPENCLAW_UPDATE_IN_PROGRESS = "1";
+    process.env.CIVITAS_UPDATE_IN_PROGRESS = "1";
   } else {
-    delete process.env.OPENCLAW_UPDATE_IN_PROGRESS;
+    delete process.env.CIVITAS_UPDATE_IN_PROGRESS;
   }
   await maybeRepairGatewayServiceConfig(
     params.cfg ?? { gateway: {} },
@@ -201,7 +201,7 @@ function setupGatewayTokenRepairScenario() {
   mocks.readCommand.mockResolvedValue({
     programArguments: gatewayProgramArguments,
     environment: {
-      OPENCLAW_GATEWAY_TOKEN: "stale-token",
+      CIVITAS_GATEWAY_TOKEN: "stale-token",
     },
   });
   mocks.auditGatewayServiceConfig.mockResolvedValue({
@@ -209,7 +209,7 @@ function setupGatewayTokenRepairScenario() {
     issues: [
       {
         code: "gateway-token-mismatch",
-        message: "Gateway service OPENCLAW_GATEWAY_TOKEN does not match gateway.auth.token",
+        message: "Gateway service CIVITAS_GATEWAY_TOKEN does not match gateway.auth.token",
         level: "recommended",
       },
     ],
@@ -226,10 +226,10 @@ describe("maybeRepairGatewayServiceConfig", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     fsMocks.realpath.mockImplementation(async (value: string) => value);
-    mocks.resolveGatewayAuthTokenForService.mockImplementation(async (cfg: OpenClawConfig, env) => {
+    mocks.resolveGatewayAuthTokenForService.mockImplementation(async (cfg: CIVITASConfig, env) => {
       const configToken =
         typeof cfg.gateway?.auth?.token === "string" ? cfg.gateway.auth.token.trim() : undefined;
-      const envToken = env.OPENCLAW_GATEWAY_TOKEN?.trim() || undefined;
+      const envToken = env.CIVITAS_GATEWAY_TOKEN?.trim() || undefined;
       return { token: configToken || envToken };
     });
   });
@@ -240,16 +240,16 @@ describe("maybeRepairGatewayServiceConfig", () => {
       configurable: true,
     });
     if (originalUpdateInProgress === undefined) {
-      delete process.env.OPENCLAW_UPDATE_IN_PROGRESS;
+      delete process.env.CIVITAS_UPDATE_IN_PROGRESS;
     } else {
-      process.env.OPENCLAW_UPDATE_IN_PROGRESS = originalUpdateInProgress;
+      process.env.CIVITAS_UPDATE_IN_PROGRESS = originalUpdateInProgress;
     }
   });
 
   it("treats gateway.auth.token as source of truth for service token repairs", async () => {
     setupGatewayTokenRepairScenario();
 
-    const cfg: OpenClawConfig = {
+    const cfg: CIVITASConfig = {
       gateway: {
         auth: {
           mode: "token",
@@ -281,11 +281,11 @@ describe("maybeRepairGatewayServiceConfig", () => {
     expect(mocks.install).toHaveBeenCalledTimes(1);
   });
 
-  it("uses OPENCLAW_GATEWAY_TOKEN when config token is missing", async () => {
-    await withEnvAsync({ OPENCLAW_GATEWAY_TOKEN: "env-token" }, async () => {
+  it("uses CIVITAS_GATEWAY_TOKEN when config token is missing", async () => {
+    await withEnvAsync({ CIVITAS_GATEWAY_TOKEN: "env-token" }, async () => {
       setupGatewayTokenRepairScenario();
 
-      const cfg: OpenClawConfig = {
+      const cfg: CIVITASConfig = {
         gateway: {},
       };
 
@@ -425,7 +425,7 @@ describe("maybeRepairGatewayServiceConfig", () => {
     mocks.readCommand.mockResolvedValue({
       programArguments: gatewayProgramArguments,
       environment: {
-        OPENCLAW_GATEWAY_TOKEN: "stale-token",
+        CIVITAS_GATEWAY_TOKEN: "stale-token",
       },
     });
     mocks.auditGatewayServiceConfig.mockResolvedValue({
@@ -439,14 +439,14 @@ describe("maybeRepairGatewayServiceConfig", () => {
     });
     mocks.install.mockResolvedValue(undefined);
 
-    const cfg: OpenClawConfig = {
+    const cfg: CIVITASConfig = {
       gateway: {
         auth: {
           mode: "token",
           token: {
             source: "env",
             provider: "default",
-            id: "OPENCLAW_GATEWAY_TOKEN",
+            id: "CIVITAS_GATEWAY_TOKEN",
           },
         },
       },
@@ -471,12 +471,12 @@ describe("maybeRepairGatewayServiceConfig", () => {
   it("falls back to embedded service token when config and env tokens are missing", async () => {
     await withEnvAsync(
       {
-        OPENCLAW_GATEWAY_TOKEN: undefined,
+        CIVITAS_GATEWAY_TOKEN: undefined,
       },
       async () => {
         setupGatewayTokenRepairScenario();
 
-        const cfg: OpenClawConfig = {
+        const cfg: CIVITASConfig = {
           gateway: {},
         };
 
@@ -518,16 +518,16 @@ describe("maybeRepairGatewayServiceConfig", () => {
       value: false,
       configurable: true,
     });
-    process.env.OPENCLAW_UPDATE_IN_PROGRESS = "1";
+    process.env.CIVITAS_UPDATE_IN_PROGRESS = "1";
 
     await withEnvAsync(
       {
-        OPENCLAW_GATEWAY_TOKEN: undefined,
+        CIVITAS_GATEWAY_TOKEN: undefined,
       },
       async () => {
         setupGatewayTokenRepairScenario();
 
-        const cfg: OpenClawConfig = {
+        const cfg: CIVITASConfig = {
           gateway: {},
         };
 
@@ -554,16 +554,16 @@ describe("maybeRepairGatewayServiceConfig", () => {
   it("does not persist EnvironmentFile-backed service tokens into config", async () => {
     await withEnvAsync(
       {
-        OPENCLAW_GATEWAY_TOKEN: undefined,
+        CIVITAS_GATEWAY_TOKEN: undefined,
       },
       async () => {
         mocks.readCommand.mockResolvedValue({
           programArguments: gatewayProgramArguments,
           environment: {
-            OPENCLAW_GATEWAY_TOKEN: "env-file-token",
+            CIVITAS_GATEWAY_TOKEN: "env-file-token",
           },
           environmentValueSources: {
-            OPENCLAW_GATEWAY_TOKEN: "file",
+            CIVITAS_GATEWAY_TOKEN: "file",
           },
         });
         mocks.auditGatewayServiceConfig.mockResolvedValue({
@@ -577,7 +577,7 @@ describe("maybeRepairGatewayServiceConfig", () => {
         });
         mocks.install.mockResolvedValue(undefined);
 
-        const cfg: OpenClawConfig = {
+        const cfg: CIVITASConfig = {
           gateway: {},
         };
 
@@ -607,16 +607,16 @@ describe("maybeScanExtraGatewayServices", () => {
     mocks.findExtraGatewayServices.mockResolvedValue([
       {
         platform: "linux",
-        label: "clawdbot-gateway.service",
-        detail: "unit: /home/test/.config/systemd/user/clawdbot-gateway.service",
+        label: "CIVITAS Channeldbot-gateway.service",
+        detail: "unit: /home/test/.config/systemd/user/CIVITAS Channeldbot-gateway.service",
         scope: "user",
         legacy: true,
       },
     ]);
     mocks.uninstallLegacySystemdUnits.mockResolvedValue([
       {
-        name: "clawdbot-gateway",
-        unitPath: "/home/test/.config/systemd/user/clawdbot-gateway.service",
+        name: "CIVITAS Channeldbot-gateway",
+        unitPath: "/home/test/.config/systemd/user/CIVITAS Channeldbot-gateway.service",
         enabled: true,
         exists: true,
       },
@@ -648,11 +648,11 @@ describe("maybeScanExtraGatewayServices", () => {
       stdout: process.stdout,
     });
     expect(mocks.note).toHaveBeenCalledWith(
-      expect.stringContaining("clawdbot-gateway.service"),
+      expect.stringContaining("CIVITAS Channeldbot-gateway.service"),
       "Legacy gateway removed",
     );
     expect(runtime.log).toHaveBeenCalledWith(
-      "Legacy gateway services removed. Installing OpenClaw gateway next.",
+      "Legacy gateway services removed. Installing CIVITAS gateway next.",
     );
   });
 });

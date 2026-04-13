@@ -18,7 +18,7 @@ import {
 import { resolveOwningPluginIdsForModelRef } from "../plugins/providers.js";
 import { isRecord, resolveConfigDir, resolveUserPath } from "../utils.js";
 import { isChannelConfigured } from "./channel-configured.js";
-import type { OpenClawConfig } from "./config.js";
+import type { CIVITASConfig } from "./config.js";
 import { ensurePluginAllowlisted } from "./plugins-allowlist.js";
 import { isBlockedObjectKey } from "./prototype-keys.js";
 
@@ -66,7 +66,7 @@ export type PluginAutoEnableCandidate =
     };
 
 export type PluginAutoEnableResult = {
-  config: OpenClawConfig;
+  config: CIVITASConfig;
   changes: string[];
   autoEnabledReasons: Record<string, string[]>;
 };
@@ -76,7 +76,7 @@ const EMPTY_PLUGIN_MANIFEST_REGISTRY: PluginManifestRegistry = {
   diagnostics: [],
 };
 
-const ENV_CATALOG_PATHS = ["OPENCLAW_PLUGIN_CATALOG_PATHS", "OPENCLAW_MPM_CATALOG_PATHS"];
+const ENV_CATALOG_PATHS = ["CIVITAS_PLUGIN_CATALOG_PATHS", "CIVITAS_MPM_CATALOG_PATHS"];
 
 function resolveAutoEnableProviderPluginIds(
   registry: PluginManifestRegistry,
@@ -92,7 +92,7 @@ function resolveAutoEnableProviderPluginIds(
   return Object.fromEntries(entries);
 }
 
-function collectModelRefs(cfg: OpenClawConfig): string[] {
+function collectModelRefs(cfg: CIVITASConfig): string[] {
   const refs: string[] = [];
   const pushModelRef = (value: unknown) => {
     if (typeof value === "string" && value.trim()) {
@@ -146,7 +146,7 @@ function extractProviderFromModelRef(value: string): string | null {
   return normalizeProviderId(trimmed.slice(0, slash));
 }
 
-function isProviderConfigured(cfg: OpenClawConfig, providerId: string): boolean {
+function isProviderConfigured(cfg: CIVITASConfig, providerId: string): boolean {
   const normalized = normalizeProviderId(providerId);
 
   const profiles = cfg.auth?.profiles;
@@ -182,7 +182,7 @@ function isProviderConfigured(cfg: OpenClawConfig, providerId: string): boolean 
   return false;
 }
 
-function hasPluginOwnedWebSearchConfig(cfg: OpenClawConfig, pluginId: string): boolean {
+function hasPluginOwnedWebSearchConfig(cfg: CIVITASConfig, pluginId: string): boolean {
   const pluginConfig = cfg.plugins?.entries?.[pluginId]?.config;
   if (!isRecord(pluginConfig)) {
     return false;
@@ -190,7 +190,7 @@ function hasPluginOwnedWebSearchConfig(cfg: OpenClawConfig, pluginId: string): b
   return isRecord(pluginConfig.webSearch);
 }
 
-function hasPluginOwnedWebFetchConfig(cfg: OpenClawConfig, pluginId: string): boolean {
+function hasPluginOwnedWebFetchConfig(cfg: CIVITASConfig, pluginId: string): boolean {
   const pluginConfig = cfg.plugins?.entries?.[pluginId]?.config;
   if (!isRecord(pluginConfig)) {
     return false;
@@ -198,7 +198,7 @@ function hasPluginOwnedWebFetchConfig(cfg: OpenClawConfig, pluginId: string): bo
   return isRecord(pluginConfig.webFetch);
 }
 
-function hasPluginOwnedToolConfig(cfg: OpenClawConfig, pluginId: string): boolean {
+function hasPluginOwnedToolConfig(cfg: CIVITASConfig, pluginId: string): boolean {
   if (pluginId === "xai") {
     const pluginConfig = cfg.plugins?.entries?.xai?.config;
     const web = cfg.tools?.web as Record<string, unknown> | undefined;
@@ -357,13 +357,13 @@ function resolvePluginIdForChannel(
   return channelToPluginId.get(channelId) ?? channelId;
 }
 
-function collectCandidateChannelIds(cfg: OpenClawConfig, env: NodeJS.ProcessEnv): string[] {
+function collectCandidateChannelIds(cfg: CIVITASConfig, env: NodeJS.ProcessEnv): string[] {
   return listPotentialConfiguredChannelIds(cfg, env).map(
     (channelId) => normalizeChatChannelId(channelId) ?? channelId,
   );
 }
 
-function hasConfiguredWebSearchPluginEntry(cfg: OpenClawConfig): boolean {
+function hasConfiguredWebSearchPluginEntry(cfg: CIVITASConfig): boolean {
   const entries = cfg.plugins?.entries;
   if (!entries || typeof entries !== "object") {
     return false;
@@ -373,7 +373,7 @@ function hasConfiguredWebSearchPluginEntry(cfg: OpenClawConfig): boolean {
   );
 }
 
-function hasConfiguredWebFetchPluginEntry(cfg: OpenClawConfig): boolean {
+function hasConfiguredWebFetchPluginEntry(cfg: CIVITASConfig): boolean {
   const entries = cfg.plugins?.entries;
   if (!entries || typeof entries !== "object") {
     return false;
@@ -387,7 +387,7 @@ function hasConfiguredWebFetchPluginEntry(cfg: OpenClawConfig): boolean {
   );
 }
 
-function configMayNeedPluginManifestRegistry(cfg: OpenClawConfig): boolean {
+function configMayNeedPluginManifestRegistry(cfg: CIVITASConfig): boolean {
   if (cfg.auth?.profiles && Object.keys(cfg.auth.profiles).length > 0) {
     return true;
   }
@@ -412,7 +412,7 @@ function configMayNeedPluginManifestRegistry(cfg: OpenClawConfig): boolean {
   return false;
 }
 
-function configMayNeedPluginAutoEnable(cfg: OpenClawConfig, env: NodeJS.ProcessEnv): boolean {
+function configMayNeedPluginAutoEnable(cfg: CIVITASConfig, env: NodeJS.ProcessEnv): boolean {
   if (hasPotentialConfiguredChannels(cfg, env)) {
     return true;
   }
@@ -462,7 +462,7 @@ function toolPolicyReferencesBrowser(value: unknown): boolean {
   return listContainsBrowser(value.allow) || listContainsBrowser(value.alsoAllow);
 }
 
-function hasBrowserToolReference(cfg: OpenClawConfig): boolean {
+function hasBrowserToolReference(cfg: CIVITASConfig): boolean {
   if (toolPolicyReferencesBrowser(cfg.tools)) {
     return true;
   }
@@ -475,14 +475,14 @@ function hasBrowserToolReference(cfg: OpenClawConfig): boolean {
   return agentList.some((entry) => isRecord(entry) && toolPolicyReferencesBrowser(entry.tools));
 }
 
-function hasExplicitBrowserPluginEntry(cfg: OpenClawConfig): boolean {
+function hasExplicitBrowserPluginEntry(cfg: CIVITASConfig): boolean {
   return Boolean(
     cfg.plugins?.entries && Object.prototype.hasOwnProperty.call(cfg.plugins.entries, "browser"),
   );
 }
 
 function resolveBrowserAutoEnableSource(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
 ): Extract<PluginAutoEnableCandidate, { kind: "browser-configured" }>["source"] | null {
   if (cfg.browser?.enabled === false || cfg.plugins?.entries?.browser?.enabled === false) {
     return null;
@@ -537,7 +537,7 @@ export function resolvePluginAutoEnableCandidateReason(
 }
 
 function resolveConfiguredPlugins(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   env: NodeJS.ProcessEnv,
   registry: PluginManifestRegistry,
 ): PluginAutoEnableCandidate[] {
@@ -630,7 +630,7 @@ function resolveConfiguredPlugins(
   return changes;
 }
 
-function isPluginExplicitlyDisabled(cfg: OpenClawConfig, pluginId: string): boolean {
+function isPluginExplicitlyDisabled(cfg: CIVITASConfig, pluginId: string): boolean {
   const builtInChannelId = normalizeChatChannelId(pluginId);
   if (builtInChannelId) {
     const channels = cfg.channels as Record<string, unknown> | undefined;
@@ -648,7 +648,7 @@ function isPluginExplicitlyDisabled(cfg: OpenClawConfig, pluginId: string): bool
   return entry?.enabled === false;
 }
 
-function isPluginDenied(cfg: OpenClawConfig, pluginId: string): boolean {
+function isPluginDenied(cfg: CIVITASConfig, pluginId: string): boolean {
   const deny = cfg.plugins?.deny;
   return Array.isArray(deny) && deny.includes(pluginId);
 }
@@ -675,7 +675,7 @@ function resolvePreferredOverIds(
 }
 
 function shouldSkipPreferredPluginAutoEnable(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   entry: PluginAutoEnableCandidate,
   configured: PluginAutoEnableCandidate[],
   env: NodeJS.ProcessEnv,
@@ -699,7 +699,7 @@ function shouldSkipPreferredPluginAutoEnable(
   return false;
 }
 
-function registerPluginEntry(cfg: OpenClawConfig, pluginId: string): OpenClawConfig {
+function registerPluginEntry(cfg: CIVITASConfig, pluginId: string): CIVITASConfig {
   const builtInChannelId = normalizeChatChannelId(pluginId);
   if (builtInChannelId) {
     const channels = cfg.channels as Record<string, unknown> | undefined;
@@ -746,12 +746,12 @@ function formatAutoEnableChange(entry: PluginAutoEnableCandidate): string {
 }
 
 export function detectPluginAutoEnableCandidates(params: {
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
   env?: NodeJS.ProcessEnv;
   manifestRegistry?: PluginManifestRegistry;
 }): PluginAutoEnableCandidate[] {
   const env = params.env ?? process.env;
-  const config = params.config ?? ({} as OpenClawConfig);
+  const config = params.config ?? ({} as CIVITASConfig);
   if (!configMayNeedPluginAutoEnable(config, env)) {
     return [];
   }
@@ -764,7 +764,7 @@ export function detectPluginAutoEnableCandidates(params: {
 }
 
 export function materializePluginAutoEnableCandidates(params: {
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
   candidates: readonly PluginAutoEnableCandidate[];
   env?: NodeJS.ProcessEnv;
   manifestRegistry?: PluginManifestRegistry;
@@ -839,7 +839,7 @@ export function materializePluginAutoEnableCandidates(params: {
 }
 
 export function applyPluginAutoEnable(params: {
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
   env?: NodeJS.ProcessEnv;
   /** Pre-loaded manifest registry. When omitted, the registry is loaded from
    *  the installed plugins on disk. Pass an explicit registry in tests to

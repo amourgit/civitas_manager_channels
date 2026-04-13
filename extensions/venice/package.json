@@ -2,7 +2,7 @@
   "name": "@civitas/venice-provider",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw Venice provider plugin",
+  "description": "CIVITAS Venice provider plugin",
   "type": "module",
   "civitas": {
     "extensions": [

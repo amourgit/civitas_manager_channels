@@ -18,7 +18,7 @@ import {
   createRawChannelSendResultAdapter,
 } from "civitas/plugin-sdk/channel-send-result";
 import { buildTokenChannelStatusSummary } from "civitas/plugin-sdk/channel-status";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { createStaticReplyToModeResolver } from "civitas/plugin-sdk/conversation-runtime";
 import { createChatChannelPlugin, buildChannelConfigSchema } from "civitas/plugin-sdk/core";
 import type { ChannelPlugin } from "civitas/plugin-sdk/core";
@@ -132,7 +132,7 @@ const resolveZaloDmPolicy = createScopedDmSecurityResolver<ResolvedZaloAccount>(
 });
 
 const collectZaloSecurityWarnings = createOpenProviderGroupPolicyWarningCollector<{
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   account: ResolvedZaloAccount;
 }>({
   providerConfigPresent: (cfg) => cfg.channels?.zalo !== undefined,

@@ -11,7 +11,7 @@ import {
 import path from "node:path";
 import { normalizeChannelId, type ChannelId } from "civitas/plugin-sdk/channel-targets";
 import type {
-  OpenClawConfig,
+  CIVITASConfig,
   TtsAutoMode,
   TtsConfig,
   TtsMode,
@@ -22,7 +22,7 @@ import { redactSensitiveText } from "civitas/plugin-sdk/logging-core";
 import { resolveSendableOutboundReplyParts } from "civitas/plugin-sdk/reply-payload";
 import type { ReplyPayload } from "civitas/plugin-sdk/reply-runtime";
 import { isVerbose, logVerbose } from "civitas/plugin-sdk/runtime-env";
-import { resolvePreferredOpenClawTmpDir } from "civitas/plugin-sdk/sandbox";
+import { resolvePreferredCIVITASTmpDir } from "civitas/plugin-sdk/sandbox";
 import { CONFIG_DIR, resolveUserPath, stripMarkdown } from "civitas/plugin-sdk/text-runtime";
 import {
   canonicalizeSpeechProviderId,
@@ -59,7 +59,7 @@ export type ResolvedTtsConfig = {
   maxTextLength: number;
   timeoutMs: number;
   rawConfig?: TtsConfig;
-  sourceConfig?: OpenClawConfig;
+  sourceConfig?: CIVITASConfig;
 };
 
 type TtsUserPrefs = {
@@ -163,7 +163,7 @@ function resolveTtsPrefsPathValue(prefsPath: string | undefined): string {
   if (prefsPath?.trim()) {
     return resolveUserPath(prefsPath.trim());
   }
-  const envPath = process.env.OPENCLAW_TTS_PREFS?.trim();
+  const envPath = process.env.CIVITAS_TTS_PREFS?.trim();
   if (envPath) {
     return resolveUserPath(envPath);
   }
@@ -199,7 +199,7 @@ function resolveModelOverridePolicy(
   };
 }
 
-function sortSpeechProvidersForAutoSelection(cfg?: OpenClawConfig) {
+function sortSpeechProvidersForAutoSelection(cfg?: CIVITASConfig) {
   return listSpeechProviders(cfg).toSorted((left, right) => {
     const leftOrder = left.autoSelectOrder ?? Number.MAX_SAFE_INTEGER;
     const rightOrder = right.autoSelectOrder ?? Number.MAX_SAFE_INTEGER;
@@ -210,7 +210,7 @@ function sortSpeechProvidersForAutoSelection(cfg?: OpenClawConfig) {
   });
 }
 
-function resolveRegistryDefaultSpeechProviderId(cfg?: OpenClawConfig): TtsProvider {
+function resolveRegistryDefaultSpeechProviderId(cfg?: CIVITASConfig): TtsProvider {
   return sortSpeechProvidersForAutoSelection(cfg)[0]?.id ?? "";
 }
 
@@ -241,7 +241,7 @@ function resolveRawProviderConfig(
 function resolveLazyProviderConfig(
   config: ResolvedTtsConfig,
   providerId: string,
-  cfg?: OpenClawConfig,
+  cfg?: CIVITASConfig,
 ): SpeechProviderConfig {
   const canonical =
     normalizeConfiguredSpeechProviderId(providerId) ?? providerId.trim().toLowerCase();
@@ -302,7 +302,7 @@ function collectDirectProviderConfigEntries(raw: TtsConfig): Record<string, Spee
 export function getResolvedSpeechProviderConfig(
   config: ResolvedTtsConfig,
   providerId: string,
-  cfg?: OpenClawConfig,
+  cfg?: CIVITASConfig,
 ): SpeechProviderConfig {
   const canonical =
     canonicalizeSpeechProviderId(providerId, cfg) ??
@@ -311,7 +311,7 @@ export function getResolvedSpeechProviderConfig(
   return resolveLazyProviderConfig(config, canonical, cfg);
 }
 
-export function resolveTtsConfig(cfg: OpenClawConfig): ResolvedTtsConfig {
+export function resolveTtsConfig(cfg: CIVITASConfig): ResolvedTtsConfig {
   const raw: TtsConfig = cfg.messages?.tts ?? {};
   const providerSource = raw.provider ? "config" : "default";
   const timeoutMs = raw.timeoutMs ?? DEFAULT_TIMEOUT_MS;
@@ -365,7 +365,7 @@ export function resolveTtsAutoMode(params: {
   return params.config.auto;
 }
 
-function resolveEffectiveTtsAutoState(params: { cfg: OpenClawConfig; sessionAuto?: string }): {
+function resolveEffectiveTtsAutoState(params: { cfg: CIVITASConfig; sessionAuto?: string }): {
   autoMode: TtsAutoMode;
   prefsPath: string;
 } {
@@ -385,7 +385,7 @@ function resolveEffectiveTtsAutoState(params: { cfg: OpenClawConfig; sessionAuto
   };
 }
 
-export function buildTtsSystemPromptHint(cfg: OpenClawConfig): string | undefined {
+export function buildTtsSystemPromptHint(cfg: CIVITASConfig): string | undefined {
   const { autoMode, prefsPath } = resolveEffectiveTtsAutoState({ cfg });
   if (autoMode === "off") {
     return undefined;
@@ -530,7 +530,7 @@ function resolveChannelId(channel: string | undefined): ChannelId | null {
   return channel ? normalizeChannelId(channel) : null;
 }
 
-export function resolveTtsProviderOrder(primary: TtsProvider, cfg?: OpenClawConfig): TtsProvider[] {
+export function resolveTtsProviderOrder(primary: TtsProvider, cfg?: CIVITASConfig): TtsProvider[] {
   const normalizedPrimary = canonicalizeSpeechProviderId(primary, cfg) ?? primary;
   const ordered = new Set<TtsProvider>([normalizedPrimary]);
   for (const provider of sortSpeechProvidersForAutoSelection(cfg)) {
@@ -545,7 +545,7 @@ export function resolveTtsProviderOrder(primary: TtsProvider, cfg?: OpenClawConf
 export function isTtsProviderConfigured(
   config: ResolvedTtsConfig,
   provider: TtsProvider,
-  cfg?: OpenClawConfig,
+  cfg?: CIVITASConfig,
 ): boolean {
   const resolvedProvider = getSpeechProvider(provider, cfg);
   if (!resolvedProvider) {
@@ -605,7 +605,7 @@ type TtsProviderReadyResolution =
 
 function resolveReadySpeechProvider(params: {
   provider: TtsProvider;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   config: ResolvedTtsConfig;
   requireTelephony?: boolean;
 }): TtsProviderReadyResolution {
@@ -651,7 +651,7 @@ function resolveReadySpeechProvider(params: {
 
 function resolveTtsRequestSetup(params: {
   text: string;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   prefsPath?: string;
   providerOverride?: TtsProvider;
   disableFallback?: boolean;
@@ -682,7 +682,7 @@ function resolveTtsRequestSetup(params: {
 
 export async function textToSpeech(params: {
   text: string;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   prefsPath?: string;
   channel?: string;
   overrides?: TtsDirectiveOverrides;
@@ -698,7 +698,7 @@ export async function textToSpeech(params: {
     };
   }
 
-  const tempRoot = resolvePreferredOpenClawTmpDir();
+  const tempRoot = resolvePreferredCIVITASTmpDir();
   mkdirSync(tempRoot, { recursive: true, mode: 0o700 });
   const tempDir = mkdtempSync(path.join(tempRoot, "tts-"));
   const audioPath = path.join(tempDir, `voice-${Date.now()}${synthesis.fileExtension}`);
@@ -720,7 +720,7 @@ export async function textToSpeech(params: {
 
 export async function synthesizeSpeech(params: {
   text: string;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   prefsPath?: string;
   channel?: string;
   overrides?: TtsDirectiveOverrides;
@@ -825,7 +825,7 @@ export async function synthesizeSpeech(params: {
 
 export async function textToSpeechTelephony(params: {
   text: string;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   prefsPath?: string;
 }): Promise<TtsTelephonyResult> {
   const setup = resolveTtsRequestSetup({
@@ -924,7 +924,7 @@ export async function textToSpeechTelephony(params: {
 
 export async function listSpeechVoices(params: {
   provider: string;
-  cfg?: OpenClawConfig;
+  cfg?: CIVITASConfig;
   config?: ResolvedTtsConfig;
   apiKey?: string;
   baseUrl?: string;
@@ -954,7 +954,7 @@ export async function listSpeechVoices(params: {
 
 export async function maybeApplyTtsToPayload(params: {
   payload: ReplyPayload;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   channel?: string;
   kind?: "tool" | "block" | "final";
   inboundAudio?: boolean;

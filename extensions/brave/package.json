@@ -2,7 +2,7 @@
   "name": "@civitas/brave-plugin",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw Brave plugin",
+  "description": "CIVITAS Brave plugin",
   "type": "module",
   "civitas": {
     "extensions": [

@@ -1,6 +1,6 @@
-import type { OpenClawPluginApi } from "civitas/plugin-sdk/core";
+import type { CIVITASPluginApi } from "civitas/plugin-sdk/core";
 
-export function registerMatrixCliMetadata(api: OpenClawPluginApi) {
+export function registerMatrixCliMetadata(api: CIVITASPluginApi) {
   api.registerCli(
     async ({ program }) => {
       const { registerMatrixCli } = await import("./cli.js");

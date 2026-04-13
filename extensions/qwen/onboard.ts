@@ -1,6 +1,6 @@
 import {
   createModelCatalogPresetAppliers,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "civitas/plugin-sdk/provider-onboard";
 import {
   QWEN_CN_BASE_URL,
@@ -21,7 +21,7 @@ export {
 
 const qwenPresetAppliers = createModelCatalogPresetAppliers<[string]>({
   primaryModelRef: QWEN_DEFAULT_MODEL_REF,
-  resolveParams: (_cfg: OpenClawConfig, baseUrl: string) => {
+  resolveParams: (_cfg: CIVITASConfig, baseUrl: string) => {
     const provider = buildQwenProvider();
     return {
       providerId: "qwen",
@@ -39,35 +39,35 @@ const qwenPresetAppliers = createModelCatalogPresetAppliers<[string]>({
   },
 });
 
-export function applyQwenProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyQwenProviderConfig(cfg: CIVITASConfig): CIVITASConfig {
   return qwenPresetAppliers.applyProviderConfig(cfg, QWEN_GLOBAL_BASE_URL);
 }
 
-export function applyQwenProviderConfigCn(cfg: OpenClawConfig): OpenClawConfig {
+export function applyQwenProviderConfigCn(cfg: CIVITASConfig): CIVITASConfig {
   return qwenPresetAppliers.applyProviderConfig(cfg, QWEN_CN_BASE_URL);
 }
 
-export function applyQwenConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyQwenConfig(cfg: CIVITASConfig): CIVITASConfig {
   return qwenPresetAppliers.applyConfig(cfg, QWEN_GLOBAL_BASE_URL);
 }
 
-export function applyQwenConfigCn(cfg: OpenClawConfig): OpenClawConfig {
+export function applyQwenConfigCn(cfg: CIVITASConfig): CIVITASConfig {
   return qwenPresetAppliers.applyConfig(cfg, QWEN_CN_BASE_URL);
 }
 
-export function applyQwenStandardProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyQwenStandardProviderConfig(cfg: CIVITASConfig): CIVITASConfig {
   return qwenPresetAppliers.applyProviderConfig(cfg, QWEN_STANDARD_GLOBAL_BASE_URL);
 }
 
-export function applyQwenStandardProviderConfigCn(cfg: OpenClawConfig): OpenClawConfig {
+export function applyQwenStandardProviderConfigCn(cfg: CIVITASConfig): CIVITASConfig {
   return qwenPresetAppliers.applyProviderConfig(cfg, QWEN_STANDARD_CN_BASE_URL);
 }
 
-export function applyQwenStandardConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyQwenStandardConfig(cfg: CIVITASConfig): CIVITASConfig {
   return qwenPresetAppliers.applyConfig(cfg, QWEN_STANDARD_GLOBAL_BASE_URL);
 }
 
-export function applyQwenStandardConfigCn(cfg: OpenClawConfig): OpenClawConfig {
+export function applyQwenStandardConfigCn(cfg: CIVITASConfig): CIVITASConfig {
   return qwenPresetAppliers.applyConfig(cfg, QWEN_STANDARD_CN_BASE_URL);
 }
 

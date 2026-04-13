@@ -1,7 +1,7 @@
 {
   "name": "@civitas/whatsapp",
   "version": "2026.4.4",
-  "description": "OpenClaw WhatsApp channel plugin",
+  "description": "CIVITAS WhatsApp channel plugin",
   "type": "module",
   "dependencies": {
     "@whiskeysockets/baileys": "7.0.0-rc.9",
@@ -45,7 +45,7 @@
       "civitasVersion": "2026.4.4"
     },
     "release": {
-      "publishToClawHub": true,
+      "publishToChannelHub": true,
       "publishToNpm": true
     }
   }

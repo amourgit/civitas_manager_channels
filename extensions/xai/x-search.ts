@@ -1,6 +1,6 @@
 import { Type } from "@sinclair/typebox";
 import { getRuntimeConfigSnapshot } from "civitas/plugin-sdk/config-runtime";
-import type { OpenClawConfig } from "civitas/plugin-sdk/plugin-entry";
+import type { CIVITASConfig } from "civitas/plugin-sdk/plugin-entry";
 import {
   jsonResult,
   readCache,
@@ -52,14 +52,14 @@ function getSharedXSearchCache(): Map<string, XSearchCacheEntry> {
 
 const X_SEARCH_CACHE = getSharedXSearchCache();
 
-function resolveXSearchConfig(cfg?: OpenClawConfig): Record<string, unknown> | undefined {
+function resolveXSearchConfig(cfg?: CIVITASConfig): Record<string, unknown> | undefined {
   return resolveEffectiveXSearchConfig(cfg);
 }
 
 function resolveXSearchEnabled(params: {
-  cfg?: OpenClawConfig;
+  cfg?: CIVITASConfig;
   config?: Record<string, unknown>;
-  runtimeConfig?: OpenClawConfig;
+  runtimeConfig?: CIVITASConfig;
 }): boolean {
   return isXaiToolEnabled({
     enabled: params.config?.enabled as boolean | undefined,
@@ -69,8 +69,8 @@ function resolveXSearchEnabled(params: {
 }
 
 function resolveXSearchApiKey(params: {
-  sourceConfig?: OpenClawConfig;
-  runtimeConfig?: OpenClawConfig;
+  sourceConfig?: CIVITASConfig;
+  runtimeConfig?: CIVITASConfig;
 }): string | undefined {
   return resolveXaiToolApiKey(params);
 }
@@ -121,8 +121,8 @@ function buildXSearchCacheKey(params: {
 }
 
 export function createXSearchTool(options?: {
-  config?: OpenClawConfig;
-  runtimeConfig?: OpenClawConfig | null;
+  config?: CIVITASConfig;
+  runtimeConfig?: CIVITASConfig | null;
 }) {
   const xSearchConfig = resolveXSearchConfig(options?.config);
   const runtimeConfig = options?.runtimeConfig ?? getRuntimeConfigSnapshot();

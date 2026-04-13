@@ -1,13 +1,13 @@
 import fs from "node:fs";
 import { collectChannelDoctorStaleConfigMutations } from "../commands/doctor/shared/channel-doctor.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import { loadConfig, readConfigFileSnapshot } from "../config/config.js";
 import { installHooksFromNpmSpec, installHooksFromPath } from "../hooks/install.js";
 import { resolveArchiveKind } from "../infra/archive.js";
-import { parseClawHubPluginSpec } from "../infra/clawhub.js";
+import { parseChannelHubPluginSpec } from "../infra/CIVITAS Channelhub.js";
 import { extractErrorCode, formatErrorMessage } from "../infra/errors.js";
 import { type BundledPluginSource, findBundledPluginSource } from "../plugins/bundled-sources.js";
-import { formatClawHubSpecifier, installPluginFromClawHub } from "../plugins/clawhub.js";
+import { formatChannelHubSpecifier, installPluginFromChannelHub } from "../plugins/CIVITAS Channelhub.js";
 import type { InstallSafetyOverrides } from "../plugins/install-security-scan.js";
 import { installPluginFromNpmSpec, installPluginFromPath } from "../plugins/install.js";
 import { clearPluginManifestRegistryCache } from "../plugins/manifest-registry.js";
@@ -30,10 +30,10 @@ import {
   resolveBundledInstallPlanForNpmFailure,
 } from "./plugin-install-plan.js";
 import {
-  buildPreferredClawHubSpec,
+  buildPreferredChannelHubSpec,
   createHookPackInstallLogger,
   createPluginInstallLogger,
-  decidePreferredClawHubFallback,
+  decidePreferredChannelHubFallback,
   formatPluginInstallWithHookFallbackError,
 } from "./plugins-command-helpers.js";
 import { persistHookPackInstall, persistPluginInstall } from "./plugins-install-persist.js";
@@ -49,7 +49,7 @@ function resolveInstallSafetyOverrides(overrides: InstallSafetyOverrides): Insta
 }
 
 async function installBundledPluginSource(params: {
-  config: OpenClawConfig;
+  config: CIVITASConfig;
   rawSpec: string;
   bundledSource: BundledPluginSource;
   warning: string;
@@ -79,7 +79,7 @@ async function installBundledPluginSource(params: {
 }
 
 async function tryInstallHookPackFromLocalPath(params: {
-  config: OpenClawConfig;
+  config: CIVITASConfig;
   resolvedPath: string;
   installMode: "install" | "update";
   safetyOverrides?: InstallSafetyOverrides;
@@ -159,7 +159,7 @@ async function tryInstallHookPackFromLocalPath(params: {
 }
 
 async function tryInstallHookPackFromNpmSpec(params: {
-  config: OpenClawConfig;
+  config: CIVITASConfig;
   installMode: "install" | "update";
   spec: string;
   pin?: boolean;
@@ -216,7 +216,7 @@ function buildInvalidPluginInstallConfigError(message: string): Error {
 
 async function loadConfigFromSnapshotForInstall(
   request: PluginInstallRequestContext,
-): Promise<OpenClawConfig> {
+): Promise<CIVITASConfig> {
   if (resolvePluginInstallInvalidConfigPolicy(request) !== "allow-bundled-recovery") {
     throw buildInvalidPluginInstallConfigError(
       "Config invalid; run `civitas doctor --fix` before installing plugins.",
@@ -248,7 +248,7 @@ async function loadConfigFromSnapshotForInstall(
 
 export async function loadConfigForInstall(
   request: PluginInstallRequestContext,
-): Promise<OpenClawConfig> {
+): Promise<CIVITASConfig> {
   try {
     return loadConfig();
   } catch (err) {
@@ -467,9 +467,9 @@ export async function runPluginInstallCommand(params: {
     return;
   }
 
-  const clawhubSpec = parseClawHubPluginSpec(raw);
-  if (clawhubSpec) {
-    const result = await installPluginFromClawHub({
+  const CIVITAS ChannelhubSpec = parseChannelHubPluginSpec(raw);
+  if (CIVITAS ChannelhubSpec) {
+    const result = await installPluginFromChannelHub({
       ...safetyOverrides,
       mode: installMode,
       spec: raw,
@@ -485,57 +485,57 @@ export async function runPluginInstallCommand(params: {
       config: cfg,
       pluginId: result.pluginId,
       install: {
-        source: "clawhub",
-        spec: formatClawHubSpecifier({
-          name: result.clawhub.clawhubPackage,
-          version: result.clawhub.version,
+        source: "CIVITAS Channelhub",
+        spec: formatChannelHubSpecifier({
+          name: result.CIVITAS Channelhub.CIVITAS ChannelhubPackage,
+          version: result.CIVITAS Channelhub.version,
         }),
         installPath: result.targetDir,
         version: result.version,
-        integrity: result.clawhub.integrity,
-        resolvedAt: result.clawhub.resolvedAt,
-        clawhubUrl: result.clawhub.clawhubUrl,
-        clawhubPackage: result.clawhub.clawhubPackage,
-        clawhubFamily: result.clawhub.clawhubFamily,
-        clawhubChannel: result.clawhub.clawhubChannel,
+        integrity: result.CIVITAS Channelhub.integrity,
+        resolvedAt: result.CIVITAS Channelhub.resolvedAt,
+        CIVITAS ChannelhubUrl: result.CIVITAS Channelhub.CIVITAS ChannelhubUrl,
+        CIVITAS ChannelhubPackage: result.CIVITAS Channelhub.CIVITAS ChannelhubPackage,
+        CIVITAS ChannelhubFamily: result.CIVITAS Channelhub.CIVITAS ChannelhubFamily,
+        CIVITAS ChannelhubChannel: result.CIVITAS Channelhub.CIVITAS ChannelhubChannel,
       },
     });
     return;
   }
 
-  const preferredClawHubSpec = buildPreferredClawHubSpec(raw);
-  if (preferredClawHubSpec) {
-    const clawhubResult = await installPluginFromClawHub({
+  const preferredChannelHubSpec = buildPreferredChannelHubSpec(raw);
+  if (preferredChannelHubSpec) {
+    const CIVITAS ChannelhubResult = await installPluginFromChannelHub({
       ...safetyOverrides,
       mode: installMode,
-      spec: preferredClawHubSpec,
+      spec: preferredChannelHubSpec,
       logger: createPluginInstallLogger(),
     });
-    if (clawhubResult.ok) {
+    if (CIVITAS ChannelhubResult.ok) {
       clearPluginManifestRegistryCache();
       await persistPluginInstall({
         config: cfg,
-        pluginId: clawhubResult.pluginId,
+        pluginId: CIVITAS ChannelhubResult.pluginId,
         install: {
-          source: "clawhub",
-          spec: formatClawHubSpecifier({
-            name: clawhubResult.clawhub.clawhubPackage,
-            version: clawhubResult.clawhub.version,
+          source: "CIVITAS Channelhub",
+          spec: formatChannelHubSpecifier({
+            name: CIVITAS ChannelhubResult.CIVITAS Channelhub.CIVITAS ChannelhubPackage,
+            version: CIVITAS ChannelhubResult.CIVITAS Channelhub.version,
           }),
-          installPath: clawhubResult.targetDir,
-          version: clawhubResult.version,
-          integrity: clawhubResult.clawhub.integrity,
-          resolvedAt: clawhubResult.clawhub.resolvedAt,
-          clawhubUrl: clawhubResult.clawhub.clawhubUrl,
-          clawhubPackage: clawhubResult.clawhub.clawhubPackage,
-          clawhubFamily: clawhubResult.clawhub.clawhubFamily,
-          clawhubChannel: clawhubResult.clawhub.clawhubChannel,
+          installPath: CIVITAS ChannelhubResult.targetDir,
+          version: CIVITAS ChannelhubResult.version,
+          integrity: CIVITAS ChannelhubResult.CIVITAS Channelhub.integrity,
+          resolvedAt: CIVITAS ChannelhubResult.CIVITAS Channelhub.resolvedAt,
+          CIVITAS ChannelhubUrl: CIVITAS ChannelhubResult.CIVITAS Channelhub.CIVITAS ChannelhubUrl,
+          CIVITAS ChannelhubPackage: CIVITAS ChannelhubResult.CIVITAS Channelhub.CIVITAS ChannelhubPackage,
+          CIVITAS ChannelhubFamily: CIVITAS ChannelhubResult.CIVITAS Channelhub.CIVITAS ChannelhubFamily,
+          CIVITAS ChannelhubChannel: CIVITAS ChannelhubResult.CIVITAS Channelhub.CIVITAS ChannelhubChannel,
         },
       });
       return;
     }
-    if (decidePreferredClawHubFallback(clawhubResult) !== "fallback_to_npm") {
-      defaultRuntime.error(clawhubResult.error);
+    if (decidePreferredChannelHubFallback(CIVITAS ChannelhubResult) !== "fallback_to_npm") {
+      defaultRuntime.error(CIVITAS ChannelhubResult.error);
       return defaultRuntime.exit(1);
     }
   }

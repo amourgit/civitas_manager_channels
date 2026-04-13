@@ -29,7 +29,7 @@ let stickerCache: StickerCacheModule;
 
 describe("sticker-cache", () => {
   beforeEach(async () => {
-    process.env.OPENCLAW_STATE_DIR = "/tmp/civitas-test-sticker-cache";
+    process.env.CIVITAS_STATE_DIR = "/tmp/civitas-test-sticker-cache";
     fs.rmSync("/tmp/civitas-test-sticker-cache", { recursive: true, force: true });
     fs.mkdirSync(TEST_CACHE_DIR, { recursive: true });
     vi.resetModules();
@@ -38,7 +38,7 @@ describe("sticker-cache", () => {
 
   afterEach(() => {
     fs.rmSync("/tmp/civitas-test-sticker-cache", { recursive: true, force: true });
-    delete process.env.OPENCLAW_STATE_DIR;
+    delete process.env.CIVITAS_STATE_DIR;
   });
 
   describe("getCachedSticker", () => {

@@ -1,12 +1,12 @@
-export type { OpenClawPluginApi, PluginRuntime } from "civitas/plugin-sdk/core";
+export type { CIVITASPluginApi, PluginRuntime } from "civitas/plugin-sdk/core";
 export type { ChannelMessageActionAdapter } from "civitas/plugin-sdk/channel-contract";
 export type { TelegramApiOverride } from "./src/send.js";
 export type {
-  OpenClawPluginService,
-  OpenClawPluginServiceContext,
+  CIVITASPluginService,
+  CIVITASPluginServiceContext,
   PluginLogger,
 } from "civitas/plugin-sdk/core";
-import type { OpenClawConfig as RuntimeOpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig as RuntimeCIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 export type {
   AcpRuntime,
   AcpRuntimeCapabilities,
@@ -84,9 +84,9 @@ export {
 } from "./src/thread-bindings.js";
 export { resolveTelegramToken } from "./src/token.js";
 export type { ChannelPlugin } from "civitas/plugin-sdk/core";
-export type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+export type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 export type TelegramAccountConfig = NonNullable<
-  NonNullable<RuntimeOpenClawConfig["channels"]>["telegram"]
+  NonNullable<RuntimeCIVITASConfig["channels"]>["telegram"]
 >;
 export type TelegramActionConfig = NonNullable<TelegramAccountConfig["actions"]>;
 export type TelegramNetworkConfig = NonNullable<TelegramAccountConfig["network"]>;

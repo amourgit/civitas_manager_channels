@@ -15,9 +15,9 @@ describe("hasAnyWhatsAppAuth", () => {
   };
 
   beforeEach(() => {
-    envSnapshot = captureEnv(["OPENCLAW_OAUTH_DIR"]);
+    envSnapshot = captureEnv(["CIVITAS_OAUTH_DIR"]);
     tempOauthDir = fs.mkdtempSync(path.join(os.tmpdir(), "civitas-oauth-"));
-    process.env.OPENCLAW_OAUTH_DIR = tempOauthDir;
+    process.env.CIVITAS_OAUTH_DIR = tempOauthDir;
   });
 
   afterEach(() => {

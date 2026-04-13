@@ -1,5 +1,5 @@
 import { attachChannelToResult } from "civitas/plugin-sdk/channel-send-result";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import {
   resolveOutboundSendDep,
   type OutboundSendDeps,
@@ -63,13 +63,13 @@ async function sendTypingTelegramLazy(
 export function resolveTelegramTokenHelper() {
   return (
     getOptionalTelegramRuntime()?.channel?.telegram?.resolveTelegramToken ??
-    ((cfg: OpenClawConfig, params?: { accountId?: string | null }) =>
+    ((cfg: CIVITASConfig, params?: { accountId?: string | null }) =>
       import("./token.js").then(({ resolveTelegramToken }) => resolveTelegramToken(cfg, params)))
   );
 }
 
 export function buildTelegramSendOptions(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   mediaUrl?: string | null;
   mediaLocalRoots?: readonly string[] | null;
   accountId?: string | null;
@@ -96,7 +96,7 @@ export function buildTelegramSendOptions(params: {
 }
 
 async function sendTelegramOutbound(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   to: string;
   text: string;
   mediaUrl?: string | null;
@@ -138,7 +138,7 @@ export const telegramChannelOutbound = {
       accountId,
       payload,
     }: {
-      cfg: OpenClawConfig;
+      cfg: CIVITASConfig;
       accountId?: string | null;
       payload: ReplyPayload;
     }) =>
@@ -152,7 +152,7 @@ export const telegramChannelOutbound = {
       target,
       hint,
     }: {
-      cfg: OpenClawConfig;
+      cfg: CIVITASConfig;
       target: { to: string; accountId?: string | null; threadId?: string | number | null };
       hint?: { kind?: string; approvalKind?: string } | null;
     }) => {
@@ -188,7 +188,7 @@ export const telegramChannelOutbound = {
       forceDocument,
       gatewayClientScopes,
     }: {
-      cfg: OpenClawConfig;
+      cfg: CIVITASConfig;
       to: string;
       payload: ReplyPayload;
       mediaLocalRoots?: readonly string[] | null;
@@ -232,7 +232,7 @@ export const telegramChannelOutbound = {
       silent,
       gatewayClientScopes,
     }: {
-      cfg: OpenClawConfig;
+      cfg: CIVITASConfig;
       to: string;
       text: string;
       accountId?: string | null;
@@ -266,7 +266,7 @@ export const telegramChannelOutbound = {
       silent,
       gatewayClientScopes,
     }: {
-      cfg: OpenClawConfig;
+      cfg: CIVITASConfig;
       to: string;
       text: string;
       mediaUrl?: string | null;
@@ -301,7 +301,7 @@ export const telegramChannelOutbound = {
       isAnonymous,
       gatewayClientScopes,
     }: {
-      cfg: OpenClawConfig;
+      cfg: CIVITASConfig;
       to: string;
       poll: Parameters<TelegramSendPollFn>[1];
       accountId?: string | null;

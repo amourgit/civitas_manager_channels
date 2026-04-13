@@ -1,5 +1,5 @@
 import { DEFAULT_ACCOUNT_ID } from "civitas/plugin-sdk/account-id";
-import type { OpenClawConfig } from "civitas/plugin-sdk/core";
+import type { CIVITASConfig } from "civitas/plugin-sdk/core";
 
 type BlueBubblesConfigPatch = {
   serverUrl?: string;
@@ -30,12 +30,12 @@ function normalizePatch(
 }
 
 export function applyBlueBubblesConnectionConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
   patch: BlueBubblesConfigPatch;
   onlyDefinedFields?: boolean;
   accountEnabled?: AccountEnabledMode;
-}): OpenClawConfig {
+}): CIVITASConfig {
   const patch = normalizePatch(params.patch, params.onlyDefinedFields === true);
   if (params.accountId === DEFAULT_ACCOUNT_ID) {
     return {

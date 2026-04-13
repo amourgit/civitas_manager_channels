@@ -10,7 +10,7 @@ import {
   readStringParam,
   resolvePollMaxSelections,
 } from "civitas/plugin-sdk/channel-actions";
-import type { OpenClawConfig, TelegramActionConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig, TelegramActionConfig } from "civitas/plugin-sdk/config-runtime";
 import { createTelegramActionGate, resolveTelegramPollActionGateState } from "./accounts.js";
 import {
   fitsTelegramCallbackData,
@@ -199,7 +199,7 @@ function readTelegramSendContent(params: {
 
 export async function handleTelegramAction(
   params: Record<string, unknown>,
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   options?: {
     mediaLocalRoots?: readonly string[];
     mediaReadFile?: (filePath: string) => Promise<Buffer>;

@@ -1,7 +1,7 @@
 import fsPromises from "node:fs/promises";
 import nodePath from "node:path";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import { readConfigFileSnapshot, replaceConfigFile, resolveGatewayPort } from "../config/config.js";
 import { logConfigUpdated } from "../config/logging.js";
 import { ensureControlUiAssetsBuilt } from "../infra/control-ui-assets.js";
@@ -48,7 +48,7 @@ import { setupSkills } from "./onboard-skills.js";
 type ConfigureSectionChoice = WizardSection | "__continue";
 
 async function resolveGatewaySecretInputForWizard(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   value: unknown;
   path: string;
 }): Promise<string | undefined> {
@@ -65,7 +65,7 @@ async function resolveGatewaySecretInputForWizard(params: {
 }
 
 async function runGatewayHealthCheck(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   runtime: RuntimeEnv;
   port: number;
 }): Promise<void> {
@@ -87,8 +87,8 @@ async function runGatewayHealthCheck(params: {
     value: params.cfg.gateway?.auth?.password,
     path: "gateway.auth.password",
   });
-  const token = process.env.OPENCLAW_GATEWAY_TOKEN ?? configuredToken;
-  const password = process.env.OPENCLAW_GATEWAY_PASSWORD ?? configuredPassword;
+  const token = process.env.CIVITAS_GATEWAY_TOKEN ?? configuredToken;
+  const password = process.env.CIVITAS_GATEWAY_PASSWORD ?? configuredPassword;
 
   await waitForGatewayReachable({
     url: wsUrl,
@@ -156,11 +156,11 @@ async function promptChannelMode(runtime: RuntimeEnv): Promise<ChannelsWizardMod
 }
 
 async function promptWebToolsConfig(
-  nextConfig: OpenClawConfig,
+  nextConfig: CIVITASConfig,
   runtime: RuntimeEnv,
   prompter: ReturnType<typeof createClackPrompter>,
-): Promise<OpenClawConfig> {
-  type WebSearchConfig = NonNullable<NonNullable<OpenClawConfig["tools"]>["web"]>["search"];
+): Promise<CIVITASConfig> {
+  type WebSearchConfig = NonNullable<NonNullable<CIVITASConfig["tools"]>["web"]>["search"];
   const existingSearch = nextConfig.tools?.web?.search;
   const existingFetch = nextConfig.tools?.web?.fetch;
   const { resolveSearchProviderOptions, setupSearch } = await import("./onboard-search.js");
@@ -323,12 +323,12 @@ export async function runConfigureWizard(
   runtime: RuntimeEnv = defaultRuntime,
 ) {
   try {
-    intro(opts.command === "update" ? "OpenClaw update wizard" : "OpenClaw configure");
+    intro(opts.command === "update" ? "CIVITAS update wizard" : "CIVITAS configure");
     const prompter = createClackPrompter();
 
     const snapshot = await readConfigFileSnapshot();
     let currentBaseHash = snapshot.hash;
-    const baseConfig: OpenClawConfig = snapshot.valid
+    const baseConfig: CIVITASConfig = snapshot.valid
       ? (snapshot.sourceConfig ?? snapshot.config)
       : {};
 
@@ -367,8 +367,8 @@ export async function runConfigureWizard(
     });
     const localProbe = await probeGatewayReachable({
       url: localUrl,
-      token: process.env.OPENCLAW_GATEWAY_TOKEN ?? baseLocalProbeToken,
-      password: process.env.OPENCLAW_GATEWAY_PASSWORD ?? baseLocalProbePassword,
+      token: process.env.CIVITAS_GATEWAY_TOKEN ?? baseLocalProbeToken,
+      password: process.env.CIVITAS_GATEWAY_PASSWORD ?? baseLocalProbePassword,
     });
     const remoteUrl = baseConfig.gateway?.remote?.url?.trim() ?? "";
     const baseRemoteProbeToken = await resolveGatewaySecretInputForWizard({
@@ -680,21 +680,21 @@ export async function runConfigureWizard(
       basePath: nextConfig.gateway?.controlUi?.basePath,
     });
     const newPassword =
-      process.env.OPENCLAW_GATEWAY_PASSWORD ??
+      process.env.CIVITAS_GATEWAY_PASSWORD ??
       (await resolveGatewaySecretInputForWizard({
         cfg: nextConfig,
         value: nextConfig.gateway?.auth?.password,
         path: "gateway.auth.password",
       }));
     const oldPassword =
-      process.env.OPENCLAW_GATEWAY_PASSWORD ??
+      process.env.CIVITAS_GATEWAY_PASSWORD ??
       (await resolveGatewaySecretInputForWizard({
         cfg: baseConfig,
         value: baseConfig.gateway?.auth?.password,
         path: "gateway.auth.password",
       }));
     const token =
-      process.env.OPENCLAW_GATEWAY_TOKEN ??
+      process.env.CIVITAS_GATEWAY_TOKEN ??
       (await resolveGatewaySecretInputForWizard({
         cfg: nextConfig,
         value: nextConfig.gateway?.auth?.token,

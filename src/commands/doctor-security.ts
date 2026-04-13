@@ -1,7 +1,7 @@
 import { listChannelPlugins } from "../channels/plugins/index.js";
 import type { ChannelId } from "../channels/plugins/types.js";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { OpenClawConfig, GatewayBindMode } from "../config/config.js";
+import type { CIVITASConfig, GatewayBindMode } from "../config/config.js";
 import type { AgentConfig } from "../config/types.agents.js";
 import { hasConfiguredSecretInput } from "../config/types.secrets.js";
 import { resolveGatewayAuth } from "../gateway/auth.js";
@@ -12,7 +12,7 @@ import { resolveDmAllowState } from "../security/dm-policy-shared.js";
 import { note } from "../terminal/note.js";
 import { resolveDefaultChannelAccountContext } from "./channel-account-context.js";
 
-function collectImplicitHeartbeatDirectPolicyWarnings(cfg: OpenClawConfig): string[] {
+function collectImplicitHeartbeatDirectPolicyWarnings(cfg: CIVITASConfig): string[] {
   const warnings: string[] = [];
 
   const maybeWarn = (params: {
@@ -72,11 +72,11 @@ function execAskRank(value: ExecAsk): number {
   }
 }
 
-function collectExecPolicyConflictWarnings(cfg: OpenClawConfig): string[] {
+function collectExecPolicyConflictWarnings(cfg: CIVITASConfig): string[] {
   const warnings: string[] = [];
   const approvals = loadExecApprovals();
-  const defaultRequestedSecuritySource = "OpenClaw default (full)";
-  const defaultRequestedAskSource = "OpenClaw default (off)";
+  const defaultRequestedSecuritySource = "CIVITAS default (full)";
+  const defaultRequestedAskSource = "CIVITAS default (off)";
 
   const maybeWarn = (params: {
     scopeLabel: string;
@@ -156,12 +156,12 @@ function collectExecPolicyConflictWarnings(cfg: OpenClawConfig): string[] {
   return warnings;
 }
 
-function collectDurableExecApprovalWarnings(cfg: OpenClawConfig): string[] {
+function collectDurableExecApprovalWarnings(cfg: CIVITASConfig): string[] {
   void cfg;
   return [];
 }
 
-export async function noteSecurityWarnings(cfg: OpenClawConfig) {
+export async function noteSecurityWarnings(cfg: CIVITASConfig) {
   const warnings: string[] = [];
   const auditHint = `- Run: ${formatCliCommand("civitas security audit --deep")}`;
 

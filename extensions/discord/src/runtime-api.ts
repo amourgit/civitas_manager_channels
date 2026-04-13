@@ -13,14 +13,14 @@ export type {
 } from "civitas/plugin-sdk/channel-contract";
 export type {
   ChannelPlugin,
-  OpenClawPluginApi,
+  CIVITASPluginApi,
   PluginRuntime,
 } from "civitas/plugin-sdk/channel-plugin-common";
 export type {
   DiscordAccountConfig,
   DiscordActionConfig,
   DiscordConfig,
-  OpenClawConfig,
+  CIVITASConfig,
 } from "civitas/plugin-sdk/config-runtime";
 export {
   jsonResult,

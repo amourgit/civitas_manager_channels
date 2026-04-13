@@ -5,7 +5,7 @@ import {
   resolveInboundSessionEnvelopeContext,
   toLocationContext,
 } from "civitas/plugin-sdk/channel-inbound";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import {
   ensureConfiguredBindingRouteReady,
   getSessionBindingService,
@@ -34,7 +34,7 @@ interface MediaRef {
 interface BuildLineMessageContextParams {
   event: MessageEvent;
   allMedia: MediaRef[];
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   account: ResolvedLineAccount;
   commandAuthorized: boolean;
   groupHistories?: Map<string, HistoryEntry[]>;
@@ -80,7 +80,7 @@ function buildPeerId(source: EventSource): string {
 
 async function resolveLineInboundRoute(params: {
   source: EventSource;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   account: ResolvedLineAccount;
 }): Promise<{
   userId?: string;
@@ -284,7 +284,7 @@ function resolveLineGroupSystemPrompt(
 }
 
 async function finalizeLineInboundContext(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   account: ResolvedLineAccount;
   event: MessageEvent | PostbackEvent;
   route: LineRouteInfo;
@@ -511,7 +511,7 @@ export async function buildLineMessageContext(params: BuildLineMessageContextPar
 
 export async function buildLinePostbackContext(params: {
   event: PostbackEvent;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   account: ResolvedLineAccount;
   commandAuthorized: boolean;
 }) {

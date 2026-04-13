@@ -2,7 +2,7 @@
   "name": "@civitas/mistral-provider",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw Mistral provider plugin",
+  "description": "CIVITAS Mistral provider plugin",
   "type": "module",
   "civitas": {
     "extensions": [

@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import type {
   CreateSandboxBackendParams,
-  OpenClawConfig,
+  CIVITASConfig,
   RemoteShellSandboxHandle,
   SandboxBackendCommandParams,
   SandboxBackendCommandResult,
@@ -15,7 +15,7 @@ import type {
 import {
   createRemoteShellSandboxFsBridge,
   disposeSshSandboxSession,
-  resolvePreferredOpenClawTmpDir,
+  resolvePreferredCIVITASTmpDir,
   runSshSandboxCommand,
   sanitizeEnvVars,
 } from "civitas/plugin-sdk/sandbox";
@@ -493,7 +493,7 @@ class OpenShellSandboxBackendImpl {
 }
 
 function resolveOpenShellPluginConfigFromConfig(
-  config: OpenClawConfig,
+  config: CIVITASConfig,
   fallback: ResolvedOpenShellPluginConfig,
 ): ResolvedOpenShellPluginConfig {
   const pluginConfig = config.plugins?.entries?.openshell?.config;
@@ -518,5 +518,5 @@ function buildOpenShellSandboxName(scopeKey: string): string {
 }
 
 function resolveOpenShellTmpRoot(): string {
-  return path.resolve(resolvePreferredOpenClawTmpDir() ?? os.tmpdir());
+  return path.resolve(resolvePreferredCIVITASTmpDir() ?? os.tmpdir());
 }

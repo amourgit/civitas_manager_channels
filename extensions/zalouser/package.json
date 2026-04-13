@@ -1,7 +1,7 @@
 {
   "name": "@civitas/zalouser",
   "version": "2026.4.4",
-  "description": "OpenClaw Zalo Personal Account plugin via native zca-js integration",
+  "description": "CIVITAS Zalo Personal Account plugin via native zca-js integration",
   "type": "module",
   "dependencies": {
     "@sinclair/typebox": "0.34.49",
@@ -48,7 +48,7 @@
       "civitasVersion": "2026.4.4"
     },
     "release": {
-      "publishToClawHub": true,
+      "publishToChannelHub": true,
       "publishToNpm": true
     }
   }

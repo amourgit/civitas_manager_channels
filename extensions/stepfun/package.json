@@ -2,7 +2,7 @@
   "name": "@civitas/stepfun-provider",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw StepFun provider plugin",
+  "description": "CIVITAS StepFun provider plugin",
   "type": "module",
   "civitas": {
     "extensions": [

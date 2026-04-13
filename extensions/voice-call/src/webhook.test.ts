@@ -811,7 +811,7 @@ describe("VoiceCallWebhookServer barge-in suppression during initial message", (
     call.state = "speaking";
     call.metadata = {
       mode: "conversation",
-      initialMessage: "Hi, this is OpenClaw.",
+      initialMessage: "Hi, this is CIVITAS.",
     };
 
     const clearTtsQueue = vi.fn();

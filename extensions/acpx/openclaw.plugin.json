@@ -91,7 +91,7 @@
     },
     "pluginToolsMcpBridge": {
       "label": "Plugin Tools MCP Bridge",
-      "help": "Default off. When enabled, inject the built-in OpenClaw plugin-tools MCP server into ACPX sessions so ACP agents can call plugin-registered tools.",
+      "help": "Default off. When enabled, inject the built-in CIVITAS plugin-tools MCP server into ACPX sessions so ACP agents can call plugin-registered tools.",
       "advanced": true
     },
     "strictWindowsCmdWrapper": {
@@ -106,7 +106,7 @@
     },
     "queueOwnerTtlSeconds": {
       "label": "Queue Owner TTL Seconds",
-      "help": "Idle queue-owner TTL for acpx prompt turns. Keep this short in OpenClaw to avoid delayed completion after each turn.",
+      "help": "Idle queue-owner TTL for acpx prompt turns. Keep this short in CIVITAS to avoid delayed completion after each turn.",
       "advanced": true
     },
     "mcpServers": {

@@ -10,8 +10,8 @@ const readConfigFileSnapshotForWrite = vi.fn().mockResolvedValue({
   writeOptions: {},
 });
 const setRuntimeConfigSnapshot = vi.fn();
-const ensureOpenClawModelsJson = vi.fn().mockResolvedValue(undefined);
-const resolveOpenClawAgentDir = vi.fn().mockReturnValue("/tmp/civitas-agent");
+const ensureCIVITASModelsJson = vi.fn().mockResolvedValue(undefined);
+const resolveCIVITASAgentDir = vi.fn().mockReturnValue("/tmp/civitas-agent");
 const ensureAuthProfileStore = vi.fn().mockReturnValue({ version: 1, profiles: {} });
 const listProfilesForProvider = vi.fn().mockReturnValue([]);
 const resolveEnvApiKey = vi.fn().mockReturnValue(undefined);
@@ -62,8 +62,8 @@ vi.mock("./models/list.runtime.js", () => {
 
   return {
     ensureAuthProfileStore,
-    ensureOpenClawModelsJson,
-    resolveOpenClawAgentDir,
+    ensureCIVITASModelsJson,
+    resolveCIVITASAgentDir,
     listProfilesForProvider,
     resolveEnvApiKey,
     resolveAwsSdkEnvVarName,
@@ -112,7 +112,7 @@ beforeEach(() => {
   getRuntimeConfig.mockReset();
   getRuntimeConfig.mockReturnValue({});
   listProfilesForProvider.mockReturnValue([]);
-  ensureOpenClawModelsJson.mockClear();
+  ensureCIVITASModelsJson.mockClear();
   readConfigFileSnapshotForWrite.mockClear();
   readConfigFileSnapshotForWrite.mockResolvedValue({
     snapshot: { valid: false, resolved: {} },
@@ -363,7 +363,7 @@ describe("models list/status", () => {
 
     await loadModelRegistry(resolvedConfig as never);
 
-    expect(ensureOpenClawModelsJson).not.toHaveBeenCalled();
+    expect(ensureCIVITASModelsJson).not.toHaveBeenCalled();
   });
 
   it("filters stale direct OpenAI spark rows from models list and registry views", async () => {
@@ -412,8 +412,8 @@ describe("models list/status", () => {
 
     await modelsListCommand({ all: true, json: true }, runtime);
 
-    expect(ensureOpenClawModelsJson).toHaveBeenCalled();
-    expect(ensureOpenClawModelsJson.mock.calls[0]?.[0]).toEqual(sourceConfig);
+    expect(ensureCIVITASModelsJson).toHaveBeenCalled();
+    expect(ensureCIVITASModelsJson.mock.calls[0]?.[0]).toEqual(sourceConfig);
   });
 
   it("toModelRow does not crash without cfg/authStore when availability is undefined", async () => {

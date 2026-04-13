@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "civitas/plugin-sdk/account-id";
 import { resolveUserPath } from "civitas/plugin-sdk/account-resolution";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { resolveOAuthDir } from "civitas/plugin-sdk/state-paths";
 import { hasWebCredsSync } from "./src/creds-files.js";
 
@@ -21,7 +21,7 @@ function addAccountAuthDirs(
 }
 
 function listWhatsAppAuthDirs(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): readonly string[] {
   const oauthDir = resolveOAuthDir(env);
@@ -63,7 +63,7 @@ function listWhatsAppAuthDirs(
 }
 
 export function hasAnyWhatsAppAuth(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {
   return listWhatsAppAuthDirs(cfg, env).some((authDir) => hasWebCredsSync(authDir));

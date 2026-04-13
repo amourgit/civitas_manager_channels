@@ -4,7 +4,7 @@ import {
   resolveInboundDebounceMs,
   shouldDebounceTextInbound,
 } from "civitas/plugin-sdk/channel-inbound";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { danger, logVerbose, warn } from "civitas/plugin-sdk/runtime-env";
 import { resolveTelegramMediaRuntimeOptions } from "./accounts.js";
 import {
@@ -50,7 +50,7 @@ type TelegramBotApi = {
 export function createTelegramInboundBufferRuntime(params: {
   accountId?: string | null;
   bot: { api: TelegramBotApi };
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   logger: { warn: (...args: unknown[]) => void };
   mediaMaxBytes: number;
   opts: {

@@ -24,20 +24,20 @@ describe("renderGatewayServiceStartHints", () => {
   it("resolves daemon container context from either env key", () => {
     expect(
       resolveDaemonContainerContext({
-        OPENCLAW_CONTAINER: "civitas-demo-container",
+        CIVITAS_CONTAINER: "civitas-demo-container",
       } as NodeJS.ProcessEnv),
     ).toBe("civitas-demo-container");
     expect(
       resolveDaemonContainerContext({
-        OPENCLAW_CONTAINER_HINT: "civitas-demo-container",
+        CIVITAS_CONTAINER_HINT: "civitas-demo-container",
       } as NodeJS.ProcessEnv),
     ).toBe("civitas-demo-container");
   });
 
-  it("prepends a single container restart hint when OPENCLAW_CONTAINER is set", () => {
+  it("prepends a single container restart hint when CIVITAS_CONTAINER is set", () => {
     expect(
       renderGatewayServiceStartHints({
-        OPENCLAW_CONTAINER: "civitas-demo-container",
+        CIVITAS_CONTAINER: "civitas-demo-container",
       } as NodeJS.ProcessEnv),
     ).toEqual(
       expect.arrayContaining([
@@ -46,10 +46,10 @@ describe("renderGatewayServiceStartHints", () => {
     );
   });
 
-  it("prepends a single container restart hint when OPENCLAW_CONTAINER_HINT is set", () => {
+  it("prepends a single container restart hint when CIVITAS_CONTAINER_HINT is set", () => {
     expect(
       renderGatewayServiceStartHints({
-        OPENCLAW_CONTAINER_HINT: "civitas-demo-container",
+        CIVITAS_CONTAINER_HINT: "civitas-demo-container",
       } as NodeJS.ProcessEnv),
     ).toEqual(
       expect.arrayContaining([
@@ -60,26 +60,26 @@ describe("renderGatewayServiceStartHints", () => {
 });
 
 describe("filterContainerGenericHints", () => {
-  it("drops the generic container foreground hint when OPENCLAW_CONTAINER is set", () => {
+  it("drops the generic container foreground hint when CIVITAS_CONTAINER is set", () => {
     expect(
       filterContainerGenericHints(
         [
           "systemd user services are unavailable; install/enable systemd or run the gateway under your supervisor.",
           "If you're in a container, run the gateway in the foreground instead of `civitas gateway`.",
         ],
-        { OPENCLAW_CONTAINER: "civitas-demo-container" } as NodeJS.ProcessEnv,
+        { CIVITAS_CONTAINER: "civitas-demo-container" } as NodeJS.ProcessEnv,
       ),
     ).toEqual([]);
   });
 
-  it("drops the generic container foreground hint when OPENCLAW_CONTAINER_HINT is set", () => {
+  it("drops the generic container foreground hint when CIVITAS_CONTAINER_HINT is set", () => {
     expect(
       filterContainerGenericHints(
         [
           "systemd user services are unavailable; install/enable systemd or run the gateway under your supervisor.",
           "If you're in a container, run the gateway in the foreground instead of `civitas gateway`.",
         ],
-        { OPENCLAW_CONTAINER_HINT: "civitas-demo-container" } as NodeJS.ProcessEnv,
+        { CIVITAS_CONTAINER_HINT: "civitas-demo-container" } as NodeJS.ProcessEnv,
       ),
     ).toEqual([]);
   });

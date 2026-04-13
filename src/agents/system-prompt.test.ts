@@ -275,7 +275,7 @@ describe("buildAgentSystemPrompt", () => {
       workspaceDir: "/tmp/civitas",
     });
 
-    expect(prompt).toContain("## OpenClaw CLI Quick Reference");
+    expect(prompt).toContain("## CIVITAS CLI Quick Reference");
     expect(prompt).toContain("civitas gateway restart");
     expect(prompt).toContain("Do not invent commands");
   });
@@ -369,7 +369,7 @@ describe("buildAgentSystemPrompt", () => {
     expect(prompt).not.toContain('runtime="acp" requires `agentId`');
     expect(prompt).not.toContain("not ACP harness ids");
     expect(prompt).toContain("- sessions_spawn: Spawn an isolated sub-agent session");
-    expect(prompt).toContain("- agents_list: List OpenClaw agent ids allowed for sessions_spawn");
+    expect(prompt).toContain("- agents_list: List CIVITAS agent ids allowed for sessions_spawn");
   });
 
   it("omits ACP harness spawn guidance for sandboxed sessions and shows ACP block note", () => {
@@ -408,9 +408,9 @@ describe("buildAgentSystemPrompt", () => {
     expect(prompt).toContain(
       "- If exactly one skill clearly applies: read its SKILL.md at <location> with `Read`, then follow it.",
     );
-    expect(prompt).toContain("OpenClaw docs: /tmp/civitas/docs");
+    expect(prompt).toContain("CIVITAS docs: /tmp/civitas/docs");
     expect(prompt).toContain(
-      "For OpenClaw behavior, commands, config, or architecture: consult local docs first.",
+      "For CIVITAS behavior, commands, config, or architecture: consult local docs first.",
     );
   });
 
@@ -421,9 +421,9 @@ describe("buildAgentSystemPrompt", () => {
     });
 
     expect(prompt).toContain("## Documentation");
-    expect(prompt).toContain("OpenClaw docs: /tmp/civitas/docs");
+    expect(prompt).toContain("CIVITAS docs: /tmp/civitas/docs");
     expect(prompt).toContain(
-      "For OpenClaw behavior, commands, config, or architecture: consult local docs first.",
+      "For CIVITAS behavior, commands, config, or architecture: consult local docs first.",
     );
   });
 
@@ -475,7 +475,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("hints to use session_status for current date/time", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/clawd",
+      workspaceDir: "/tmp/CIVITAS Channeld",
       userTimezone: "America/Chicago",
     });
 
@@ -488,7 +488,7 @@ describe("buildAgentSystemPrompt", () => {
   // Agents should use session_status or message timestamps to determine the date/time.
   it("does NOT include a date or time in the system prompt (cache stability)", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/clawd",
+      workspaceDir: "/tmp/CIVITAS Channeld",
       userTimezone: "America/Chicago",
       userTime: "Monday, January 5th, 2026 — 3:26 PM",
       userTimeFormat: "12",
@@ -524,7 +524,7 @@ describe("buildAgentSystemPrompt", () => {
       toolNames: ["gateway", "exec"],
     });
 
-    expect(prompt).toContain("## OpenClaw Self-Update");
+    expect(prompt).toContain("## CIVITAS Self-Update");
     expect(prompt).toContain("config.schema.lookup");
     expect(prompt).toContain("config.apply");
     expect(prompt).toContain("config.patch");
@@ -822,7 +822,7 @@ describe("buildSubagentSystemPrompt", () => {
     expect(prompt).toContain("set `agentId` unless `acp.defaultAgent` is configured");
     expect(prompt).toContain("Do not ask users to run slash commands or CLI");
     expect(prompt).toContain("Do not use `exec` (`civitas ...`, `acpx ...`)");
-    expect(prompt).toContain("Use `subagents` only for OpenClaw subagents");
+    expect(prompt).toContain("Use `subagents` only for CIVITAS subagents");
     expect(prompt).toContain("Subagent results auto-announce back to you");
     expect(prompt).toContain(
       "After spawning children, do NOT call sessions_list, sessions_history, exec sleep, or any polling tool.",

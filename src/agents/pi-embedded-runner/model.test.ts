@@ -36,7 +36,7 @@ vi.mock("./openrouter-model-capabilities.js", () => ({
     mockLoadOpenRouterModelCapabilities(modelId),
 }));
 
-import type { OpenClawConfig } from "../../config/config.js";
+import type { CIVITASConfig } from "../../config/config.js";
 import { buildForwardCompatTemplate } from "./model.forward-compat.test-support.js";
 import { buildInlineProviderModels, resolveModel, resolveModelAsync } from "./model.js";
 import {
@@ -77,7 +77,7 @@ function resolveModelForTest(
   provider: string,
   modelId: string,
   agentDir?: string,
-  cfg?: OpenClawConfig,
+  cfg?: CIVITASConfig,
 ) {
   const resolvedAgentDir = agentDir ?? "/tmp/agent";
   return resolveModel(provider, modelId, agentDir, cfg, {
@@ -91,7 +91,7 @@ function resolveModelAsyncForTest(
   provider: string,
   modelId: string,
   agentDir?: string,
-  cfg?: OpenClawConfig,
+  cfg?: CIVITASConfig,
   options?: { retryTransientProviderRuntimeMiss?: boolean },
 ) {
   const resolvedAgentDir = agentDir ?? "/tmp/agent";
@@ -335,7 +335,7 @@ describe("resolveModel", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as CIVITASConfig);
 
     expect(result.error).toBeUndefined();
     expect(Array.isArray(result.model?.input)).toBe(true);
@@ -352,7 +352,7 @@ describe("resolveModel", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     const result = resolveModelForTest("custom", "missing-model", "/tmp/agent", cfg);
 
@@ -372,7 +372,7 @@ describe("resolveModel", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     const result = resolveModelForTest("google-paid", "missing-model", "/tmp/agent", cfg);
 
@@ -400,7 +400,7 @@ describe("resolveModel", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     const result = resolveModelForTest("google", "gemini-2.5-pro", "/tmp/agent", cfg);
 
@@ -425,7 +425,7 @@ describe("resolveModel", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     const result = resolveModelForTest("custom-openai", "gpt-5.4", "/tmp/agent", cfg);
 
@@ -454,7 +454,7 @@ describe("resolveModel", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     const result = resolveModelForTest("custom-xai", "grok-4.1-fast", "/tmp/agent", cfg);
 
@@ -478,7 +478,7 @@ describe("resolveModel", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     // Requesting a non-listed model forces the providerCfg fallback branch.
     const result = resolveModelForTest("custom", "missing-model", "/tmp/agent", cfg);
@@ -504,7 +504,7 @@ describe("resolveModel", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     const result = resolveModelForTest("custom", "missing-model", "/tmp/agent", cfg);
 
@@ -558,7 +558,7 @@ describe("resolveModel", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     const result = resolveModelForTest("custom", "model-b", "/tmp/agent", cfg);
 
@@ -585,7 +585,7 @@ describe("resolveModel", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     const result = resolveModelForTest("custom", "model-b", "/tmp/agent", cfg);
 
@@ -611,7 +611,7 @@ describe("resolveModel", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     const models = buildInlineProviderModels(cfg.models?.providers ?? {});
     expect(models).toEqual(
@@ -777,7 +777,7 @@ describe("resolveModel", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     const result = resolveModelForTest("onehub", "glm-5", "/tmp/agent", cfg);
 
@@ -836,7 +836,7 @@ describe("resolveModel", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     const result = resolveModelForTest("bedrock", "bedrock-alias-exact-test", "/tmp/agent", cfg);
 
@@ -947,7 +947,7 @@ describe("resolveModel", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     const result = resolveModelForTest("openai", "gpt-5.4", "/tmp/agent", cfg);
 
@@ -985,7 +985,7 @@ describe("resolveModel", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     const result = resolveModelForTest("github-copilot", "gpt-5.4-mini", "/tmp/agent", cfg);
 

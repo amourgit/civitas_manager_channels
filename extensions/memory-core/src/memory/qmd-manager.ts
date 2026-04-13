@@ -12,7 +12,7 @@ import {
   resolveGlobalSingleton,
   resolveStateDir,
   writeFileWithinRoot,
-  type OpenClawConfig,
+  type CIVITASConfig,
   type ResolvedMemorySearchConfig,
 } from "civitas/plugin-sdk/memory-core-host-engine-foundation";
 import {
@@ -101,7 +101,7 @@ function hasHanScript(value: string): boolean {
 
 function normalizeHanBm25Query(query: string): string {
   const trimmed = query.trim();
-  // Keep Han/CJK BM25 queries intact so OpenClaw search semantics match direct qmd search.
+  // Keep Han/CJK BM25 queries intact so CIVITAS search semantics match direct qmd search.
   return trimmed;
 }
 
@@ -212,7 +212,7 @@ type QmdMcporterAcrossCollectionsParams =
 
 export class QmdMemoryManager implements MemorySearchManager {
   static async create(params: {
-    cfg: OpenClawConfig;
+    cfg: CIVITASConfig;
     agentId: string;
     resolved: ResolvedMemoryBackendConfig;
     mode?: QmdManagerMode;
@@ -226,7 +226,7 @@ export class QmdMemoryManager implements MemorySearchManager {
     return manager;
   }
 
-  private readonly cfg: OpenClawConfig;
+  private readonly cfg: CIVITASConfig;
   private readonly agentId: string;
   private readonly qmd: ResolvedQmdConfig;
   private readonly workspaceDir: string;
@@ -277,7 +277,7 @@ export class QmdMemoryManager implements MemorySearchManager {
   private collectionPatternFlag: QmdCollectionPatternFlag | null = "--mask";
 
   private constructor(params: {
-    cfg: OpenClawConfig;
+    cfg: CIVITASConfig;
     agentId: string;
     resolved: ResolvedQmdConfig;
   }) {

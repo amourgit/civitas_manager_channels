@@ -105,8 +105,8 @@ export type ProviderRequestCapabilities = ProviderRequestPolicyResolution & {
   compatibilityFamily?: ProviderRequestCompatibilityFamily;
 };
 
-const OPENCLAW_ATTRIBUTION_PRODUCT = "OpenClaw";
-const OPENCLAW_ATTRIBUTION_ORIGINATOR = "civitas";
+const CIVITAS_ATTRIBUTION_PRODUCT = "CIVITAS";
+const CIVITAS_ATTRIBUTION_ORIGINATOR = "civitas";
 
 const LOCAL_ENDPOINT_HOSTS = new Set(["localhost", "127.0.0.1", "::1", "[::1]"]);
 const MOONSHOT_NATIVE_BASE_URLS = new Set([
@@ -123,8 +123,8 @@ const OPENAI_RESPONSES_APIS = new Set(["openai-responses", "azure-openai-respons
 const OPENAI_RESPONSES_PROVIDERS = new Set(["openai", "azure-openai", "azure-openai-responses"]);
 const MOONSHOT_COMPAT_PROVIDERS = new Set(["moonshot", "kimi"]);
 
-function formatOpenClawUserAgent(version: string): string {
-  return `${OPENCLAW_ATTRIBUTION_ORIGINATOR}/${version}`;
+function formatCIVITASUserAgent(version: string): string {
+  return `${CIVITAS_ATTRIBUTION_ORIGINATOR}/${version}`;
 }
 
 function tryParseHostname(value: string): string | undefined {
@@ -317,7 +317,7 @@ export function resolveProviderAttributionIdentity(
   env: RuntimeVersionEnv = process.env as RuntimeVersionEnv,
 ): ProviderAttributionIdentity {
   return {
-    product: OPENCLAW_ATTRIBUTION_PRODUCT,
+    product: CIVITAS_ATTRIBUTION_PRODUCT,
     version: resolveRuntimeServiceVersion(env),
   };
 }
@@ -332,7 +332,7 @@ function buildOpenRouterAttributionPolicy(
     verification: "vendor-documented",
     hook: "request-headers",
     docsUrl: "https://openrouter.ai/docs/app-attribution",
-    reviewNote: "Documented app attribution headers. Verified in OpenClaw runtime wrapper.",
+    reviewNote: "Documented app attribution headers. Verified in CIVITAS runtime wrapper.",
     ...identity,
     headers: {
       "HTTP-Referer": "https://civitas.ai",
@@ -355,9 +355,9 @@ function buildOpenAIAttributionPolicy(
       "OpenAI native traffic supports hidden originator/User-Agent attribution. Verified against the Codex wire contract.",
     ...identity,
     headers: {
-      originator: OPENCLAW_ATTRIBUTION_ORIGINATOR,
+      originator: CIVITAS_ATTRIBUTION_ORIGINATOR,
       version: identity.version,
-      "User-Agent": formatOpenClawUserAgent(identity.version),
+      "User-Agent": formatCIVITASUserAgent(identity.version),
     },
   };
 }
@@ -375,9 +375,9 @@ function buildOpenAICodexAttributionPolicy(
       "OpenAI Codex ChatGPT-backed traffic supports the same hidden originator/User-Agent attribution contract.",
     ...identity,
     headers: {
-      originator: OPENCLAW_ATTRIBUTION_ORIGINATOR,
+      originator: CIVITAS_ATTRIBUTION_ORIGINATOR,
       version: identity.version,
-      "User-Agent": formatOpenClawUserAgent(identity.version),
+      "User-Agent": formatCIVITASUserAgent(identity.version),
     },
   };
 }

@@ -2,7 +2,7 @@
   "name": "@civitas/minimax-provider",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw MiniMax provider and OAuth plugin",
+  "description": "CIVITAS MiniMax provider and OAuth plugin",
   "type": "module",
   "civitas": {
     "extensions": [

@@ -15,19 +15,19 @@ vi.mock("../plugins/tools.js", () => ({
   getPluginToolMeta: vi.fn(() => undefined),
 }));
 
-let createOpenClawTools: typeof import("./civitas-tools.js").createOpenClawTools;
-let createOpenClawCodingTools: typeof import("./pi-tools.js").createOpenClawCodingTools;
+let createCIVITASTools: typeof import("./civitas-tools.js").createCIVITASTools;
+let createCIVITASCodingTools: typeof import("./pi-tools.js").createCIVITASCodingTools;
 
-describe("createOpenClawTools plugin context", () => {
+describe("createCIVITASTools plugin context", () => {
   beforeEach(async () => {
     resolvePluginToolsMock.mockClear();
     vi.resetModules();
-    ({ createOpenClawTools } = await import("./civitas-tools.js"));
-    ({ createOpenClawCodingTools } = await import("./pi-tools.js"));
+    ({ createCIVITASTools } = await import("./civitas-tools.js"));
+    ({ createCIVITASCodingTools } = await import("./pi-tools.js"));
   });
 
   it("forwards trusted requester sender identity to plugin tool context", () => {
-    createOpenClawTools({
+    createCIVITASTools({
       config: {} as never,
       requesterSenderId: "trusted-sender",
       senderIsOwner: true,
@@ -44,7 +44,7 @@ describe("createOpenClawTools plugin context", () => {
   });
 
   it("forwards ephemeral sessionId to plugin tool context", () => {
-    createOpenClawTools({
+    createCIVITASTools({
       config: {} as never,
       agentSessionKey: "agent:main:telegram:direct:12345",
       sessionId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
@@ -62,7 +62,7 @@ describe("createOpenClawTools plugin context", () => {
 
   it("infers the default agent workspace for plugin tools when workspaceDir is omitted", () => {
     const workspaceDir = path.join(process.cwd(), "tmp-main-workspace");
-    createOpenClawTools({
+    createCIVITASTools({
       config: {
         agents: {
           defaults: { workspace: workspaceDir },
@@ -84,7 +84,7 @@ describe("createOpenClawTools plugin context", () => {
 
   it("infers the session agent workspace for plugin tools when workspaceDir is omitted", () => {
     const supportWorkspace = path.join(process.cwd(), "tmp-support-workspace");
-    createOpenClawTools({
+    createCIVITASTools({
       config: {
         agents: {
           defaults: { workspace: path.join(process.cwd(), "tmp-default-workspace") },
@@ -108,7 +108,7 @@ describe("createOpenClawTools plugin context", () => {
   });
 
   it("forwards browser session wiring to plugin tool context", () => {
-    createOpenClawTools({
+    createCIVITASTools({
       config: {} as never,
       sandboxBrowserBridgeUrl: "http://127.0.0.1:9999",
       allowHostBrowserControl: true,
@@ -127,7 +127,7 @@ describe("createOpenClawTools plugin context", () => {
   });
 
   it("forwards gateway subagent binding for plugin tools", () => {
-    createOpenClawTools({
+    createCIVITASTools({
       config: {} as never,
       allowGatewaySubagentBinding: true,
     });
@@ -140,7 +140,7 @@ describe("createOpenClawTools plugin context", () => {
   });
 
   it("forwards gateway subagent binding through coding tools", () => {
-    createOpenClawCodingTools({
+    createCIVITASCodingTools({
       config: {} as never,
       allowGatewaySubagentBinding: true,
     });
@@ -153,7 +153,7 @@ describe("createOpenClawTools plugin context", () => {
   });
 
   it("forwards ambient deliveryContext to plugin tool context", () => {
-    createOpenClawTools({
+    createCIVITASTools({
       config: {} as never,
       agentChannel: "slack",
       agentTo: "channel:C123",
@@ -194,11 +194,11 @@ describe("createOpenClawTools plugin context", () => {
     };
     resolvePluginToolsMock.mockImplementation(() => [sharedTool] as never);
 
-    const first = createOpenClawTools({
+    const first = createCIVITASTools({
       config: {} as never,
       agentThreadId: "111.222",
     }).find((tool) => tool.name === "plugin-thread-default");
-    const second = createOpenClawTools({
+    const second = createCIVITASTools({
       config: {} as never,
       agentThreadId: "333.444",
     }).find((tool) => tool.name === "plugin-thread-default");
@@ -234,7 +234,7 @@ describe("createOpenClawTools plugin context", () => {
     };
     resolvePluginToolsMock.mockReturnValue([tool] as never);
 
-    const wrapped = createOpenClawTools({
+    const wrapped = createCIVITASTools({
       config: {} as never,
       agentThreadId: "77",
     }).find((candidate) => candidate.name === tool.name);
@@ -263,7 +263,7 @@ describe("createOpenClawTools plugin context", () => {
     };
     resolvePluginToolsMock.mockReturnValue([tool] as never);
 
-    const wrapped = createOpenClawTools({
+    const wrapped = createCIVITASTools({
       config: {} as never,
       agentThreadId: "77",
     }).find((candidate) => candidate.name === tool.name);
@@ -292,7 +292,7 @@ describe("createOpenClawTools plugin context", () => {
     };
     resolvePluginToolsMock.mockReturnValue([tool] as never);
 
-    const wrapped = createOpenClawTools({
+    const wrapped = createCIVITASTools({
       config: {} as never,
       agentThreadId: "111.222",
     }).find((candidate) => candidate.name === tool.name);

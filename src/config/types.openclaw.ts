@@ -29,9 +29,9 @@ import type { SecretsConfig } from "./types.secrets.js";
 import type { SkillsConfig } from "./types.skills.js";
 import type { ToolsConfig } from "./types.tools.js";
 
-export type OpenClawConfig = {
+export type CIVITASConfig = {
   meta?: {
-    /** Last OpenClaw version that wrote this config. */
+    /** Last CIVITAS version that wrote this config. */
     lastTouchedVersion?: string;
     /** ISO timestamp when this config was last written. */
     lastTouchedAt?: string;
@@ -83,7 +83,7 @@ export type OpenClawConfig = {
   };
   browser?: BrowserConfig;
   ui?: {
-    /** Accent color for OpenClaw UI chrome (hex). */
+    /** Accent color for CIVITAS UI chrome (hex). */
     seamColor?: string;
     assistant?: {
       /** Assistant display name for UI surfaces. */
@@ -124,10 +124,10 @@ export type OpenClawConfig = {
   mcp?: McpConfig;
 };
 
-declare const openClawConfigStateBrand: unique symbol;
+declare const CIVITASConfigStateBrand: unique symbol;
 
-type BrandedConfigState<TState extends string> = OpenClawConfig & {
-  readonly [openClawConfigStateBrand]?: TState;
+type BrandedConfigState<TState extends string> = CIVITASConfig & {
+  readonly [CIVITASConfigStateBrand]?: TState;
 };
 
 export type SourceConfig = BrandedConfigState<"source">;

@@ -25,7 +25,7 @@ import {
   type CommandArgValues,
   type CommandArgs,
 } from "civitas/plugin-sdk/command-auth";
-import type { OpenClawConfig, loadConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig, loadConfig } from "civitas/plugin-sdk/config-runtime";
 import { loadSessionStore, resolveStorePath } from "civitas/plugin-sdk/config-runtime";
 import type { ResolvedAgentRoute } from "civitas/plugin-sdk/routing";
 import { logVerbose } from "civitas/plugin-sdk/runtime-env";
@@ -51,7 +51,7 @@ import { resolveDiscordNativeInteractionRouteState } from "./native-command-rout
 import type { ThreadBindingManager } from "./thread-bindings.js";
 import { resolveDiscordThreadParentInfo } from "./threading.js";
 
-type DiscordConfig = NonNullable<OpenClawConfig["channels"]>["discord"];
+type DiscordConfig = NonNullable<CIVITASConfig["channels"]>["discord"];
 
 const DISCORD_COMMAND_ARG_CUSTOM_ID_KEY = "cmdarg";
 

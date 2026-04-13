@@ -10,7 +10,7 @@ import {
   type TopLevelComponents,
 } from "@buape/carbon";
 import { ButtonStyle, Routes } from "discord-api-types/v10";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { DiscordExecApprovalConfig } from "civitas/plugin-sdk/config-runtime";
 import {
   createChannelNativeApprovalRuntime,
@@ -126,7 +126,7 @@ export function parseExecApprovalData(
 }
 
 type ExecApprovalContainerParams = {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
   title: string;
   description?: string;
@@ -294,7 +294,7 @@ function resolveExecApprovalPreviews(
 
 function createExecApprovalRequestContainer(params: {
   request: ExecApprovalRequest;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
   actionRow?: Row<Button>;
 }): ExecApprovalContainer {
@@ -321,7 +321,7 @@ function createExecApprovalRequestContainer(params: {
 
 function createPluginApprovalRequestContainer(params: {
   request: PluginApprovalRequest;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
   actionRow?: Row<Button>;
 }): ExecApprovalContainer {
@@ -347,7 +347,7 @@ function createExecResolvedContainer(params: {
   request: ExecApprovalRequest;
   decision: ExecApprovalDecision;
   resolvedBy?: string | null;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
 }): ExecApprovalContainer {
   const { commandPreview, commandSecondaryPreview } = resolveExecApprovalPreviews(
@@ -386,7 +386,7 @@ function createPluginResolvedContainer(params: {
   request: PluginApprovalRequest;
   decision: ExecApprovalDecision;
   resolvedBy?: string | null;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
 }): ExecApprovalContainer {
   const decisionLabel =
@@ -418,7 +418,7 @@ function createPluginResolvedContainer(params: {
 
 function createExecExpiredContainer(params: {
   request: ExecApprovalRequest;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
 }): ExecApprovalContainer {
   const { commandPreview, commandSecondaryPreview } = resolveExecApprovalPreviews(
@@ -441,7 +441,7 @@ function createExecExpiredContainer(params: {
 
 function createPluginExpiredContainer(params: {
   request: PluginApprovalRequest;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
 }): ExecApprovalContainer {
   return new ExecApprovalContainer({
@@ -462,7 +462,7 @@ export type DiscordExecApprovalHandlerOpts = {
   accountId: string;
   config: DiscordExecApprovalConfig;
   gatewayUrl?: string;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   runtime?: RuntimeEnv;
   onResolve?: (id: string, decision: ExecApprovalDecision) => Promise<void>;
 };

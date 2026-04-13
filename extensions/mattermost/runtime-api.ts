@@ -10,8 +10,8 @@ export type {
   ChannelPlugin,
   ChatType,
   HistoryEntry,
-  OpenClawConfig,
-  OpenClawPluginApi,
+  CIVITASConfig,
+  CIVITASPluginApi,
   PluginRuntime,
 } from "civitas/plugin-sdk/core";
 export type { RuntimeEnv } from "civitas/plugin-sdk/runtime";

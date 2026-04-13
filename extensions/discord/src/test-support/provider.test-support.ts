@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { RuntimeEnv } from "civitas/plugin-sdk/runtime-env";
 import type { Mock } from "vitest";
 import { expect, vi } from "vitest";
@@ -29,7 +29,7 @@ type ProviderMonitorTestMocks = {
   createdBindingManagers: Array<{ stop: ReturnType<typeof vi.fn> }>;
   getAcpSessionStatusMock: Mock<
     (params: {
-      cfg: OpenClawConfig;
+      cfg: CIVITASConfig;
       sessionKey: string;
       signal?: AbortSignal;
     }) => Promise<{ state: string }>
@@ -110,7 +110,7 @@ const providerMonitorTestMocks: ProviderMonitorTestMocks = vi.hoisted(() => {
     })),
     createdBindingManagers,
     getAcpSessionStatusMock: vi.fn(
-      async (_params: { cfg: OpenClawConfig; sessionKey: string; signal?: AbortSignal }) => ({
+      async (_params: { cfg: CIVITASConfig; sessionKey: string; signal?: AbortSignal }) => ({
         state: "idle",
       }),
     ),
@@ -261,7 +261,7 @@ export const baseRuntime = (): RuntimeEnv => ({
   exit: vi.fn(),
 });
 
-export const baseConfig = (): OpenClawConfig =>
+export const baseConfig = (): CIVITASConfig =>
   ({
     channels: {
       discord: {
@@ -272,7 +272,7 @@ export const baseConfig = (): OpenClawConfig =>
         },
       },
     },
-  }) as OpenClawConfig;
+  }) as CIVITASConfig;
 
 vi.mock("@buape/carbon", async () => {
   const actual = await vi.importActual<typeof import("@buape/carbon")>("@buape/carbon");

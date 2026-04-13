@@ -1,4 +1,4 @@
-import { loadConfig, type OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import { loadConfig, type CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { resolveMarkdownTableMode } from "civitas/plugin-sdk/config-runtime";
 import { generateSecureUuid } from "civitas/plugin-sdk/core";
 import { normalizePollInput, type PollInput } from "civitas/plugin-sdk/media-runtime";
@@ -18,7 +18,7 @@ import { markdownToWhatsApp, toWhatsappJid } from "./text-runtime.js";
 const outboundLog = createSubsystemLogger("gateway/channels/whatsapp").child("outbound");
 
 function resolveOutboundWhatsAppAccountId(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string;
 }): string | undefined {
   const explicitAccountId = params.accountId?.trim();
@@ -33,7 +33,7 @@ export async function sendMessageWhatsApp(
   body: string,
   options: {
     verbose: boolean;
-    cfg?: OpenClawConfig;
+    cfg?: CIVITASConfig;
     mediaUrl?: string;
     mediaAccess?: {
       localRoots?: readonly string[];
@@ -189,7 +189,7 @@ export async function sendReactionWhatsApp(
 export async function sendPollWhatsApp(
   to: string,
   poll: PollInput,
-  options: { verbose: boolean; accountId?: string; cfg?: OpenClawConfig },
+  options: { verbose: boolean; accountId?: string; cfg?: CIVITASConfig },
 ): Promise<{ messageId: string; toJid: string }> {
   const correlationId = generateSecureUuid();
   const startedAt = Date.now();

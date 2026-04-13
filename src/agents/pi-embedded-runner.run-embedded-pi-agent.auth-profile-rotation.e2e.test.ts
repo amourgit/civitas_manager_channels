@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import type { AssistantMessage } from "@mariozechner/pi-ai";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import { redactIdentifier } from "../logging/redact-identifier.js";
 import type { AuthProfileFailureReason } from "./auth-profiles.js";
 import { buildAttemptReplayMetadata } from "./pi-embedded-runner/run/incomplete-turn.js";
@@ -98,7 +98,7 @@ const installRunEmbeddedMocks = () => {
     const mod = await vi.importActual<typeof import("./models-config.js")>("./models-config.js");
     return {
       ...mod,
-      ensureOpenClawModelsJson: vi.fn(async () => ({ wrote: false })),
+      ensureCIVITASModelsJson: vi.fn(async () => ({ wrote: false })),
     };
   });
 };
@@ -213,7 +213,7 @@ const makeConfig = (opts?: {
   apiKey?: string;
   overloadedBackoffMs?: number;
   overloadedProfileRotations?: number;
-}): OpenClawConfig =>
+}): CIVITASConfig =>
   ({
     auth:
       opts?.overloadedBackoffMs != null || opts?.overloadedProfileRotations != null
@@ -255,9 +255,9 @@ const makeConfig = (opts?: {
         },
       },
     },
-  }) satisfies OpenClawConfig;
+  }) satisfies CIVITASConfig;
 
-const makeAgentOverrideOnlyFallbackConfig = (agentId: string): OpenClawConfig =>
+const makeAgentOverrideOnlyFallbackConfig = (agentId: string): CIVITASConfig =>
   ({
     agents: {
       defaults: {
@@ -294,11 +294,11 @@ const makeAgentOverrideOnlyFallbackConfig = (agentId: string): OpenClawConfig =>
         },
       },
     },
-  }) satisfies OpenClawConfig;
+  }) satisfies CIVITASConfig;
 
 const copilotModelId = "gpt-4o";
 
-const makeCopilotConfig = (): OpenClawConfig =>
+const makeCopilotConfig = (): CIVITASConfig =>
   ({
     models: {
       providers: {
@@ -319,7 +319,7 @@ const makeCopilotConfig = (): OpenClawConfig =>
         },
       },
     },
-  }) satisfies OpenClawConfig;
+  }) satisfies CIVITASConfig;
 
 const writeAuthStore = async (
   agentDir: string,
@@ -417,7 +417,7 @@ async function runAutoPinnedOpenAiTurn(params: {
   sessionKey: string;
   runId: string;
   authProfileId?: string;
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
 }) {
   await runEmbeddedPiAgentInline({
     sessionId: "session:test",
@@ -462,7 +462,7 @@ async function runAutoPinnedRotationCase(params: {
   errorMessage: string;
   sessionKey: string;
   runId: string;
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
 }) {
   runEmbeddedAttemptMock.mockReset();
   return withAgentWorkspace(async ({ agentDir, workspaceDir }) => {
@@ -486,7 +486,7 @@ async function runAutoPinnedPromptErrorRotationCase(params: {
   errorMessage: string;
   sessionKey: string;
   runId: string;
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
 }) {
   runEmbeddedAttemptMock.mockReset();
   return withAgentWorkspace(async ({ agentDir, workspaceDir }) => {

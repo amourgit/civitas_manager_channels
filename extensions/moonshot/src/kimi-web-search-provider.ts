@@ -1,5 +1,5 @@
 import { Type } from "@sinclair/typebox";
-import type { OpenClawConfig } from "civitas/plugin-sdk/provider-onboard";
+import type { CIVITASConfig } from "civitas/plugin-sdk/provider-onboard";
 import {
   buildSearchCacheKey,
   buildUnsupportedSearchFilterResponse,
@@ -100,13 +100,13 @@ function trimTrailingSlashes(url: string): string {
   return url.replace(/\/+$/, "");
 }
 
-function resolveKimiBaseUrl(kimi?: KimiConfig, openClawConfig?: OpenClawConfig): string {
+function resolveKimiBaseUrl(kimi?: KimiConfig, CIVITASConfig?: CIVITASConfig): string {
   const explicitBaseUrl = typeof kimi?.baseUrl === "string" ? kimi.baseUrl.trim() : "";
   if (explicitBaseUrl) {
     return trimTrailingSlashes(explicitBaseUrl) || DEFAULT_KIMI_BASE_URL;
   }
 
-  const moonshotBaseUrl = openClawConfig?.models?.providers?.moonshot?.baseUrl;
+  const moonshotBaseUrl = CIVITASConfig?.models?.providers?.moonshot?.baseUrl;
   if (typeof moonshotBaseUrl === "string") {
     const normalizedMoonshotBaseUrl = trimTrailingSlashes(moonshotBaseUrl.trim());
     if (normalizedMoonshotBaseUrl && isNativeMoonshotBaseUrl(normalizedMoonshotBaseUrl)) {
@@ -277,7 +277,7 @@ function createKimiSchema() {
 
 function createKimiToolDefinition(
   searchConfig: SearchConfigRecord | undefined,
-  openClawConfig: OpenClawConfig | undefined,
+  CIVITASConfig: CIVITASConfig | undefined,
 ): WebSearchProviderToolDefinition {
   return {
     description:
@@ -307,7 +307,7 @@ function createKimiToolDefinition(
         searchConfig?.maxResults ??
         undefined;
       const model = resolveKimiModel(kimiConfig);
-      const baseUrl = resolveKimiBaseUrl(kimiConfig, openClawConfig);
+      const baseUrl = resolveKimiBaseUrl(kimiConfig, CIVITASConfig);
       const cacheKey = buildSearchCacheKey([
         "kimi",
         query,

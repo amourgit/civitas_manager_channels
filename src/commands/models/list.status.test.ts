@@ -30,7 +30,7 @@ const mocks = vi.hoisted(() => {
 
   return {
     store,
-    resolveOpenClawAgentDir: vi.fn().mockReturnValue("/tmp/civitas-agent"),
+    resolveCIVITASAgentDir: vi.fn().mockReturnValue("/tmp/civitas-agent"),
     resolveAgentDir: vi.fn().mockReturnValue("/tmp/civitas-agent"),
     resolveAgentWorkspaceDir: vi.fn().mockReturnValue("/tmp/civitas-agent/workspace"),
     resolveAgentExplicitModelPrimary: vi.fn().mockReturnValue(undefined),
@@ -90,7 +90,7 @@ let modelsStatusCommand: typeof import("./list.status-command.js").modelsStatusC
 async function loadFreshModelsStatusCommandModuleForTest() {
   vi.resetModules();
   vi.doMock("../../agents/agent-paths.js", () => ({
-    resolveOpenClawAgentDir: mocks.resolveOpenClawAgentDir,
+    resolveCIVITASAgentDir: mocks.resolveCIVITASAgentDir,
   }));
   vi.doMock("../../agents/agent-scope.js", () => ({
     resolveAgentDir: mocks.resolveAgentDir,
@@ -210,7 +210,7 @@ describe("modelsStatusCommand auth overview", () => {
     await modelsStatusCommand({ json: true }, runtime as never);
     const payload = JSON.parse(String((runtime.log as Mock).mock.calls[0]?.[0]));
 
-    expect(mocks.resolveOpenClawAgentDir).toHaveBeenCalled();
+    expect(mocks.resolveCIVITASAgentDir).toHaveBeenCalled();
     expect(payload.defaultModel).toBe("anthropic/claude-opus-4-6");
     expect(payload.configPath).toBe("/tmp/civitas-dev/civitas.json");
     expect(payload.auth.storePath).toBe("/tmp/civitas-agent/auth-profiles.json");

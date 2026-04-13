@@ -1,10 +1,10 @@
 # CIVITAS Channel Manager
 
-Complete channel management system extracted from OpenClaw, customized for CIVITAS infrastructure.
+Complete channel management system extracted from CIVITAS, customized for CIVITAS infrastructure.
 
 ## Overview
 
-This repository contains the surgically extracted channel management components from OpenClaw, providing a standalone Channel Manager that can be integrated with custom gateways and agents.
+This repository contains the surgically extracted channel management components from CIVITAS, providing a standalone Channel Manager that can be integrated with custom gateways and agents.
 
 ## Features
 

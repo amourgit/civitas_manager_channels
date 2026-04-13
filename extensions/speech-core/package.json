@@ -2,6 +2,6 @@
   "name": "@civitas/speech-core",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw speech runtime package",
+  "description": "CIVITAS speech runtime package",
   "type": "module"
 }

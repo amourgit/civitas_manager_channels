@@ -174,7 +174,7 @@ describe("skills-cli", () => {
       ]);
 
       const output = formatSkillInfo(report, "env-aware-skill", {});
-      expect(output).toContain("OPENCLAW_CONFIG_PATH");
+      expect(output).toContain("CIVITAS_CONFIG_PATH");
       expect(output).toContain("default: ~/.civitas/civitas.json");
       expect(output).toContain("skills.entries.env-aware-skill.apiKey");
     });

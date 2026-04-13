@@ -27,7 +27,7 @@ export { writeJsonFileAtomically } from "civitas/plugin-sdk/json-store";
 export type {
   ChannelDirectoryEntry,
   ChannelMessageActionContext,
-  OpenClawConfig,
+  CIVITASConfig,
   PluginRuntime,
   RuntimeLogger,
   RuntimeEnv,

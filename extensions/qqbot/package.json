@@ -2,7 +2,7 @@
   "name": "@civitas/qqbot",
   "version": "2026.4.4",
   "private": false,
-  "description": "OpenClaw QQ Bot channel plugin",
+  "description": "CIVITAS QQ Bot channel plugin",
   "type": "module",
   "dependencies": {
     "mpg123-decoder": "^1.0.3",
@@ -52,7 +52,7 @@
       "stageRuntimeDependencies": true
     },
     "release": {
-      "publishToClawHub": true,
+      "publishToChannelHub": true,
       "publishToNpm": true
     }
   }

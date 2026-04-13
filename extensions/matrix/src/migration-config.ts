@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "civitas/plugin-sdk/account-id";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { resolveStateDir } from "civitas/plugin-sdk/state-paths";
 import {
   findMatrixAccountEntry,
@@ -128,14 +128,14 @@ function resolveGlobalMatrixEnvConfig(env: NodeJS.ProcessEnv): {
 }
 
 function resolveMatrixAccountConfigEntry(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId: string,
 ): Record<string, unknown> | null {
   return findMatrixAccountEntry(cfg, accountId);
 }
 
 function resolveMatrixFlatStoreSelectionNote(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId: string,
 ): string | undefined {
   if (resolveConfiguredMatrixAccountIds(cfg).length <= 1) {
@@ -148,7 +148,7 @@ function resolveMatrixFlatStoreSelectionNote(
 }
 
 export function resolveMatrixMigrationConfigFields(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   env: NodeJS.ProcessEnv;
   accountId: string;
 }): {
@@ -239,7 +239,7 @@ export function credentialsMatchResolvedIdentity(
 }
 
 export function resolveMatrixMigrationAccountTarget(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   env: NodeJS.ProcessEnv;
   accountId: string;
 }): MatrixMigrationAccountTarget | null {
@@ -279,7 +279,7 @@ export function resolveMatrixMigrationAccountTarget(params: {
 }
 
 export function resolveLegacyMatrixFlatStoreTarget(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   env: NodeJS.ProcessEnv;
   detectedPath: string;
   detectedKind: MatrixLegacyFlatStoreKind;

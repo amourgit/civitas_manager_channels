@@ -2,7 +2,7 @@
   "name": "@civitas/firecrawl-plugin",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw Firecrawl plugin",
+  "description": "CIVITAS Firecrawl plugin",
   "type": "module",
   "civitas": {
     "extensions": [

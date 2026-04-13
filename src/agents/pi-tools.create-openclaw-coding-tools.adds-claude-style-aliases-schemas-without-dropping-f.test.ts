@@ -3,14 +3,14 @@ import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import "./test-helpers/fast-coding-tools.js";
-import { createOpenClawCodingTools } from "./pi-tools.js";
+import { createCIVITASCodingTools } from "./pi-tools.js";
 import { expectReadWriteEditTools } from "./test-helpers/pi-tools-fs-helpers.js";
 
-describe("createOpenClawCodingTools", () => {
+describe("createCIVITASCodingTools", () => {
   it("accepts Claude Code parameter aliases for read/write/edit", async () => {
     const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "civitas-alias-"));
     try {
-      const tools = createOpenClawCodingTools({ workspaceDir: tmpDir });
+      const tools = createCIVITASCodingTools({ workspaceDir: tmpDir });
       const { readTool, writeTool, editTool } = expectReadWriteEditTools(tools);
 
       const filePath = "alias-test.txt";
@@ -42,7 +42,7 @@ describe("createOpenClawCodingTools", () => {
   it("accepts broader file/edit alias variants", async () => {
     const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "civitas-alias-broad-"));
     try {
-      const tools = createOpenClawCodingTools({ workspaceDir: tmpDir });
+      const tools = createCIVITASCodingTools({ workspaceDir: tmpDir });
       const { readTool, writeTool, editTool } = expectReadWriteEditTools(tools);
 
       await writeTool?.execute("tool-alias-broad-1", {
@@ -73,7 +73,7 @@ describe("createOpenClawCodingTools", () => {
   it("coerces structured content blocks for write", async () => {
     const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "civitas-structured-write-"));
     try {
-      const tools = createOpenClawCodingTools({ workspaceDir: tmpDir });
+      const tools = createCIVITASCodingTools({ workspaceDir: tmpDir });
       const writeTool = tools.find((tool) => tool.name === "write");
       expect(writeTool).toBeDefined();
 
@@ -81,13 +81,13 @@ describe("createOpenClawCodingTools", () => {
         path: "structured-write.js",
         content: [
           { type: "text", text: "const path = require('path');\n" },
-          { type: "input_text", text: "const root = path.join(process.env.HOME, 'clawd');\n" },
+          { type: "input_text", text: "const root = path.join(process.env.HOME, 'CIVITAS Channeld');\n" },
         ],
       });
 
       const written = await fs.readFile(path.join(tmpDir, "structured-write.js"), "utf8");
       expect(written).toBe(
-        "const path = require('path');\nconst root = path.join(process.env.HOME, 'clawd');\n",
+        "const path = require('path');\nconst root = path.join(process.env.HOME, 'CIVITAS Channeld');\n",
       );
     } finally {
       await fs.rm(tmpDir, { recursive: true, force: true });
@@ -100,7 +100,7 @@ describe("createOpenClawCodingTools", () => {
       const filePath = path.join(tmpDir, "structured-edit.js");
       await fs.writeFile(filePath, "const value = 'old';\n", "utf8");
 
-      const tools = createOpenClawCodingTools({ workspaceDir: tmpDir });
+      const tools = createCIVITASCodingTools({ workspaceDir: tmpDir });
       const editTool = tools.find((tool) => tool.name === "edit");
       expect(editTool).toBeDefined();
 

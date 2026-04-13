@@ -12,12 +12,12 @@ import {
 } from "../plugin-sdk/provider-tools.js";
 import { applyXaiModelCompat } from "../plugin-sdk/xai.js";
 import "./test-helpers/fast-coding-tools.js";
-import { createOpenClawTools } from "./civitas-tools.js";
-import { __testing, createOpenClawCodingTools } from "./pi-tools.js";
-import { createOpenClawReadTool, createSandboxedReadTool } from "./pi-tools.read.js";
+import { createCIVITASTools } from "./civitas-tools.js";
+import { __testing, createCIVITASCodingTools } from "./pi-tools.js";
+import { createCIVITASReadTool, createSandboxedReadTool } from "./pi-tools.read.js";
 import { createHostSandboxFsBridge } from "./test-helpers/host-sandbox-fs-bridge.js";
 
-const defaultTools = createOpenClawCodingTools();
+const defaultTools = createCIVITASCodingTools();
 
 function findUnionKeywordOffenders(
   tools: Array<{ name: string; parameters: unknown }>,
@@ -83,7 +83,7 @@ function extractToolText(result: unknown): string {
   return textBlock?.text ?? "";
 }
 
-describe("createOpenClawCodingTools", () => {
+describe("createCIVITASCodingTools", () => {
   describe("Claude/Gemini alias support", () => {
     it("adds Claude-style aliases to schemas without dropping metadata", () => {
       const base: AgentTool = {
@@ -180,7 +180,7 @@ describe("createOpenClawCodingTools", () => {
     expect(parameters.required ?? []).toContain("action");
   });
   it("exposes raw for gateway config.apply tool calls", () => {
-    const gateway = createOpenClawCodingTools({ senderIsOwner: true }).find(
+    const gateway = createCIVITASCodingTools({ senderIsOwner: true }).find(
       (tool) => tool.name === "gateway",
     );
     expect(gateway).toBeDefined();
@@ -294,7 +294,7 @@ describe("createOpenClawCodingTools", () => {
     expect(findUnionKeywordOffenders(defaultTools)).toEqual([]);
   });
   it("keeps raw core tool schemas union-free", () => {
-    const tools = createOpenClawTools();
+    const tools = createCIVITASTools();
     const coreTools = new Set([
       "browser",
       "canvas",
@@ -314,7 +314,7 @@ describe("createOpenClawCodingTools", () => {
     expect(findUnionKeywordOffenders(tools, { onlyNames: coreTools })).toEqual([]);
   });
   it("does not expose provider-specific message tools", () => {
-    const tools = createOpenClawCodingTools({ messageProvider: "discord" });
+    const tools = createCIVITASCodingTools({ messageProvider: "discord" });
     const names = new Set(tools.map((tool) => tool.name));
     expect(names.has("discord")).toBe(false);
     expect(names.has("slack")).toBe(false);
@@ -322,7 +322,7 @@ describe("createOpenClawCodingTools", () => {
     expect(names.has("whatsapp")).toBe(false);
   });
   it("filters session tools for sub-agent sessions by default", () => {
-    const tools = createOpenClawCodingTools({
+    const tools = createCIVITASCodingTools({
       sessionKey: "agent:main:subagent:test",
     });
     const names = new Set(tools.map((tool) => tool.name));
@@ -358,7 +358,7 @@ describe("createOpenClawCodingTools", () => {
       "utf-8",
     );
 
-    const tools = createOpenClawCodingTools({
+    const tools = createCIVITASCodingTools({
       sessionKey: "agent:main:subagent:flat",
       config: {
         session: {
@@ -380,7 +380,7 @@ describe("createOpenClawCodingTools", () => {
     expect(names.has("subagents")).toBe(false);
   });
   it("supports allow-only sub-agent tool policy", () => {
-    const tools = createOpenClawCodingTools({
+    const tools = createCIVITASCodingTools({
       sessionKey: "agent:main:subagent:test",
       // Intentionally partial config; only fields used by pi-tools are provided.
       config: {
@@ -398,7 +398,7 @@ describe("createOpenClawCodingTools", () => {
   });
 
   it("applies tool profiles before allow/deny policies", () => {
-    const tools = createOpenClawCodingTools({
+    const tools = createCIVITASCodingTools({
       config: { tools: { profile: "messaging" } },
     });
     const names = new Set(tools.map((tool) => tool.name));
@@ -409,7 +409,7 @@ describe("createOpenClawCodingTools", () => {
     expect(names.has("browser")).toBe(false);
   });
   it("expands group shorthands in global tool policy", () => {
-    const tools = createOpenClawCodingTools({
+    const tools = createCIVITASCodingTools({
       config: { tools: { allow: ["group:fs"] } },
     });
     const names = new Set(tools.map((tool) => tool.name));
@@ -420,7 +420,7 @@ describe("createOpenClawCodingTools", () => {
     expect(names.has("browser")).toBe(false);
   });
   it("expands group shorthands in global tool deny policy", () => {
-    const tools = createOpenClawCodingTools({
+    const tools = createCIVITASCodingTools({
       config: { tools: { deny: ["group:fs"] } },
     });
     const names = new Set(tools.map((tool) => tool.name));
@@ -430,7 +430,7 @@ describe("createOpenClawCodingTools", () => {
     expect(names.has("exec")).toBe(true);
   });
   it("lets agent profiles override global profiles", () => {
-    const tools = createOpenClawCodingTools({
+    const tools = createCIVITASCodingTools({
       sessionKey: "agent:work:main",
       config: {
         tools: { profile: "coding" },
@@ -445,7 +445,7 @@ describe("createOpenClawCodingTools", () => {
     expect(names.has("read")).toBe(false);
   });
   it("removes unsupported JSON Schema keywords for Cloud Code Assist API compatibility", () => {
-    const googleTools = createOpenClawCodingTools({
+    const googleTools = createCIVITASCodingTools({
       modelProvider: "google",
       senderIsOwner: true,
     });
@@ -459,7 +459,7 @@ describe("createOpenClawCodingTools", () => {
     }
   });
   it("applies xai model compat for direct Grok tool cleanup", () => {
-    const xaiTools = createOpenClawCodingTools({
+    const xaiTools = createCIVITASCodingTools({
       modelProvider: "xai",
       modelCompat: applyXaiModelCompat({ compat: {} }).compat,
       senderIsOwner: true,
@@ -570,8 +570,8 @@ describe("createOpenClawCodingTools", () => {
       execute: vi.fn(async () => readResult),
     };
 
-    const wrapped = createOpenClawReadTool(
-      baseRead as unknown as Parameters<typeof createOpenClawReadTool>[0],
+    const wrapped = createCIVITASReadTool(
+      baseRead as unknown as Parameters<typeof createCIVITASReadTool>[0],
     );
     const result = await wrapped.execute("read-strip-1", { path: "demo.txt", limit: 1 });
 

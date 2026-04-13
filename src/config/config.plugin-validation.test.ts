@@ -106,12 +106,12 @@ describe("config plugin validation", () => {
   const suiteEnv = () =>
     ({
       HOME: suiteHome,
-      OPENCLAW_HOME: undefined,
-      OPENCLAW_STATE_DIR: path.join(suiteHome, ".civitas"),
-      OPENCLAW_PLUGIN_MANIFEST_CACHE_MS: "10000",
-      OPENCLAW_DISABLE_PLUGIN_DISCOVERY_CACHE: "1",
-      OPENCLAW_BUNDLED_PLUGINS_DIR: undefined,
-      OPENCLAW_VERSION: undefined,
+      CIVITAS_HOME: undefined,
+      CIVITAS_STATE_DIR: path.join(suiteHome, ".civitas"),
+      CIVITAS_PLUGIN_MANIFEST_CACHE_MS: "10000",
+      CIVITAS_DISABLE_PLUGIN_DISCOVERY_CACHE: "1",
+      CIVITAS_BUNDLED_PLUGINS_DIR: undefined,
+      CIVITAS_VERSION: undefined,
       VITEST: "true",
     }) satisfies NodeJS.ProcessEnv;
 
@@ -289,7 +289,7 @@ describe("config plugin validation", () => {
       {
         env: {
           ...suiteEnv(),
-          OPENCLAW_BUNDLED_PLUGINS_DIR: path.join(suiteHome, "missing-bundled-plugins"),
+          CIVITAS_BUNDLED_PLUGINS_DIR: path.join(suiteHome, "missing-bundled-plugins"),
         },
       },
     );

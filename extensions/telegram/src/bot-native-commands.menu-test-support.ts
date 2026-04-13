@@ -1,6 +1,6 @@
 import type { RuntimeEnv } from "civitas/plugin-sdk/runtime-env";
 import { expect, vi, type Mock } from "vitest";
-import type { OpenClawConfig } from "../runtime-api.js";
+import type { CIVITASConfig } from "../runtime-api.js";
 import type { TelegramNativeCommandDeps } from "./bot-native-command-deps.runtime.js";
 import {
   createNativeCommandTestParams as createBaseNativeCommandTestParams,
@@ -86,7 +86,7 @@ export function createCommandBot(): CreateCommandBotResult {
 }
 
 export function createNativeCommandTestParams(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   params: Partial<RegisterTelegramNativeCommandsParams> = {},
 ): RegisterTelegramNativeCommandsParams {
   const dispatchResult: Awaited<

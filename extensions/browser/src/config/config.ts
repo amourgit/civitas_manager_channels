@@ -5,5 +5,5 @@ export {
   writeConfigFile,
   type BrowserConfig,
   type BrowserProfileConfig,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "civitas/plugin-sdk/browser-support";

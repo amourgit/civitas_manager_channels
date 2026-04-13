@@ -2,7 +2,7 @@
   "name": "@civitas/synthetic-provider",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw Synthetic provider plugin",
+  "description": "CIVITAS Synthetic provider plugin",
   "type": "module",
   "civitas": {
     "extensions": [

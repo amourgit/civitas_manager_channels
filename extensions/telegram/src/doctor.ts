@@ -4,7 +4,7 @@ import {
   type ChannelDoctorEmptyAllowlistAccountContext,
   type ChannelDoctorLegacyConfigRule,
 } from "civitas/plugin-sdk/channel-contract";
-import { type OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import { type CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import {
   getChannelsCommandSecretTargetIds,
   resolveCommandSecretRefsViaGateway,
@@ -79,7 +79,7 @@ function normalizeTelegramStreamingAliases(params: {
   return { entry: updated, changed };
 }
 
-function normalizeTelegramCompatibilityConfig(cfg: OpenClawConfig): ChannelDoctorConfigMutation {
+function normalizeTelegramCompatibilityConfig(cfg: CIVITASConfig): ChannelDoctorConfigMutation {
   const rawEntry = asObjectRecord((cfg.channels as Record<string, unknown> | undefined)?.telegram);
   if (!rawEntry) {
     return { config: cfg, changes: [] };
@@ -130,8 +130,8 @@ function normalizeTelegramCompatibilityConfig(cfg: OpenClawConfig): ChannelDocto
       ...cfg,
       channels: {
         ...cfg.channels,
-        telegram: updated as unknown as NonNullable<OpenClawConfig["channels"]>["telegram"],
-      } as OpenClawConfig["channels"],
+        telegram: updated as unknown as NonNullable<CIVITASConfig["channels"]>["telegram"],
+      } as CIVITASConfig["channels"],
     },
     changes,
   };
@@ -142,7 +142,7 @@ function hasAllowFromEntries(values?: DoctorAllowFromList): boolean {
 }
 
 function collectTelegramAccountScopes(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
 ): Array<{ prefix: string; account: Record<string, unknown> }> {
   const scopes: Array<{ prefix: string; account: Record<string, unknown> }> = [];
   const telegram = asObjectRecord((cfg.channels as Record<string, unknown> | undefined)?.telegram);
@@ -205,7 +205,7 @@ function collectTelegramAllowFromLists(
 }
 
 export function scanTelegramAllowFromUsernameEntries(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
 ): TelegramAllowFromUsernameHit[] {
   const hits: TelegramAllowFromUsernameHit[] = [];
   const scanList = (pathLabel: string, list: unknown) => {
@@ -243,8 +243,8 @@ export function collectTelegramAllowFromUsernameWarnings(params: {
   ];
 }
 
-export async function maybeRepairTelegramAllowFromUsernames(cfg: OpenClawConfig): Promise<{
-  config: OpenClawConfig;
+export async function maybeRepairTelegramAllowFromUsernames(cfg: CIVITASConfig): Promise<{
+  config: CIVITASConfig;
   changes: string[];
 }> {
   const hits = scanTelegramAllowFromUsernameEntries(cfg);

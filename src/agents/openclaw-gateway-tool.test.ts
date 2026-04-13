@@ -50,16 +50,16 @@ function createGatewayToolModuleMocks() {
 
 vi.mock("./tools/gateway.js", () => createGatewayToolModuleMocks());
 
-let createOpenClawTools: typeof import("./civitas-tools.js").createOpenClawTools;
+let createCIVITASTools: typeof import("./civitas-tools.js").createCIVITASTools;
 
-async function loadFreshOpenClawToolsModuleForTest() {
+async function loadFreshCIVITASToolsModuleForTest() {
   vi.resetModules();
   vi.doMock("./tools/gateway.js", () => createGatewayToolModuleMocks());
-  ({ createOpenClawTools } = await import("./civitas-tools.js"));
+  ({ createCIVITASTools } = await import("./civitas-tools.js"));
 }
 
 function requireGatewayTool(agentSessionKey?: string) {
-  const tool = createOpenClawTools({
+  const tool = createCIVITASTools({
     ...(agentSessionKey ? { agentSessionKey } : {}),
     config: { commands: { restart: true } },
   }).find((candidate) => candidate.name === "gateway");
@@ -94,7 +94,7 @@ function expectConfigMutationCall(params: {
 
 describe("gateway tool", () => {
   beforeEach(async () => {
-    await loadFreshOpenClawToolsModuleForTest();
+    await loadFreshCIVITASToolsModuleForTest();
   });
 
   it("marks gateway as owner-only", async () => {
@@ -109,7 +109,7 @@ describe("gateway tool", () => {
 
     try {
       await withEnvAsync(
-        { OPENCLAW_STATE_DIR: stateDir, OPENCLAW_PROFILE: "isolated" },
+        { CIVITAS_STATE_DIR: stateDir, CIVITAS_PROFILE: "isolated" },
         async () => {
           const tool = requireGatewayTool();
 

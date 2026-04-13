@@ -14,7 +14,7 @@ import {
 } from "civitas/plugin-sdk/channel-inbound";
 import { createChannelPairingChallengeIssuer } from "civitas/plugin-sdk/channel-pairing";
 import { hasControlCommand, resolveControlCommandGate } from "civitas/plugin-sdk/command-auth";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import {
   resolveAllowlistProviderRuntimeGroupPolicy,
   resolveDefaultGroupPolicy,
@@ -72,7 +72,7 @@ function isDownloadableLineMessageType(
 }
 
 export interface LineHandlerContext {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   account: ResolvedLineAccount;
   runtime: RuntimeEnv;
   mediaMaxBytes: number;
@@ -454,7 +454,7 @@ function resolveEventRawText(event: MessageEvent | PostbackEvent): string {
 }
 
 function resolveLineCommandAuthorized(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   event: MessageEvent | PostbackEvent;
   senderId?: string;
   allow: NormalizedAllowFrom;

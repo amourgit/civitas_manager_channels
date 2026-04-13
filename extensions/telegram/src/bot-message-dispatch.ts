@@ -6,7 +6,7 @@ import {
 } from "civitas/plugin-sdk/channel-feedback";
 import { createChannelReplyPipeline } from "civitas/plugin-sdk/channel-reply-pipeline";
 import type {
-  OpenClawConfig,
+  CIVITASConfig,
   ReplyToMode,
   TelegramAccountConfig,
   TelegramDirectConfig,
@@ -69,7 +69,7 @@ const EMPTY_RESPONSE_FALLBACK = "No response generated. Please try again.";
 /** Minimum chars before sending first streaming message (improves push notification UX) */
 const DRAFT_MIN_INITIAL_CHARS = 30;
 
-async function resolveStickerVisionSupport(cfg: OpenClawConfig, agentId: string) {
+async function resolveStickerVisionSupport(cfg: CIVITASConfig, agentId: string) {
   try {
     const catalog = await loadModelCatalog({ config: cfg });
     const defaultModel = resolveDefaultModelForAgent({ cfg, agentId });
@@ -117,7 +117,7 @@ export function pruneStickerMediaFromContext(
 type DispatchTelegramMessageParams = {
   context: TelegramMessageContext;
   bot: Bot;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   runtime: RuntimeEnv;
   replyToMode: ReplyToMode;
   streamMode: TelegramStreamMode;
@@ -130,7 +130,7 @@ type DispatchTelegramMessageParams = {
 type TelegramReasoningLevel = "off" | "on" | "stream";
 
 function resolveTelegramReasoningLevel(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   sessionKey?: string;
   agentId: string;
   telegramDeps: TelegramBotDeps;

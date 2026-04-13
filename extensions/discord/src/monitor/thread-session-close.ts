@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { resolveStorePath, updateSessionStore } from "civitas/plugin-sdk/config-runtime";
 
 /**
@@ -11,7 +11,7 @@ import { resolveStorePath, updateSessionStore } from "civitas/plugin-sdk/config-
  * any on-disk transcript history.
  */
 export async function closeDiscordThreadSessions(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
   threadId: string;
 }): Promise<number> {

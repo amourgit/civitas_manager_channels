@@ -1,6 +1,6 @@
 import { Command } from "commander";
 import { beforeEach, describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import {
   loadConfig,
   registerPluginsCli,
@@ -17,7 +17,7 @@ function createTrackedPluginConfig(params: {
   pluginId: string;
   spec: string;
   resolvedName?: string;
-}): OpenClawConfig {
+}): CIVITASConfig {
   return {
     plugins: {
       installs: {
@@ -29,7 +29,7 @@ function createTrackedPluginConfig(params: {
         },
       },
     },
-  } as OpenClawConfig;
+  } as CIVITASConfig;
 }
 
 describe("plugins cli update", () => {
@@ -64,7 +64,7 @@ describe("plugins cli update", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const nextConfig = {
       hooks: {
         internal: {
@@ -77,7 +77,7 @@ describe("plugins cli update", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     loadConfig.mockReturnValue(cfg);
     updateNpmInstalledPlugins.mockResolvedValue({
@@ -116,7 +116,7 @@ describe("plugins cli update", () => {
       plugins: {
         installs: {},
       },
-    } as OpenClawConfig);
+    } as CIVITASConfig);
 
     await expect(runPluginsCommand(["plugins", "update"])).rejects.toThrow("__exit__:1");
 
@@ -129,7 +129,7 @@ describe("plugins cli update", () => {
       plugins: {
         installs: {},
       },
-    } as OpenClawConfig);
+    } as CIVITASConfig);
 
     await runPluginsCommand(["plugins", "update", "--all"]);
 
@@ -150,7 +150,7 @@ describe("plugins cli update", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     loadConfig.mockReturnValue(config);
     updateNpmInstalledPlugins.mockResolvedValue({
       config,
@@ -183,7 +183,7 @@ describe("plugins cli update", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     loadConfig.mockReturnValue(config);
     updateNpmInstalledPlugins.mockResolvedValue({
       config,
@@ -216,7 +216,7 @@ describe("plugins cli update", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     loadConfig.mockReturnValue(config);
     updateNpmInstalledPlugins.mockResolvedValue({
       config,
@@ -277,7 +277,7 @@ describe("plugins cli update", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     loadConfig.mockReturnValue(config);
     updateNpmInstalledPlugins.mockResolvedValue({
       config,
@@ -310,7 +310,7 @@ describe("plugins cli update", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const nextConfig = {
       plugins: {
         installs: {
@@ -320,7 +320,7 @@ describe("plugins cli update", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     loadConfig.mockReturnValue(cfg);
     updateNpmInstalledPlugins.mockResolvedValue({
       outcomes: [{ status: "ok", message: "Updated alpha -> 1.1.0" }],

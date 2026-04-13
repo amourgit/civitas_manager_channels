@@ -1,7 +1,7 @@
 {
   "name": "@civitas/zalo",
   "version": "2026.4.4",
-  "description": "OpenClaw Zalo channel plugin",
+  "description": "CIVITAS Zalo channel plugin",
   "type": "module",
   "dependencies": {
     "undici": "8.0.0"
@@ -47,7 +47,7 @@
       "civitasVersion": "2026.4.4"
     },
     "release": {
-      "publishToClawHub": true,
+      "publishToChannelHub": true,
       "publishToNpm": true
     }
   }

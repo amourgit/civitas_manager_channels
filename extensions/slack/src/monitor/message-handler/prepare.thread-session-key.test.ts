@@ -1,5 +1,5 @@
 import type { App } from "@slack/bolt";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { SlackMessageEvent } from "../../types.js";
 
@@ -29,7 +29,7 @@ function buildCtx(overrides?: { replyToMode?: "all" | "first" | "off" }) {
       channels: {
         slack: { enabled: true, replyToMode },
       },
-    } as OpenClawConfig,
+    } as CIVITASConfig,
     appClient: {} as App["client"],
     defaultRequireMention: false,
     replyToMode,

@@ -1,6 +1,6 @@
 import { formatCliCommand, parseDurationMs } from "civitas/plugin-sdk/cli-runtime";
 import type {
-  OpenClawPluginApi,
+  CIVITASPluginApi,
   ProviderAuthContext,
   ProviderAuthMethodNonInteractiveContext,
   ProviderResolveDynamicModelContext,
@@ -13,7 +13,7 @@ import {
   ensureApiKeyFromOptionEnvOrPrompt,
   listProfilesForProvider,
   normalizeApiKeyInput,
-  type OpenClawConfig as ProviderAuthConfig,
+  type CIVITASConfig as ProviderAuthConfig,
   suggestOAuthProfileIdForLegacyDefault,
   type AuthProfileStore,
   type ProviderAuthResult,
@@ -56,8 +56,8 @@ const ANTHROPIC_OAUTH_ALLOWLIST = [
   "anthropic/claude-haiku-4-5",
 ] as const;
 const ANTHROPIC_SETUP_TOKEN_NOTE_LINES = [
-  "Anthropic setup-token auth is a legacy/manual path in OpenClaw.",
-  "Anthropic told OpenClaw users that OpenClaw counts as a third-party harness, so this path requires Extra Usage on the Claude account.",
+  "Anthropic setup-token auth is a legacy/manual path in CIVITAS.",
+  "Anthropic told CIVITAS users that CIVITAS counts as a third-party harness, so this path requires Extra Usage on the Claude account.",
   `If you want a direct API billing path instead, use ${formatCliCommand("civitas models auth login --provider anthropic --method api-key --set-default")} or ${formatCliCommand("civitas models auth login --provider anthropic --method cli --set-default")}.`,
 ] as const;
 
@@ -331,7 +331,7 @@ async function runAnthropicCliMigrationNonInteractive(ctx: {
   };
 }
 
-export function registerAnthropicPlugin(api: OpenClawPluginApi): void {
+export function registerAnthropicPlugin(api: CIVITASPluginApi): void {
   const claudeCliProfileId = "anthropic:claude-cli";
   const providerId = "anthropic";
   const defaultAnthropicModel = "anthropic/claude-sonnet-4-6";
@@ -387,12 +387,12 @@ export function registerAnthropicPlugin(api: OpenClawPluginApi): void {
       {
         id: "setup-token",
         label: "Anthropic setup-token",
-        hint: "Legacy/manual bearer token path; requires Extra Usage when used through OpenClaw",
+        hint: "Legacy/manual bearer token path; requires Extra Usage when used through CIVITAS",
         kind: "token",
         wizard: {
           choiceId: "setup-token",
           choiceLabel: "Anthropic setup-token",
-          choiceHint: "Legacy/manual path; requires Extra Usage in OpenClaw",
+          choiceHint: "Legacy/manual path; requires Extra Usage in CIVITAS",
           assistantPriority: 40,
           groupId: "anthropic",
           groupLabel: "Anthropic",

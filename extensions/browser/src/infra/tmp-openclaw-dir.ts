@@ -1,1 +1,1 @@
-export { resolvePreferredOpenClawTmpDir } from "civitas/plugin-sdk/temp-path";
+export { resolvePreferredCIVITASTmpDir } from "civitas/plugin-sdk/temp-path";

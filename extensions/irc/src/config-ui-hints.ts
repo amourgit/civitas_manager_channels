@@ -3,7 +3,7 @@ import type { ChannelConfigUiHint } from "civitas/plugin-sdk/core";
 export const ircChannelConfigUiHints = {
   "": {
     label: "IRC",
-    help: "IRC channel provider configuration and compatibility settings for classic IRC transport workflows. Use this section when bridging legacy chat infrastructure into OpenClaw.",
+    help: "IRC channel provider configuration and compatibility settings for classic IRC transport workflows. Use this section when bridging legacy chat infrastructure into CIVITAS.",
   },
   dmPolicy: {
     label: "IRC DM Policy",

@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { ResolvedAgentRoute } from "civitas/plugin-sdk/routing";
 import { describe, expect, it } from "vitest";
 import {
@@ -11,7 +11,7 @@ import {
 function buildWorkerBindingConfig(peer: {
   kind: "channel" | "direct";
   id: string;
-}): OpenClawConfig {
+}): CIVITASConfig {
   return {
     agents: {
       list: [{ id: "worker" }],

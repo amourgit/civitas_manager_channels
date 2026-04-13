@@ -1,7 +1,7 @@
 import {
   DEFAULT_ACCOUNT_ID,
   normalizeAccountId,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "civitas/plugin-sdk/account-resolution";
 import {
   hasConfiguredSecretInput,
@@ -64,7 +64,7 @@ function inspectSlackToken(value: unknown): {
 }
 
 export function inspectSlackAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
   envBotToken?: string | null;
   envAppToken?: string | null;

@@ -31,7 +31,7 @@ describe("proxy stream wrappers", () => {
       {
         headers: {
           "HTTP-Referer": "https://civitas.ai",
-          "X-OpenRouter-Title": "OpenClaw",
+          "X-OpenRouter-Title": "CIVITAS",
           "X-OpenRouter-Categories": "cli-agent",
           "X-Custom": "1",
         },

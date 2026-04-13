@@ -14,7 +14,7 @@ describe("zalouser setup plugin", () => {
     const stateDir = await mkdtemp(path.join(os.tmpdir(), "civitas-zalouser-setup-"));
 
     try {
-      await withEnvAsync({ OPENCLAW_STATE_DIR: stateDir }, async () => {
+      await withEnvAsync({ CIVITAS_STATE_DIR: stateDir }, async () => {
         await expect(
           zalouserSetupGetStatus({
             cfg: {},

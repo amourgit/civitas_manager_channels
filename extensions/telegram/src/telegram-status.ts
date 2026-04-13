@@ -4,7 +4,7 @@ import {
   projectCredentialSnapshotFields,
   resolveConfiguredFromCredentialStatuses,
 } from "civitas/plugin-sdk/channel-status";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import {
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,

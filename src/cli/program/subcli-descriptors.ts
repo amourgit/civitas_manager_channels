@@ -65,7 +65,7 @@ export const SUB_CLI_DESCRIPTORS = [
   },
   {
     name: "docs",
-    description: "Search the live OpenClaw docs",
+    description: "Search the live CIVITAS docs",
     hasSubcommands: false,
   },
   {
@@ -84,8 +84,8 @@ export const SUB_CLI_DESCRIPTORS = [
     hasSubcommands: false,
   },
   {
-    name: "clawbot",
-    description: "Legacy clawbot command aliases",
+    name: "CIVITAS Channelbot",
+    description: "Legacy CIVITAS Channelbot command aliases",
     hasSubcommands: true,
   },
   {
@@ -95,7 +95,7 @@ export const SUB_CLI_DESCRIPTORS = [
   },
   {
     name: "plugins",
-    description: "Manage OpenClaw plugins and extensions",
+    description: "Manage CIVITAS plugins and extensions",
     hasSubcommands: true,
   },
   {
@@ -125,7 +125,7 @@ export const SUB_CLI_DESCRIPTORS = [
   },
   {
     name: "update",
-    description: "Update OpenClaw and inspect update channel status",
+    description: "Update CIVITAS and inspect update channel status",
     hasSubcommands: true,
   },
   {

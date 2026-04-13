@@ -1,6 +1,6 @@
 import {
   definePluginEntry,
-  type OpenClawPluginApi,
+  type CIVITASPluginApi,
   type ProviderAuthMethodNonInteractiveContext,
 } from "civitas/plugin-sdk/plugin-entry";
 import {
@@ -21,7 +21,7 @@ export default definePluginEntry({
   id: "sglang",
   name: "SGLang Provider",
   description: "Bundled SGLang provider plugin",
-  register(api: OpenClawPluginApi) {
+  register(api: CIVITASPluginApi) {
     api.registerProvider({
       id: PROVIDER_ID,
       label: "SGLang",

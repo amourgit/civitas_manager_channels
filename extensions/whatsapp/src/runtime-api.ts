@@ -15,7 +15,7 @@ export {
 } from "civitas/plugin-sdk/channel-actions";
 export { normalizeE164 } from "civitas/plugin-sdk/account-resolution";
 export type { DmPolicy, GroupPolicy } from "civitas/plugin-sdk/config-runtime";
-import type { OpenClawConfig as RuntimeOpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig as RuntimeCIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 
 export { type ChannelMessageActionName } from "civitas/plugin-sdk/channel-contract";
 import { loadWebMedia } from "civitas/plugin-sdk/web-media";
@@ -40,9 +40,9 @@ export {
 export { resolveWhatsAppOutboundTarget } from "./resolve-outbound-target.js";
 export { resolveWhatsAppReactionLevel } from "./reaction-level.js";
 
-export type OpenClawConfig = RuntimeOpenClawConfig;
+export type CIVITASConfig = RuntimeCIVITASConfig;
 export type WhatsAppAccountConfig = NonNullable<
-  NonNullable<NonNullable<RuntimeOpenClawConfig["channels"]>["whatsapp"]>["accounts"]
+  NonNullable<NonNullable<RuntimeCIVITASConfig["channels"]>["whatsapp"]>["accounts"]
 >[string];
 
 type MonitorWebChannel = typeof import("./channel.runtime.js").monitorWebChannel;

@@ -1,7 +1,7 @@
 import {
   DEFAULT_ACCOUNT_ID,
   setSetupChannelEnabled,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "civitas/plugin-sdk/setup";
 import type { ChannelSetupWizard } from "civitas/plugin-sdk/setup";
 import { formatDocsLink } from "civitas/plugin-sdk/setup-tools";

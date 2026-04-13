@@ -47,7 +47,7 @@ describe("root help", () => {
         },
       },
     };
-    const env = { OPENCLAW_STATE_DIR: "/tmp/civitas-root-help-state" } as NodeJS.ProcessEnv;
+    const env = { CIVITAS_STATE_DIR: "/tmp/civitas-root-help-state" } as NodeJS.ProcessEnv;
 
     await renderRootHelpText({ config, env, pluginSdkResolution: "src" });
 

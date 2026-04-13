@@ -1,12 +1,12 @@
-import type { OpenClawPluginApi } from "civitas/plugin-sdk/plugin-runtime";
+import type { CIVITASPluginApi } from "civitas/plugin-sdk/plugin-runtime";
 
 type TestPluginApiInput = Omit<
-  Partial<OpenClawPluginApi>,
+  Partial<CIVITASPluginApi>,
   "id" | "name" | "source" | "config" | "runtime"
 > &
-  Pick<OpenClawPluginApi, "id" | "name" | "source" | "config" | "runtime">;
+  Pick<CIVITASPluginApi, "id" | "name" | "source" | "config" | "runtime">;
 
-export function createTestPluginApi(api: TestPluginApiInput): OpenClawPluginApi {
+export function createTestPluginApi(api: TestPluginApiInput): CIVITASPluginApi {
   return {
     registrationMode: "full",
     logger: { info() {}, warn() {}, error() {}, debug() {} },

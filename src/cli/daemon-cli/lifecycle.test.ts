@@ -131,8 +131,8 @@ describe("runDaemonRestart health checks", () => {
   });
 
   beforeEach(() => {
-    envSnapshot = captureEnv(["OPENCLAW_CONTAINER_HINT", "OPENCLAW_PROFILE"]);
-    delete process.env.OPENCLAW_CONTAINER_HINT;
+    envSnapshot = captureEnv(["CIVITAS_CONTAINER_HINT", "CIVITAS_PROFILE"]);
+    delete process.env.CIVITAS_CONTAINER_HINT;
     service.readCommand.mockReset();
     service.restart.mockReset();
     runServiceRestart.mockReset();

@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import type { AuthProfileFailureReason } from "./auth-profiles.js";
 import { runWithModelFallback } from "./model-fallback.js";
 import type { EmbeddedRunAttemptResult } from "./pi-embedded-runner/run/types.js";
@@ -49,7 +49,7 @@ vi.mock("./models-config.js", async () => {
   const mod = await vi.importActual<typeof import("./models-config.js")>("./models-config.js");
   return {
     ...mod,
-    ensureOpenClawModelsJson: vi.fn(async () => ({ wrote: false })),
+    ensureCIVITASModelsJson: vi.fn(async () => ({ wrote: false })),
   };
 });
 
@@ -100,7 +100,7 @@ const OVERLOADED_ERROR_PAYLOAD =
   '{"type":"error","error":{"type":"overloaded_error","message":"Overloaded"}}';
 const RATE_LIMIT_ERROR_MESSAGE = "rate limit exceeded";
 
-function makeConfig(): OpenClawConfig {
+function makeConfig(): CIVITASConfig {
   const apiKeyField = ["api", "Key"].join("");
   return {
     agents: {
@@ -147,7 +147,7 @@ function makeConfig(): OpenClawConfig {
         },
       },
     },
-  } satisfies OpenClawConfig;
+  } satisfies CIVITASConfig;
 }
 
 async function withAgentWorkspace<T>(
@@ -228,7 +228,7 @@ async function runEmbeddedFallback(params: {
   sessionKey: string;
   runId: string;
   abortSignal?: AbortSignal;
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
 }) {
   const cfg = params.config ?? makeConfig();
   return await runWithModelFallback({

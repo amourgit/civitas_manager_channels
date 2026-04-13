@@ -3,14 +3,14 @@ import { formatDocsLink } from "../terminal/links.js";
 import { theme } from "../terminal/theme.js";
 import { registerQrCli } from "./qr-cli.js";
 
-export function registerClawbotCli(program: Command) {
-  const clawbot = program
-    .command("clawbot")
-    .description("Legacy clawbot command aliases")
+export function registerChannelbotCli(program: Command) {
+  const CIVITAS Channelbot = program
+    .command("CIVITAS Channelbot")
+    .description("Legacy CIVITAS Channelbot command aliases")
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/clawbot", "docs.civitas.ai/cli/clawbot")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/CIVITAS Channelbot", "docs.civitas.ai/cli/CIVITAS Channelbot")}\n`,
     );
-  registerQrCli(clawbot);
+  registerQrCli(CIVITAS Channelbot);
 }

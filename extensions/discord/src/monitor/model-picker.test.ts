@@ -1,6 +1,6 @@
 import { serializePayload } from "@buape/carbon";
 import { ComponentType } from "discord-api-types/v10";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { describe, expect, it, vi } from "vitest";
 import {
   DISCORD_CUSTOM_ID_MAX_CHARS,
@@ -75,7 +75,7 @@ function requireValue<T>(value: T | null | undefined, message: string): T {
 describe("loadDiscordModelPickerData", () => {
   it("reuses buildModelsProviderData as source of truth with agent scope", async () => {
     const expected = createModelsProviderData({ openai: ["gpt-4o"] });
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as CIVITASConfig;
     buildModelsProviderDataMock.mockResolvedValue(expected);
 
     const result = await loadDiscordModelPickerData(cfg, "support");

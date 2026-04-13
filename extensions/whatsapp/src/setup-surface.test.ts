@@ -1,5 +1,5 @@
 import type { RuntimeEnv } from "civitas/plugin-sdk/runtime-env";
-import { DEFAULT_ACCOUNT_ID, type OpenClawConfig } from "civitas/plugin-sdk/setup";
+import { DEFAULT_ACCOUNT_ID, type CIVITASConfig } from "civitas/plugin-sdk/setup";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createPluginSetupWizardStatus,
@@ -10,7 +10,7 @@ import { whatsappSetupPlugin } from "./channel.setup.js";
 import { whatsappSetupWizard } from "./setup-surface.js";
 
 const hoisted = vi.hoisted(() => ({
-  detectWhatsAppLinked: vi.fn<(cfg: OpenClawConfig, accountId: string) => Promise<boolean>>(
+  detectWhatsAppLinked: vi.fn<(cfg: CIVITASConfig, accountId: string) => Promise<boolean>>(
     async () => false,
   ),
   loginWeb: vi.fn(async () => {}),
@@ -86,13 +86,13 @@ function createSeparatePhoneHarness(params: { selectValues: string[]; textValues
 }
 
 function expectFinalizeResult(result: Awaited<ReturnType<typeof runFinalizeWithHarness>>): {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
 } {
   expect(result).toBeDefined();
   if (!result || typeof result !== "object" || !("cfg" in result) || !result.cfg) {
     throw new Error("Expected WhatsApp finalize result with cfg");
   }
-  return result as { cfg: OpenClawConfig };
+  return result as { cfg: CIVITASConfig };
 }
 
 async function runSeparatePhoneFlow(params: { selectValues: string[]; textValues?: string[] }) {
@@ -205,7 +205,7 @@ describe("whatsapp setup wizard", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
       accountOverrides: {
         whatsapp: "work",
       },
@@ -217,7 +217,7 @@ describe("whatsapp setup wizard", () => {
 
   it("uses configured defaultAccount for omitted-account setup status", async () => {
     hoisted.detectWhatsAppLinked.mockImplementation(
-      async (_cfg: OpenClawConfig, accountId: string) => accountId === "work",
+      async (_cfg: CIVITASConfig, accountId: string) => accountId === "work",
     );
 
     const status = await whatsappGetStatus({
@@ -235,7 +235,7 @@ describe("whatsapp setup wizard", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
       accountOverrides: {},
     });
 

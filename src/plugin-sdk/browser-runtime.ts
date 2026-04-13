@@ -5,8 +5,8 @@ type FacadeModule = FacadeEntry["module"];
 export {
   DEFAULT_AI_SNAPSHOT_MAX_CHARS,
   DEFAULT_BROWSER_EVALUATE_ENABLED,
-  DEFAULT_OPENCLAW_BROWSER_COLOR,
-  DEFAULT_OPENCLAW_BROWSER_PROFILE_NAME,
+  DEFAULT_CIVITAS_BROWSER_COLOR,
+  DEFAULT_CIVITAS_BROWSER_PROFILE_NAME,
   DEFAULT_UPLOAD_DIR,
   redactCdpUrl,
   resolveBrowserConfig,
@@ -214,9 +214,9 @@ export type BrowserServerState = FacadeEntry["types"]["BrowserServerState"];
 export type BrowserStatus = FacadeEntry["types"]["BrowserStatus"];
 export type BrowserTab = FacadeEntry["types"]["BrowserTab"];
 export type BrowserTransport = FacadeEntry["types"]["BrowserTransport"];
-export type OpenClawPluginApi = FacadeEntry["types"]["OpenClawPluginApi"];
-export type OpenClawPluginToolContext = FacadeEntry["types"]["OpenClawPluginToolContext"];
-export type OpenClawPluginToolFactory = FacadeEntry["types"]["OpenClawPluginToolFactory"];
+export type CIVITASPluginApi = FacadeEntry["types"]["CIVITASPluginApi"];
+export type CIVITASPluginToolContext = FacadeEntry["types"]["CIVITASPluginToolContext"];
+export type CIVITASPluginToolFactory = FacadeEntry["types"]["CIVITASPluginToolFactory"];
 export type ProfileStatus = FacadeEntry["types"]["ProfileStatus"];
 export type ResolvedBrowserConfig = FacadeEntry["types"]["ResolvedBrowserConfig"];
 export type ResolvedBrowserProfile = FacadeEntry["types"]["ResolvedBrowserProfile"];

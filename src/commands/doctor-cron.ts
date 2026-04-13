@@ -1,5 +1,5 @@
 import { formatCliCommand } from "../cli/command-format.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import { resolveCronStorePath, loadCronStore, saveCronStore } from "../cron/store.js";
 import type { CronJob } from "../cron/types.js";
 import { note } from "../terminal/note.js";
@@ -119,7 +119,7 @@ function migrateLegacyNotifyFallback(params: {
 }
 
 export async function maybeRepairLegacyCronStore(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   options: DoctorOptions;
   prompter: Pick<DoctorPrompter, "confirm">;
 }) {

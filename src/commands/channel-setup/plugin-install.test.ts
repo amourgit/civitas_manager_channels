@@ -71,7 +71,7 @@ vi.mock("../../plugins/bundled-sources.js", () => ({
 }));
 
 vi.mock("../../plugins/loader.js", () => ({
-  loadOpenClawPlugins: vi.fn(),
+  loadCIVITASPlugins: vi.fn(),
 }));
 
 const clearPluginDiscoveryCache = vi.fn();
@@ -81,8 +81,8 @@ vi.mock("../../plugins/discovery.js", () => ({
 
 import fs from "node:fs";
 import type { ChannelPluginCatalogEntry } from "../../channels/plugins/catalog.js";
-import type { OpenClawConfig } from "../../config/config.js";
-import { loadOpenClawPlugins } from "../../plugins/loader.js";
+import type { CIVITASConfig } from "../../config/config.js";
+import { loadCIVITASPlugins } from "../../plugins/loader.js";
 import { createEmptyPluginRegistry } from "../../plugins/registry.js";
 import {
   pinActivePluginChannelRegistry,
@@ -140,7 +140,7 @@ async function runInitialValueForChannel(channel: "dev" | "beta") {
   const runtime = makeRuntime();
   const select = vi.fn((async <T extends string>() => "skip" as T) as WizardPrompter["select"]);
   const prompter = makePrompter({ select: select as unknown as WizardPrompter["select"] });
-  const cfg: OpenClawConfig = { update: { channel } };
+  const cfg: CIVITASConfig = { update: { channel } };
   mockRepoLocalPathExists();
 
   await ensureChannelSetupPluginInstalled({
@@ -168,7 +168,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
     const prompter = makePrompter({
       select: vi.fn(async () => "npm") as WizardPrompter["select"],
     });
-    const cfg: OpenClawConfig = { plugins: { allow: ["other"] } };
+    const cfg: CIVITASConfig = { plugins: { allow: ["other"] } };
     vi.mocked(fs.existsSync).mockReturnValue(false);
     installPluginFromNpmSpec.mockResolvedValue({
       ok: true,
@@ -200,7 +200,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
     const prompter = makePrompter({
       select: vi.fn(async () => "local") as WizardPrompter["select"],
     });
-    const cfg: OpenClawConfig = {};
+    const cfg: CIVITASConfig = {};
     mockRepoLocalPathExists();
 
     const result = await ensureChannelSetupPluginInstalled({
@@ -219,7 +219,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
     const prompter = makePrompter({
       select: vi.fn(async () => "local") as WizardPrompter["select"],
     });
-    const cfg: OpenClawConfig = {};
+    const cfg: CIVITASConfig = {};
     mockRepoLocalPathExists();
 
     const result = await ensureChannelSetupPluginInstalled({
@@ -250,7 +250,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
     const runtime = makeRuntime();
     const select = vi.fn((async <T extends string>() => "skip" as T) as WizardPrompter["select"]);
     const prompter = makePrompter({ select: select as unknown as WizardPrompter["select"] });
-    const cfg: OpenClawConfig = { update: { channel: "beta" } };
+    const cfg: CIVITASConfig = { update: { channel: "beta" } };
     vi.mocked(fs.existsSync).mockReturnValue(false);
     resolveBundledPluginSources.mockReturnValue(
       new Map([
@@ -289,7 +289,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
     const runtime = makeRuntime();
     const select = vi.fn((async <T extends string>() => "skip" as T) as WizardPrompter["select"]);
     const prompter = makePrompter({ select: select as unknown as WizardPrompter["select"] });
-    const cfg: OpenClawConfig = { update: { channel: "beta" } };
+    const cfg: CIVITASConfig = { update: { channel: "beta" } };
     vi.mocked(fs.existsSync).mockReturnValue(false);
     resolveBundledPluginSources.mockReturnValue(
       new Map([
@@ -348,7 +348,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
       note,
       confirm,
     });
-    const cfg: OpenClawConfig = {};
+    const cfg: CIVITASConfig = {};
     mockRepoLocalPathExists();
     installPluginFromNpmSpec.mockResolvedValue({
       ok: false,
@@ -369,7 +369,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
   it("clears discovery cache before reloading the setup plugin registry", () => {
     const runtime = makeRuntime();
-    const cfg: OpenClawConfig = {};
+    const cfg: CIVITASConfig = {};
 
     reloadChannelSetupPluginRegistry({
       cfg,
@@ -378,7 +378,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
     });
 
     expect(clearPluginDiscoveryCache).toHaveBeenCalledTimes(1);
-    expect(loadOpenClawPlugins).toHaveBeenCalledWith(
+    expect(loadCIVITASPlugins).toHaveBeenCalledWith(
       expect.objectContaining({
         config: cfg,
         activationSourceConfig: cfg,
@@ -389,13 +389,13 @@ describe("ensureChannelSetupPluginInstalled", () => {
       }),
     );
     expect(clearPluginDiscoveryCache.mock.invocationCallOrder[0]).toBeLessThan(
-      vi.mocked(loadOpenClawPlugins).mock.invocationCallOrder[0] ?? Number.POSITIVE_INFINITY,
+      vi.mocked(loadCIVITASPlugins).mock.invocationCallOrder[0] ?? Number.POSITIVE_INFINITY,
     );
   });
 
   it("loads the setup plugin registry from the auto-enabled config snapshot", () => {
     const runtime = makeRuntime();
-    const cfg: OpenClawConfig = {
+    const cfg: CIVITASConfig = {
       plugins: {},
       channels: { telegram: { enabled: true } } as never,
     };
@@ -406,7 +406,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
           telegram: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     applyPluginAutoEnable.mockReturnValue({
       config: autoEnabledConfig,
       changes: [],
@@ -423,7 +423,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
       config: cfg,
       env: process.env,
     });
-    expect(loadOpenClawPlugins).toHaveBeenCalledWith(
+    expect(loadCIVITASPlugins).toHaveBeenCalledWith(
       expect.objectContaining({
         config: autoEnabledConfig,
         activationSourceConfig: cfg,
@@ -434,7 +434,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
   it("scopes channel reloads when setup starts from an empty registry", () => {
     const runtime = makeRuntime();
-    const cfg: OpenClawConfig = {};
+    const cfg: CIVITASConfig = {};
     getChannelPluginCatalogEntry.mockReturnValue({ pluginId: "@civitas/telegram-plugin" });
 
     reloadChannelSetupPluginRegistryForChannel({
@@ -444,7 +444,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
       workspaceDir: "/tmp/civitas-workspace",
     });
 
-    expect(loadOpenClawPlugins).toHaveBeenCalledWith(
+    expect(loadCIVITASPlugins).toHaveBeenCalledWith(
       expect.objectContaining({
         config: cfg,
         activationSourceConfig: cfg,
@@ -459,7 +459,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
   it("keeps full reloads when the active plugin registry is already populated", () => {
     const runtime = makeRuntime();
-    const cfg: OpenClawConfig = {};
+    const cfg: CIVITASConfig = {};
     const registry = createEmptyPluginRegistry();
     registry.plugins.push(
       createPluginRecord({
@@ -479,7 +479,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
       workspaceDir: "/tmp/civitas-workspace",
     });
 
-    expect(loadOpenClawPlugins).toHaveBeenCalledWith(
+    expect(loadCIVITASPlugins).toHaveBeenCalledWith(
       expect.not.objectContaining({
         onlyPluginIds: expect.anything(),
       }),
@@ -488,7 +488,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
   it("scopes channel reloads when the global registry is populated but the pinned channel registry is empty", () => {
     const runtime = makeRuntime();
-    const cfg: OpenClawConfig = {};
+    const cfg: CIVITASConfig = {};
     getChannelPluginCatalogEntry.mockReturnValue({ pluginId: "@civitas/telegram-plugin" });
     const activeRegistry = createEmptyPluginRegistry();
     activeRegistry.plugins.push(
@@ -514,7 +514,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
       releasePinnedPluginChannelRegistry(pinnedChannelRegistry);
     }
 
-    expect(loadOpenClawPlugins).toHaveBeenCalledWith(
+    expect(loadCIVITASPlugins).toHaveBeenCalledWith(
       expect.objectContaining({
         activationSourceConfig: cfg,
         autoEnabledReasons: {},
@@ -525,7 +525,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
   it("can load a channel-scoped snapshot without activating the global registry", () => {
     const runtime = makeRuntime();
-    const cfg: OpenClawConfig = {};
+    const cfg: CIVITASConfig = {};
     getChannelPluginCatalogEntry.mockReturnValue({ pluginId: "@civitas/telegram-plugin" });
 
     loadChannelSetupPluginRegistrySnapshotForChannel({
@@ -535,7 +535,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
       workspaceDir: "/tmp/civitas-workspace",
     });
 
-    expect(loadOpenClawPlugins).toHaveBeenCalledWith(
+    expect(loadCIVITASPlugins).toHaveBeenCalledWith(
       expect.objectContaining({
         config: cfg,
         activationSourceConfig: cfg,
@@ -551,7 +551,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
   it("does not scope by raw channel id when no trusted plugin mapping exists", () => {
     const runtime = makeRuntime();
-    const cfg: OpenClawConfig = {};
+    const cfg: CIVITASConfig = {};
 
     loadChannelSetupPluginRegistrySnapshotForChannel({
       cfg,
@@ -560,7 +560,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
       workspaceDir: "/tmp/civitas-workspace",
     });
 
-    expect(loadOpenClawPlugins).toHaveBeenCalledWith(
+    expect(loadCIVITASPlugins).toHaveBeenCalledWith(
       expect.not.objectContaining({
         onlyPluginIds: expect.anything(),
       }),
@@ -569,7 +569,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
   it("scopes snapshots by a unique discovered manifest match when catalog mapping is missing", () => {
     const runtime = makeRuntime();
-    const cfg: OpenClawConfig = {};
+    const cfg: CIVITASConfig = {};
     loadPluginManifestRegistry.mockReturnValue({
       plugins: [{ id: "custom-telegram-plugin", channels: ["telegram"] }],
       diagnostics: [],
@@ -582,7 +582,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
       workspaceDir: "/tmp/civitas-workspace",
     });
 
-    expect(loadOpenClawPlugins).toHaveBeenCalledWith(
+    expect(loadCIVITASPlugins).toHaveBeenCalledWith(
       expect.objectContaining({
         config: cfg,
         activationSourceConfig: cfg,
@@ -598,7 +598,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
   it("scopes snapshots by plugin id when channel and plugin ids differ", () => {
     const runtime = makeRuntime();
-    const cfg: OpenClawConfig = {};
+    const cfg: CIVITASConfig = {};
 
     loadChannelSetupPluginRegistrySnapshotForChannel({
       cfg,
@@ -608,7 +608,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
       workspaceDir: "/tmp/civitas-workspace",
     });
 
-    expect(loadOpenClawPlugins).toHaveBeenCalledWith(
+    expect(loadCIVITASPlugins).toHaveBeenCalledWith(
       expect.objectContaining({
         config: cfg,
         activationSourceConfig: cfg,

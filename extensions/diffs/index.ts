@@ -1,8 +1,8 @@
 import path from "node:path";
 import {
   definePluginEntry,
-  resolvePreferredOpenClawTmpDir,
-  type OpenClawPluginApi,
+  resolvePreferredCIVITASTmpDir,
+  type CIVITASPluginApi,
 } from "./api.js";
 import {
   diffsPluginConfigSchema,
@@ -20,12 +20,12 @@ export default definePluginEntry({
   name: "Diffs",
   description: "Read-only diff viewer and PNG/PDF renderer for agents.",
   configSchema: diffsPluginConfigSchema,
-  register(api: OpenClawPluginApi) {
+  register(api: CIVITASPluginApi) {
     const defaults = resolveDiffsPluginDefaults(api.pluginConfig);
     const security = resolveDiffsPluginSecurity(api.pluginConfig);
     const viewerBaseUrl = resolveDiffsPluginViewerBaseUrl(api.pluginConfig);
     const store = new DiffArtifactStore({
-      rootDir: path.join(resolvePreferredOpenClawTmpDir(), "civitas-diffs"),
+      rootDir: path.join(resolvePreferredCIVITASTmpDir(), "civitas-diffs"),
       logger: api.logger,
     });
 

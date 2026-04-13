@@ -1,16 +1,16 @@
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import { emptyPluginConfigSchema } from "../plugins/config-schema.js";
 import type {
   AnyAgentTool,
   MediaUnderstandingProviderPlugin,
-  OpenClawPluginApi,
-  OpenClawPluginCommandDefinition,
-  OpenClawPluginConfigSchema,
-  OpenClawPluginDefinition,
-  OpenClawPluginService,
-  OpenClawPluginServiceContext,
-  OpenClawPluginToolContext,
-  OpenClawPluginToolFactory,
+  CIVITASPluginApi,
+  CIVITASPluginCommandDefinition,
+  CIVITASPluginConfigSchema,
+  CIVITASPluginDefinition,
+  CIVITASPluginService,
+  CIVITASPluginServiceContext,
+  CIVITASPluginToolContext,
+  CIVITASPluginToolFactory,
   PluginLogger,
   ProviderAugmentModelCatalogContext,
   ProviderAuthContext,
@@ -70,11 +70,11 @@ import { createCachedLazyValueGetter } from "./lazy-value.js";
 export type {
   AnyAgentTool,
   MediaUnderstandingProviderPlugin,
-  OpenClawPluginApi,
-  OpenClawPluginToolContext,
-  OpenClawPluginToolFactory,
+  CIVITASPluginApi,
+  CIVITASPluginToolContext,
+  CIVITASPluginToolFactory,
   PluginCommandContext,
-  OpenClawPluginConfigSchema,
+  CIVITASPluginConfigSchema,
   ProviderDiscoveryContext,
   ProviderCatalogContext,
   ProviderCatalogResult,
@@ -121,18 +121,18 @@ export type {
   ProviderValidateReplayTurnsContext,
   ProviderWebSocketSessionPolicy,
   ProviderWrapStreamFnContext,
-  OpenClawPluginService,
-  OpenClawPluginServiceContext,
+  CIVITASPluginService,
+  CIVITASPluginServiceContext,
   ProviderAuthContext,
   ProviderAuthDoctorHintContext,
   ProviderAuthMethodNonInteractiveContext,
   ProviderAuthMethod,
   ProviderAuthResult,
-  OpenClawPluginCommandDefinition,
-  OpenClawPluginDefinition,
+  CIVITASPluginCommandDefinition,
+  CIVITASPluginDefinition,
   PluginLogger,
 };
-export type { OpenClawConfig };
+export type { CIVITASConfig };
 
 export { emptyPluginConfigSchema } from "../plugins/config-schema.js";
 
@@ -141,19 +141,19 @@ type DefinePluginEntryOptions = {
   id: string;
   name: string;
   description: string;
-  kind?: OpenClawPluginDefinition["kind"];
-  configSchema?: OpenClawPluginConfigSchema | (() => OpenClawPluginConfigSchema);
-  register: (api: OpenClawPluginApi) => void;
+  kind?: CIVITASPluginDefinition["kind"];
+  configSchema?: CIVITASPluginConfigSchema | (() => CIVITASPluginConfigSchema);
+  register: (api: CIVITASPluginApi) => void;
 };
 
-/** Normalized object shape that OpenClaw loads from a plugin entry module. */
+/** Normalized object shape that CIVITAS loads from a plugin entry module. */
 type DefinedPluginEntry = {
   id: string;
   name: string;
   description: string;
-  configSchema: OpenClawPluginConfigSchema;
-  register: NonNullable<OpenClawPluginDefinition["register"]>;
-} & Pick<OpenClawPluginDefinition, "kind">;
+  configSchema: CIVITASPluginConfigSchema;
+  register: NonNullable<CIVITASPluginDefinition["register"]>;
+} & Pick<CIVITASPluginDefinition, "kind">;
 
 /**
  * Canonical entry helper for non-channel plugins.

@@ -19,21 +19,21 @@ const mocks = vi.hoisted(() => {
   };
   return {
     runtime,
-    serveOpenClawChannelMcp: vi.fn(),
+    serveCIVITASChannelMcp: vi.fn(),
   };
 });
 
 const defaultRuntime = mocks.runtime;
 const mockLog = defaultRuntime.log;
 const mockError = defaultRuntime.error;
-const serveOpenClawChannelMcp = mocks.serveOpenClawChannelMcp;
+const serveCIVITASChannelMcp = mocks.serveCIVITASChannelMcp;
 
 vi.mock("../runtime.js", () => ({
   defaultRuntime: mocks.runtime,
 }));
 
 vi.mock("../mcp/channel-server.js", () => ({
-  serveOpenClawChannelMcp: mocks.serveOpenClawChannelMcp,
+  serveCIVITASChannelMcp: mocks.serveCIVITASChannelMcp,
 }));
 
 const tempDirs: string[] = [];
@@ -113,7 +113,7 @@ describe("mcp cli", () => {
         "--verbose",
       ]);
 
-      expect(serveOpenClawChannelMcp).toHaveBeenCalledWith({
+      expect(serveCIVITASChannelMcp).toHaveBeenCalledWith({
         gatewayUrl: "ws://127.0.0.1:18789",
         gatewayToken: "secret-token",
         gatewayPassword: undefined,

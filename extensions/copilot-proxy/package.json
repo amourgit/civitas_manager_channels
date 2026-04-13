@@ -2,7 +2,7 @@
   "name": "@civitas/copilot-proxy",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw Copilot Proxy provider plugin",
+  "description": "CIVITAS Copilot Proxy provider plugin",
   "type": "module",
   "civitas": {
     "extensions": [

@@ -1,5 +1,5 @@
 import { type Block, type KnownBlock, type WebClient } from "@slack/web-api";
-import { loadConfig, type OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import { loadConfig, type CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { resolveMarkdownTableMode } from "civitas/plugin-sdk/config-runtime";
 import { withTrustedEnvProxyGuardedFetchMode } from "civitas/plugin-sdk/fetch-runtime";
 import {
@@ -45,7 +45,7 @@ export type SlackSendIdentity = {
 };
 
 type SlackSendOpts = {
-  cfg?: OpenClawConfig;
+  cfg?: CIVITASConfig;
   token?: string;
   accountId?: string;
   mediaUrl?: string;

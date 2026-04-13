@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { describe, expect, it } from "vitest";
 import { createPluginSetupWizardStatus } from "../../../test/helpers/plugins/setup-wizard.js";
 import { qqbotSetupPlugin } from "./channel.setup.js";
@@ -21,7 +21,7 @@ describe("qqbot setup", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
     });
 
     expect(configured).toBe(true);
@@ -40,7 +40,7 @@ describe("qqbot setup", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
     });
 
     expect(configured).toBe(true);
@@ -64,7 +64,7 @@ describe("qqbot setup", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
       accountOverrides: {
         qqbot: "bot2",
       },
@@ -86,7 +86,7 @@ describe("qqbot setup", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     const account = qqbotSetupPlugin.config.resolveAccount?.(cfg, DEFAULT_ACCOUNT_ID);
 
@@ -103,7 +103,7 @@ describe("qqbot setup", () => {
           clientSecret: "secret-from-config",
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     const next = await qqbotSetupWizard.credentials[1]!.applyUseEnv!({
       cfg,
@@ -143,7 +143,7 @@ describe("qqbot setup", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as CIVITASConfig,
         accountId: undefined,
       } as never),
     ).toBe("bot2");

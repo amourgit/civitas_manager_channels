@@ -2,7 +2,7 @@ import { migrateVoiceCallLegacyConfigInput } from "../../extensions/voice-call/c
 import { normalizeProviderId } from "../agents/model-selection.js";
 import { isDeepStrictEqual } from "node:util";
 import { shouldMoveSingleAccountChannelKey } from "../channels/plugins/setup-helpers.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import { resolveNormalizedProviderModelMaxTokens } from "../config/defaults.js";
 import { migrateLegacyWebFetchConfig } from "../config/legacy-web-fetch.js";
 import { migrateLegacyWebSearchConfig } from "../config/legacy-web-search.js";
@@ -11,14 +11,14 @@ import { LEGACY_TALK_PROVIDER_ID, normalizeTalkSection } from "../config/talk.js
 import { DEFAULT_GOOGLE_API_BASE_URL } from "../infra/google-api-base-url.js";
 import { DEFAULT_ACCOUNT_ID } from "../routing/session-key.js";
 
-export function normalizeCompatibilityConfigValues(cfg: OpenClawConfig): {
-  config: OpenClawConfig;
+export function normalizeCompatibilityConfigValues(cfg: CIVITASConfig): {
+  config: CIVITASConfig;
   changes: string[];
 } {
   const changes: string[] = [];
   const NANO_BANANA_SKILL_KEY = "nano-banana-pro";
   const NANO_BANANA_MODEL = "google/gemini-3-pro-image-preview";
-  let next: OpenClawConfig = cfg;
+  let next: CIVITASConfig = cfg;
 
   const isRecord = (value: unknown): value is Record<string, unknown> =>
     Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -180,7 +180,7 @@ export function normalizeCompatibilityConfigValues(cfg: OpenClawConfig): {
     }
     next = {
       ...next,
-      channels: nextChannels as OpenClawConfig["channels"],
+      channels: nextChannels as CIVITASConfig["channels"],
     };
   };
 
@@ -239,7 +239,7 @@ export function normalizeCompatibilityConfigValues(cfg: OpenClawConfig): {
 
     next = {
       ...next,
-      browser: migratedBrowser as OpenClawConfig["browser"],
+      browser: migratedBrowser as CIVITASConfig["browser"],
     };
     changes.push(
       `Moved browser.ssrfPolicy.allowPrivateNetwork → browser.ssrfPolicy.dangerouslyAllowPrivateNetwork (${String(resolvedDangerousAllowPrivateNetwork)}).`,
@@ -248,9 +248,9 @@ export function normalizeCompatibilityConfigValues(cfg: OpenClawConfig): {
 
   const normalizeLegacyNanoBananaSkill = () => {
     type ModelProviderEntry = Partial<
-      NonNullable<NonNullable<OpenClawConfig["models"]>["providers"]>[string]
+      NonNullable<NonNullable<CIVITASConfig["models"]>["providers"]>[string]
     >;
-    type ModelsConfigPatch = Partial<NonNullable<OpenClawConfig["models"]>>;
+    type ModelsConfigPatch = Partial<NonNullable<CIVITASConfig["models"]>>;
 
     const rawSkills = next.skills;
     if (!isRecord(rawSkills)) {
@@ -341,10 +341,10 @@ export function normalizeCompatibilityConfigValues(cfg: OpenClawConfig): {
         rawGoogle.models = [];
       }
       rawProviders.google = rawGoogle;
-      rawModels.providers = rawProviders as NonNullable<OpenClawConfig["models"]>["providers"];
+      rawModels.providers = rawProviders as NonNullable<CIVITASConfig["models"]>["providers"];
       next = {
         ...next,
-        models: rawModels as OpenClawConfig["models"],
+        models: rawModels as CIVITASConfig["models"],
       };
       changes.push(
         `Moved skills.entries.${NANO_BANANA_SKILL_KEY}.${legacyEnvApiKey ? "env.GEMINI_API_KEY" : "apiKey"} → models.providers.google.apiKey.`,
@@ -382,7 +382,7 @@ export function normalizeCompatibilityConfigValues(cfg: OpenClawConfig): {
       return;
     }
 
-    const normalizedTalk = normalizeTalkSection(rawTalk as OpenClawConfig["talk"]);
+    const normalizedTalk = normalizeTalkSection(rawTalk as CIVITASConfig["talk"]);
     if (!normalizedTalk) {
       return;
     }
@@ -565,7 +565,7 @@ export function normalizeCompatibilityConfigValues(cfg: OpenClawConfig): {
       ...next,
       tools: {
         ...next.tools,
-        media: nextMedia as NonNullable<OpenClawConfig["tools"]>["media"],
+        media: nextMedia as NonNullable<CIVITASConfig["tools"]>["media"],
       },
     };
   };
@@ -644,7 +644,7 @@ export function normalizeCompatibilityConfigValues(cfg: OpenClawConfig): {
       ...next,
       models: {
         ...next.models,
-        providers: nextProviders as NonNullable<OpenClawConfig["models"]>["providers"],
+        providers: nextProviders as NonNullable<CIVITASConfig["models"]>["providers"],
       },
     };
   };

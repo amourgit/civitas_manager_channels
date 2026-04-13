@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import plugin from "../index.js";
 
@@ -78,7 +78,7 @@ describe("ollama web search provider", () => {
         JSON.stringify({
           results: [
             {
-              title: "OpenClaw",
+              title: "CIVITAS",
               url: "https://civitas.ai/docs",
               content: "Gateway docs and setup details",
             },
@@ -155,7 +155,7 @@ describe("ollama web search provider", () => {
     fetchWithSsrFGuardMock.mockRejectedValueOnce(new Error("connect failed"));
 
     const notes: Array<{ title?: string; message: string }> = [];
-    const config: OpenClawConfig = {
+    const config: CIVITASConfig = {
       models: {
         providers: {
           ollama: {
@@ -232,7 +232,7 @@ describe("ollama web search provider", () => {
       });
 
     const notes: Array<{ title?: string; message: string }> = [];
-    const config: OpenClawConfig = {
+    const config: CIVITASConfig = {
       models: {
         providers: {
           ollama: {

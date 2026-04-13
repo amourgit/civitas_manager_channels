@@ -13,7 +13,7 @@ import {
 
 const ROOT_DIR = path.parse(process.cwd()).root;
 const CONFIG_DIR = path.join(ROOT_DIR, "config");
-const ETC_OPENCLAW_DIR = path.join(ROOT_DIR, "etc", "civitas");
+const ETC_CIVITAS_DIR = path.join(ROOT_DIR, "etc", "civitas");
 const SHARED_DIR = path.join(ROOT_DIR, "shared");
 
 const DEFAULT_BASE_PATH = path.join(CONFIG_DIR, "civitas.json");
@@ -22,8 +22,8 @@ function configPath(...parts: string[]) {
   return path.join(CONFIG_DIR, ...parts);
 }
 
-function etcOpenClawPath(...parts: string[]) {
-  return path.join(ETC_OPENCLAW_DIR, ...parts);
+function etcCIVITASPath(...parts: string[]) {
+  return path.join(ETC_CIVITAS_DIR, ...parts);
 }
 
 function sharedPath(...parts: string[]) {
@@ -80,7 +80,7 @@ describe("resolveConfigIncludes", () => {
   });
 
   it("rejects absolute path outside config directory (CWE-22)", () => {
-    const absolute = etcOpenClawPath("agents.json");
+    const absolute = etcCIVITASPath("agents.json");
     const files = { [absolute]: { list: [{ id: "main" }] } };
     const obj = { agents: { $include: absolute } };
     expectResolveIncludeError(() => resolve(obj, files), /escapes config directory/);

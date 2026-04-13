@@ -10,7 +10,7 @@ import {
   splitSetupEntries,
   type ChannelSetupDmPolicy,
   type ChannelSetupWizard,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "civitas/plugin-sdk/setup";
 import {
   listGoogleChatAccountIds,

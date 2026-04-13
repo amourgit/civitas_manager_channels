@@ -92,14 +92,14 @@ describe("parseCliContainerArgs", () => {
 });
 
 describe("resolveCliContainerTarget", () => {
-  it("uses argv first and falls back to OPENCLAW_CONTAINER", () => {
+  it("uses argv first and falls back to CIVITAS_CONTAINER", () => {
     expect(
       resolveCliContainerTarget(["node", "civitas", "--container", "demo", "status"], {}),
     ).toBe("demo");
     expect(resolveCliContainerTarget(["node", "civitas", "status"], {})).toBeNull();
     expect(
       resolveCliContainerTarget(["node", "civitas", "status"], {
-        OPENCLAW_CONTAINER: "demo",
+        CIVITAS_CONTAINER: "demo",
       } as NodeJS.ProcessEnv),
     ).toBe("demo");
   });
@@ -113,7 +113,7 @@ describe("maybeRunCliInContainer", () => {
     });
   });
 
-  it("uses OPENCLAW_CONTAINER when the flag is absent", () => {
+  it("uses CIVITAS_CONTAINER when the flag is absent", () => {
     const spawnSync = vi
       .fn()
       .mockReturnValueOnce({
@@ -131,7 +131,7 @@ describe("maybeRunCliInContainer", () => {
 
     expect(
       maybeRunCliInContainer(["node", "civitas", "status"], {
-        env: { OPENCLAW_CONTAINER: "demo" } as NodeJS.ProcessEnv,
+        env: { CIVITAS_CONTAINER: "demo" } as NodeJS.ProcessEnv,
         spawnSync,
       }),
     ).toEqual({
@@ -146,9 +146,9 @@ describe("maybeRunCliInContainer", () => {
         "exec",
         "-i",
         "--env",
-        "OPENCLAW_CONTAINER_HINT=demo",
+        "CIVITAS_CONTAINER_HINT=demo",
         "--env",
-        "OPENCLAW_CLI_CONTAINER_BYPASS=1",
+        "CIVITAS_CLI_CONTAINER_BYPASS=1",
         "demo",
         "civitas",
         "status",
@@ -156,7 +156,7 @@ describe("maybeRunCliInContainer", () => {
       {
         stdio: "inherit",
         env: {
-          OPENCLAW_CONTAINER: "",
+          CIVITAS_CONTAINER: "",
         },
       },
     );
@@ -180,12 +180,12 @@ describe("maybeRunCliInContainer", () => {
 
     maybeRunCliInContainer(["node", "civitas", "status"], {
       env: {
-        OPENCLAW_CONTAINER: "demo",
-        OPENCLAW_PROFILE: "work",
-        OPENCLAW_GATEWAY_PORT: "19001",
-        OPENCLAW_GATEWAY_URL: "ws://127.0.0.1:18789",
-        OPENCLAW_GATEWAY_TOKEN: "token",
-        OPENCLAW_GATEWAY_PASSWORD: "password",
+        CIVITAS_CONTAINER: "demo",
+        CIVITAS_PROFILE: "work",
+        CIVITAS_GATEWAY_PORT: "19001",
+        CIVITAS_GATEWAY_URL: "ws://127.0.0.1:18789",
+        CIVITAS_GATEWAY_TOKEN: "token",
+        CIVITAS_GATEWAY_PASSWORD: "password",
       } as NodeJS.ProcessEnv,
       spawnSync,
     });
@@ -197,9 +197,9 @@ describe("maybeRunCliInContainer", () => {
         "exec",
         "-i",
         "--env",
-        "OPENCLAW_CONTAINER_HINT=demo",
+        "CIVITAS_CONTAINER_HINT=demo",
         "--env",
-        "OPENCLAW_CLI_CONTAINER_BYPASS=1",
+        "CIVITAS_CLI_CONTAINER_BYPASS=1",
         "demo",
         "civitas",
         "status",
@@ -207,7 +207,7 @@ describe("maybeRunCliInContainer", () => {
       {
         stdio: "inherit",
         env: {
-          OPENCLAW_CONTAINER: "",
+          CIVITAS_CONTAINER: "",
         },
       },
     );
@@ -252,16 +252,16 @@ describe("maybeRunCliInContainer", () => {
         "exec",
         "-i",
         "--env",
-        "OPENCLAW_CONTAINER_HINT=demo",
+        "CIVITAS_CONTAINER_HINT=demo",
         "--env",
-        "OPENCLAW_CLI_CONTAINER_BYPASS=1",
+        "CIVITAS_CLI_CONTAINER_BYPASS=1",
         "demo",
         "civitas",
         "status",
       ],
       {
         stdio: "inherit",
-        env: { OPENCLAW_CONTAINER: "" },
+        env: { CIVITAS_CONTAINER: "" },
       },
     );
   });
@@ -305,16 +305,16 @@ describe("maybeRunCliInContainer", () => {
         "exec",
         "-i",
         "-e",
-        "OPENCLAW_CONTAINER_HINT=demo",
+        "CIVITAS_CONTAINER_HINT=demo",
         "-e",
-        "OPENCLAW_CLI_CONTAINER_BYPASS=1",
+        "CIVITAS_CLI_CONTAINER_BYPASS=1",
         "demo",
         "civitas",
         "health",
       ],
       {
         stdio: "inherit",
-        env: { USER: "civitas", OPENCLAW_CONTAINER: "" },
+        env: { USER: "civitas", CIVITAS_CONTAINER: "" },
       },
     );
   });
@@ -368,16 +368,16 @@ describe("maybeRunCliInContainer", () => {
         "exec",
         "-i",
         "-e",
-        "OPENCLAW_CONTAINER_HINT=demo",
+        "CIVITAS_CONTAINER_HINT=demo",
         "-e",
-        "OPENCLAW_CLI_CONTAINER_BYPASS=1",
+        "CIVITAS_CLI_CONTAINER_BYPASS=1",
         "demo",
         "civitas",
         "status",
       ],
       {
         stdio: "inherit",
-        env: { USER: "somalley", OPENCLAW_CONTAINER: "" },
+        env: { USER: "somalley", CIVITAS_CONTAINER: "" },
       },
     );
     expect(spawnSync).toHaveBeenCalledTimes(3);
@@ -474,21 +474,21 @@ describe("maybeRunCliInContainer", () => {
         "-i",
         "-t",
         "--env",
-        "OPENCLAW_CONTAINER_HINT=demo",
+        "CIVITAS_CONTAINER_HINT=demo",
         "--env",
-        "OPENCLAW_CLI_CONTAINER_BYPASS=1",
+        "CIVITAS_CLI_CONTAINER_BYPASS=1",
         "demo",
         "civitas",
         "setup",
       ],
       {
         stdio: "inherit",
-        env: { OPENCLAW_CONTAINER: "" },
+        env: { CIVITAS_CONTAINER: "" },
       },
     );
   });
 
-  it("prefers --container over OPENCLAW_CONTAINER", () => {
+  it("prefers --container over CIVITAS_CONTAINER", () => {
     const spawnSync = vi
       .fn()
       .mockReturnValueOnce({
@@ -506,7 +506,7 @@ describe("maybeRunCliInContainer", () => {
 
     expect(
       maybeRunCliInContainer(["node", "civitas", "--container", "flag-demo", "health"], {
-        env: { OPENCLAW_CONTAINER: "env-demo" } as NodeJS.ProcessEnv,
+        env: { CIVITAS_CONTAINER: "env-demo" } as NodeJS.ProcessEnv,
         spawnSync,
       }),
     ).toEqual({
@@ -539,7 +539,7 @@ describe("maybeRunCliInContainer", () => {
   it("skips recursion when the bypass env is set", () => {
     expect(
       maybeRunCliInContainer(["node", "civitas", "--container", "demo", "status"], {
-        env: { OPENCLAW_CLI_CONTAINER_BYPASS: "1" } as NodeJS.ProcessEnv,
+        env: { CIVITAS_CLI_CONTAINER_BYPASS: "1" } as NodeJS.ProcessEnv,
       }),
     ).toEqual({
       handled: false,

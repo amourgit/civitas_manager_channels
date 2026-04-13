@@ -1,6 +1,6 @@
 import { Type } from "@sinclair/typebox";
 import { getRuntimeConfigSnapshot } from "civitas/plugin-sdk/config-runtime";
-import type { OpenClawConfig } from "civitas/plugin-sdk/plugin-entry";
+import type { CIVITASConfig } from "civitas/plugin-sdk/plugin-entry";
 import { jsonResult, readStringParam } from "civitas/plugin-sdk/provider-web-search";
 import {
   buildXaiCodeExecutionPayload,
@@ -11,7 +11,7 @@ import {
 import { isXaiToolEnabled, resolveXaiToolApiKey } from "./src/tool-auth-shared.js";
 
 type XaiPluginConfig = NonNullable<
-  NonNullable<OpenClawConfig["plugins"]>["entries"]
+  NonNullable<CIVITASConfig["plugins"]>["entries"]
 >["xai"] extends {
   config?: infer Config;
 }
@@ -31,7 +31,7 @@ function readCodeExecutionConfigRecord(
   return config && typeof config === "object" ? (config as Record<string, unknown>) : undefined;
 }
 
-function readPluginCodeExecutionConfig(cfg?: OpenClawConfig): CodeExecutionConfig | undefined {
+function readPluginCodeExecutionConfig(cfg?: CIVITASConfig): CodeExecutionConfig | undefined {
   const entries = cfg?.plugins?.entries;
   if (!entries || typeof entries !== "object") {
     return undefined;
@@ -52,8 +52,8 @@ function readPluginCodeExecutionConfig(cfg?: OpenClawConfig): CodeExecutionConfi
 }
 
 function resolveCodeExecutionEnabled(params: {
-  sourceConfig?: OpenClawConfig;
-  runtimeConfig?: OpenClawConfig;
+  sourceConfig?: CIVITASConfig;
+  runtimeConfig?: CIVITASConfig;
   config?: CodeExecutionConfig;
 }): boolean {
   return isXaiToolEnabled({
@@ -64,8 +64,8 @@ function resolveCodeExecutionEnabled(params: {
 }
 
 export function createCodeExecutionTool(options?: {
-  config?: OpenClawConfig;
-  runtimeConfig?: OpenClawConfig | null;
+  config?: CIVITASConfig;
+  runtimeConfig?: CIVITASConfig | null;
 }) {
   const runtimeConfig = options?.runtimeConfig ?? getRuntimeConfigSnapshot();
   const codeExecutionConfig =

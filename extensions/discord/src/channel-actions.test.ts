@@ -1,6 +1,6 @@
 import { Type } from "@sinclair/typebox";
 import type { ChannelMessageActionContext } from "civitas/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { describe, expect, it, vi } from "vitest";
 
 const handleDiscordMessageActionMock = vi.hoisted(() =>
@@ -22,7 +22,7 @@ describe("discordMessageActions", () => {
             enabled: true,
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
     });
 
     expect(discovery).toEqual({
@@ -47,7 +47,7 @@ describe("discordMessageActions", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
     });
 
     expect(discovery?.capabilities).toEqual(["interactive", "components"]);
@@ -79,7 +79,7 @@ describe("discordMessageActions", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     const defaultDiscovery = discordMessageActions.describeMessageTool?.({
       cfg,
@@ -106,7 +106,7 @@ describe("discordMessageActions", () => {
             token: "Bot token-main",
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
     });
     const schema = discovery?.schema;
     if (!schema || Array.isArray(schema)) {
@@ -143,7 +143,7 @@ describe("discordMessageActions", () => {
           token: "Bot token-main",
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const toolContext: ChannelMessageActionContext["toolContext"] = {
       currentChannelProvider: "discord",
     };

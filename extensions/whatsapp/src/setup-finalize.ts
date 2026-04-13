@@ -6,7 +6,7 @@ import {
   pathExists,
   splitSetupEntries,
   type DmPolicy,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "civitas/plugin-sdk/setup";
 import type { ChannelSetupWizard } from "civitas/plugin-sdk/setup";
 import { formatCliCommand, formatDocsLink } from "civitas/plugin-sdk/setup-tools";
@@ -20,15 +20,15 @@ import { whatsappSetupAdapter } from "./setup-core.js";
 
 type SetupPrompter = Parameters<NonNullable<ChannelSetupWizard["finalize"]>>[0]["prompter"];
 type SetupRuntime = Parameters<NonNullable<ChannelSetupWizard["finalize"]>>[0]["runtime"];
-type WhatsAppConfig = NonNullable<NonNullable<OpenClawConfig["channels"]>["whatsapp"]>;
+type WhatsAppConfig = NonNullable<NonNullable<CIVITASConfig["channels"]>["whatsapp"]>;
 type WhatsAppAccountConfig = NonNullable<NonNullable<WhatsAppConfig["accounts"]>[string]>;
 
 function mergeWhatsAppConfig(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId: string,
   patch: Partial<WhatsAppAccountConfig>,
   options?: { unsetOnUndefined?: string[] },
-): OpenClawConfig {
+): CIVITASConfig {
   const channelConfig: WhatsAppConfig = { ...(cfg.channels?.whatsapp ?? {}) };
   const mutableChannelConfig = channelConfig as Record<string, unknown>;
   if (accountId === DEFAULT_ACCOUNT_ID) {
@@ -77,31 +77,31 @@ function mergeWhatsAppConfig(
 }
 
 function setWhatsAppDmPolicy(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId: string,
   dmPolicy: DmPolicy,
-): OpenClawConfig {
+): CIVITASConfig {
   return mergeWhatsAppConfig(cfg, accountId, { dmPolicy });
 }
 
 function setWhatsAppAllowFrom(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId: string,
   allowFrom?: string[],
-): OpenClawConfig {
+): CIVITASConfig {
   return mergeWhatsAppConfig(cfg, accountId, { allowFrom }, { unsetOnUndefined: ["allowFrom"] });
 }
 
 function setWhatsAppSelfChatMode(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId: string,
   selfChatMode: boolean,
-): OpenClawConfig {
+): CIVITASConfig {
   return mergeWhatsAppConfig(cfg, accountId, { selfChatMode });
 }
 
 export async function detectWhatsAppLinked(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId: string,
 ): Promise<boolean> {
   const { authDir } = resolveWhatsAppAuthDir({ cfg, accountId });
@@ -116,7 +116,7 @@ async function promptWhatsAppOwnerAllowFrom(params: {
   const { prompter, existingAllowFrom } = params;
 
   await prompter.note(
-    "We need the sender/owner number so OpenClaw can allowlist you.",
+    "We need the sender/owner number so CIVITAS can allowlist you.",
     "WhatsApp number",
   );
   const entry = await prompter.text({
@@ -148,13 +148,13 @@ async function promptWhatsAppOwnerAllowFrom(params: {
 }
 
 async function applyWhatsAppOwnerAllowlist(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
   existingAllowFrom: string[];
   messageLines: string[];
   prompter: SetupPrompter;
   title: string;
-}): Promise<OpenClawConfig> {
+}): Promise<CIVITASConfig> {
   const { normalized, allowFrom } = await promptWhatsAppOwnerAllowFrom({
     prompter: params.prompter,
     existingAllowFrom: params.existingAllowFrom,
@@ -190,11 +190,11 @@ function parseWhatsAppAllowFromEntries(raw: string): { entries: string[]; invali
 }
 
 async function promptWhatsAppDmAccess(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
   forceAllowFrom: boolean;
   prompter: SetupPrompter;
-}): Promise<OpenClawConfig> {
+}): Promise<CIVITASConfig> {
   const accountId = params.accountId.trim() || DEFAULT_ACCOUNT_ID;
   const account = resolveWhatsAppAccount({ cfg: params.cfg, accountId });
   const existingPolicy = account.dmPolicy ?? "pairing";
@@ -238,7 +238,7 @@ async function promptWhatsAppDmAccess(params: {
     message: "WhatsApp phone setup",
     options: [
       { value: "personal", label: "This is my personal phone number" },
-      { value: "separate", label: "Separate phone just for OpenClaw" },
+      { value: "separate", label: "Separate phone just for CIVITAS" },
     ],
   });
 
@@ -331,7 +331,7 @@ async function promptWhatsAppDmAccess(params: {
 }
 
 export async function finalizeWhatsAppSetup(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
   forceAllowFrom: boolean;
   prompter: SetupPrompter;

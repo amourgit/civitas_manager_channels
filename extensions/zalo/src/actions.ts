@@ -3,7 +3,7 @@ import type {
   ChannelMessageActionAdapter,
   ChannelMessageActionName,
 } from "civitas/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { createLazyRuntimeNamedExport } from "civitas/plugin-sdk/lazy-runtime";
 import { extractToolSend } from "civitas/plugin-sdk/tool-send";
 import { listEnabledZaloAccounts, resolveZaloAccount } from "./accounts.js";
@@ -15,7 +15,7 @@ const loadZaloActionsRuntime = createLazyRuntimeNamedExport(
 
 const providerId = "zalo";
 
-function listEnabledAccounts(cfg: OpenClawConfig, accountId?: string | null) {
+function listEnabledAccounts(cfg: CIVITASConfig, accountId?: string | null) {
   return (
     accountId ? [resolveZaloAccount({ cfg, accountId })] : listEnabledZaloAccounts(cfg)
   ).filter((account) => account.enabled && account.tokenSource !== "none");

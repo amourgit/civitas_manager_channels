@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { beforeEach, describe, expect, it } from "vitest";
 import { installedPluginRoot } from "../../test/helpers/bundled-plugin-paths.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import {
   applyExclusiveSlotSelection,
   buildPluginDiagnosticsReport,
@@ -11,13 +11,13 @@ import {
   enablePluginInConfig,
   installHooksFromPath,
   installHooksFromNpmSpec,
-  installPluginFromClawHub,
+  installPluginFromChannelHub,
   installPluginFromMarketplace,
   installPluginFromNpmSpec,
   installPluginFromPath,
   loadConfig,
   readConfigFileSnapshot,
-  parseClawHubPluginSpec,
+  parseChannelHubPluginSpec,
   recordHookInstall,
   recordPluginInstall,
   resetPluginsCliTestState,
@@ -33,7 +33,7 @@ function cliInstallPath(pluginId: string): string {
   return installedPluginRoot(CLI_STATE_ROOT, pluginId);
 }
 
-function createEnabledPluginConfig(pluginId: string): OpenClawConfig {
+function createEnabledPluginConfig(pluginId: string): CIVITASConfig {
   return {
     plugins: {
       entries: {
@@ -42,13 +42,13 @@ function createEnabledPluginConfig(pluginId: string): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as CIVITASConfig;
 }
 
-function createClawHubInstalledConfig(params: {
+function createChannelHubInstalledConfig(params: {
   pluginId: string;
   install: Record<string, unknown>;
-}): OpenClawConfig {
+}): CIVITASConfig {
   const enabledCfg = createEnabledPluginConfig(params.pluginId);
   return {
     ...enabledCfg,
@@ -58,27 +58,27 @@ function createClawHubInstalledConfig(params: {
         [params.pluginId]: params.install,
       },
     },
-  } as OpenClawConfig;
+  } as CIVITASConfig;
 }
 
-function createClawHubInstallResult(params: {
+function createChannelHubInstallResult(params: {
   pluginId: string;
   packageName: string;
   version: string;
   channel: string;
-}): Awaited<ReturnType<typeof installPluginFromClawHub>> {
+}): Awaited<ReturnType<typeof installPluginFromChannelHub>> {
   return {
     ok: true,
     pluginId: params.pluginId,
     targetDir: cliInstallPath(params.pluginId),
     version: params.version,
     packageName: params.packageName,
-    clawhub: {
-      source: "clawhub",
-      clawhubUrl: "https://clawhub.ai",
-      clawhubPackage: params.packageName,
-      clawhubFamily: "code-plugin",
-      clawhubChannel: params.channel,
+    CIVITAS Channelhub: {
+      source: "CIVITAS Channelhub",
+      CIVITAS ChannelhubUrl: "https://CIVITAS Channelhub.ai",
+      CIVITAS ChannelhubPackage: params.packageName,
+      CIVITAS ChannelhubFamily: "code-plugin",
+      CIVITAS ChannelhubChannel: params.channel,
       version: params.version,
       integrity: "sha256-abc",
       resolvedAt: "2026-03-22T00:00:00.000Z",
@@ -174,7 +174,7 @@ describe("plugins cli install", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const enabledCfg = {
       plugins: {
         entries: {
@@ -183,7 +183,7 @@ describe("plugins cli install", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const installedCfg = {
       ...enabledCfg,
       plugins: {
@@ -195,7 +195,7 @@ describe("plugins cli install", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     loadConfig.mockReturnValue(cfg);
     installPluginFromMarketplace.mockResolvedValue({
@@ -241,29 +241,29 @@ describe("plugins cli install", () => {
     );
   });
 
-  it("installs ClawHub plugins and persists source metadata", async () => {
+  it("installs ChannelHub plugins and persists source metadata", async () => {
     const cfg = {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const enabledCfg = createEnabledPluginConfig("demo");
-    const installedCfg = createClawHubInstalledConfig({
+    const installedCfg = createChannelHubInstalledConfig({
       pluginId: "demo",
       install: {
-        source: "clawhub",
-        spec: "clawhub:demo@1.2.3",
+        source: "CIVITAS Channelhub",
+        spec: "CIVITAS Channelhub:demo@1.2.3",
         installPath: cliInstallPath("demo"),
-        clawhubPackage: "demo",
-        clawhubFamily: "code-plugin",
-        clawhubChannel: "official",
+        CIVITAS ChannelhubPackage: "demo",
+        CIVITAS ChannelhubFamily: "code-plugin",
+        CIVITAS ChannelhubChannel: "official",
       },
     });
 
     loadConfig.mockReturnValue(cfg);
-    parseClawHubPluginSpec.mockReturnValue({ name: "demo" });
-    installPluginFromClawHub.mockResolvedValue(
-      createClawHubInstallResult({
+    parseChannelHubPluginSpec.mockReturnValue({ name: "demo" });
+    installPluginFromChannelHub.mockResolvedValue(
+      createChannelHubInstallResult({
         pluginId: "demo",
         packageName: "demo",
         version: "1.2.3",
@@ -277,22 +277,22 @@ describe("plugins cli install", () => {
       warnings: [],
     });
 
-    await runPluginsCommand(["plugins", "install", "clawhub:demo"]);
+    await runPluginsCommand(["plugins", "install", "CIVITAS Channelhub:demo"]);
 
-    expect(installPluginFromClawHub).toHaveBeenCalledWith(
+    expect(installPluginFromChannelHub).toHaveBeenCalledWith(
       expect.objectContaining({
-        spec: "clawhub:demo",
+        spec: "CIVITAS Channelhub:demo",
       }),
     );
     expect(recordPluginInstall).toHaveBeenCalledWith(
       enabledCfg,
       expect.objectContaining({
         pluginId: "demo",
-        source: "clawhub",
-        spec: "clawhub:demo@1.2.3",
-        clawhubPackage: "demo",
-        clawhubFamily: "code-plugin",
-        clawhubChannel: "official",
+        source: "CIVITAS Channelhub",
+        spec: "CIVITAS Channelhub:demo@1.2.3",
+        CIVITAS ChannelhubPackage: "demo",
+        CIVITAS ChannelhubFamily: "code-plugin",
+        CIVITAS ChannelhubChannel: "official",
       }),
     );
     expect(writeConfigFile).toHaveBeenCalledWith(installedCfg);
@@ -300,18 +300,18 @@ describe("plugins cli install", () => {
     expect(installPluginFromNpmSpec).not.toHaveBeenCalled();
   });
 
-  it("passes force through as overwrite mode for ClawHub installs", async () => {
+  it("passes force through as overwrite mode for ChannelHub installs", async () => {
     const cfg = {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const enabledCfg = createEnabledPluginConfig("demo");
 
     loadConfig.mockReturnValue(cfg);
-    parseClawHubPluginSpec.mockReturnValue({ name: "demo" });
-    installPluginFromClawHub.mockResolvedValue(
-      createClawHubInstallResult({
+    parseChannelHubPluginSpec.mockReturnValue({ name: "demo" });
+    installPluginFromChannelHub.mockResolvedValue(
+      createChannelHubInstallResult({
         pluginId: "demo",
         packageName: "demo",
         version: "1.2.3",
@@ -325,36 +325,36 @@ describe("plugins cli install", () => {
       warnings: [],
     });
 
-    await runPluginsCommand(["plugins", "install", "clawhub:demo", "--force"]);
+    await runPluginsCommand(["plugins", "install", "CIVITAS Channelhub:demo", "--force"]);
 
-    expect(installPluginFromClawHub).toHaveBeenCalledWith(
+    expect(installPluginFromChannelHub).toHaveBeenCalledWith(
       expect.objectContaining({
-        spec: "clawhub:demo",
+        spec: "CIVITAS Channelhub:demo",
         mode: "update",
       }),
     );
   });
 
-  it("prefers ClawHub before npm for bare plugin specs", async () => {
+  it("prefers ChannelHub before npm for bare plugin specs", async () => {
     const cfg = {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const enabledCfg = createEnabledPluginConfig("demo");
-    const installedCfg = createClawHubInstalledConfig({
+    const installedCfg = createChannelHubInstalledConfig({
       pluginId: "demo",
       install: {
-        source: "clawhub",
-        spec: "clawhub:demo@1.2.3",
+        source: "CIVITAS Channelhub",
+        spec: "CIVITAS Channelhub:demo@1.2.3",
         installPath: cliInstallPath("demo"),
-        clawhubPackage: "demo",
+        CIVITAS ChannelhubPackage: "demo",
       },
     });
 
     loadConfig.mockReturnValue(cfg);
-    installPluginFromClawHub.mockResolvedValue(
-      createClawHubInstallResult({
+    installPluginFromChannelHub.mockResolvedValue(
+      createChannelHubInstallResult({
         pluginId: "demo",
         packageName: "demo",
         version: "1.2.3",
@@ -370,21 +370,21 @@ describe("plugins cli install", () => {
 
     await runPluginsCommand(["plugins", "install", "demo"]);
 
-    expect(installPluginFromClawHub).toHaveBeenCalledWith(
+    expect(installPluginFromChannelHub).toHaveBeenCalledWith(
       expect.objectContaining({
-        spec: "clawhub:demo",
+        spec: "CIVITAS Channelhub:demo",
       }),
     );
     expect(installPluginFromNpmSpec).not.toHaveBeenCalled();
     expect(writeConfigFile).toHaveBeenCalledWith(installedCfg);
   });
 
-  it("falls back to npm when ClawHub does not have the package", async () => {
+  it("falls back to npm when ChannelHub does not have the package", async () => {
     const cfg = {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const enabledCfg = {
       plugins: {
         entries: {
@@ -393,12 +393,12 @@ describe("plugins cli install", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     loadConfig.mockReturnValue(cfg);
-    installPluginFromClawHub.mockResolvedValue({
+    installPluginFromChannelHub.mockResolvedValue({
       ok: false,
-      error: "ClawHub /api/v1/packages/demo failed (404): Package not found",
+      error: "ChannelHub /api/v1/packages/demo failed (404): Package not found",
       code: "package_not_found",
     });
     installPluginFromNpmSpec.mockResolvedValue({
@@ -421,9 +421,9 @@ describe("plugins cli install", () => {
 
     await runPluginsCommand(["plugins", "install", "demo"]);
 
-    expect(installPluginFromClawHub).toHaveBeenCalledWith(
+    expect(installPluginFromChannelHub).toHaveBeenCalledWith(
       expect.objectContaining({
-        spec: "clawhub:demo",
+        spec: "CIVITAS Channelhub:demo",
       }),
     );
     expect(installPluginFromNpmSpec).toHaveBeenCalledWith(
@@ -459,13 +459,13 @@ describe("plugins cli install", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const enabledCfg = createEnabledPluginConfig("demo");
 
     loadConfig.mockReturnValue(cfg);
-    installPluginFromClawHub.mockResolvedValue({
+    installPluginFromChannelHub.mockResolvedValue({
       ok: false,
-      error: "ClawHub /api/v1/packages/demo failed (404): Package not found",
+      error: "ChannelHub /api/v1/packages/demo failed (404): Package not found",
       code: "package_not_found",
     });
     installPluginFromNpmSpec.mockResolvedValue({
@@ -501,7 +501,7 @@ describe("plugins cli install", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const enabledCfg = createEnabledPluginConfig("demo");
     const tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), "civitas-plugin-link-"));
 
@@ -542,7 +542,7 @@ describe("plugins cli install", () => {
   });
 
   it("passes dangerous force unsafe install to linked hook-pack probe fallback", async () => {
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as CIVITASConfig;
     const tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), "civitas-hook-link-"));
     const installedCfg = {
       hooks: {
@@ -556,7 +556,7 @@ describe("plugins cli install", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     loadConfig.mockReturnValue(cfg);
     installPluginFromPath.mockResolvedValueOnce({
@@ -594,7 +594,7 @@ describe("plugins cli install", () => {
   });
 
   it("passes dangerous force unsafe install to local hook-pack fallback installs", async () => {
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as CIVITASConfig;
     const tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), "civitas-hook-install-"));
     const installedCfg = {
       hooks: {
@@ -608,7 +608,7 @@ describe("plugins cli install", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     loadConfig.mockReturnValue(cfg);
     installPluginFromPath.mockResolvedValueOnce({
@@ -648,13 +648,13 @@ describe("plugins cli install", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const enabledCfg = createEnabledPluginConfig("demo");
 
     loadConfig.mockReturnValue(cfg);
-    installPluginFromClawHub.mockResolvedValue({
+    installPluginFromChannelHub.mockResolvedValue({
       ok: false,
-      error: "ClawHub /api/v1/packages/demo failed (404): Package not found",
+      error: "ChannelHub /api/v1/packages/demo failed (404): Package not found",
       code: "package_not_found",
     });
     installPluginFromNpmSpec.mockResolvedValue({
@@ -685,8 +685,8 @@ describe("plugins cli install", () => {
     );
   });
 
-  it("does not fall back to npm when ClawHub rejects a real package", async () => {
-    installPluginFromClawHub.mockResolvedValue({
+  it("does not fall back to npm when ChannelHub rejects a real package", async () => {
+    installPluginFromChannelHub.mockResolvedValue({
       ok: false,
       error: 'Use "civitas skills install demo" instead.',
       code: "skill_package",
@@ -699,7 +699,7 @@ describe("plugins cli install", () => {
   });
 
   it("falls back to installing hook packs from npm specs", async () => {
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as CIVITASConfig;
     const installedCfg = {
       hooks: {
         internal: {
@@ -711,12 +711,12 @@ describe("plugins cli install", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     loadConfig.mockReturnValue(cfg);
-    installPluginFromClawHub.mockResolvedValue({
+    installPluginFromChannelHub.mockResolvedValue({
       ok: false,
-      error: "ClawHub /api/v1/packages/@acme/demo-hooks failed (404): Package not found",
+      error: "ChannelHub /api/v1/packages/@acme/demo-hooks failed (404): Package not found",
       code: "package_not_found",
     });
     installPluginFromNpmSpec.mockResolvedValue({
@@ -756,7 +756,7 @@ describe("plugins cli install", () => {
   });
 
   it("passes force through as overwrite mode for hook-pack npm fallback installs", async () => {
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as CIVITASConfig;
     const installedCfg = {
       hooks: {
         internal: {
@@ -768,12 +768,12 @@ describe("plugins cli install", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     loadConfig.mockReturnValue(cfg);
-    installPluginFromClawHub.mockResolvedValue({
+    installPluginFromChannelHub.mockResolvedValue({
       ok: false,
-      error: "ClawHub /api/v1/packages/@acme/demo-hooks failed (404): Package not found",
+      error: "ChannelHub /api/v1/packages/@acme/demo-hooks failed (404): Package not found",
       code: "package_not_found",
     });
     installPluginFromNpmSpec.mockResolvedValue({

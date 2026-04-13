@@ -1,6 +1,6 @@
 import {
   definePluginEntry,
-  type OpenClawConfig,
+  type CIVITASConfig,
   type ProviderCatalogContext,
 } from "civitas/plugin-sdk/plugin-entry";
 import { createProviderApiKeyAuthMethod } from "civitas/plugin-sdk/provider-auth-api-key";
@@ -130,7 +130,7 @@ function createStepFunApiKeyMethod(params: {
   choiceId: string;
   choiceLabel: string;
   choiceHint: string;
-  applyConfig: (cfg: OpenClawConfig) => OpenClawConfig;
+  applyConfig: (cfg: CIVITASConfig) => CIVITASConfig;
 }) {
   return createProviderApiKeyAuthMethod({
     providerId: params.providerId,

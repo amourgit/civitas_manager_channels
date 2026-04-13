@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import {
   applyModelAllowlist,
   applyModelFallbacksFromSelection,
@@ -110,7 +110,7 @@ describe("promptDefaultModel", () => {
           model: "openai/gpt-5.4",
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     const result = await promptDefaultModel({
       config,
@@ -171,7 +171,7 @@ describe("promptDefaultModel", () => {
       return (vllm?.value ?? "") as never;
     });
     const prompter = makePrompter({ select });
-    const config = { agents: { defaults: {} } } as OpenClawConfig;
+    const config = { agents: { defaults: {} } } as CIVITASConfig;
 
     const result = await promptDefaultModel({
       config,
@@ -239,7 +239,7 @@ describe("promptDefaultModel", () => {
     const prompter = makePrompter({ select });
 
     await promptDefaultModel({
-      config: { agents: { defaults: {} } } as OpenClawConfig,
+      config: { agents: { defaults: {} } } as CIVITASConfig,
       prompter,
       allowKeep: false,
       includeManual: false,
@@ -281,7 +281,7 @@ describe("promptModelAllowlist", () => {
 
     const multiselect = createSelectAllMultiselect();
     const prompter = makePrompter({ multiselect });
-    const config = { agents: { defaults: {} } } as OpenClawConfig;
+    const config = { agents: { defaults: {} } } as CIVITASConfig;
 
     await promptModelAllowlist({
       config,
@@ -316,7 +316,7 @@ describe("promptModelAllowlist", () => {
 
     const multiselect = createSelectAllMultiselect();
     const prompter = makePrompter({ multiselect });
-    const config = { agents: { defaults: {} } } as OpenClawConfig;
+    const config = { agents: { defaults: {} } } as CIVITASConfig;
 
     await promptModelAllowlist({
       config,
@@ -343,7 +343,7 @@ describe("router model filtering", () => {
     const multiselect = createSelectAllMultiselect();
     const defaultPrompter = makePrompter({ select });
     const allowlistPrompter = makePrompter({ multiselect });
-    const config = { agents: { defaults: {} } } as OpenClawConfig;
+    const config = { agents: { defaults: {} } } as CIVITASConfig;
 
     await promptDefaultModel({
       config,
@@ -375,7 +375,7 @@ describe("applyModelAllowlist", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     const next = applyModelAllowlist(config, ["openai/gpt-5.4"]);
     expect(next.agents?.defaults?.models).toEqual({
@@ -392,7 +392,7 @@ describe("applyModelAllowlist", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     const next = applyModelAllowlist(config, []);
     expect(next.agents?.defaults?.models).toBeUndefined();
@@ -407,7 +407,7 @@ describe("applyModelFallbacksFromSelection", () => {
           model: { primary: "anthropic/claude-opus-4-6" },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     const next = applyModelFallbacksFromSelection(config, [
       "anthropic/claude-opus-4-6",
@@ -426,7 +426,7 @@ describe("applyModelFallbacksFromSelection", () => {
           model: { primary: "anthropic/claude-opus-4-6", fallbacks: ["openai/gpt-5.4"] },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     const next = applyModelFallbacksFromSelection(config, ["openai/gpt-5.4"]);
     expect(next.agents?.defaults?.model).toEqual({

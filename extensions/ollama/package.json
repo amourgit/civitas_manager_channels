@@ -2,7 +2,7 @@
   "name": "@civitas/ollama-provider",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw Ollama provider plugin",
+  "description": "CIVITAS Ollama provider plugin",
   "type": "module",
   "civitas": {
     "extensions": [

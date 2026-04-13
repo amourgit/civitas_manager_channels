@@ -5,7 +5,7 @@ import {
   runSetupWizardConfigure,
   type WizardPrompter,
 } from "../../../test/helpers/plugins/setup-wizard.js";
-import type { OpenClawConfig } from "../runtime-api.js";
+import type { CIVITASConfig } from "../runtime-api.js";
 import { zaloPlugin } from "./channel.js";
 import { zaloDmPolicy } from "./setup-core.js";
 import { zaloSetupWizard } from "./setup-surface.js";
@@ -32,7 +32,7 @@ describe("zalo setup wizard", () => {
 
     const result = await runSetupWizardConfigure({
       configure: zaloConfigure,
-      cfg: {} as OpenClawConfig,
+      cfg: {} as CIVITASConfig,
       prompter,
       options: { secretInputMode: "plaintext" as const },
     });
@@ -58,14 +58,14 @@ describe("zalo setup wizard", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as CIVITASConfig,
         "work",
       ),
     ).toBe("allowlist");
   });
 
   it("reports account-scoped config keys for named accounts", () => {
-    expect(zaloDmPolicy.resolveConfigKeys?.({} as OpenClawConfig, "work")).toEqual({
+    expect(zaloDmPolicy.resolveConfigKeys?.({} as CIVITASConfig, "work")).toEqual({
       policyKey: "channels.zalo.accounts.work.dmPolicy",
       allowFromKey: "channels.zalo.accounts.work.allowFrom",
     });
@@ -86,7 +86,7 @@ describe("zalo setup wizard", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     expect(zaloDmPolicy.getCurrent(cfg)).toBe("allowlist");
     expect(zaloDmPolicy.resolveConfigKeys?.(cfg)).toEqual({
@@ -112,7 +112,7 @@ describe("zalo setup wizard", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
       "open",
       "work",
     );
@@ -139,7 +139,7 @@ describe("zalo setup wizard", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
     });
 
     expect(configured).toBe(false);

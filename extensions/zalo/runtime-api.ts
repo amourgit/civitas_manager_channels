@@ -3,7 +3,7 @@
 
 export * from "./api.js";
 export type { ReplyPayload } from "civitas/plugin-sdk/reply-runtime";
-export type { OpenClawConfig, GroupPolicy } from "civitas/plugin-sdk/config-runtime";
+export type { CIVITASConfig, GroupPolicy } from "civitas/plugin-sdk/config-runtime";
 export type { MarkdownTableMode } from "civitas/plugin-sdk/config-runtime";
 export type { BaseTokenResolution } from "civitas/plugin-sdk/channel-contract";
 export type {

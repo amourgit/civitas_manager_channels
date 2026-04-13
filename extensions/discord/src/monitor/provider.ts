@@ -18,7 +18,7 @@ import {
   resolveNativeCommandsEnabled,
   resolveNativeSkillsEnabled,
 } from "civitas/plugin-sdk/config-runtime";
-import type { OpenClawConfig, ReplyToMode } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig, ReplyToMode } from "civitas/plugin-sdk/config-runtime";
 import { loadConfig } from "civitas/plugin-sdk/config-runtime";
 import { createConnectedChannelStatusPatch } from "civitas/plugin-sdk/gateway-runtime";
 import { getPluginCommandSpecs } from "civitas/plugin-sdk/plugin-runtime";
@@ -85,7 +85,7 @@ import { formatThreadBindingDurationLabel } from "./thread-bindings.messages.js"
 export type MonitorDiscordOpts = {
   token?: string;
   accountId?: string;
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
   runtime?: RuntimeEnv;
   abortSignal?: AbortSignal;
   mediaMaxMb?: number;
@@ -232,7 +232,7 @@ function classifyAcpStatusProbeError(params: {
 }
 
 async function probeDiscordAcpBindingHealth(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   sessionKey: string;
   storedState?: "idle" | "running" | "error";
   lastActivityAt?: number;

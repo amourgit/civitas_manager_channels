@@ -1,11 +1,11 @@
 /**
- * Synology Chat Channel Plugin for OpenClaw.
+ * Synology Chat Channel Plugin for CIVITAS.
  *
  * Implements the ChannelPlugin interface following the LINE pattern.
  */
 
 import { DEFAULT_ACCOUNT_ID } from "civitas/plugin-sdk/account-id";
-import type { OpenClawConfig } from "civitas/plugin-sdk/account-resolution";
+import type { CIVITASConfig } from "civitas/plugin-sdk/account-resolution";
 import {
   createHybridChannelConfigAdapter,
   createScopedDmSecurityResolver,
@@ -46,7 +46,7 @@ const resolveSynologyChatDmPolicy = createScopedDmSecurityResolver<ResolvedSynol
 });
 
 type SynologyChannelGatewayContext = {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
   abortSignal: AbortSignal;
   log?: {
@@ -56,7 +56,7 @@ type SynologyChannelGatewayContext = {
   };
 };
 type SynologyChannelOutboundContext = {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   to: string;
   text?: string;
   mediaUrl?: string;
@@ -65,7 +65,7 @@ type SynologyChannelOutboundContext = {
 type SynologyChannelSendTextContext = SynologyChannelOutboundContext & { text: string };
 type SynologyChannelSendMediaContext = SynologyChannelOutboundContext & { mediaUrl: string };
 type SynologySecurityWarningContext = {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   account: ResolvedSynologyChatAccount;
 };
 
@@ -132,16 +132,16 @@ type SynologyChatPlugin = Omit<
   pairing: {
     idLabel: string;
     normalizeAllowEntry?: (entry: string) => string;
-    notifyApproval: (params: { cfg: OpenClawConfig; id: string }) => Promise<void>;
+    notifyApproval: (params: { cfg: CIVITASConfig; id: string }) => Promise<void>;
   };
   security: {
-    resolveDmPolicy: (params: { cfg: OpenClawConfig; account: ResolvedSynologyChatAccount }) => {
+    resolveDmPolicy: (params: { cfg: CIVITASConfig; account: ResolvedSynologyChatAccount }) => {
       policy: string | null | undefined;
       allowFrom?: Array<string | number>;
       normalizeEntry?: (raw: string) => string;
     } | null;
     collectWarnings: (params: {
-      cfg: OpenClawConfig;
+      cfg: CIVITASConfig;
       account: ResolvedSynologyChatAccount;
     }) => string[];
   };
@@ -174,7 +174,7 @@ type SynologyChatPlugin = Omit<
 
 const collectSynologyChatRoutingWarnings = projectAccountConfigWarningCollector<
   ResolvedSynologyChatAccount,
-  OpenClawConfig,
+  CIVITASConfig,
   SynologySecurityWarningContext
 >(
   (cfg) => cfg,
@@ -182,7 +182,7 @@ const collectSynologyChatRoutingWarnings = projectAccountConfigWarningCollector<
 );
 
 function resolveOutboundAccount(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId?: string | null,
 ): ResolvedSynologyChatAccount {
   return resolveAccount(cfg ?? {}, accountId);
@@ -205,7 +205,7 @@ export function createSynologyChatPlugin(): SynologyChatPlugin {
         selectionLabel: "Synology Chat (Webhook)",
         detailLabel: "Synology Chat (Webhook)",
         docsPath: "/channels/synology-chat",
-        blurb: "Connect your Synology NAS Chat to OpenClaw",
+        blurb: "Connect your Synology NAS Chat to CIVITAS",
         order: 90,
       },
       capabilities: {
@@ -302,7 +302,7 @@ export function createSynologyChatPlugin(): SynologyChatPlugin {
     pairing: {
       text: {
         idLabel: "synologyChatUserId",
-        message: "OpenClaw: your access has been approved.",
+        message: "CIVITAS: your access has been approved.",
         normalizeAllowEntry: (entry: string) => entry.toLowerCase().trim(),
         notify: async ({ cfg, id, message }) => {
           const account = resolveAccount(cfg);

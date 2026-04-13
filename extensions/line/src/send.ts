@@ -1,5 +1,5 @@
 import { messagingApi } from "@line/bot-sdk";
-import { loadConfig, type OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import { loadConfig, type CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { recordChannelActivity } from "civitas/plugin-sdk/infra-runtime";
 import { logVerbose } from "civitas/plugin-sdk/runtime-env";
 import { resolveLineAccount } from "./accounts.js";
@@ -25,7 +25,7 @@ const userProfileCache = new Map<
 const PROFILE_CACHE_TTL_MS = 5 * 60 * 1000;
 
 interface LineSendOpts {
-  cfg?: OpenClawConfig;
+  cfg?: CIVITASConfig;
   channelAccessToken?: string;
   accountId?: string;
   verbose?: boolean;

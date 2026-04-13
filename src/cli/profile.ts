@@ -100,18 +100,18 @@ export function applyCliProfileEnv(params: {
   }
 
   // Convenience only: fill defaults, never override explicit env values.
-  env.OPENCLAW_PROFILE = profile;
+  env.CIVITAS_PROFILE = profile;
 
-  const stateDir = env.OPENCLAW_STATE_DIR?.trim() || resolveProfileStateDir(profile, env, homedir);
-  if (!env.OPENCLAW_STATE_DIR?.trim()) {
-    env.OPENCLAW_STATE_DIR = stateDir;
+  const stateDir = env.CIVITAS_STATE_DIR?.trim() || resolveProfileStateDir(profile, env, homedir);
+  if (!env.CIVITAS_STATE_DIR?.trim()) {
+    env.CIVITAS_STATE_DIR = stateDir;
   }
 
-  if (!env.OPENCLAW_CONFIG_PATH?.trim()) {
-    env.OPENCLAW_CONFIG_PATH = path.join(stateDir, "civitas.json");
+  if (!env.CIVITAS_CONFIG_PATH?.trim()) {
+    env.CIVITAS_CONFIG_PATH = path.join(stateDir, "civitas.json");
   }
 
-  if (profile === "dev" && !env.OPENCLAW_GATEWAY_PORT?.trim()) {
-    env.OPENCLAW_GATEWAY_PORT = "19001";
+  if (profile === "dev" && !env.CIVITAS_GATEWAY_PORT?.trim()) {
+    env.CIVITAS_GATEWAY_PORT = "19001";
   }
 }

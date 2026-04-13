@@ -3,7 +3,7 @@ import {
   type ChannelDoctorConfigMutation,
   type ChannelDoctorLegacyConfigRule,
 } from "civitas/plugin-sdk/channel-contract";
-import { type OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import { type CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { collectProviderDangerousNameMatchingScopes } from "civitas/plugin-sdk/runtime";
 import { isSlackMutableAllowEntry } from "./security-doctor.js";
 import {
@@ -163,7 +163,7 @@ function normalizeSlackStreamingAliases(params: {
   return { entry: updated, changed };
 }
 
-function normalizeSlackCompatibilityConfig(cfg: OpenClawConfig): ChannelDoctorConfigMutation {
+function normalizeSlackCompatibilityConfig(cfg: CIVITASConfig): ChannelDoctorConfigMutation {
   const rawEntry = asObjectRecord((cfg.channels as Record<string, unknown> | undefined)?.slack);
   if (!rawEntry) {
     return { config: cfg, changes: [] };
@@ -233,14 +233,14 @@ function normalizeSlackCompatibilityConfig(cfg: OpenClawConfig): ChannelDoctorCo
       ...cfg,
       channels: {
         ...cfg.channels,
-        slack: updated as unknown as NonNullable<OpenClawConfig["channels"]>["slack"],
-      } as OpenClawConfig["channels"],
+        slack: updated as unknown as NonNullable<CIVITASConfig["channels"]>["slack"],
+      } as CIVITASConfig["channels"],
     },
     changes,
   };
 }
 
-export function collectSlackMutableAllowlistWarnings(cfg: OpenClawConfig): string[] {
+export function collectSlackMutableAllowlistWarnings(cfg: CIVITASConfig): string[] {
   const hits: Array<{ path: string; entry: string }> = [];
   const addHits = (pathLabel: string, list: unknown) => {
     if (!Array.isArray(list)) {

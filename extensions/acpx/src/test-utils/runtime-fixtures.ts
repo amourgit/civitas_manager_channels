@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import { chmod, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { resolvePreferredOpenClawTmpDir } from "civitas/plugin-sdk/temp-path";
+import { resolvePreferredCIVITASTmpDir } from "civitas/plugin-sdk/temp-path";
 import type { ResolvedAcpxPluginConfig } from "../config.js";
 import { ACPX_PINNED_VERSION } from "../config.js";
 import { AcpxRuntime } from "../runtime.js";
@@ -23,7 +23,7 @@ const fs = require("node:fs");
 (async () => {
 const args = process.argv.slice(2);
 const logPath = process.env.MOCK_ACPX_LOG;
-const civitasShell = process.env.OPENCLAW_SHELL || "";
+const civitasShell = process.env.CIVITAS_SHELL || "";
 const writeLog = (entry) => {
   if (!logPath) return;
   fs.appendFileSync(logPath, JSON.stringify(entry) + "\n");
@@ -408,7 +408,7 @@ async function ensureMockCliScriptPath(): Promise<string> {
   }
   sharedMockCliScriptPath = (async () => {
     const dir = await mkdtemp(
-      path.join(resolvePreferredOpenClawTmpDir(), "civitas-acpx-runtime-test-"),
+      path.join(resolvePreferredCIVITASTmpDir(), "civitas-acpx-runtime-test-"),
     );
     tempDirs.push(dir);
     const scriptPath = path.join(dir, "mock-acpx.cjs");

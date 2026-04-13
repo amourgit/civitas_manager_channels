@@ -2,7 +2,7 @@
   "name": "@civitas/perplexity-plugin",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw Perplexity plugin",
+  "description": "CIVITAS Perplexity plugin",
   "type": "module",
   "civitas": {
     "extensions": [

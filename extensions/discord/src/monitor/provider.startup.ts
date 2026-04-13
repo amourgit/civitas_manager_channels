@@ -8,7 +8,7 @@ import {
 } from "@buape/carbon";
 import type { GatewayPlugin } from "@buape/carbon/gateway";
 import { VoicePlugin } from "@buape/carbon/voice";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { isDangerousNameMatchingEnabled } from "civitas/plugin-sdk/config-runtime";
 import { danger } from "civitas/plugin-sdk/runtime-env";
 import type { RuntimeEnv } from "civitas/plugin-sdk/runtime-env";
@@ -175,7 +175,7 @@ export async function fetchDiscordBotIdentity(params: {
 }
 
 export function registerDiscordMonitorListeners(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   client: Pick<Client, "listeners">;
   accountId: string;
   discordConfig: DiscordListenerConfig;

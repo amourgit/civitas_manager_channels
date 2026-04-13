@@ -14,7 +14,7 @@ import {
 } from "civitas/plugin-sdk/channel-inbound";
 import { createChannelReplyPipeline } from "civitas/plugin-sdk/channel-reply-pipeline";
 import { isDangerousNameMatchingEnabled } from "civitas/plugin-sdk/config-runtime";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { resolveChannelContextVisibilityMode } from "civitas/plugin-sdk/config-runtime";
 import { resolveMarkdownTableMode } from "civitas/plugin-sdk/config-runtime";
 import { readSessionUpdatedAt, resolveStorePath } from "civitas/plugin-sdk/config-runtime";

@@ -5,5 +5,5 @@ export { normalizeChannelId } from "civitas/plugin-sdk/channel-targets";
 export {
   loadSessionStore,
   resolveStorePath,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "civitas/plugin-sdk/config-runtime";

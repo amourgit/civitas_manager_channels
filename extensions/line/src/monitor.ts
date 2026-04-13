@@ -1,6 +1,6 @@
 import type { WebhookRequestBody } from "@line/bot-sdk";
 import { createChannelReplyPipeline } from "civitas/plugin-sdk/channel-reply-pipeline";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import {
   dispatchReplyWithBufferedBlockDispatcher,
   chunkMarkdownText,
@@ -45,7 +45,7 @@ export interface MonitorLineProviderOptions {
   channelAccessToken: string;
   channelSecret: string;
   accountId?: string;
-  config: OpenClawConfig;
+  config: CIVITASConfig;
   runtime: RuntimeEnv;
   abortSignal?: AbortSignal;
   webhookUrl?: string;

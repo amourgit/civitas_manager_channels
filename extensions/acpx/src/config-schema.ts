@@ -1,6 +1,6 @@
 import { buildPluginConfigSchema } from "civitas/plugin-sdk/core";
 import { z } from "civitas/plugin-sdk/zod";
-import type { OpenClawPluginConfigSchema } from "../runtime-api.js";
+import type { CIVITASPluginConfigSchema } from "../runtime-api.js";
 
 export const ACPX_PERMISSION_MODES = ["approve-all", "approve-reads", "deny-all"] as const;
 export type AcpxPermissionMode = (typeof ACPX_PERMISSION_MODES)[number];
@@ -100,6 +100,6 @@ export const AcpxPluginConfigSchema = z.strictObject({
   mcpServers: z.record(z.string(), McpServerConfigSchema).optional(),
 });
 
-export function createAcpxPluginConfigSchema(): OpenClawPluginConfigSchema {
+export function createAcpxPluginConfigSchema(): CIVITASPluginConfigSchema {
   return buildPluginConfigSchema(AcpxPluginConfigSchema);
 }

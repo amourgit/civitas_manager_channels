@@ -1,5 +1,5 @@
 import * as agentRuntimeModule from "civitas/plugin-sdk/agent-runtime";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const completeWithPreparedSimpleCompletionModelMock =
@@ -76,7 +76,7 @@ describe("generateThreadTitle", () => {
           model: "openrouter/anthropic/claude-sonnet-4-5@work",
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     await generateThreadTitle({
       cfg,
@@ -92,7 +92,7 @@ describe("generateThreadTitle", () => {
   });
 
   it("passes model override refs into shared model prep", async () => {
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as CIVITASConfig;
     await generateThreadTitle({
       cfg,
       agentId: "main",
@@ -114,7 +114,7 @@ describe("generateThreadTitle", () => {
     } as Awaited<ReturnType<typeof agentRuntimeModule.prepareSimpleCompletionModelForAgent>>);
 
     const result = await generateThreadTitle({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as CIVITASConfig,
       agentId: "main",
       messageText: "Need a thread title.",
     });
@@ -134,7 +134,7 @@ describe("generateThreadTitle", () => {
     } as Awaited<ReturnType<typeof agentRuntimeModule.prepareSimpleCompletionModelForAgent>>);
 
     const result = await generateThreadTitle({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as CIVITASConfig,
       agentId: "main",
       messageText: "Need a thread title.",
     });
@@ -145,7 +145,7 @@ describe("generateThreadTitle", () => {
 
   it("builds contextual prompt and forwards completion options", async () => {
     const result = await generateThreadTitle({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as CIVITASConfig,
       agentId: "main",
       messageText: "Summarize deployment blockers and owner follow-ups.",
       channelName: "release-status",
@@ -184,7 +184,7 @@ describe("generateThreadTitle", () => {
     );
 
     const result = await generateThreadTitle({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as CIVITASConfig,
       agentId: "main",
       messageText: "Generate title.",
     });

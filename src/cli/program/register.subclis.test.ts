@@ -34,7 +34,7 @@ vi.mock("../../config/config.js", () => configModule);
 
 describe("registerSubCliCommands", () => {
   const originalArgv = process.argv;
-  const originalDisableLazySubcommands = process.env.OPENCLAW_DISABLE_LAZY_SUBCOMMANDS;
+  const originalDisableLazySubcommands = process.env.CIVITAS_DISABLE_LAZY_SUBCOMMANDS;
 
   const createRegisteredProgram = (argv: string[], name?: string) => {
     process.argv = argv;
@@ -48,9 +48,9 @@ describe("registerSubCliCommands", () => {
 
   beforeEach(() => {
     if (originalDisableLazySubcommands === undefined) {
-      delete process.env.OPENCLAW_DISABLE_LAZY_SUBCOMMANDS;
+      delete process.env.CIVITAS_DISABLE_LAZY_SUBCOMMANDS;
     } else {
-      process.env.OPENCLAW_DISABLE_LAZY_SUBCOMMANDS = originalDisableLazySubcommands;
+      process.env.CIVITAS_DISABLE_LAZY_SUBCOMMANDS = originalDisableLazySubcommands;
     }
     registerAcpCli.mockClear();
     acpAction.mockClear();
@@ -63,9 +63,9 @@ describe("registerSubCliCommands", () => {
   afterEach(() => {
     process.argv = originalArgv;
     if (originalDisableLazySubcommands === undefined) {
-      delete process.env.OPENCLAW_DISABLE_LAZY_SUBCOMMANDS;
+      delete process.env.CIVITAS_DISABLE_LAZY_SUBCOMMANDS;
     } else {
-      process.env.OPENCLAW_DISABLE_LAZY_SUBCOMMANDS = originalDisableLazySubcommands;
+      process.env.CIVITAS_DISABLE_LAZY_SUBCOMMANDS = originalDisableLazySubcommands;
     }
   });
 
@@ -86,7 +86,7 @@ describe("registerSubCliCommands", () => {
     const names = program.commands.map((cmd) => cmd.name());
     expect(names).toContain("acp");
     expect(names).toContain("gateway");
-    expect(names).toContain("clawbot");
+    expect(names).toContain("CIVITAS Channelbot");
     expect(registerAcpCli).not.toHaveBeenCalled();
   });
 

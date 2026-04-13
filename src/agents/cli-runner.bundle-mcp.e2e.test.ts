@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import { captureEnv } from "../test-utils/env.js";
 import {
   writeBundleProbeMcpServer,
@@ -35,7 +35,7 @@ describe("runCliAgent bundle MCP e2e", () => {
       await writeFakeClaudeCli(fakeClaudePath);
       await writeClaudeBundle({ pluginRoot, serverScriptPath });
 
-      const config: OpenClawConfig = {
+      const config: CIVITASConfig = {
         agents: {
           defaults: {
             workspace: workspaceDir,

@@ -10,7 +10,7 @@ export type { ChannelPlugin } from "civitas/plugin-sdk/core";
 export {
   DEFAULT_ACCOUNT_ID,
   normalizeAccountId,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "civitas/plugin-sdk/core";
 export {
   isDangerousNameMatchingEnabled,

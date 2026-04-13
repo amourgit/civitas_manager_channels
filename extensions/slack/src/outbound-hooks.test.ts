@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const sendMessageSlackMock = vi.hoisted(() => vi.fn());
@@ -35,7 +35,7 @@ const BASE_SLACK_SEND_CTX = {
 const sendSlackText = async (ctx: SlackSendTextCtx) => {
   const sendText = slackOutbound.sendText as NonNullable<typeof slackOutbound.sendText>;
   return await sendText({
-    cfg: {} as OpenClawConfig,
+    cfg: {} as CIVITASConfig,
     ...ctx,
   });
 };
@@ -160,7 +160,7 @@ describe("slack outbound hook wiring", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
       to: "C123",
       text: "hello",
       replyToId: "1111.2222",

@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import type { ChannelLegacyStateMigrationPlan } from "civitas/plugin-sdk/channel-contract";
 import { resolveChannelAllowFromPath } from "civitas/plugin-sdk/channel-pairing";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { resolveDefaultTelegramAccountId } from "./accounts.js";
 
 function fileExists(pathValue: string): boolean {
@@ -13,7 +13,7 @@ function fileExists(pathValue: string): boolean {
 }
 
 export function detectTelegramLegacyStateMigrations(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   env: NodeJS.ProcessEnv;
 }): ChannelLegacyStateMigrationPlan[] {
   const legacyPath = resolveChannelAllowFromPath("telegram", params.env);

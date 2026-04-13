@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/account-resolution";
+import type { CIVITASConfig } from "civitas/plugin-sdk/account-resolution";
 import {
   createResolvedApproverActionAuthAdapter,
   resolveApprovalApprovers,
@@ -13,7 +13,7 @@ function normalizeSynologyChatApproverId(value: string | number): string | undef
 export const synologyChatApprovalAuth = createResolvedApproverActionAuthAdapter({
   channelLabel: "Synology Chat",
   resolveApprovers: ({ cfg, accountId }) => {
-    const account = resolveAccount((cfg ?? {}) as OpenClawConfig, accountId);
+    const account = resolveAccount((cfg ?? {}) as CIVITASConfig, accountId);
     return resolveApprovalApprovers({
       allowFrom: account.allowedUserIds,
       normalizeApprover: normalizeSynologyChatApproverId,

@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/plugin-entry";
+import type { CIVITASConfig } from "civitas/plugin-sdk/plugin-entry";
 import {
   coerceSecretRef,
   resolveNonEnvSecretRefApiKeyMarker,
@@ -24,7 +24,7 @@ function readConfiguredOrManagedApiKey(value: unknown): string | undefined {
   return ref ? resolveNonEnvSecretRefApiKeyMarker(ref.source) : undefined;
 }
 
-function readLegacyGrokFallbackAuth(cfg?: OpenClawConfig): XaiFallbackAuth | undefined {
+function readLegacyGrokFallbackAuth(cfg?: CIVITASConfig): XaiFallbackAuth | undefined {
   const search = cfg?.tools?.web?.search;
   if (!search || typeof search !== "object") {
     return undefined;
@@ -36,7 +36,7 @@ function readLegacyGrokFallbackAuth(cfg?: OpenClawConfig): XaiFallbackAuth | und
   return apiKey ? { apiKey, source: "tools.web.search.grok.apiKey" } : undefined;
 }
 
-export function readLegacyGrokApiKey(cfg?: OpenClawConfig): string | undefined {
+export function readLegacyGrokApiKey(cfg?: CIVITASConfig): string | undefined {
   const search = cfg?.tools?.web?.search;
   if (!search || typeof search !== "object") {
     return undefined;
@@ -48,14 +48,14 @@ export function readLegacyGrokApiKey(cfg?: OpenClawConfig): string | undefined {
   );
 }
 
-export function readPluginXaiWebSearchApiKey(cfg?: OpenClawConfig): string | undefined {
+export function readPluginXaiWebSearchApiKey(cfg?: CIVITASConfig): string | undefined {
   return readConfiguredSecretString(
     resolveProviderWebSearchPluginConfig(cfg as Record<string, unknown> | undefined, "xai")?.apiKey,
     "plugins.entries.xai.config.webSearch.apiKey",
   );
 }
 
-export function resolveFallbackXaiAuth(cfg?: OpenClawConfig): XaiFallbackAuth | undefined {
+export function resolveFallbackXaiAuth(cfg?: CIVITASConfig): XaiFallbackAuth | undefined {
   const pluginApiKey = readConfiguredOrManagedApiKey(
     resolveProviderWebSearchPluginConfig(cfg as Record<string, unknown> | undefined, "xai")?.apiKey,
   );
@@ -68,13 +68,13 @@ export function resolveFallbackXaiAuth(cfg?: OpenClawConfig): XaiFallbackAuth | 
   return readLegacyGrokFallbackAuth(cfg);
 }
 
-export function resolveFallbackXaiApiKey(cfg?: OpenClawConfig): string | undefined {
+export function resolveFallbackXaiApiKey(cfg?: CIVITASConfig): string | undefined {
   return readPluginXaiWebSearchApiKey(cfg) ?? readLegacyGrokApiKey(cfg);
 }
 
 export function resolveXaiToolApiKey(params: {
-  runtimeConfig?: OpenClawConfig;
-  sourceConfig?: OpenClawConfig;
+  runtimeConfig?: CIVITASConfig;
+  sourceConfig?: CIVITASConfig;
 }): string | undefined {
   return (
     resolveFallbackXaiApiKey(params.runtimeConfig) ??
@@ -85,8 +85,8 @@ export function resolveXaiToolApiKey(params: {
 
 export function isXaiToolEnabled(params: {
   enabled?: boolean;
-  runtimeConfig?: OpenClawConfig;
-  sourceConfig?: OpenClawConfig;
+  runtimeConfig?: CIVITASConfig;
+  sourceConfig?: CIVITASConfig;
 }): boolean {
   if (params.enabled === false) {
     return false;

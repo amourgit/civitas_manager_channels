@@ -8,7 +8,7 @@ import {
 } from "../../agents/session-dirs.js";
 import { DEFAULT_AGENT_ID, normalizeAgentId } from "../../routing/session-key.js";
 import { resolveStateDir } from "../paths.js";
-import type { OpenClawConfig } from "../types.civitas.js";
+import type { CIVITASConfig } from "../types.civitas.js";
 import { resolveAgentsDirFromSessionStorePath, resolveStorePath } from "./paths.js";
 
 export type SessionStoreSelectionOptions = {
@@ -102,7 +102,7 @@ async function resolveValidatedDiscoveredStorePath(params: {
 }
 
 function resolveSessionStoreDiscoveryState(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   env: NodeJS.ProcessEnv,
 ): {
   configuredTargets: SessionStoreTarget[];
@@ -141,7 +141,7 @@ function toDiscoveredSessionStoreTarget(
 }
 
 export function resolveAllAgentSessionStoreTargetsSync(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   params: { env?: NodeJS.ProcessEnv } = {},
 ): SessionStoreTarget[] {
   const env = params.env ?? process.env;
@@ -207,7 +207,7 @@ export function resolveAllAgentSessionStoreTargetsSync(
 }
 
 export async function resolveAllAgentSessionStoreTargets(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   params: { env?: NodeJS.ProcessEnv } = {},
 ): Promise<SessionStoreTarget[]> {
   const env = params.env ?? process.env;
@@ -287,7 +287,7 @@ export async function resolveAllAgentSessionStoreTargets(
 }
 
 export function resolveSessionStoreTargets(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   opts: SessionStoreSelectionOptions,
   params: { env?: NodeJS.ProcessEnv } = {},
 ): SessionStoreTarget[] {

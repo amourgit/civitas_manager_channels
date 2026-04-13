@@ -16,10 +16,10 @@ export type {
   AcpSessionUpdateTag,
 } from "civitas/plugin-sdk/acp-runtime";
 export type {
-  OpenClawPluginApi,
-  OpenClawPluginConfigSchema,
-  OpenClawPluginService,
-  OpenClawPluginServiceContext,
+  CIVITASPluginApi,
+  CIVITASPluginConfigSchema,
+  CIVITASPluginService,
+  CIVITASPluginServiceContext,
   PluginLogger,
 } from "civitas/plugin-sdk/core";
 export type {

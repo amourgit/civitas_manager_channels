@@ -4,7 +4,7 @@ import {
 } from "civitas/plugin-sdk/config-runtime";
 import { readChannelAllowFromStore } from "civitas/plugin-sdk/conversation-runtime";
 import type { ResolvedSlackAccount } from "./accounts.js";
-import type { OpenClawConfig } from "./runtime-api.js";
+import type { CIVITASConfig } from "./runtime-api.js";
 
 function normalizeAllowFromList(list: Array<string | number> | undefined | null): string[] {
   if (!Array.isArray(list)) {
@@ -21,7 +21,7 @@ function coerceNativeSetting(value: unknown): boolean | "auto" | undefined {
 }
 
 export async function collectSlackSecurityAuditFindings(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
   account: ResolvedSlackAccount;
 }) {

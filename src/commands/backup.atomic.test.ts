@@ -22,7 +22,7 @@ describe("backupCreateCommand atomic archive write", () => {
   async function resetTempHome() {
     await fs.rm(tempHome.home, { recursive: true, force: true });
     await fs.mkdir(path.join(tempHome.home, ".civitas"), { recursive: true });
-    delete process.env.OPENCLAW_CONFIG_PATH;
+    delete process.env.CIVITAS_CONFIG_PATH;
   }
 
   beforeAll(async () => {

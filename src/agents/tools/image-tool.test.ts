@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { CIVITASConfig } from "../../config/config.js";
 import type { ModelDefinitionConfig } from "../../config/types.models.js";
 import type {
   ImageDescriptionRequest,
@@ -18,9 +18,9 @@ import { makeZeroUsageSnapshot } from "../usage.js";
 import { __testing, createImageTool, resolveImageModelConfigForTool } from "./image-tool.js";
 
 type PiToolsModule = typeof import("../pi-tools.js");
-type CreateOpenClawCodingToolsArgs = Parameters<PiToolsModule["createOpenClawCodingTools"]>[0];
-type MockOpenClawToolsOptions = {
-  config?: OpenClawConfig;
+type CreateCIVITASCodingToolsArgs = Parameters<PiToolsModule["createCIVITASCodingTools"]>[0];
+type MockCIVITASToolsOptions = {
+  config?: CIVITASConfig;
   agentDir?: string;
   workspaceDir?: string;
   sandboxRoot?: string;
@@ -90,7 +90,7 @@ vi.mock("../pi-tools.abort.js", () => ({
 vi.mock("../civitas-tools.js", async () => {
   const { createImageTool } = await import("./image-tool.js");
   return {
-    createOpenClawTools: vi.fn((options?: MockOpenClawToolsOptions) => {
+    createCIVITASTools: vi.fn((options?: MockCIVITASToolsOptions) => {
       const imageTool = createImageTool({
         config: options?.config,
         agentDir: options?.agentDir,
@@ -119,7 +119,7 @@ async function writeAuthProfiles(agentDir: string, profiles: unknown) {
   );
 }
 
-async function createOpenClawCodingToolsWithFreshModules(options?: CreateOpenClawCodingToolsArgs) {
+async function createCIVITASCodingToolsWithFreshModules(options?: CreateCIVITASCodingToolsArgs) {
   vi.resetModules();
   const freshImageTool = await import("./image-tool.js");
   const defaultImageModels = new Map<string, string>([
@@ -143,8 +143,8 @@ async function createOpenClawCodingToolsWithFreshModules(options?: CreateOpenCla
     resolveDefaultMediaModel: ({ providerId, capability }) =>
       capability === "image" ? defaultImageModels.get(providerId.toLowerCase()) : undefined,
   });
-  const { createOpenClawCodingTools } = await import("../pi-tools.js");
-  return createOpenClawCodingTools(options);
+  const { createCIVITASCodingTools } = await import("../pi-tools.js");
+  return createCIVITASCodingTools(options);
 }
 
 async function withTempAgentDir<T>(run: (agentDir: string) => Promise<T>): Promise<T> {
@@ -268,7 +268,7 @@ function stubOpenAiCompletionsOkFetch(text = "ok") {
   return fetch;
 }
 
-function createMinimaxImageConfig(): OpenClawConfig {
+function createMinimaxImageConfig(): CIVITASConfig {
   return {
     agents: {
       defaults: {
@@ -561,7 +561,7 @@ describe("image tool implicit imageModel config", () => {
 
   it("stays disabled without auth when no pairing is possible", async () => {
     await withTempAgentDir(async (agentDir) => {
-      const cfg: OpenClawConfig = {
+      const cfg: CIVITASConfig = {
         agents: { defaults: { model: { primary: "openai/gpt-5.4" } } },
       };
       expect(resolveImageModelConfigForTool({ cfg, agentDir })).toBeNull();
@@ -574,7 +574,7 @@ describe("image tool implicit imageModel config", () => {
       vi.stubEnv("MINIMAX_API_KEY", "minimax-test");
       vi.stubEnv("OPENAI_API_KEY", "openai-test");
       vi.stubEnv("ANTHROPIC_API_KEY", "anthropic-test");
-      const cfg: OpenClawConfig = {
+      const cfg: CIVITASConfig = {
         agents: { defaults: { model: { primary: "minimax/MiniMax-M2.7" } } },
       };
       expect(resolveImageModelConfigForTool({ cfg, agentDir })).toEqual({
@@ -605,7 +605,7 @@ describe("image tool implicit imageModel config", () => {
       });
       vi.stubEnv("OPENAI_API_KEY", "openai-test");
       vi.stubEnv("ANTHROPIC_API_KEY", "anthropic-test");
-      const cfg: OpenClawConfig = {
+      const cfg: CIVITASConfig = {
         agents: { defaults: { model: { primary: "minimax-portal/MiniMax-M2.7" } } },
       };
       expect(resolveImageModelConfigForTool({ cfg, agentDir })).toEqual(
@@ -620,7 +620,7 @@ describe("image tool implicit imageModel config", () => {
       vi.stubEnv("ZAI_API_KEY", "zai-test");
       vi.stubEnv("OPENAI_API_KEY", "openai-test");
       vi.stubEnv("ANTHROPIC_API_KEY", "anthropic-test");
-      const cfg: OpenClawConfig = {
+      const cfg: CIVITASConfig = {
         agents: { defaults: { model: { primary: "zai/glm-4.7" } } },
       };
       expect(resolveImageModelConfigForTool({ cfg, agentDir })).toEqual(
@@ -638,7 +638,7 @@ describe("image tool implicit imageModel config", () => {
           "acme:default": { type: "api_key", provider: "acme", key: "sk-test" },
         },
       });
-      const cfg: OpenClawConfig = {
+      const cfg: CIVITASConfig = {
         agents: { defaults: { model: { primary: "acme/text-1" } } },
         models: {
           providers: {
@@ -671,7 +671,7 @@ describe("image tool implicit imageModel config", () => {
           },
         },
       });
-      const cfg: OpenClawConfig = {
+      const cfg: CIVITASConfig = {
         agents: { defaults: { model: { primary: "aws-bedrock/text-1" } } },
         models: {
           providers: {
@@ -694,7 +694,7 @@ describe("image tool implicit imageModel config", () => {
 
   it("prefers explicit agents.defaults.imageModel", async () => {
     await withTempAgentDir(async (agentDir) => {
-      const cfg: OpenClawConfig = {
+      const cfg: CIVITASConfig = {
         agents: {
           defaults: {
             model: { primary: "minimax/MiniMax-M2.7" },
@@ -714,7 +714,7 @@ describe("image tool implicit imageModel config", () => {
     // adjusted via modelHasVision to discourage redundant usage.
     vi.stubEnv("OPENAI_API_KEY", "test-key");
     await withTempAgentDir(async (agentDir) => {
-      const cfg: OpenClawConfig = {
+      const cfg: CIVITASConfig = {
         agents: {
           defaults: {
             model: { primary: "acme/vision-1" },
@@ -746,7 +746,7 @@ describe("image tool implicit imageModel config", () => {
     await withTempAgentDir(async (agentDir) => {
       vi.stubEnv("MOONSHOT_API_KEY", "moonshot-test");
       const fetch = stubOpenAiCompletionsOkFetch("ok moonshot");
-      const cfg: OpenClawConfig = {
+      const cfg: CIVITASConfig = {
         agents: {
           defaults: {
             model: { primary: "moonshot/kimi-k2.5" },
@@ -810,7 +810,7 @@ describe("image tool implicit imageModel config", () => {
   it("falls back to the generic image runtime when openrouter has no media provider registration", async () => {
     await withTempAgentDir(async (agentDir) => {
       const fetch = stubOpenAiCompletionsOkFetch("ok openrouter");
-      const cfg: OpenClawConfig = {
+      const cfg: CIVITASConfig = {
         agents: {
           defaults: {
             model: { primary: "openrouter/google/gemini-2.5-flash-lite" },
@@ -845,7 +845,7 @@ describe("image tool implicit imageModel config", () => {
   it("falls back to the generic multi-image runtime when openrouter has no media provider registration", async () => {
     await withTempAgentDir(async (agentDir) => {
       const fetch = stubOpenAiCompletionsOkFetch("ok multi");
-      const cfg: OpenClawConfig = {
+      const cfg: CIVITASConfig = {
         agents: {
           defaults: {
             model: { primary: "openrouter/google/gemini-2.5-flash-lite" },
@@ -896,7 +896,7 @@ describe("image tool implicit imageModel config", () => {
         },
       });
       const fetch = stubMinimaxOkFetch();
-      const cfg: OpenClawConfig = {
+      const cfg: CIVITASConfig = {
         agents: {
           defaults: {
             model: { primary: "minimax-portal/MiniMax-M2.7" },
@@ -1027,13 +1027,13 @@ describe("image tool implicit imageModel config", () => {
     });
   });
 
-  it("allows workspace images via createOpenClawCodingTools when workspace root is explicit", async () => {
+  it("allows workspace images via createCIVITASCodingTools when workspace root is explicit", async () => {
     await withTempWorkspacePng(async ({ workspaceDir, imagePath }) => {
       const fetch = stubMinimaxOkFetch();
       await withTempAgentDir(async (agentDir) => {
         const cfg = createMinimaxImageConfig();
 
-        const tools = await createOpenClawCodingToolsWithFreshModules({
+        const tools = await createCIVITASCodingToolsWithFreshModules({
           config: cfg,
           agentDir,
           workspaceDir,
@@ -1073,7 +1073,7 @@ describe("image tool implicit imageModel config", () => {
       const sandbox = { root: sandboxRoot, bridge: createHostSandboxFsBridge(sandboxRoot) };
 
       vi.stubEnv("OPENAI_API_KEY", "openai-test");
-      const cfg: OpenClawConfig = {
+      const cfg: CIVITASConfig = {
         agents: { defaults: { model: { primary: "minimax/MiniMax-M2.7" } } },
       };
       const tool = createRequiredImageTool({ config: cfg, agentDir, sandbox });
@@ -1096,12 +1096,12 @@ describe("image tool implicit imageModel config", () => {
       );
       const sandbox = createUnsafeMountedSandbox({ sandboxRoot, agentRoot: agentDir });
       const fetch = stubMinimaxOkFetch();
-      const cfg: OpenClawConfig = {
+      const cfg: CIVITASConfig = {
         ...createMinimaxImageConfig(),
         tools: { fs: { workspaceOnly: true } },
       };
 
-      const tools = await createOpenClawCodingToolsWithFreshModules({
+      const tools = await createCIVITASCodingToolsWithFreshModules({
         config: cfg,
         agentDir,
         sandbox,
@@ -1138,7 +1138,7 @@ describe("image tool implicit imageModel config", () => {
 
       const fetch = stubMinimaxOkFetch();
 
-      const cfg: OpenClawConfig = {
+      const cfg: CIVITASConfig = {
         agents: {
           defaults: {
             model: { primary: "minimax/MiniMax-M2.7" },

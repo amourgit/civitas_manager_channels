@@ -1,5 +1,5 @@
 import { Type } from "@sinclair/typebox";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import {
   isNonSecretApiKeyMarker,
   normalizeOptionalSecretInput,
@@ -54,7 +54,7 @@ type OllamaWebSearchResponse = {
   results?: OllamaWebSearchResult[];
 };
 
-function resolveOllamaWebSearchApiKey(config?: OpenClawConfig): string | undefined {
+function resolveOllamaWebSearchApiKey(config?: CIVITASConfig): string | undefined {
   const providerApiKey = normalizeOptionalSecretInput(config?.models?.providers?.ollama?.apiKey);
   if (providerApiKey && !isNonSecretApiKeyMarker(providerApiKey)) {
     return providerApiKey;
@@ -62,7 +62,7 @@ function resolveOllamaWebSearchApiKey(config?: OpenClawConfig): string | undefin
   return resolveEnvApiKey("ollama")?.apiKey;
 }
 
-function resolveOllamaWebSearchBaseUrl(config?: OpenClawConfig): string {
+function resolveOllamaWebSearchBaseUrl(config?: CIVITASConfig): string {
   const configuredBaseUrl = config?.models?.providers?.ollama?.baseUrl;
   if (typeof configuredBaseUrl === "string" && configuredBaseUrl.trim()) {
     return resolveOllamaApiBase(configuredBaseUrl);
@@ -85,7 +85,7 @@ function normalizeOllamaWebSearchResult(
 }
 
 export async function runOllamaWebSearch(params: {
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
   query: string;
   count?: number;
 }): Promise<Record<string, unknown>> {
@@ -163,11 +163,11 @@ export async function runOllamaWebSearch(params: {
 }
 
 async function warnOllamaWebSearchPrereqs(params: {
-  config: OpenClawConfig;
+  config: CIVITASConfig;
   prompter: {
     note: (message: string, title?: string) => Promise<void>;
   };
-}): Promise<OpenClawConfig> {
+}): Promise<CIVITASConfig> {
   const baseUrl = resolveOllamaWebSearchBaseUrl(params.config);
   const { reachable } = await fetchOllamaModels(baseUrl);
   if (!reachable) {

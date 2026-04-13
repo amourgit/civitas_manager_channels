@@ -1,10 +1,10 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/plugin-entry";
+import type { CIVITASConfig } from "civitas/plugin-sdk/plugin-entry";
 import { normalizeProviderId } from "civitas/plugin-sdk/provider-model-shared";
 
 const ANTHROPIC_PROVIDER_API = "anthropic-messages";
 
 function resolveAnthropicDefaultAuthMode(
-  config: OpenClawConfig,
+  config: CIVITASConfig,
   env: NodeJS.ProcessEnv,
 ): "api_key" | "oauth" | null {
   const profiles = config.auth?.profiles ?? {};
@@ -127,9 +127,9 @@ export function normalizeAnthropicProviderConfig<T extends { api?: string; model
 }
 
 export function applyAnthropicConfigDefaults(params: {
-  config: OpenClawConfig;
+  config: CIVITASConfig;
   env: NodeJS.ProcessEnv;
-}): OpenClawConfig {
+}): CIVITASConfig {
   const defaults = params.config.agents?.defaults;
   if (!defaults) {
     return params.config;

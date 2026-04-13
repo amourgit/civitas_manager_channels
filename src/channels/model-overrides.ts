@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import { normalizeMessageChannel } from "../utils/message-channel.js";
 import {
   buildChannelKeyCandidates,
@@ -23,7 +23,7 @@ export type ChannelModelOverride = {
 type ChannelModelByChannelConfig = Record<string, Record<string, string>>;
 
 type ChannelModelOverrideParams = {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   channel?: string | null;
   groupId?: string | null;
   groupChatType?: string | null;

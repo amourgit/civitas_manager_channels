@@ -9,10 +9,10 @@ export type { ChannelMessageActionContext } from "civitas/plugin-sdk/channel-con
 export { DEFAULT_ACCOUNT_ID } from "civitas/plugin-sdk/account-id";
 export type {
   ChannelPlugin,
-  OpenClawPluginApi,
+  CIVITASPluginApi,
   PluginRuntime,
 } from "civitas/plugin-sdk/channel-plugin-common";
-export type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+export type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 export type { SlackAccountConfig } from "civitas/plugin-sdk/config-runtime";
 export {
   emptyPluginConfigSchema,

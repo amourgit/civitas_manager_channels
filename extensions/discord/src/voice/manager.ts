@@ -8,7 +8,7 @@ import type { VoicePlugin } from "@buape/carbon/voice";
 import { resolveAgentDir } from "civitas/plugin-sdk/agent-runtime";
 import { agentCommandFromIngress } from "civitas/plugin-sdk/agent-runtime";
 import { resolveTtsConfig, type ResolvedTtsConfig } from "civitas/plugin-sdk/agent-runtime";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { DiscordAccountConfig, TtsConfig } from "civitas/plugin-sdk/config-runtime";
 import { transcribeAudioFile } from "civitas/plugin-sdk/media-understanding-runtime";
 import { resolveAgentRoute } from "civitas/plugin-sdk/routing";
@@ -18,7 +18,7 @@ import type { RuntimeEnv } from "civitas/plugin-sdk/runtime-env";
 import { parseTtsDirectives } from "civitas/plugin-sdk/speech";
 import { textToSpeech } from "civitas/plugin-sdk/speech-runtime";
 import { formatErrorMessage } from "civitas/plugin-sdk/ssrf-runtime";
-import { resolvePreferredOpenClawTmpDir } from "civitas/plugin-sdk/temp-path";
+import { resolvePreferredCIVITASTmpDir } from "civitas/plugin-sdk/temp-path";
 import { formatMention } from "../mentions.js";
 import { normalizeDiscordSlug, resolveDiscordOwnerAccess } from "../monitor/allow-list.js";
 import { formatDiscordUserTag } from "../monitor/format.js";
@@ -103,8 +103,8 @@ function mergeTtsConfig(base: TtsConfig, override?: TtsConfig): TtsConfig {
   };
 }
 
-function resolveVoiceTtsConfig(params: { cfg: OpenClawConfig; override?: TtsConfig }): {
-  cfg: OpenClawConfig;
+function resolveVoiceTtsConfig(params: { cfg: CIVITASConfig; override?: TtsConfig }): {
+  cfg: CIVITASConfig;
   resolved: ResolvedTtsConfig;
 } {
   if (!params.override) {
@@ -202,7 +202,7 @@ function estimateDurationSeconds(pcm: Buffer): number {
 }
 
 async function writeWavFile(pcm: Buffer): Promise<{ path: string; durationSeconds: number }> {
-  const tempDir = await fs.mkdtemp(path.join(resolvePreferredOpenClawTmpDir(), "discord-voice-"));
+  const tempDir = await fs.mkdtemp(path.join(resolvePreferredCIVITASTmpDir(), "discord-voice-"));
   const filePath = path.join(tempDir, `segment-${randomUUID()}.wav`);
   const wav = buildWavBuffer(pcm);
   await fs.writeFile(filePath, wav);
@@ -222,7 +222,7 @@ function scheduleTempCleanup(tempDir: string, delayMs: number = 30 * 60 * 1000):
 }
 
 async function transcribeAudio(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   agentId: string;
   filePath: string;
 }): Promise<string | undefined> {
@@ -256,7 +256,7 @@ export class DiscordVoiceManager {
   constructor(
     private params: {
       client: Client;
-      cfg: OpenClawConfig;
+      cfg: CIVITASConfig;
       discordConfig: DiscordAccountConfig;
       accountId: string;
       runtime: RuntimeEnv;

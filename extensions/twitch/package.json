@@ -1,7 +1,7 @@
 {
   "name": "@civitas/twitch",
   "version": "2026.4.4",
-  "description": "OpenClaw Twitch channel plugin",
+  "description": "CIVITAS Twitch channel plugin",
   "type": "module",
   "dependencies": {
     "@twurple/api": "^8.1.2",

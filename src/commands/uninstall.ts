@@ -87,9 +87,9 @@ async function removeMacApp(runtime: RuntimeEnv, dryRun?: boolean) {
   if (process.platform !== "darwin") {
     return;
   }
-  await removePath("/Applications/OpenClaw.app", runtime, {
+  await removePath("/Applications/CIVITAS.app", runtime, {
     dryRun,
-    label: "/Applications/OpenClaw.app",
+    label: "/Applications/CIVITAS.app",
   });
 }
 
@@ -125,7 +125,7 @@ export async function uninstallCommand(runtime: RuntimeEnv, opts: UninstallOptio
         {
           value: "app",
           label: "macOS app",
-          hint: "/Applications/OpenClaw.app",
+          hint: "/Applications/CIVITAS.app",
         },
       ],
       initialValues: ["service", "state", "workspace"],

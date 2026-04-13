@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   collectTelegramAllowFromUsernameWarnings,
@@ -79,7 +79,7 @@ describe("telegram doctor", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as CIVITASConfig);
 
     expect(hits).toEqual([
       { path: "channels.telegram.allowFrom", entry: "@top" },
@@ -125,7 +125,7 @@ describe("telegram doctor", () => {
           allowFrom: ["@testuser"],
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as CIVITASConfig);
 
     expect(result.config.channels?.telegram?.allowFrom).toEqual(["111"]);
     expect(result.changes[0]).toContain("@testuser");

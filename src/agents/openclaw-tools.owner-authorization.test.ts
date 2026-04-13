@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
 import "./test-helpers/fast-core-tools.js";
-import { createOpenClawTools } from "./civitas-tools.js";
+import { createCIVITASTools } from "./civitas-tools.js";
 
 function readToolByName() {
-  return new Map(createOpenClawTools().map((tool) => [tool.name, tool]));
+  return new Map(createCIVITASTools().map((tool) => [tool.name, tool]));
 }
 
-describe("createOpenClawTools owner authorization", () => {
+describe("createCIVITASTools owner authorization", () => {
   it("marks owner-only core tools in raw registration", () => {
     const tools = readToolByName();
     expect(tools.get("cron")?.ownerOnly).toBe(true);

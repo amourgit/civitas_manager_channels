@@ -48,7 +48,7 @@ describe("runEmbeddedAttempt memory flush tool forwarding", () => {
           await vi.importActual<typeof import("../../pi-tools.js")>("../../pi-tools.js");
         return {
           ...actual,
-          createOpenClawCodingTools: vi.fn((options) => {
+          createCIVITASCodingTools: vi.fn((options) => {
             capturedOptions.push(options as Record<string, unknown> | undefined);
             throw stop;
           }),

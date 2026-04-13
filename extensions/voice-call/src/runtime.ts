@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/core";
+import type { CIVITASConfig } from "civitas/plugin-sdk/core";
 import type {
   RealtimeVoiceProviderConfig,
   RealtimeVoiceProviderPlugin,
@@ -150,7 +150,7 @@ async function resolveProvider(config: VoiceCallConfig): Promise<VoiceCallProvid
 
 async function resolveRealtimeProvider(params: {
   config: VoiceCallConfig;
-  fullConfig: OpenClawConfig;
+  fullConfig: CIVITASConfig;
 }): Promise<ResolvedRealtimeProvider> {
   const { getRealtimeVoiceProvider, listRealtimeVoiceProviders } =
     await import("./realtime-voice.runtime.js");
@@ -188,7 +188,7 @@ async function resolveRealtimeProvider(params: {
 export async function createVoiceCallRuntime(params: {
   config: VoiceCallConfig;
   coreConfig: CoreConfig;
-  fullConfig?: OpenClawConfig;
+  fullConfig?: CIVITASConfig;
   agentRuntime: CoreAgentDeps;
   ttsRuntime?: TelephonyTtsRuntime;
   logger?: Logger;
@@ -223,7 +223,7 @@ export async function createVoiceCallRuntime(params: {
   const realtimeProvider = config.realtime.enabled
     ? await resolveRealtimeProvider({
         config,
-        fullConfig: (fullConfig ?? (coreConfig as OpenClawConfig)) as OpenClawConfig,
+        fullConfig: (fullConfig ?? (coreConfig as CIVITASConfig)) as CIVITASConfig,
       })
     : null;
   const webhookServer = new VoiceCallWebhookServer(

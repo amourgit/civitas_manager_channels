@@ -2,7 +2,7 @@
   "name": "@civitas/browser-plugin",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw browser tool plugin",
+  "description": "CIVITAS browser tool plugin",
   "type": "module",
   "civitas": {
     "extensions": [

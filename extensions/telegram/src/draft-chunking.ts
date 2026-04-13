@@ -1,4 +1,4 @@
-import { type OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import { type CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { resolveTextChunkLimit } from "civitas/plugin-sdk/reply-chunking";
 import { resolveAccountEntry } from "civitas/plugin-sdk/routing";
 import { normalizeAccountId } from "civitas/plugin-sdk/routing";
@@ -8,7 +8,7 @@ const DEFAULT_TELEGRAM_DRAFT_STREAM_MIN = 200;
 const DEFAULT_TELEGRAM_DRAFT_STREAM_MAX = 800;
 
 export function resolveTelegramDraftStreamingChunking(
-  cfg: OpenClawConfig | undefined,
+  cfg: CIVITASConfig | undefined,
   accountId?: string | null,
 ): {
   minChars: number;

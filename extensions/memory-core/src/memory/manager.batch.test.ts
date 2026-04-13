@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { OpenClawConfig } from "civitas/plugin-sdk/memory-core-host-engine-foundation";
+import type { CIVITASConfig } from "civitas/plugin-sdk/memory-core-host-engine-foundation";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { useFastShortTimeouts } from "../../../../test/helpers/fast-short-timeouts.js";
 import { createOpenAIEmbeddingProviderMock } from "./test-embeddings-mock.js";
@@ -92,7 +92,7 @@ describe("memory indexing with OpenAI batches", () => {
     return { fetchMock, state };
   }
 
-  function createBatchCfg(): OpenClawConfig {
+  function createBatchCfg(): CIVITASConfig {
     return {
       agents: {
         defaults: {
@@ -108,7 +108,7 @@ describe("memory indexing with OpenAI batches", () => {
         },
         list: [{ id: "main", default: true }],
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
   }
 
   beforeAll(async () => {

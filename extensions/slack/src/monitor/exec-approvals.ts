@@ -1,6 +1,6 @@
 import type { App } from "@slack/bolt";
 import type { Block, KnownBlock } from "@slack/web-api";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import {
   buildApprovalInteractiveReply,
   createChannelNativeApprovalRuntime,
@@ -34,7 +34,7 @@ type SlackPendingDelivery = {
 };
 
 type SlackExecApprovalConfig = NonNullable<
-  NonNullable<NonNullable<OpenClawConfig["channels"]>["slack"]>["execApprovals"]
+  NonNullable<NonNullable<CIVITASConfig["channels"]>["slack"]>["execApprovals"]
 >;
 
 type SlackExecApprovalHandlerOpts = {
@@ -42,7 +42,7 @@ type SlackExecApprovalHandlerOpts = {
   accountId: string;
   config: SlackExecApprovalConfig;
   gatewayUrl?: string;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
 };
 
 function truncateSlackMrkdwn(text: string, maxChars: number): string {

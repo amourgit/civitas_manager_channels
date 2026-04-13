@@ -1,6 +1,6 @@
 import type { Guild } from "@buape/carbon";
 import { resolveCommandAuthorizedFromAuthorizers } from "civitas/plugin-sdk/command-auth-native";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { DiscordAccountConfig } from "civitas/plugin-sdk/config-runtime";
 import { resolveOpenProviderRuntimeGroupPolicy } from "civitas/plugin-sdk/runtime-group-policy";
 import {
@@ -12,7 +12,7 @@ import {
 } from "../monitor/allow-list.js";
 
 export async function authorizeDiscordVoiceIngress(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   discordConfig: DiscordAccountConfig;
   groupPolicy?: "open" | "disabled" | "allowlist";
   useAccessGroups?: boolean;

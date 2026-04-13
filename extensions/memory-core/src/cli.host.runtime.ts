@@ -17,7 +17,7 @@ export {
   resolveDefaultAgentId,
   resolveSessionTranscriptsDirForAgent,
   resolveStateDir,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "civitas/plugin-sdk/memory-core-host-runtime-core";
 export {
   listMemoryFiles,

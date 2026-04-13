@@ -1,6 +1,6 @@
 import { createPairingPrefixStripper } from "civitas/plugin-sdk/channel-pairing";
 import { PAIRING_APPROVED_MESSAGE } from "civitas/plugin-sdk/channel-status";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { resolveTelegramSend, resolveTelegramTokenHelper } from "./outbound-base.js";
 
 export const telegramPairingText = {
@@ -13,7 +13,7 @@ export const telegramPairingText = {
     message,
     accountId,
   }: {
-    cfg: OpenClawConfig;
+    cfg: CIVITASConfig;
     id: string;
     message: string;
     accountId?: string | null;

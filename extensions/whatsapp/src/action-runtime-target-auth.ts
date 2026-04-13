@@ -1,10 +1,10 @@
 import { ToolAuthorizationError } from "civitas/plugin-sdk/channel-actions";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { resolveWhatsAppAccount } from "./accounts.js";
 import { resolveWhatsAppOutboundTarget } from "./resolve-outbound-target.js";
 
 export function resolveAuthorizedWhatsAppOutboundTarget(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   chatJid: string;
   accountId?: string;
   actionLabel: string;

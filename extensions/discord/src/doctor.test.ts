@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { describe, expect, it } from "vitest";
 import {
   collectDiscordNumericIdWarnings,
@@ -23,7 +23,7 @@ describe("discord doctor", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     const hits = scanDiscordNumericIdEntries(cfg);
     expect(hits.map((hit) => hit.path)).toEqual([
@@ -46,7 +46,7 @@ describe("discord doctor", () => {
           guilds: { main: { users: [111], roles: [222] } },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as CIVITASConfig;
 
     const result = maybeRepairDiscordNumericIds(cfg, "civitas doctor --fix");
     expect(result.config.channels?.discord?.allowFrom).toEqual(["123"]);

@@ -54,7 +54,7 @@ function getTestConfigPath() {
   return path.join(process.env.HOME ?? "", ".civitas", "civitas.json");
 }
 
-async function writeOpenClawConfig(config: Record<string, unknown>, pretty = false) {
+async function writeCIVITASConfig(config: Record<string, unknown>, pretty = false) {
   const configPath = getTestConfigPath();
   await fs.mkdir(path.dirname(configPath), { recursive: true });
   await fs.writeFile(configPath, JSON.stringify(config, null, pretty ? 2 : undefined));
@@ -1341,7 +1341,7 @@ describe("exec approvals", () => {
   });
 
   it("shows a local /approve prompt when discord exec approvals are disabled", async () => {
-    await writeOpenClawConfig({
+    await writeCIVITASConfig({
       channels: {
         discord: {
           enabled: true,
@@ -1373,7 +1373,7 @@ describe("exec approvals", () => {
   });
 
   it("keeps Telegram approvals in the initiating chat even when Discord DM approvals are also enabled", async () => {
-    await writeOpenClawConfig(
+    await writeCIVITASConfig(
       {
         channels: {
           telegram: {

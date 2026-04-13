@@ -2,7 +2,7 @@ import {
   createAccountListHelpers,
   normalizeAccountId,
   resolveMergedAccountConfig,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "civitas/plugin-sdk/account-resolution";
 import type { SignalAccountConfig } from "./runtime-api.js";
 
@@ -19,7 +19,7 @@ const { listAccountIds, resolveDefaultAccountId } = createAccountListHelpers("si
 export const listSignalAccountIds = listAccountIds;
 export const resolveDefaultSignalAccountId = resolveDefaultAccountId;
 
-function mergeSignalAccountConfig(cfg: OpenClawConfig, accountId: string): SignalAccountConfig {
+function mergeSignalAccountConfig(cfg: CIVITASConfig, accountId: string): SignalAccountConfig {
   return resolveMergedAccountConfig<SignalAccountConfig>({
     channelConfig: cfg.channels?.signal as SignalAccountConfig | undefined,
     accounts: cfg.channels?.signal?.accounts as
@@ -30,7 +30,7 @@ function mergeSignalAccountConfig(cfg: OpenClawConfig, accountId: string): Signa
 }
 
 export function resolveSignalAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
 }): ResolvedSignalAccount {
   const accountId = normalizeAccountId(
@@ -61,7 +61,7 @@ export function resolveSignalAccount(params: {
   };
 }
 
-export function listEnabledSignalAccounts(cfg: OpenClawConfig): ResolvedSignalAccount[] {
+export function listEnabledSignalAccounts(cfg: CIVITASConfig): ResolvedSignalAccount[] {
   return listSignalAccountIds(cfg)
     .map((accountId) => resolveSignalAccount({ cfg, accountId }))
     .filter((account) => account.enabled);

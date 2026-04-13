@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { writeJsonFileAtomically } from "civitas/plugin-sdk/json-store";
 import { resolveRequiredHomeDir } from "civitas/plugin-sdk/provider-auth";
 import { createBackupArchive } from "civitas/plugin-sdk/runtime";
@@ -72,7 +72,7 @@ export function resolveMatrixMigrationSnapshotOutputDir(
 }
 
 export function hasPendingMatrixMigration(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   env?: NodeJS.ProcessEnv;
 }): boolean {
   const env = params.env ?? process.env;
@@ -85,7 +85,7 @@ export function hasPendingMatrixMigration(params: {
 }
 
 export function hasActionableMatrixMigration(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   env?: NodeJS.ProcessEnv;
 }): boolean {
   const env = params.env ?? process.env;

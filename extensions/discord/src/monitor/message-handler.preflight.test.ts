@@ -70,7 +70,7 @@ function createThreadBinding(
 }
 
 function createPreflightArgs(params: {
-  cfg: import("civitas/plugin-sdk/config-runtime").OpenClawConfig;
+  cfg: import("civitas/plugin-sdk/config-runtime").CIVITASConfig;
   discordConfig: DiscordConfig;
   data: DiscordMessageEvent;
   client: DiscordClient;
@@ -162,7 +162,7 @@ async function runGuildPreflight(params: {
   guildId: string;
   message: import("@buape/carbon").Message;
   discordConfig: DiscordConfig;
-  cfg?: import("civitas/plugin-sdk/config-runtime").OpenClawConfig;
+  cfg?: import("civitas/plugin-sdk/config-runtime").CIVITASConfig;
   guildEntries?: Parameters<typeof preflightDiscordMessage>[0]["guildEntries"];
   includeGuildObject?: boolean;
 }) {
@@ -294,7 +294,7 @@ describe("preflightDiscordMessage", () => {
       author: {
         id: "relay-bot-1",
         bot: true,
-        username: "OpenClaw",
+        username: "CIVITAS",
       },
     });
 
@@ -537,7 +537,7 @@ describe("preflightDiscordMessage", () => {
       createPreflightArgs({
         cfg: {
           ...DEFAULT_PREFLIGHT_CFG,
-        } as import("civitas/plugin-sdk/config-runtime").OpenClawConfig,
+        } as import("civitas/plugin-sdk/config-runtime").CIVITASConfig,
         discordConfig: {
           allowBots: true,
         } as DiscordConfig,
@@ -876,7 +876,7 @@ describe("preflightDiscordMessage", () => {
               mentionPatterns: ["civitas"],
             },
           },
-        } as import("civitas/plugin-sdk/config-runtime").OpenClawConfig,
+        } as import("civitas/plugin-sdk/config-runtime").CIVITASConfig,
         discordConfig: {} as DiscordConfig,
         data: createGuildEvent({
           channelId,
@@ -944,7 +944,7 @@ describe("preflightDiscordMessage", () => {
               mentionPatterns: ["civitas"],
             },
           },
-        } as import("civitas/plugin-sdk/config-runtime").OpenClawConfig,
+        } as import("civitas/plugin-sdk/config-runtime").CIVITASConfig,
         discordConfig: {} as DiscordConfig,
         data: createGuildEvent({
           channelId,

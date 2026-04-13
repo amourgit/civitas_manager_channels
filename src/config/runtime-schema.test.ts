@@ -1,7 +1,7 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { ConfigFileSnapshot, OpenClawConfig } from "./types.js";
+import type { ConfigFileSnapshot, CIVITASConfig } from "./types.js";
 
-const mockLoadConfig = vi.hoisted(() => vi.fn<() => OpenClawConfig>());
+const mockLoadConfig = vi.hoisted(() => vi.fn<() => CIVITASConfig>());
 const mockReadConfigFileSnapshot = vi.hoisted(() => vi.fn<() => Promise<ConfigFileSnapshot>>());
 const mockLoadPluginManifestRegistry = vi.hoisted(() => vi.fn());
 
@@ -21,7 +21,7 @@ vi.mock("../plugins/manifest-registry.js", () => ({
   loadPluginManifestRegistry: (...args: unknown[]) => mockLoadPluginManifestRegistry(...args),
 }));
 
-function makeSnapshot(params: { valid: boolean; config?: OpenClawConfig }): ConfigFileSnapshot {
+function makeSnapshot(params: { valid: boolean; config?: CIVITASConfig }): ConfigFileSnapshot {
   return {
     path: "/tmp/civitas.json",
     exists: true,

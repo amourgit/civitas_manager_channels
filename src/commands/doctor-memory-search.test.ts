@@ -1,6 +1,6 @@
 import path from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import type { checkQmdBinaryAvailability as checkQmdBinaryAvailabilityFn } from "../plugin-sdk/memory-core-host-engine-qmd.js";
 import type { DoctorPrompter } from "./doctor-prompter.js";
 
@@ -77,7 +77,7 @@ import { maybeRepairMemoryRecallHealth, noteMemoryRecallHealth } from "./doctor-
 import { detectLegacyWorkspaceDirs } from "./doctor-workspace.js";
 
 describe("noteMemorySearchHealth", () => {
-  const cfg = {} as OpenClawConfig;
+  const cfg = {} as CIVITASConfig;
 
   async function expectNoWarningWithConfiguredRemoteApiKey(provider: string) {
     resolveMemorySearchConfig.mockReturnValue({
@@ -428,7 +428,7 @@ describe("noteMemorySearchHealth", () => {
 });
 
 describe("memory recall doctor integration", () => {
-  const cfg = {} as OpenClawConfig;
+  const cfg = {} as CIVITASConfig;
 
   function createPrompter(overrides: Partial<DoctorPrompter> = {}): DoctorPrompter {
     return {

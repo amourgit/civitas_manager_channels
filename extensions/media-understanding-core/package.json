@@ -2,6 +2,6 @@
   "name": "@civitas/media-understanding-core",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw media understanding runtime package",
+  "description": "CIVITAS media understanding runtime package",
   "type": "module"
 }

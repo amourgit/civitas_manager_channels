@@ -2,7 +2,7 @@
   "name": "@civitas/google-plugin",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw Google plugin",
+  "description": "CIVITAS Google plugin",
   "type": "module",
   "civitas": {
     "extensions": [

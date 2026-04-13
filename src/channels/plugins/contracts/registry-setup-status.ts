@@ -1,5 +1,5 @@
 import { expect } from "vitest";
-import type { OpenClawConfig } from "../../../config/config.js";
+import type { CIVITASConfig } from "../../../config/config.js";
 import { requireBundledChannelPlugin } from "../bundled.js";
 import type { ChannelPlugin } from "../types.js";
 
@@ -8,14 +8,14 @@ type SetupContractEntry = {
   plugin: Pick<ChannelPlugin, "id" | "config" | "setup">;
   cases: Array<{
     name: string;
-    cfg: OpenClawConfig;
+    cfg: CIVITASConfig;
     accountId?: string;
     input: Record<string, unknown>;
     expectedAccountId?: string;
     expectedValidation?: string | null;
     beforeTest?: () => void;
-    assertPatchedConfig?: (cfg: OpenClawConfig) => void;
-    assertResolvedAccount?: (account: unknown, cfg: OpenClawConfig) => void;
+    assertPatchedConfig?: (cfg: CIVITASConfig) => void;
+    assertResolvedAccount?: (account: unknown, cfg: CIVITASConfig) => void;
   }>;
 };
 
@@ -24,7 +24,7 @@ type StatusContractEntry = {
   plugin: Pick<ChannelPlugin, "id" | "config" | "status">;
   cases: Array<{
     name: string;
-    cfg: OpenClawConfig;
+    cfg: CIVITASConfig;
     accountId?: string;
     runtime?: Record<string, unknown>;
     probe?: unknown;
@@ -45,7 +45,7 @@ export function getSetupContractRegistry(): SetupContractEntry[] {
       cases: [
         {
           name: "default account stores tokens and enables the channel",
-          cfg: {} as OpenClawConfig,
+          cfg: {} as CIVITASConfig,
           input: {
             botToken: "xoxb-test",
             appToken: "xapp-test",
@@ -59,7 +59,7 @@ export function getSetupContractRegistry(): SetupContractEntry[] {
         },
         {
           name: "non-default env setup is rejected",
-          cfg: {} as OpenClawConfig,
+          cfg: {} as CIVITASConfig,
           accountId: "ops",
           input: {
             useEnv: true,
@@ -75,7 +75,7 @@ export function getSetupContractRegistry(): SetupContractEntry[] {
       cases: [
         {
           name: "default account stores token and normalized base URL",
-          cfg: {} as OpenClawConfig,
+          cfg: {} as CIVITASConfig,
           input: {
             botToken: "test-token",
             httpUrl: "https://chat.example.com/",
@@ -89,7 +89,7 @@ export function getSetupContractRegistry(): SetupContractEntry[] {
         },
         {
           name: "missing credentials are rejected",
-          cfg: {} as OpenClawConfig,
+          cfg: {} as CIVITASConfig,
           input: {
             httpUrl: "",
           },
@@ -104,7 +104,7 @@ export function getSetupContractRegistry(): SetupContractEntry[] {
       cases: [
         {
           name: "default account stores token and secret",
-          cfg: {} as OpenClawConfig,
+          cfg: {} as CIVITASConfig,
           input: {
             channelAccessToken: "line-token",
             channelSecret: "line-secret",
@@ -118,7 +118,7 @@ export function getSetupContractRegistry(): SetupContractEntry[] {
         },
         {
           name: "non-default env setup is rejected",
-          cfg: {} as OpenClawConfig,
+          cfg: {} as CIVITASConfig,
           accountId: "ops",
           input: {
             useEnv: true,
@@ -147,7 +147,7 @@ export function getStatusContractRegistry(): StatusContractEntry[] {
                 appToken: "xapp-test",
               },
             },
-          } as OpenClawConfig,
+          } as CIVITASConfig,
           runtime: {
             accountId: "default",
             connected: true,
@@ -176,7 +176,7 @@ export function getStatusContractRegistry(): StatusContractEntry[] {
                 baseUrl: "https://chat.example.com",
               },
             },
-          } as OpenClawConfig,
+          } as CIVITASConfig,
           runtime: {
             accountId: "default",
             connected: true,
@@ -207,7 +207,7 @@ export function getStatusContractRegistry(): StatusContractEntry[] {
                 channelSecret: "line-secret",
               },
             },
-          } as OpenClawConfig,
+          } as CIVITASConfig,
           runtime: {
             accountId: "default",
             running: true,

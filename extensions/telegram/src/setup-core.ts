@@ -5,7 +5,7 @@ import {
   patchChannelConfigForAccount,
   promptResolvedAllowFrom,
   splitSetupEntries,
-  type OpenClawConfig,
+  type CIVITASConfig,
   type WizardPrompter,
 } from "civitas/plugin-sdk/setup-runtime";
 import type { ChannelSetupAdapter, ChannelSetupDmPolicy } from "civitas/plugin-sdk/setup-runtime";
@@ -75,7 +75,7 @@ export async function resolveTelegramAllowFromEntries(params: {
 }
 
 export async function promptTelegramAllowFromForAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   prompter: WizardPrompter;
   accountId?: string;
 }) {

@@ -7,7 +7,7 @@ export {
 } from "civitas/plugin-sdk/channel-status";
 export { createScopedChannelConfigAdapter } from "civitas/plugin-sdk/channel-config-helpers";
 export type { ChannelPlugin } from "civitas/plugin-sdk/channel-core";
-export type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+export type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 
 const DISCORD_CHANNEL_META = {
   id: "discord",

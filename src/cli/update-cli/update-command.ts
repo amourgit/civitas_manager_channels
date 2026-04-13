@@ -76,9 +76,9 @@ import { suppressDeprecations } from "./suppress-deprecations.js";
 const CLI_NAME = resolveCliName();
 const SERVICE_REFRESH_TIMEOUT_MS = 60_000;
 const SERVICE_REFRESH_PATH_ENV_KEYS = [
-  "OPENCLAW_HOME",
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_CONFIG_PATH",
+  "CIVITAS_HOME",
+  "CIVITAS_STATE_DIR",
+  "CIVITAS_CONFIG_PATH",
 ] as const;
 
 const UPDATE_QUIPS = [
@@ -90,7 +90,7 @@ const UPDATE_QUIPS = [
   "I've evolved. Try to keep up.",
   "New version, who dis? Oh right, still me but shinier.",
   "Patched, polished, and ready to pinch. Let's go.",
-  "The lobster has molted. Harder shell, sharper claws.",
+  "The lobster has molted. Harder shell, sharper CIVITAS Channels.",
   "Update done! Check the changelog or just trust me, it's good.",
   "Reborn from the boiling waters of npm. Stronger now.",
   "I went away and came back smarter. You should try it sometime.",
@@ -677,7 +677,7 @@ async function maybeRestartService(params: {
       if (!params.opts.json && restarted) {
         defaultRuntime.log(theme.success("Daemon restarted successfully."));
         defaultRuntime.log("");
-        process.env.OPENCLAW_UPDATE_IN_PROGRESS = "1";
+        process.env.CIVITAS_UPDATE_IN_PROGRESS = "1";
         try {
           const interactiveDoctor =
             Boolean(process.stdin.isTTY) && !params.opts.json && params.opts.yes !== true;
@@ -687,7 +687,7 @@ async function maybeRestartService(params: {
         } catch (err) {
           defaultRuntime.log(theme.warn(`Doctor failed: ${String(err)}`));
         } finally {
-          delete process.env.OPENCLAW_UPDATE_IN_PROGRESS;
+          delete process.env.CIVITAS_UPDATE_IN_PROGRESS;
         }
       }
 
@@ -953,7 +953,7 @@ export async function updateCommand(opts: UpdateCommandOptions): Promise<void> {
 
   const showProgress = !opts.json && process.stdout.isTTY;
   if (!opts.json) {
-    defaultRuntime.log(theme.heading("Updating OpenClaw..."));
+    defaultRuntime.log(theme.heading("Updating CIVITAS..."));
     defaultRuntime.log("");
   }
 
@@ -1021,7 +1021,7 @@ export async function updateCommand(opts: UpdateCommandOptions): Promise<void> {
     if (result.reason === "not-git-install") {
       defaultRuntime.log(
         theme.warn(
-          `Skipped: this OpenClaw install isn't a git checkout, and the package manager couldn't be detected. Update via your package manager, then run \`${replaceCliName(formatCliCommand("civitas doctor"), CLI_NAME)}\` and \`${replaceCliName(formatCliCommand("civitas gateway restart"), CLI_NAME)}\`.`,
+          `Skipped: this CIVITAS install isn't a git checkout, and the package manager couldn't be detected. Update via your package manager, then run \`${replaceCliName(formatCliCommand("civitas doctor"), CLI_NAME)}\` and \`${replaceCliName(formatCliCommand("civitas gateway restart"), CLI_NAME)}\`.`,
         ),
       );
       defaultRuntime.log(

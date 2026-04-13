@@ -1,7 +1,7 @@
 import os from "node:os";
 import { formatSkillsForPrompt as upstreamFormatSkillsForPrompt } from "@mariozechner/pi-coding-agent";
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { CIVITASConfig } from "../../config/config.js";
 import { createCanonicalFixtureSkill } from "../skills.test-helpers.js";
 import { formatSkillsForPrompt, type Skill } from "./skill-contract.js";
 import type { SkillEntry } from "./types.js";
@@ -46,7 +46,7 @@ function buildPrompt(
           ...(limits.maxCount !== undefined && { maxSkillsInPrompt: limits.maxCount }),
         },
       },
-    } satisfies OpenClawConfig,
+    } satisfies CIVITASConfig,
   });
 }
 
@@ -116,7 +116,7 @@ describe("applySkillsPromptLimits (via buildWorkspaceSkillsPrompt)", () => {
             maxSkillsPromptChars: 4_000,
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
     });
 
     expect(prompt).toContain("visible");

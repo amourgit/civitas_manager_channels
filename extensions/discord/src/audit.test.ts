@@ -37,7 +37,7 @@ describe("discord audit", () => {
           },
         },
       },
-    } as unknown as import("civitas/plugin-sdk/config-runtime").OpenClawConfig;
+    } as unknown as import("civitas/plugin-sdk/config-runtime").CIVITASConfig;
 
     const collected = collectDiscordAuditChannelIds({
       cfg,
@@ -88,7 +88,7 @@ describe("discord audit", () => {
           },
         },
       },
-    } as unknown as import("civitas/plugin-sdk/config-runtime").OpenClawConfig;
+    } as unknown as import("civitas/plugin-sdk/config-runtime").CIVITASConfig;
 
     const collected = collectDiscordAuditChannelIds({ cfg, accountId: "default" });
     expect(collected.channelIds).toEqual(["111"]);
@@ -111,7 +111,7 @@ describe("discord audit", () => {
           },
         },
       },
-    } as unknown as import("civitas/plugin-sdk/config-runtime").OpenClawConfig;
+    } as unknown as import("civitas/plugin-sdk/config-runtime").CIVITASConfig;
 
     const collected = collectDiscordAuditChannelIds({ cfg, accountId: "default" });
     expect(collected.channelIds).toEqual([]);
@@ -138,7 +138,7 @@ describe("discord audit", () => {
           },
         },
       },
-    } as unknown as import("civitas/plugin-sdk/config-runtime").OpenClawConfig;
+    } as unknown as import("civitas/plugin-sdk/config-runtime").CIVITASConfig;
 
     const collected = collectDiscordAuditChannelIds({ cfg, accountId: "default" });
     expect(collected.channelIds).toEqual(["111"]);

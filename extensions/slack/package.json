@@ -2,7 +2,7 @@
   "name": "@civitas/slack",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw Slack channel plugin",
+  "description": "CIVITAS Slack channel plugin",
   "type": "module",
   "dependencies": {
     "@slack/bolt": "^4.6.0",

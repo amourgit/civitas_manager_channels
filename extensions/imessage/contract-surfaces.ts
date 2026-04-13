@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { OpenClawConfig } from "./runtime-api.js";
+import type { CIVITASConfig } from "./runtime-api.js";
 import { resolveIMessageAccount } from "./src/accounts.js";
 
 const DEFAULT_IMESSAGE_ATTACHMENT_ROOTS = ["/Users/*/Library/Messages/Attachments"] as const;
@@ -77,7 +77,7 @@ function mergeInboundPathRoots(...rootsLists: Array<readonly string[] | undefine
 }
 
 export function resolveInboundAttachmentRoots(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
 }): string[] {
   const account = resolveIMessageAccount(params);
@@ -89,7 +89,7 @@ export function resolveInboundAttachmentRoots(params: {
 }
 
 export function resolveRemoteInboundAttachmentRoots(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
 }): string[] {
   const account = resolveIMessageAccount(params);

@@ -6,7 +6,7 @@ import {
 import type { ModelProviderConfig } from "civitas/plugin-sdk/provider-model-shared";
 import {
   applyAgentDefaultModelPrimary,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "civitas/plugin-sdk/provider-onboard";
 import { normalizeAntigravityModelId, normalizeGoogleModelId } from "./model-id.js";
 import { parseGoogleOauthApiKey } from "./oauth-token-shared.js";
@@ -185,8 +185,8 @@ export function resolveGoogleGenerativeAiHttpRequestConfig(params: {
 
 export const GOOGLE_GEMINI_DEFAULT_MODEL = "google/gemini-3.1-pro-preview";
 
-export function applyGoogleGeminiModelDefault(cfg: OpenClawConfig): {
-  next: OpenClawConfig;
+export function applyGoogleGeminiModelDefault(cfg: CIVITASConfig): {
+  next: CIVITASConfig;
   changed: boolean;
 } {
   const current = cfg.agents?.defaults?.model as unknown;

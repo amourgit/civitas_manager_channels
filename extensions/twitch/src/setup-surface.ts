@@ -7,7 +7,7 @@ import {
   type ChannelSetupAdapter,
   type ChannelSetupDmPolicy,
   type ChannelSetupWizard,
-  type OpenClawConfig,
+  type CIVITASConfig,
   type WizardPrompter,
 } from "civitas/plugin-sdk/setup";
 import { DEFAULT_ACCOUNT_ID, getAccountConfig, resolveDefaultTwitchAccountId } from "./config.js";
@@ -16,16 +16,16 @@ import { isAccountConfigured } from "./utils/twitch.js";
 
 const channel = "twitch" as const;
 
-function resolveSetupAccountId(cfg: OpenClawConfig): string {
+function resolveSetupAccountId(cfg: CIVITASConfig): string {
   const preferred = cfg.channels?.twitch?.defaultAccount?.trim();
   return preferred || resolveDefaultTwitchAccountId(cfg);
 }
 
 export function setTwitchAccount(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   account: Partial<TwitchAccountConfig>,
   accountId: string = resolveSetupAccountId(cfg),
-): OpenClawConfig {
+): CIVITASConfig {
   const existing = getAccountConfig(cfg, accountId);
   const merged: TwitchAccountConfig = {
     username: account.username ?? existing?.username ?? "",
@@ -70,7 +70,7 @@ async function noteTwitchSetupHelp(prompter: WizardPrompter): Promise<void> {
       "2. Generate a token with scopes: chat:read and chat:write",
       "   Use https://twitchtokengenerator.com/ or https://twitchapps.com/tmi/",
       "3. Copy the token (starts with 'oauth:') and Client ID",
-      "Env vars supported: OPENCLAW_TWITCH_ACCESS_TOKEN",
+      "Env vars supported: CIVITAS_TWITCH_ACCESS_TOKEN",
       `Docs: ${formatDocsLink("/channels/twitch", "channels/twitch")}`,
     ].join("\n"),
     "Twitch setup",
@@ -186,15 +186,15 @@ export async function promptRefreshTokenSetup(
 }
 
 export async function configureWithEnvToken(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   prompter: WizardPrompter,
   account: TwitchAccountConfig | null,
   envToken: string,
   forceAllowFrom: boolean,
   dmPolicy: ChannelSetupDmPolicy,
-): Promise<{ cfg: OpenClawConfig } | null> {
+): Promise<{ cfg: CIVITASConfig } | null> {
   const useEnv = await prompter.confirm({
-    message: "Twitch env var OPENCLAW_TWITCH_ACCESS_TOKEN detected. Use env token?",
+    message: "Twitch env var CIVITAS_TWITCH_ACCESS_TOKEN detected. Use env token?",
     initialValue: true,
   });
   if (!useEnv) {
@@ -219,10 +219,10 @@ export async function configureWithEnvToken(
 }
 
 function setTwitchAccessControl(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   allowedRoles: TwitchRole[],
   requireMention: boolean,
-): OpenClawConfig {
+): CIVITASConfig {
   const accountId = resolveSetupAccountId(cfg);
   const account = getAccountConfig(cfg, accountId);
   if (!account) {
@@ -240,7 +240,7 @@ function setTwitchAccessControl(
   );
 }
 
-function resolveTwitchGroupPolicy(cfg: OpenClawConfig): "open" | "allowlist" | "disabled" {
+function resolveTwitchGroupPolicy(cfg: CIVITASConfig): "open" | "allowlist" | "disabled" {
   const account = getAccountConfig(cfg, resolveSetupAccountId(cfg));
   if (account?.allowedRoles?.includes("all")) {
     return "open";
@@ -252,9 +252,9 @@ function resolveTwitchGroupPolicy(cfg: OpenClawConfig): "open" | "allowlist" | "
 }
 
 function setTwitchGroupPolicy(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   policy: "open" | "allowlist" | "disabled",
-): OpenClawConfig {
+): CIVITASConfig {
   const allowedRoles: TwitchRole[] =
     policy === "open" ? ["all"] : policy === "allowlist" ? ["moderator", "vip"] : [];
   return setTwitchAccessControl(cfg, allowedRoles, true);
@@ -267,8 +267,8 @@ const twitchDmPolicy: ChannelSetupDmPolicy = {
   allowFromKey: "channels.twitch.accounts.<default>.allowFrom",
   getCurrent: (cfg) => {
     const account = getAccountConfig(
-      cfg as OpenClawConfig,
-      resolveSetupAccountId(cfg as OpenClawConfig),
+      cfg as CIVITASConfig,
+      resolveSetupAccountId(cfg as CIVITASConfig),
     );
     if (account?.allowedRoles?.includes("all")) {
       return "open";
@@ -281,11 +281,11 @@ const twitchDmPolicy: ChannelSetupDmPolicy = {
   setPolicy: (cfg, policy) => {
     const allowedRoles: TwitchRole[] =
       policy === "open" ? ["all"] : policy === "allowlist" ? [] : ["moderator"];
-    return setTwitchAccessControl(cfg as OpenClawConfig, allowedRoles, true);
+    return setTwitchAccessControl(cfg as CIVITASConfig, allowedRoles, true);
   },
   promptAllowFrom: async ({ cfg, prompter }) => {
-    const accountId = resolveSetupAccountId(cfg as OpenClawConfig);
-    const account = getAccountConfig(cfg as OpenClawConfig, accountId);
+    const accountId = resolveSetupAccountId(cfg as CIVITASConfig);
+    const account = getAccountConfig(cfg as CIVITASConfig, accountId);
     const existingAllowFrom = account?.allowFrom ?? [];
 
     const entry = await prompter.text({
@@ -300,7 +300,7 @@ const twitchDmPolicy: ChannelSetupDmPolicy = {
       .filter(Boolean);
 
     return setTwitchAccount(
-      cfg as OpenClawConfig,
+      cfg as CIVITASConfig,
       {
         ...(account ?? undefined),
         allowFrom,
@@ -314,28 +314,28 @@ const twitchGroupAccess: NonNullable<ChannelSetupWizard["groupAccess"]> = {
   label: "Twitch chat",
   placeholder: "",
   skipAllowlistEntries: true,
-  currentPolicy: ({ cfg }) => resolveTwitchGroupPolicy(cfg as OpenClawConfig),
+  currentPolicy: ({ cfg }) => resolveTwitchGroupPolicy(cfg as CIVITASConfig),
   currentEntries: ({ cfg }) => {
     const account = getAccountConfig(
-      cfg as OpenClawConfig,
-      resolveSetupAccountId(cfg as OpenClawConfig),
+      cfg as CIVITASConfig,
+      resolveSetupAccountId(cfg as CIVITASConfig),
     );
     return account?.allowFrom ?? [];
   },
   updatePrompt: ({ cfg }) => {
     const account = getAccountConfig(
-      cfg as OpenClawConfig,
-      resolveSetupAccountId(cfg as OpenClawConfig),
+      cfg as CIVITASConfig,
+      resolveSetupAccountId(cfg as CIVITASConfig),
     );
     return Boolean(account?.allowedRoles?.length || account?.allowFrom?.length);
   },
-  setPolicy: ({ cfg, policy }) => setTwitchGroupPolicy(cfg as OpenClawConfig, policy),
+  setPolicy: ({ cfg, policy }) => setTwitchGroupPolicy(cfg as CIVITASConfig, policy),
   resolveAllowlist: async () => [],
-  applyAllowlist: ({ cfg }) => cfg as OpenClawConfig,
+  applyAllowlist: ({ cfg }) => cfg as CIVITASConfig,
 };
 
 export const twitchSetupAdapter: ChannelSetupAdapter = {
-  resolveAccountId: ({ cfg }) => resolveSetupAccountId(cfg as OpenClawConfig),
+  resolveAccountId: ({ cfg }) => resolveSetupAccountId(cfg as CIVITASConfig),
   applyAccountConfig: ({ cfg, accountId }) =>
     setTwitchAccount(
       cfg,
@@ -357,14 +357,14 @@ export const twitchSetupWizard: ChannelSetupWizard = {
     unconfiguredHint: "needs setup",
     resolveConfigured: ({ cfg }) => {
       const account = getAccountConfig(
-        cfg as OpenClawConfig,
-        resolveSetupAccountId(cfg as OpenClawConfig),
+        cfg as CIVITASConfig,
+        resolveSetupAccountId(cfg as CIVITASConfig),
       );
       return account ? isAccountConfigured(account) : false;
     },
     resolveStatusLines: ({ cfg }) => {
-      const accountId = resolveSetupAccountId(cfg as OpenClawConfig);
-      const account = getAccountConfig(cfg as OpenClawConfig, accountId);
+      const accountId = resolveSetupAccountId(cfg as CIVITASConfig);
+      const account = getAccountConfig(cfg as CIVITASConfig, accountId);
       const configured = account ? isAccountConfigured(account) : false;
       return [
         `Twitch${accountId !== DEFAULT_ACCOUNT_ID ? ` (${accountId})` : ""}: ${configured ? "configured" : "needs username, token, and clientId"}`,
@@ -373,18 +373,18 @@ export const twitchSetupWizard: ChannelSetupWizard = {
   },
   credentials: [],
   finalize: async ({ cfg, prompter, forceAllowFrom }) => {
-    const accountId = resolveSetupAccountId(cfg as OpenClawConfig);
-    const account = getAccountConfig(cfg as OpenClawConfig, accountId);
+    const accountId = resolveSetupAccountId(cfg as CIVITASConfig);
+    const account = getAccountConfig(cfg as CIVITASConfig, accountId);
 
     if (!account || !isAccountConfigured(account)) {
       await noteTwitchSetupHelp(prompter);
     }
 
-    const envToken = process.env.OPENCLAW_TWITCH_ACCESS_TOKEN?.trim();
+    const envToken = process.env.CIVITAS_TWITCH_ACCESS_TOKEN?.trim();
 
     if (envToken && !account?.accessToken) {
       const envResult = await configureWithEnvToken(
-        cfg as OpenClawConfig,
+        cfg as CIVITASConfig,
         prompter,
         account,
         envToken,
@@ -403,7 +403,7 @@ export const twitchSetupWizard: ChannelSetupWizard = {
     const { clientSecret, refreshToken } = await promptRefreshTokenSetup(prompter, account);
 
     const cfgWithAccount = setTwitchAccount(
-      cfg as OpenClawConfig,
+      cfg as CIVITASConfig,
       {
         username,
         accessToken: token,

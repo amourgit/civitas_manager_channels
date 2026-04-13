@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import {
   DEFAULT_CACHE_TTL_MINUTES,
   DEFAULT_SEARCH_COUNT,
@@ -131,7 +131,7 @@ function parseSearxngResponseText(text: string, count: number): SearxngResult[] 
 }
 
 export async function runSearxngSearch(params: {
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
   query: string;
   count?: number;
   categories?: string;

@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { normalizeAccountId, resolveAgentIdFromSessionKey } from "civitas/plugin-sdk/routing";
 import {
   registerSessionBindingAdapter,
@@ -119,7 +119,7 @@ function toSessionBindingRecord(
 
 export function createBlueBubblesConversationBindingManager(params: {
   accountId?: string;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
 }): BlueBubblesConversationBindingManager {
   const accountId = normalizeAccountId(params.accountId);
   const existing = getState().managersByAccountId.get(accountId);

@@ -2,7 +2,7 @@
   "name": "@civitas/nvidia-provider",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw NVIDIA provider plugin",
+  "description": "CIVITAS NVIDIA provider plugin",
   "type": "module",
   "civitas": {
     "extensions": [

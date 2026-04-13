@@ -1,7 +1,7 @@
 import path from "node:path";
 import { type Api, type Model } from "@mariozechner/pi-ai";
 import { formatCliCommand } from "../cli/command-format.js";
-import { getRuntimeConfigSnapshot, type OpenClawConfig } from "../config/config.js";
+import { getRuntimeConfigSnapshot, type CIVITASConfig } from "../config/config.js";
 import type { ModelProviderAuthMode, ModelProviderConfig } from "../config/types.js";
 import { coerceSecretRef } from "../config/types.secrets.js";
 import { getShellEnvAppliedKeys } from "../infra/shell-env.js";
@@ -41,7 +41,7 @@ export type { ResolvedProviderAuth } from "./model-auth-runtime-shared.js";
 
 const log = createSubsystemLogger("model-auth");
 function resolveProviderConfig(
-  cfg: OpenClawConfig | undefined,
+  cfg: CIVITASConfig | undefined,
   provider: string,
 ): ModelProviderConfig | undefined {
   const providers = cfg?.models?.providers ?? {};
@@ -63,7 +63,7 @@ function resolveProviderConfig(
 }
 
 export function getCustomProviderApiKey(
-  cfg: OpenClawConfig | undefined,
+  cfg: CIVITASConfig | undefined,
   provider: string,
 ): string | undefined {
   const entry = resolveProviderConfig(cfg, provider);
@@ -76,7 +76,7 @@ type ResolvedCustomProviderApiKey = {
 };
 
 export function resolveUsableCustomProviderApiKey(params: {
-  cfg: OpenClawConfig | undefined;
+  cfg: CIVITASConfig | undefined;
   provider: string;
   env?: NodeJS.ProcessEnv;
 }): ResolvedCustomProviderApiKey | null {
@@ -106,7 +106,7 @@ export function resolveUsableCustomProviderApiKey(params: {
 }
 
 export function hasUsableCustomProviderApiKey(
-  cfg: OpenClawConfig | undefined,
+  cfg: CIVITASConfig | undefined,
   provider: string,
   env?: NodeJS.ProcessEnv,
 ): boolean {
@@ -114,7 +114,7 @@ export function hasUsableCustomProviderApiKey(
 }
 
 export function shouldPreferExplicitConfigApiKeyAuth(
-  cfg: OpenClawConfig | undefined,
+  cfg: CIVITASConfig | undefined,
   provider: string,
 ): boolean {
   const providerConfig = resolveProviderConfig(cfg, provider);
@@ -126,7 +126,7 @@ export function shouldPreferExplicitConfigApiKeyAuth(
 }
 
 function resolveProviderAuthOverride(
-  cfg: OpenClawConfig | undefined,
+  cfg: CIVITASConfig | undefined,
   provider: string,
 ): ModelProviderAuthMode | undefined {
   const entry = resolveProviderConfig(cfg, provider);
@@ -181,11 +181,11 @@ type SyntheticProviderAuthResolution = {
 };
 
 function resolveProviderSyntheticRuntimeAuth(params: {
-  cfg: OpenClawConfig | undefined;
+  cfg: CIVITASConfig | undefined;
   provider: string;
 }): SyntheticProviderAuthResolution {
   const resolveFromConfig = (
-    config: OpenClawConfig | undefined,
+    config: CIVITASConfig | undefined,
   ): ResolvedProviderAuth | undefined => {
     const providerConfig = resolveProviderConfig(config, params.provider);
     return resolveProviderSyntheticAuthWithPlugin({
@@ -223,7 +223,7 @@ function resolveProviderSyntheticRuntimeAuth(params: {
 }
 
 function resolveSyntheticLocalProviderAuth(params: {
-  cfg: OpenClawConfig | undefined;
+  cfg: CIVITASConfig | undefined;
   provider: string;
 }): ResolvedProviderAuth | null {
   const syntheticProviderAuth = resolveProviderSyntheticRuntimeAuth(params);
@@ -318,7 +318,7 @@ function resolveAwsSdkAuthInfo(): { mode: "aws-sdk"; source: string } {
 }
 
 function shouldDeferSyntheticProfileAuth(params: {
-  cfg: OpenClawConfig | undefined;
+  cfg: CIVITASConfig | undefined;
   provider: string;
   resolvedApiKey: string | undefined;
 }): boolean {
@@ -339,7 +339,7 @@ function shouldDeferSyntheticProfileAuth(params: {
 
 export async function resolveApiKeyForProvider(params: {
   provider: string;
-  cfg?: OpenClawConfig;
+  cfg?: CIVITASConfig;
   profileId?: string;
   preferredProfile?: string;
   store?: AuthProfileStore;
@@ -521,7 +521,7 @@ export type { EnvApiKeyResult } from "./model-auth-env.js";
 
 export function resolveModelAuthMode(
   provider?: string,
-  cfg?: OpenClawConfig,
+  cfg?: CIVITASConfig,
   store?: AuthProfileStore,
 ): ModelAuthMode | undefined {
   const resolved = provider?.trim();
@@ -577,7 +577,7 @@ export function resolveModelAuthMode(
 
 export async function hasAvailableAuthForProvider(params: {
   provider: string;
-  cfg?: OpenClawConfig;
+  cfg?: CIVITASConfig;
   preferredProfile?: string;
   store?: AuthProfileStore;
   agentDir?: string;
@@ -627,7 +627,7 @@ export async function hasAvailableAuthForProvider(params: {
 
 export async function getApiKeyForModel(params: {
   model: Model<Api>;
-  cfg?: OpenClawConfig;
+  cfg?: CIVITASConfig;
   profileId?: string;
   preferredProfile?: string;
   store?: AuthProfileStore;
@@ -680,7 +680,7 @@ export function applyLocalNoAuthHeaderOverride<T extends Model<Api>>(
 export function applyAuthHeaderOverride<T extends Model<Api>>(
   model: T,
   auth: ResolvedProviderAuth | null | undefined,
-  cfg: OpenClawConfig | undefined,
+  cfg: CIVITASConfig | undefined,
 ): T {
   if (!auth?.apiKey) {
     return model;

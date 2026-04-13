@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../../config/config.js";
+import type { CIVITASConfig } from "../../../config/config.js";
 import type {
   PluginHookAgentContext,
   PluginHookBeforeAgentStartResult,
@@ -103,7 +103,7 @@ export function shouldWarnOnOrphanedUserRepair(
 }
 
 export function resolveAttemptFsWorkspaceOnly(params: {
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
   sessionAgentId: string;
 }): boolean {
   return resolveEffectiveToolFsWorkspaceOnly({

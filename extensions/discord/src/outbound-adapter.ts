@@ -3,7 +3,7 @@ import {
   type ChannelOutboundAdapter,
   createAttachedChannelResultAdapter,
 } from "civitas/plugin-sdk/channel-send-result";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import {
   resolveOutboundSendDep,
   type OutboundIdentity,
@@ -75,7 +75,7 @@ function resolveDiscordWebhookIdentity(params: {
 }
 
 async function maybeSendDiscordWebhookText(params: {
-  cfg?: OpenClawConfig;
+  cfg?: CIVITASConfig;
   text: string;
   threadId?: string | number | null;
   accountId?: string | null;

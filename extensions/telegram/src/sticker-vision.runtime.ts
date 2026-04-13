@@ -4,10 +4,10 @@ import {
   modelSupportsVision,
   resolveDefaultModelForAgent,
 } from "civitas/plugin-sdk/agent-runtime";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 
 export async function resolveStickerVisionSupportRuntime(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   agentId?: string;
 }): Promise<boolean> {
   const catalog = await loadModelCatalog({ config: params.cfg });

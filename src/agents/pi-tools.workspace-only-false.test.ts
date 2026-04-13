@@ -22,7 +22,7 @@ vi.mock("@mariozechner/pi-ai/oauth", async () => {
   };
 });
 
-import { createOpenClawCodingTools } from "./pi-tools.js";
+import { createCIVITASCodingTools } from "./pi-tools.js";
 
 describe("FS tools with workspaceOnly=false", () => {
   let tmpDir: string;
@@ -38,7 +38,7 @@ describe("FS tools with workspaceOnly=false", () => {
     });
 
   const toolsFor = (workspaceOnly: boolean | undefined) =>
-    createOpenClawCodingTools({
+    createCIVITASCodingTools({
       workspaceDir,
       config:
         workspaceOnly === undefined
@@ -208,7 +208,7 @@ describe("FS tools with workspaceOnly=false", () => {
     await fs.mkdir(path.dirname(allowedAbsolutePath), { recursive: true });
     await fs.writeFile(allowedAbsolutePath, "seed");
 
-    const tools = createOpenClawCodingTools({
+    const tools = createCIVITASCodingTools({
       workspaceDir,
       trigger: "memory",
       memoryFlushWritePath: allowedRelativePath,

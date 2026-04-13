@@ -10,7 +10,7 @@ import {
 import { normalizeAccountId, resolveAgentIdFromSessionKey } from "civitas/plugin-sdk/routing";
 import {
   getRuntimeConfigSnapshot,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "civitas/plugin-sdk/runtime-config-snapshot";
 import { logVerbose } from "civitas/plugin-sdk/runtime-env";
 import { createDiscordRestClient } from "../client.js";
@@ -175,7 +175,7 @@ export function createThreadBindingManager(
   params: {
     accountId?: string;
     token?: string;
-    cfg?: OpenClawConfig;
+    cfg?: CIVITASConfig;
     persist?: boolean;
     enableSweeper?: boolean;
     idleTimeoutMs?: number;

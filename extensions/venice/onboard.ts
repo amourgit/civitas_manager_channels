@@ -1,6 +1,6 @@
 import {
   createModelCatalogPresetAppliers,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "civitas/plugin-sdk/provider-onboard";
 import {
   buildVeniceModelDefinition,
@@ -13,7 +13,7 @@ export { VENICE_DEFAULT_MODEL_REF };
 
 const venicePresetAppliers = createModelCatalogPresetAppliers({
   primaryModelRef: VENICE_DEFAULT_MODEL_REF,
-  resolveParams: (_cfg: OpenClawConfig) => ({
+  resolveParams: (_cfg: CIVITASConfig) => ({
     providerId: "venice",
     api: "openai-completions",
     baseUrl: VENICE_BASE_URL,
@@ -22,10 +22,10 @@ const venicePresetAppliers = createModelCatalogPresetAppliers({
   }),
 });
 
-export function applyVeniceProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyVeniceProviderConfig(cfg: CIVITASConfig): CIVITASConfig {
   return venicePresetAppliers.applyProviderConfig(cfg);
 }
 
-export function applyVeniceConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyVeniceConfig(cfg: CIVITASConfig): CIVITASConfig {
   return venicePresetAppliers.applyConfig(cfg);
 }

@@ -4,7 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import { resolveBoundaryPath } from "../../infra/boundary-path.js";
 import { parseSshTarget } from "../../infra/ssh-tunnel.js";
-import { resolvePreferredOpenClawTmpDir } from "../../infra/tmp-civitas-dir.js";
+import { resolvePreferredCIVITASTmpDir } from "../../infra/tmp-civitas-dir.js";
 import { resolveUserPath } from "../../utils.js";
 import type { SandboxBackendCommandResult } from "./backend.js";
 import { sanitizeEnvVars } from "./sanitize-env-vars.js";
@@ -376,7 +376,7 @@ function parseSshConfigHost(configText: string): string | null {
 }
 
 function resolveSshTmpRoot(): string {
-  return path.resolve(resolvePreferredOpenClawTmpDir() ?? os.tmpdir());
+  return path.resolve(resolvePreferredCIVITASTmpDir() ?? os.tmpdir());
 }
 
 function resolveOptionalLocalPath(value: string | undefined): string | undefined {

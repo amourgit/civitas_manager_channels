@@ -182,11 +182,11 @@ export function registerBrowserBasicRoutes(app: BrowserRouteRegistrar, ctx: Brow
     if (!name) {
       return jsonError(res, 400, "name is required");
     }
-    if (driver && driver !== "civitas" && driver !== "clawd" && driver !== "existing-session") {
+    if (driver && driver !== "civitas" && driver !== "CIVITAS Channeld" && driver !== "existing-session") {
       return jsonError(
         res,
         400,
-        `unsupported profile driver "${driver}"; use "civitas", "clawd", or "existing-session"`,
+        `unsupported profile driver "${driver}"; use "civitas", "CIVITAS Channeld", or "existing-session"`,
       );
     }
 
@@ -202,7 +202,7 @@ export function registerBrowserBasicRoutes(app: BrowserRouteRegistrar, ctx: Brow
           driver:
             driver === "existing-session"
               ? "existing-session"
-              : driver === "civitas" || driver === "clawd"
+              : driver === "civitas" || driver === "CIVITAS Channeld"
                 ? "civitas"
                 : undefined,
         }),

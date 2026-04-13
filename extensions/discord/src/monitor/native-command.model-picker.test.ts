@@ -2,7 +2,7 @@ import { ChannelType } from "discord-api-types/v10";
 import * as commandRegistryModule from "civitas/plugin-sdk/command-auth";
 import type { ChatCommandDefinition, CommandArgsParsing } from "civitas/plugin-sdk/command-auth";
 import type { ModelsProviderData } from "civitas/plugin-sdk/command-auth";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import * as dispatcherModule from "civitas/plugin-sdk/reply-dispatch-runtime";
 import * as globalsModule from "civitas/plugin-sdk/runtime-env";
 import * as commandTextModule from "civitas/plugin-sdk/text-runtime";
@@ -68,7 +68,7 @@ function createModelPickerContext(): ModelPickerContext {
         },
       },
     },
-  } as unknown as OpenClawConfig;
+  } as unknown as CIVITASConfig;
 
   return {
     cfg,

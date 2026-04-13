@@ -2,7 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import type { App } from "@slack/bolt";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import type { SlackMessageEvent } from "../../types.js";
 
@@ -76,7 +76,7 @@ describe("prepareSlackMessage thread context allowlists", () => {
             contextVisibility: "allowlist",
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
       appClient: { conversations: { replies } } as unknown as App["client"],
       defaultRequireMention: false,
       replyToMode: "all",
@@ -146,7 +146,7 @@ describe("prepareSlackMessage thread context allowlists", () => {
             contextVisibility: "allowlist",
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
       appClient: { conversations: { replies } } as unknown as App["client"],
       defaultRequireMention: false,
       replyToMode: "all",
@@ -215,7 +215,7 @@ describe("prepareSlackMessage thread context allowlists", () => {
             contextVisibility: "allowlist",
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
       appClient: { conversations: { replies } } as unknown as App["client"],
       defaultRequireMention: false,
       replyToMode: "all",
@@ -278,7 +278,7 @@ describe("prepareSlackMessage thread context allowlists", () => {
             contextVisibility: "allowlist",
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
       appClient: { conversations: { replies } } as unknown as App["client"],
       defaultRequireMention: false,
       replyToMode: "all",

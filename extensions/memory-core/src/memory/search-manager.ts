@@ -2,7 +2,7 @@ import {
   createSubsystemLogger,
   resolveAgentWorkspaceDir,
   resolveGlobalSingleton,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "civitas/plugin-sdk/memory-core-host-engine-foundation";
 import { checkQmdBinaryAvailability } from "civitas/plugin-sdk/memory-core-host-engine-qmd";
 import {
@@ -43,7 +43,7 @@ export type MemorySearchManagerResult = {
 };
 
 export async function getMemorySearchManager(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   agentId: string;
   purpose?: "default" | "status";
 }): Promise<MemorySearchManagerResult> {

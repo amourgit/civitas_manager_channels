@@ -7,15 +7,15 @@ function mockContextDeps(params: {
   loadConfig: () => unknown;
   discoveredModels?: DiscoveredModel[];
 }) {
-  const ensureOpenClawModelsJson = vi.fn(async () => {});
+  const ensureCIVITASModelsJson = vi.fn(async () => {});
   vi.doMock("../config/config.js", () => ({
     loadConfig: params.loadConfig,
   }));
   vi.doMock("./models-config.js", () => ({
-    ensureOpenClawModelsJson,
+    ensureCIVITASModelsJson,
   }));
   vi.doMock("./agent-paths.js", () => ({
-    resolveOpenClawAgentDir: () => "/tmp/civitas-agent",
+    resolveCIVITASAgentDir: () => "/tmp/civitas-agent",
   }));
   vi.doMock("./pi-model-discovery-runtime.js", () => ({
     discoverAuthStorage: vi.fn(() => ({})),
@@ -23,7 +23,7 @@ function mockContextDeps(params: {
       getAll: () => params.discoveredModels ?? [],
     })),
   }));
-  return { ensureOpenClawModelsJson };
+  return { ensureCIVITASModelsJson };
 }
 
 function mockContextModuleDeps(loadConfigImpl: () => unknown) {
@@ -194,11 +194,11 @@ describe("lookupContextTokens", () => {
       ]) {
         vi.resetModules();
         const loadConfigMock = vi.fn(() => ({ models: {} }));
-        const { ensureOpenClawModelsJson } = mockContextModuleDeps(loadConfigMock);
+        const { ensureCIVITASModelsJson } = mockContextModuleDeps(loadConfigMock);
         process.argv = scenario.argv;
         await importContextModule();
         expect(loadConfigMock).toHaveBeenCalledTimes(scenario.expectedCalls);
-        expect(ensureOpenClawModelsJson).toHaveBeenCalledTimes(scenario.expectedCalls);
+        expect(ensureCIVITASModelsJson).toHaveBeenCalledTimes(scenario.expectedCalls);
       }
     } finally {
       process.argv = argvSnapshot;

@@ -2,7 +2,7 @@ import { access, mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig, PluginRuntime, RuntimeEnv } from "../runtime-api.js";
+import type { CIVITASConfig, PluginRuntime, RuntimeEnv } from "../runtime-api.js";
 import {
   type MSTeamsActivityHandler,
   type MSTeamsMessageHandlerDeps,
@@ -60,7 +60,7 @@ function createRuntimeStub(readAllowFromStore: ReturnType<typeof vi.fn>): Plugin
 }
 
 function createDeps(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   readAllowFromStore?: ReturnType<typeof vi.fn>;
 }): MSTeamsMessageHandlerDeps {
   const readAllowFromStore = params.readAllowFromStore ?? vi.fn(async () => []);
@@ -127,7 +127,7 @@ async function expectFileMissing(filePath: string) {
 }
 
 async function withFeedbackHandler(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   context: Parameters<typeof createFeedbackInvokeContext>[0];
   assertResult: (args: { tmpDir: string; originalRun: ReturnType<typeof vi.fn> }) => Promise<void>;
 }) {
@@ -168,7 +168,7 @@ describe("msteams feedback invoke authz", () => {
             allowFrom: ["owner-aad"],
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
       context: {
         reaction: "like",
         conversationId: "a:personal-chat;messageid=bot-msg-1",
@@ -211,7 +211,7 @@ describe("msteams feedback invoke authz", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
       context: {
         reaction: "like",
         conversationId: "a:personal-chat;messageid=bot-msg-1",
@@ -245,7 +245,7 @@ describe("msteams feedback invoke authz", () => {
             allowFrom: ["owner-aad"],
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
       context: {
         reaction: "like",
         conversationId: "a:personal-chat;messageid=bot-msg-1",
@@ -278,7 +278,7 @@ describe("msteams feedback invoke authz", () => {
                 feedbackReflection: true,
               },
             },
-          } as OpenClawConfig,
+          } as CIVITASConfig,
         }),
       ) as MSTeamsActivityHandler & {
         run: NonNullable<MSTeamsActivityHandler["run"]>;

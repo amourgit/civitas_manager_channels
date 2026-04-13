@@ -35,7 +35,7 @@ export { formatZonedTimestamp } from "civitas/plugin-sdk/core";
 export { normalizeOptionalAccountId } from "civitas/plugin-sdk/account-id";
 export type { ChannelSetupInput } from "civitas/plugin-sdk/core";
 export type {
-  OpenClawConfig,
+  CIVITASConfig,
   ContextVisibilityMode,
   DmPolicy,
   GroupPolicy,

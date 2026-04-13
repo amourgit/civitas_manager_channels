@@ -1,8 +1,8 @@
 import { resolveChannelGroupRequireMention } from "civitas/plugin-sdk/channel-policy";
-import type { OpenClawConfig } from "civitas/plugin-sdk/core";
+import type { CIVITASConfig } from "civitas/plugin-sdk/core";
 
 type GoogleChatGroupContext = {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
   groupId?: string | null;
 };

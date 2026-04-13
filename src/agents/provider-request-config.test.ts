@@ -409,7 +409,7 @@ describe("provider request config", () => {
 
     expect(resolved).toEqual({
       "HTTP-Referer": "https://civitas.ai",
-      "X-OpenRouter-Title": "OpenClaw",
+      "X-OpenRouter-Title": "CIVITAS",
       "X-OpenRouter-Categories": "cli-agent",
       "X-Custom": "1",
     });

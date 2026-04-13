@@ -7,7 +7,7 @@ import type { AcpInitializeSessionInput } from "../acp/control-plane/manager.typ
 import {
   clearRuntimeConfigSnapshot,
   setRuntimeConfigSnapshot,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "../config/config.js";
 import * as sessionPaths from "../config/sessions/paths.js";
 import * as sessionStore from "../config/sessions/store.js";
@@ -24,7 +24,7 @@ import {
 import { resetTaskRegistryForTests } from "../tasks/task-registry.js";
 import * as acpSpawnParentStream from "./acp-spawn-parent-stream.js";
 
-function createDefaultSpawnConfig(): OpenClawConfig {
+function createDefaultSpawnConfig(): CIVITASConfig {
   return {
     acp: {
       enabled: true,
@@ -112,7 +112,7 @@ type CrossAgentWorkspaceFixture = {
   targetWorkspace: string;
 };
 
-function replaceSpawnConfig(next: OpenClawConfig): void {
+function replaceSpawnConfig(next: CIVITASConfig): void {
   const current = hoisted.state.cfg as Record<string, unknown>;
   for (const key of Object.keys(current)) {
     delete current[key];
@@ -1009,7 +1009,7 @@ describe("spawnAcpDirect", () => {
       {
         task: "Check workspace",
         agentId: "codex",
-        cwd: "/home/bob/clawd",
+        cwd: "/home/bob/CIVITAS Channeld",
         mode: "session",
         thread: true,
       },
@@ -1025,7 +1025,7 @@ describe("spawnAcpDirect", () => {
     expect(hoisted.sessionBindingBindMock).toHaveBeenCalledWith(
       expect.objectContaining({
         metadata: expect.objectContaining({
-          introText: expect.stringContaining("cwd: /home/bob/clawd"),
+          introText: expect.stringContaining("cwd: /home/bob/CIVITAS Channeld"),
         }),
       }),
     );

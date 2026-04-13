@@ -83,7 +83,7 @@ describe("discord tool result dispatch", () => {
             mentionedEveryone: false,
             mentionedUsers: [],
             mentionedRoles: [],
-            author: { id: "bot-id", bot: true, username: "OpenClaw" },
+            author: { id: "bot-id", bot: true, username: "CIVITAS" },
           },
         },
       }),

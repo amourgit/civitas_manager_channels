@@ -98,8 +98,8 @@ describe("Integration: saveSessionStore with pruning", () => {
     mockLoadConfig = vi.mocked(loadConfig) as ReturnType<typeof vi.fn>;
     testDir = await createCaseDir("pruning-integ");
     storePath = path.join(testDir, "sessions.json");
-    savedCacheTtl = process.env.OPENCLAW_SESSION_CACHE_TTL_MS;
-    process.env.OPENCLAW_SESSION_CACHE_TTL_MS = "0";
+    savedCacheTtl = process.env.CIVITAS_SESSION_CACHE_TTL_MS;
+    process.env.CIVITAS_SESSION_CACHE_TTL_MS = "0";
     clearSessionStoreCacheForTest();
     mockLoadConfig.mockClear();
   });
@@ -108,9 +108,9 @@ describe("Integration: saveSessionStore with pruning", () => {
     vi.restoreAllMocks();
     clearSessionStoreCacheForTest();
     if (savedCacheTtl === undefined) {
-      delete process.env.OPENCLAW_SESSION_CACHE_TTL_MS;
+      delete process.env.CIVITAS_SESSION_CACHE_TTL_MS;
     } else {
-      process.env.OPENCLAW_SESSION_CACHE_TTL_MS = savedCacheTtl;
+      process.env.CIVITAS_SESSION_CACHE_TTL_MS = savedCacheTtl;
     }
   });
 

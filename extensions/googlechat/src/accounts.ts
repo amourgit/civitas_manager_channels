@@ -5,7 +5,7 @@ import {
   resolveAccountEntry,
   resolveMergedAccountConfig,
 } from "civitas/plugin-sdk/account-resolution";
-import { isSecretRef, type OpenClawConfig } from "civitas/plugin-sdk/core";
+import { isSecretRef, type CIVITASConfig } from "civitas/plugin-sdk/core";
 import { safeParseJsonWithSchema, safeParseWithSchema } from "civitas/plugin-sdk/extension-shared";
 import { z } from "zod";
 import type { GoogleChatAccountConfig } from "./types.config.js";
@@ -33,7 +33,7 @@ const {
 export { listGoogleChatAccountIds, resolveDefaultGoogleChatAccountId };
 
 function mergeGoogleChatAccountConfig(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId: string,
 ): GoogleChatAccountConfig {
   const raw = cfg.channels?.["googlechat"] ?? {};
@@ -127,7 +127,7 @@ function resolveCredentialsFromConfig(params: {
 }
 
 export function resolveGoogleChatAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
 }): ResolvedGoogleChatAccount {
   const accountId = normalizeAccountId(
@@ -150,7 +150,7 @@ export function resolveGoogleChatAccount(params: {
   };
 }
 
-export function listEnabledGoogleChatAccounts(cfg: OpenClawConfig): ResolvedGoogleChatAccount[] {
+export function listEnabledGoogleChatAccounts(cfg: CIVITASConfig): ResolvedGoogleChatAccount[] {
   return listGoogleChatAccountIds(cfg)
     .map((accountId) => resolveGoogleChatAccount({ cfg, accountId }))
     .filter((account) => account.enabled);

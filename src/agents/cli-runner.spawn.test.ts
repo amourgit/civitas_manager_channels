@@ -1,9 +1,9 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { beforeEach, describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import { onAgentEvent, resetAgentEventsForTest } from "../infra/agent-events.js";
-import { resolvePreferredOpenClawTmpDir } from "../infra/tmp-civitas-dir.js";
+import { resolvePreferredCIVITASTmpDir } from "../infra/tmp-civitas-dir.js";
 import {
   createManagedRun,
   mockSuccessfulCliRun,
@@ -120,7 +120,7 @@ describe("runCliAgent spawn path", () => {
             },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       prompt: "hi",
       provider: "claude-cli",
       model: "claude-sonnet-4-6",
@@ -345,7 +345,7 @@ describe("runCliAgent spawn path", () => {
             bootstrapTotalMaxChars: 50,
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       prompt: "hi",
       provider: "codex-cli",
       model: "gpt-5.4",
@@ -381,7 +381,7 @@ describe("runCliAgent spawn path", () => {
     );
 
     const tempDir = await fs.mkdtemp(
-      path.join(resolvePreferredOpenClawTmpDir(), "civitas-cli-prompt-image-"),
+      path.join(resolvePreferredCIVITASTmpDir(), "civitas-cli-prompt-image-"),
     );
     const sourceImage = path.join(tempDir, "bb-image.png");
     await fs.writeFile(sourceImage, Buffer.from(SMALL_PNG_BASE64, "base64"));
@@ -425,7 +425,7 @@ describe("runCliAgent spawn path", () => {
     );
 
     const tempDir = await fs.mkdtemp(
-      path.join(resolvePreferredOpenClawTmpDir(), "civitas-cli-prompt-image-generic-"),
+      path.join(resolvePreferredCIVITASTmpDir(), "civitas-cli-prompt-image-generic-"),
     );
     const sourceImage = path.join(tempDir, "claude-image.png");
     await fs.writeFile(sourceImage, Buffer.from(SMALL_PNG_BASE64, "base64"));
@@ -473,7 +473,7 @@ describe("runCliAgent spawn path", () => {
     );
 
     const tempDir = await fs.mkdtemp(
-      path.join(resolvePreferredOpenClawTmpDir(), "civitas-cli-explicit-images-"),
+      path.join(resolvePreferredCIVITASTmpDir(), "civitas-cli-explicit-images-"),
     );
     const sourceImage = path.join(tempDir, "ignored-prompt-image.png");
     await fs.writeFile(sourceImage, Buffer.from(SMALL_PNG_BASE64, "base64"));
@@ -512,7 +512,7 @@ describe("runCliAgent spawn path", () => {
           workspace: fallbackWorkspace,
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies CIVITASConfig;
 
     supervisorSpawnMock.mockResolvedValueOnce(
       createManagedRun({

@@ -1,6 +1,6 @@
 import type { WebhookRequestBody } from "@line/bot-sdk";
 import type { NextFunction, Request, Response } from "express";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { loadConfig } from "civitas/plugin-sdk/config-runtime";
 import { DEFAULT_GROUP_HISTORY_LIMIT, type HistoryEntry } from "civitas/plugin-sdk/reply-history";
 import {
@@ -19,7 +19,7 @@ export interface LineBotOptions {
   channelSecret: string;
   accountId?: string;
   runtime?: RuntimeEnv;
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
   mediaMaxMb?: number;
   onMessage?: (ctx: LineInboundContext) => Promise<void>;
 }

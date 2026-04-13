@@ -1,11 +1,11 @@
 import os from "node:os";
 import path from "node:path";
 import type { Command } from "commander";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import { loadConfig, readConfigFileSnapshot, replaceConfigFile } from "../config/config.js";
 import { resolveStateDir } from "../config/paths.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
-import { parseClawHubPluginSpec } from "../infra/clawhub.js";
+import { parseChannelHubPluginSpec } from "../infra/CIVITAS Channelhub.js";
 import { enablePluginInConfig } from "../plugins/enable.js";
 import { listMarketplacePlugins } from "../plugins/marketplace.js";
 import type { PluginRecord } from "../plugins/registry.js";
@@ -69,7 +69,7 @@ export type PluginUninstallOptions = {
 
 function resolvePluginUninstallId(params: {
   rawId: string;
-  config: OpenClawConfig;
+  config: CIVITASConfig;
   plugins: PluginRecord[];
 }): { pluginId: string; plugin?: PluginRecord } {
   const rawId = params.rawId.trim();
@@ -89,14 +89,14 @@ function resolvePluginUninstallId(params: {
     }
   }
 
-  const requestedClawHub = parseClawHubPluginSpec(rawId);
-  if (requestedClawHub) {
+  const requestedChannelHub = parseChannelHubPluginSpec(rawId);
+  if (requestedChannelHub) {
     for (const [pluginId, install] of Object.entries(params.config.plugins?.installs ?? {})) {
-      const installedClawHubName =
-        install.clawhubPackage ??
-        parseClawHubPluginSpec(install.spec ?? "")?.name ??
-        parseClawHubPluginSpec(install.resolvedSpec ?? "")?.name;
-      if (installedClawHubName === requestedClawHub.name) {
+      const installedChannelHubName =
+        install.CIVITAS ChannelhubPackage ??
+        parseChannelHubPluginSpec(install.spec ?? "")?.name ??
+        parseChannelHubPluginSpec(install.resolvedSpec ?? "")?.name;
+      if (installedChannelHubName === requestedChannelHub.name) {
         return { pluginId };
       }
     }
@@ -234,7 +234,7 @@ function formatInstallLines(install: PluginInstallRecord | undefined): string[] 
 export function registerPluginsCli(program: Command) {
   const plugins = program
     .command("plugins")
-    .description("Manage OpenClaw plugins and extensions")
+    .description("Manage CIVITAS plugins and extensions")
     .addHelpText(
       "after",
       () =>
@@ -574,9 +574,9 @@ export function registerPluginsCli(program: Command) {
     .argument("<id>", "Plugin id")
     .action(async (id: string) => {
       const snapshot = await readConfigFileSnapshot();
-      const cfg = (snapshot.sourceConfig ?? snapshot.config) as OpenClawConfig;
+      const cfg = (snapshot.sourceConfig ?? snapshot.config) as CIVITASConfig;
       const enableResult = enablePluginInConfig(cfg, id);
-      let next: OpenClawConfig = enableResult.config;
+      let next: CIVITASConfig = enableResult.config;
       const slotResult = applySlotSelectionForPlugin(next, id);
       next = slotResult.config;
       await replaceConfigFile({
@@ -601,7 +601,7 @@ export function registerPluginsCli(program: Command) {
     .argument("<id>", "Plugin id")
     .action(async (id: string) => {
       const snapshot = await readConfigFileSnapshot();
-      const cfg = (snapshot.sourceConfig ?? snapshot.config) as OpenClawConfig;
+      const cfg = (snapshot.sourceConfig ?? snapshot.config) as CIVITASConfig;
       const next = setPluginEnabledInConfig(cfg, id, false);
       await replaceConfigFile({
         nextConfig: next,
@@ -620,7 +620,7 @@ export function registerPluginsCli(program: Command) {
     .option("--dry-run", "Show what would be removed without making changes", false)
     .action(async (id: string, opts: PluginUninstallOptions) => {
       const snapshot = await readConfigFileSnapshot();
-      const cfg = (snapshot.sourceConfig ?? snapshot.config) as OpenClawConfig;
+      const cfg = (snapshot.sourceConfig ?? snapshot.config) as CIVITASConfig;
       const report = buildPluginDiagnosticsReport({ config: cfg });
       const extensionsDir = path.join(resolveStateDir(process.env, os.homedir), "extensions");
       const keepFiles = Boolean(opts.keepFiles || opts.keepConfig);
@@ -763,7 +763,7 @@ export function registerPluginsCli(program: Command) {
   plugins
     .command("install")
     .description(
-      "Install a plugin or hook pack (path, archive, npm spec, clawhub:package, or marketplace entry)",
+      "Install a plugin or hook pack (path, archive, npm spec, CIVITAS Channelhub:package, or marketplace entry)",
     )
     .argument(
       "<path-or-spec-or-plugin>",

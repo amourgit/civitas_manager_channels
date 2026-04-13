@@ -12,9 +12,9 @@ import {
   setRuntimeConfigSnapshot,
   writeConfigFile,
 } from "./io.js";
-import type { OpenClawConfig } from "./types.js";
+import type { CIVITASConfig } from "./types.js";
 
-function createSourceConfig(): OpenClawConfig {
+function createSourceConfig(): CIVITASConfig {
   return {
     models: {
       providers: {
@@ -28,7 +28,7 @@ function createSourceConfig(): OpenClawConfig {
   };
 }
 
-function createRuntimeConfig(): OpenClawConfig {
+function createRuntimeConfig(): CIVITASConfig {
   return {
     models: {
       providers: {
@@ -71,7 +71,7 @@ describe("runtime config snapshot writes", () => {
 
   it("skips source projection for non-runtime-derived configs", async () => {
     await withTempHome("civitas-config-runtime-projection-shape-", async () => {
-      const sourceConfig: OpenClawConfig = {
+      const sourceConfig: CIVITASConfig = {
         ...createSourceConfig(),
         gateway: {
           auth: {
@@ -79,7 +79,7 @@ describe("runtime config snapshot writes", () => {
           },
         },
       };
-      const runtimeConfig: OpenClawConfig = {
+      const runtimeConfig: CIVITASConfig = {
         ...createRuntimeConfig(),
         gateway: {
           auth: {
@@ -87,7 +87,7 @@ describe("runtime config snapshot writes", () => {
           },
         },
       };
-      const independentConfig: OpenClawConfig = {
+      const independentConfig: CIVITASConfig = {
         models: {
           providers: {
             openai: {
@@ -150,7 +150,7 @@ describe("runtime config snapshot writes", () => {
   it("refreshes the runtime snapshot after writes so follow-up reads see persisted changes", async () => {
     await withTempHome("civitas-config-runtime-write-refresh-", async (home) => {
       const configPath = path.join(home, ".civitas", "civitas.json");
-      const sourceConfig: OpenClawConfig = {
+      const sourceConfig: CIVITASConfig = {
         models: {
           providers: {
             openai: {
@@ -161,7 +161,7 @@ describe("runtime config snapshot writes", () => {
           },
         },
       };
-      const runtimeConfig: OpenClawConfig = {
+      const runtimeConfig: CIVITASConfig = {
         models: {
           providers: {
             openai: {
@@ -172,7 +172,7 @@ describe("runtime config snapshot writes", () => {
           },
         },
       };
-      const nextRuntimeConfig: OpenClawConfig = {
+      const nextRuntimeConfig: CIVITASConfig = {
         ...runtimeConfig,
         gateway: { auth: { mode: "token" as const } },
       };
@@ -224,7 +224,7 @@ describe("runtime config snapshot writes", () => {
       const configPath = path.join(home, ".civitas", "civitas.json");
       const sourceConfig = createSourceConfig();
       const runtimeConfig = createRuntimeConfig();
-      const nextRuntimeConfig: OpenClawConfig = {
+      const nextRuntimeConfig: CIVITASConfig = {
         ...runtimeConfig,
         gateway: { auth: { mode: "token" as const } },
       };
@@ -265,7 +265,7 @@ describe("runtime config snapshot writes", () => {
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(configPath, `${JSON.stringify({ gateway: { port: 18789 } }, null, 2)}\n`);
 
-      const seen: Array<{ configPath: string; runtimeConfig: OpenClawConfig }> = [];
+      const seen: Array<{ configPath: string; runtimeConfig: CIVITASConfig }> = [];
       const unsubscribe = registerConfigWriteListener((event) => {
         seen.push({
           configPath: event.configPath,

@@ -2,11 +2,11 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import { normalizeCompatibilityConfigValues } from "./doctor-legacy-config.js";
 
-function asLegacyConfig(value: unknown): OpenClawConfig {
-  return value as OpenClawConfig;
+function asLegacyConfig(value: unknown): CIVITASConfig {
+  return value as CIVITASConfig;
 }
 
 function getLegacyProperty(value: unknown, key: string): unknown {
@@ -34,16 +34,16 @@ describe("normalizeCompatibilityConfigValues", () => {
   };
 
   beforeEach(() => {
-    previousOauthDir = process.env.OPENCLAW_OAUTH_DIR;
+    previousOauthDir = process.env.CIVITAS_OAUTH_DIR;
     tempOauthDir = fs.mkdtempSync(path.join(os.tmpdir(), "civitas-oauth-"));
-    process.env.OPENCLAW_OAUTH_DIR = tempOauthDir;
+    process.env.CIVITAS_OAUTH_DIR = tempOauthDir;
   });
 
   afterEach(() => {
     if (previousOauthDir === undefined) {
-      delete process.env.OPENCLAW_OAUTH_DIR;
+      delete process.env.CIVITAS_OAUTH_DIR;
     } else {
-      process.env.OPENCLAW_OAUTH_DIR = previousOauthDir;
+      process.env.CIVITAS_OAUTH_DIR = previousOauthDir;
     }
     if (tempOauthDir) {
       fs.rmSync(tempOauthDir, { recursive: true, force: true });
@@ -379,7 +379,7 @@ describe("normalizeCompatibilityConfigValues", () => {
           allowedHostnames: ["localhost"],
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as CIVITASConfig);
 
     expect(
       (res.config.browser?.ssrfPolicy as Record<string, unknown> | undefined)?.allowPrivateNetwork,
@@ -399,7 +399,7 @@ describe("normalizeCompatibilityConfigValues", () => {
           dangerouslyAllowPrivateNetwork: false,
         },
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as CIVITASConfig);
 
     expect(
       (res.config.browser?.ssrfPolicy as Record<string, unknown> | undefined)?.allowPrivateNetwork,
@@ -634,7 +634,7 @@ describe("normalizeCompatibilityConfigValues", () => {
           },
         },
       },
-    } as OpenClawConfig);
+    } as CIVITASConfig);
 
     expect(res.config.tools?.web?.fetch).toEqual({
       provider: "firecrawl",
@@ -682,7 +682,7 @@ describe("normalizeCompatibilityConfigValues", () => {
           },
         },
       },
-    } as OpenClawConfig);
+    } as CIVITASConfig);
 
     expect(res.config.plugins?.entries?.firecrawl).toEqual({
       enabled: true,
@@ -705,7 +705,7 @@ describe("normalizeCompatibilityConfigValues", () => {
       talk: {
         voiceId: "voice-123",
         voiceAliases: {
-          Clawd: "EXAVITQu4vr4xnSDxMaL",
+          Channeld: "EXAVITQu4vr4xnSDxMaL",
         },
         modelId: "eleven_v3",
         outputFormat: "pcm_44100",
@@ -713,14 +713,14 @@ describe("normalizeCompatibilityConfigValues", () => {
         interruptOnSpeech: false,
         silenceTimeoutMs: 1500,
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as CIVITASConfig);
 
     expect(res.config.talk).toEqual({
       providers: {
         elevenlabs: {
           voiceId: "voice-123",
           voiceAliases: {
-            Clawd: "EXAVITQu4vr4xnSDxMaL",
+            Channeld: "EXAVITQu4vr4xnSDxMaL",
           },
           modelId: "eleven_v3",
           outputFormat: "pcm_44100",
@@ -744,7 +744,7 @@ describe("normalizeCompatibilityConfigValues", () => {
         },
         apiKey: "secret-key",
       },
-    } as unknown as OpenClawConfig);
+    } as unknown as CIVITASConfig);
 
     expect(res.config.talk).toEqual({
       provider: "elevenlabs",

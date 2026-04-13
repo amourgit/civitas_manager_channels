@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { afterEach, describe, expect, it } from "vitest";
 import { withTempHome } from "../../../test/helpers/temp-home.js";
 import { autoPrepareLegacyMatrixCrypto, detectLegacyMatrixCrypto } from "./legacy-crypto.js";
@@ -18,7 +18,7 @@ import {
   writeMatrixCredentials,
 } from "./test-helpers.js";
 
-function createDefaultMatrixConfig(): OpenClawConfig {
+function createDefaultMatrixConfig(): CIVITASConfig {
   return {
     channels: {
       matrix: {
@@ -161,7 +161,7 @@ describe("matrix legacy encrypted-state migration", () => {
         home,
         includeStoredCredentials: true,
       });
-      const cfg: OpenClawConfig = {
+      const cfg: CIVITASConfig = {
         channels: {
           matrix: {
             accounts: {

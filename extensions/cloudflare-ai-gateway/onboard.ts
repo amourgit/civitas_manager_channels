@@ -1,7 +1,7 @@
 import {
   applyAgentDefaultModelPrimary,
   applyProviderConfigWithDefaultModel,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "civitas/plugin-sdk/provider-onboard";
 import {
   buildCloudflareAiGatewayModelDefinition,
@@ -37,9 +37,9 @@ export function buildCloudflareAiGatewayConfigPatch(params: {
 }
 
 export function applyCloudflareAiGatewayProviderConfig(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   params?: { accountId?: string; gatewayId?: string },
-): OpenClawConfig {
+): CIVITASConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[CLOUDFLARE_AI_GATEWAY_DEFAULT_MODEL_REF] = {
     ...models[CLOUDFLARE_AI_GATEWAY_DEFAULT_MODEL_REF],
@@ -81,9 +81,9 @@ export function applyCloudflareAiGatewayProviderConfig(
 }
 
 export function applyCloudflareAiGatewayConfig(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   params?: { accountId?: string; gatewayId?: string },
-): OpenClawConfig {
+): CIVITASConfig {
   return applyAgentDefaultModelPrimary(
     applyCloudflareAiGatewayProviderConfig(cfg, params),
     CLOUDFLARE_AI_GATEWAY_DEFAULT_MODEL_REF,

@@ -2,9 +2,9 @@ import type {
   ChannelDoctorAdapter,
   ChannelDoctorConfigMutation,
 } from "civitas/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 
-function normalizeWhatsAppAckReactionConfig(cfg: OpenClawConfig): ChannelDoctorConfigMutation {
+function normalizeWhatsAppAckReactionConfig(cfg: CIVITASConfig): ChannelDoctorConfigMutation {
   const legacyAckReaction = cfg.messages?.ackReaction?.trim();
   if (!legacyAckReaction || cfg.channels?.whatsapp === undefined) {
     return { config: cfg, changes: [] };

@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import type { DatabaseSync } from "node:sqlite";
-import type { OpenClawConfig } from "civitas/plugin-sdk/memory-core-host-engine-foundation";
+import type { CIVITASConfig } from "civitas/plugin-sdk/memory-core-host-engine-foundation";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { openMemoryDatabaseAtPath } from "./manager-sync-ops.js";
 import { runMemorySyncWithReadonlyRecovery } from "./manager.js";
@@ -36,7 +36,7 @@ describe("memory manager readonly recovery", () => {
   let workspaceDir = "";
   let indexPath = "";
 
-  function createMemoryConfig(): OpenClawConfig {
+  function createMemoryConfig(): CIVITASConfig {
     return {
       agents: {
         defaults: {
@@ -52,7 +52,7 @@ describe("memory manager readonly recovery", () => {
         },
         list: [{ id: "main", default: true }],
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
   }
 
   function createReadonlyRecoveryHarness() {

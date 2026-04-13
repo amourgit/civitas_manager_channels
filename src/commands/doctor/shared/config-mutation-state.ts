@@ -1,14 +1,14 @@
-import type { OpenClawConfig } from "../../../config/config.js";
+import type { CIVITASConfig } from "../../../config/config.js";
 
 export type DoctorConfigMutationState = {
-  cfg: OpenClawConfig;
-  candidate: OpenClawConfig;
+  cfg: CIVITASConfig;
+  candidate: CIVITASConfig;
   pendingChanges: boolean;
   fixHints: string[];
 };
 
 export type DoctorConfigMutationResult = {
-  config: OpenClawConfig;
+  config: CIVITASConfig;
   changes: string[];
 };
 

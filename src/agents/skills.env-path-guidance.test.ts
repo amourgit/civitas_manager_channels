@@ -13,7 +13,7 @@ type GuidanceCase = {
 const CASES: GuidanceCase[] = [
   {
     file: "skills/session-logs/SKILL.md",
-    required: ["OPENCLAW_STATE_DIR"],
+    required: ["CIVITAS_STATE_DIR"],
     forbidden: [
       "for f in ~/.civitas/agents/<agentId>/sessions/*.jsonl",
       'rg -l "phrase" ~/.civitas/agents/<agentId>/sessions/*.jsonl',
@@ -22,24 +22,24 @@ const CASES: GuidanceCase[] = [
   },
   {
     file: "skills/gh-issues/SKILL.md",
-    required: ["OPENCLAW_CONFIG_PATH"],
+    required: ["CIVITAS_CONFIG_PATH"],
     forbidden: ["cat ~/.civitas/civitas.json"],
   },
   {
     file: "skills/canvas/SKILL.md",
-    required: ["OPENCLAW_CONFIG_PATH"],
+    required: ["CIVITAS_CONFIG_PATH"],
     forbidden: ["cat ~/.civitas/civitas.json"],
   },
   {
     file: "skills/openai-whisper-api/SKILL.md",
-    required: ["OPENCLAW_CONFIG_PATH"],
+    required: ["CIVITAS_CONFIG_PATH"],
   },
   {
     file: "skills/sherpa-onnx-tts/SKILL.md",
     required: [
-      "OPENCLAW_STATE_DIR",
-      "OPENCLAW_CONFIG_PATH",
-      'STATE_DIR="${OPENCLAW_STATE_DIR:-$HOME/.civitas}"',
+      "CIVITAS_STATE_DIR",
+      "CIVITAS_CONFIG_PATH",
+      'STATE_DIR="${CIVITAS_STATE_DIR:-$HOME/.civitas}"',
     ],
     forbidden: [
       'SHERPA_ONNX_RUNTIME_DIR: "~/.civitas/tools/sherpa-onnx-tts/runtime"',
@@ -49,14 +49,14 @@ const CASES: GuidanceCase[] = [
   },
   {
     file: "skills/coding-agent/SKILL.md",
-    required: ["OPENCLAW_STATE_DIR"],
+    required: ["CIVITAS_STATE_DIR"],
     forbidden: ["NEVER start Codex in ~/.civitas/"],
   },
 ];
 
 describe("bundled skill env-path guidance", () => {
   it.each(CASES)(
-    "keeps $file aligned with OPENCLAW env overrides",
+    "keeps $file aligned with CIVITAS env overrides",
     ({ file, required, forbidden }) => {
       const content = fs.readFileSync(path.join(REPO_ROOT, file), "utf8");
       for (const needle of required ?? []) {

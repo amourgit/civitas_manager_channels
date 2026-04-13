@@ -6,17 +6,17 @@ import {
   prepareScopedSetupConfig,
   type ChannelSetupAdapter,
   type DmPolicy,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "civitas/plugin-sdk/setup";
 import { applyBlueBubblesConnectionConfig } from "./config-apply.js";
 
 const channel = "bluebubbles" as const;
 
 export function setBlueBubblesDmPolicy(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId: string,
   dmPolicy: DmPolicy,
-): OpenClawConfig {
+): CIVITASConfig {
   const resolvedAccountId = normalizeAccountId(accountId);
   const existingAllowFrom =
     resolvedAccountId === "default"
@@ -37,10 +37,10 @@ export function setBlueBubblesDmPolicy(
 }
 
 export function setBlueBubblesAllowFrom(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId: string,
   allowFrom: string[],
-): OpenClawConfig {
+): CIVITASConfig {
   return patchScopedAccountConfig({
     cfg,
     channelKey: channel,

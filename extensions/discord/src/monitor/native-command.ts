@@ -17,7 +17,7 @@ import {
   resolveCommandAuthorizedFromAuthorizers,
   resolveNativeCommandSessionTargets,
 } from "civitas/plugin-sdk/command-auth-native";
-import type { OpenClawConfig, loadConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig, loadConfig } from "civitas/plugin-sdk/config-runtime";
 import { buildPairingReply } from "civitas/plugin-sdk/conversation-runtime";
 import { isDangerousNameMatchingEnabled } from "civitas/plugin-sdk/dangerous-name-runtime";
 import { getAgentScopedMediaLocalRoots } from "civitas/plugin-sdk/media-runtime";
@@ -82,7 +82,7 @@ import { resolveDiscordSenderIdentity } from "./sender-identity.js";
 import type { ThreadBindingManager } from "./thread-bindings.js";
 import { resolveDiscordThreadParentInfo } from "./threading.js";
 
-type DiscordConfig = NonNullable<OpenClawConfig["channels"]>["discord"];
+type DiscordConfig = NonNullable<CIVITASConfig["channels"]>["discord"];
 const log = createSubsystemLogger("discord/native-command");
 // Discord application command and option descriptions are limited to 1-100 chars.
 // https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-structure
@@ -142,7 +142,7 @@ function resolveDiscordCommandLogLabel(command: ChatCommandDefinition): string {
 }
 
 function resolveDiscordNativeCommandAllowlistAccess(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
   sender: { id: string; name?: string; tag?: string };
   chatType: "direct" | "group" | "thread" | "channel";

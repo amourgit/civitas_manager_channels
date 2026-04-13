@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import { afterEach, describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { CIVITASConfig } from "../../config/config.js";
 import {
   createBundleMcpTempHarness,
   createBundleProbePlugin,
@@ -50,7 +50,7 @@ describe("prepareCliBundleMcpConfig", () => {
 
       const { serverPath } = await createBundleProbePlugin(homeDir);
 
-      const config: OpenClawConfig = {
+      const config: CIVITASConfig = {
         plugins: {
           entries: {
             "bundle-probe": { enabled: true },
@@ -94,7 +94,7 @@ describe("prepareCliBundleMcpConfig", () => {
 
       await createBundleProbePlugin(homeDir);
 
-      const config: OpenClawConfig = {
+      const config: CIVITASConfig = {
         plugins: {
           entries: {
             "bundle-probe": { enabled: true },
@@ -116,7 +116,7 @@ describe("prepareCliBundleMcpConfig", () => {
               type: "http",
               url: "http://127.0.0.1:23119/mcp",
               headers: {
-                Authorization: "Bearer ${OPENCLAW_MCP_TOKEN}",
+                Authorization: "Bearer ${CIVITAS_MCP_TOKEN}",
               },
             },
           },
@@ -130,7 +130,7 @@ describe("prepareCliBundleMcpConfig", () => {
       };
       expect(Object.keys(raw.mcpServers ?? {}).toSorted()).toEqual(["bundleProbe", "civitas"]);
       expect(raw.mcpServers?.civitas?.url).toBe("http://127.0.0.1:23119/mcp");
-      expect(raw.mcpServers?.civitas?.headers?.Authorization).toBe("Bearer ${OPENCLAW_MCP_TOKEN}");
+      expect(raw.mcpServers?.civitas?.headers?.Authorization).toBe("Bearer ${CIVITAS_MCP_TOKEN}");
 
       await prepared.cleanup?.();
     } finally {
@@ -150,14 +150,14 @@ describe("prepareCliBundleMcpConfig", () => {
       workspaceDir,
       config: {},
       env: {
-        OPENCLAW_MCP_TOKEN: "loopback-token-123",
-        OPENCLAW_MCP_SESSION_KEY: "agent:main:telegram:group:chat123",
+        CIVITAS_MCP_TOKEN: "loopback-token-123",
+        CIVITAS_MCP_SESSION_KEY: "agent:main:telegram:group:chat123",
       },
     });
 
     expect(prepared.env).toEqual({
-      OPENCLAW_MCP_TOKEN: "loopback-token-123",
-      OPENCLAW_MCP_SESSION_KEY: "agent:main:telegram:group:chat123",
+      CIVITAS_MCP_TOKEN: "loopback-token-123",
+      CIVITAS_MCP_SESSION_KEY: "agent:main:telegram:group:chat123",
     });
 
     await prepared.cleanup?.();

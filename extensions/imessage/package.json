@@ -2,7 +2,7 @@
   "name": "@civitas/imessage",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw iMessage channel plugin",
+  "description": "CIVITAS iMessage channel plugin",
   "type": "module",
   "civitas": {
     "extensions": [

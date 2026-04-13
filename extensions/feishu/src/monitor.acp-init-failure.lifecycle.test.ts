@@ -1,7 +1,7 @@
 import "./lifecycle.test-support.js";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createRuntimeEnv } from "../../../test/helpers/plugins/runtime-env.js";
-import type { ClawdbotConfig, RuntimeEnv } from "../runtime-api.js";
+import type { ChanneldbotConfig, RuntimeEnv } from "../runtime-api.js";
 import { getFeishuLifecycleTestMocks } from "./lifecycle.test-support.js";
 import {
   createFeishuLifecycleFixture,
@@ -28,7 +28,7 @@ const {
 
 let handlers: Record<string, (data: unknown) => Promise<void>> = {};
 let lastRuntime: RuntimeEnv | null = null;
-const originalStateDir = process.env.OPENCLAW_STATE_DIR;
+const originalStateDir = process.env.CIVITAS_STATE_DIR;
 const { cfg: lifecycleConfig, account: lifecycleAccount } = createFeishuLifecycleFixture({
   accountId: "acct-acp",
   appId: "cli_test",
@@ -51,7 +51,7 @@ const { cfg: lifecycleConfig, account: lifecycleAccount } = createFeishuLifecycl
     session: { mainKey: "main", scope: "per-sender" },
   },
 }) as {
-  cfg: ClawdbotConfig;
+  cfg: ChanneldbotConfig;
   account: ResolvedFeishuAccount;
 };
 

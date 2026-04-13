@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import type { App } from "@slack/bolt";
 import { resolveEnvelopeFormatOptions } from "civitas/plugin-sdk/channel-inbound";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import type { SlackMessageEvent } from "../../types.js";
 import { resolveSlackThreadContextData } from "./prepare-thread-context.js";
@@ -37,7 +37,7 @@ describe("resolveSlackThreadContextData", () => {
     return createInboundSlackTestContext({
       cfg: {
         channels: { slack: { enabled: true, replyToMode: "all", groupPolicy: "open" } },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
       appClient: { conversations: { replies: params.replies } } as App["client"],
       defaultRequireMention: false,
       replyToMode: "all",
@@ -90,7 +90,7 @@ describe("resolveSlackThreadContextData", () => {
       allowFromLower: ["u1"],
       allowNameMatching: false,
       contextVisibilityMode: "allowlist",
-      envelopeOptions: resolveEnvelopeFormatOptions({} as OpenClawConfig),
+      envelopeOptions: resolveEnvelopeFormatOptions({} as CIVITASConfig),
       effectiveDirectMedia: null,
     });
 
@@ -136,7 +136,7 @@ describe("resolveSlackThreadContextData", () => {
       allowFromLower: ["alice"],
       allowNameMatching: true,
       contextVisibilityMode: "allowlist",
-      envelopeOptions: resolveEnvelopeFormatOptions({} as OpenClawConfig),
+      envelopeOptions: resolveEnvelopeFormatOptions({} as CIVITASConfig),
       effectiveDirectMedia: null,
     });
 

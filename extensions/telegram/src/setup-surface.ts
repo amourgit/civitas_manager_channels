@@ -6,7 +6,7 @@ import {
   type ChannelSetupDmPolicy,
   DEFAULT_ACCOUNT_ID,
   hasConfiguredSecretInput,
-  type OpenClawConfig,
+  type CIVITASConfig,
   patchChannelConfigForAccount,
   setSetupChannelEnabled,
   splitSetupEntries,
@@ -32,9 +32,9 @@ import {
 const channel = "telegram" as const;
 
 function ensureTelegramDefaultGroupMentionGate(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId: string,
-): OpenClawConfig {
+): CIVITASConfig {
   const resolved = resolveTelegramAccount({ cfg, accountId });
   const wildcardGroup = resolved.config.groups?.["*"];
   if (wildcardGroup?.requireMention !== undefined) {
@@ -56,7 +56,7 @@ function ensureTelegramDefaultGroupMentionGate(
   });
 }
 
-function shouldShowTelegramDmAccessWarning(cfg: OpenClawConfig, accountId: string): boolean {
+function shouldShowTelegramDmAccessWarning(cfg: CIVITASConfig, accountId: string): boolean {
   const merged = mergeTelegramAccountConfig(cfg, accountId);
   const policy = merged.dmPolicy ?? "pairing";
   const hasAllowFrom =

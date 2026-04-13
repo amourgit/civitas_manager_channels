@@ -4,5 +4,5 @@ export {
   getRuntimeConfig,
   readSourceConfigSnapshotForWrite,
   setRuntimeConfigSnapshot,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "../../config/config.js";

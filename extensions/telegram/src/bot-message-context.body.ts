@@ -8,7 +8,7 @@ import {
 } from "civitas/plugin-sdk/channel-inbound";
 import { resolveControlCommandGate } from "civitas/plugin-sdk/command-auth-native";
 import { hasControlCommand } from "civitas/plugin-sdk/command-detection";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type {
   TelegramDirectConfig,
   TelegramGroupConfig,
@@ -60,7 +60,7 @@ export type TelegramInboundBodyResult = {
 };
 
 async function resolveStickerVisionSupport(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   agentId?: string;
 }): Promise<boolean> {
   try {
@@ -72,7 +72,7 @@ async function resolveStickerVisionSupport(params: {
 }
 
 export async function resolveTelegramInboundBody(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   primaryCtx: TelegramContext;
   msg: TelegramContext["message"];
   allMedia: TelegramMediaRef[];

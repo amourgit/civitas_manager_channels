@@ -1,9 +1,9 @@
 export { definePluginEntry } from "civitas/plugin-sdk/core";
 export type {
   AnyAgentTool,
-  OpenClawPluginApi,
-  OpenClawPluginToolContext,
-  OpenClawPluginToolFactory,
+  CIVITASPluginApi,
+  CIVITASPluginToolContext,
+  CIVITASPluginToolFactory,
 } from "civitas/plugin-sdk/core";
 export {
   applyWindowsSpawnProgramPolicy,

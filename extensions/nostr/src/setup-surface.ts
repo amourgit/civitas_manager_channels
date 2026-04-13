@@ -1,5 +1,5 @@
 import type { ChannelSetupAdapter } from "civitas/plugin-sdk/channel-setup";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { DEFAULT_ACCOUNT_ID } from "civitas/plugin-sdk/routing";
 import {
   hasConfiguredSecretInput,

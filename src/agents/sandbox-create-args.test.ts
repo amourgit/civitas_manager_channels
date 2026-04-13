@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { OPENCLAW_CLI_ENV_VALUE } from "../infra/civitas-exec-env.js";
+import { CIVITAS_CLI_ENV_VALUE } from "../infra/civitas-exec-env.js";
 import { buildSandboxCreateArgs } from "./sandbox/docker.js";
 import type { SandboxDockerConfig } from "./sandbox/types.js";
 
@@ -119,7 +119,7 @@ describe("buildSandboxCreateArgs", () => {
         "--env",
         "LANG=C.UTF-8",
         "--env",
-        `OPENCLAW_CLI=${OPENCLAW_CLI_ENV_VALUE}`,
+        `CIVITAS_CLI=${CIVITAS_CLI_ENV_VALUE}`,
       ]),
     );
 
@@ -137,7 +137,7 @@ describe("buildSandboxCreateArgs", () => {
     );
   });
 
-  it("preserves the OpenClaw exec marker when strict env sanitization is enabled", () => {
+  it("preserves the CIVITAS exec marker when strict env sanitization is enabled", () => {
     const cfg = createSandboxConfig({
       env: {
         NODE_ENV: "test",
@@ -159,7 +159,7 @@ describe("buildSandboxCreateArgs", () => {
         "--env",
         "NODE_ENV=test",
         "--env",
-        `OPENCLAW_CLI=${OPENCLAW_CLI_ENV_VALUE}`,
+        `CIVITAS_CLI=${CIVITAS_CLI_ENV_VALUE}`,
       ]),
     );
   });

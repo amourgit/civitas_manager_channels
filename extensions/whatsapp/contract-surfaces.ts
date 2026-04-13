@@ -19,7 +19,7 @@ export const defaultMarkdownTableMode = "bullets";
 export { resolveLegacyGroupSessionKey } from "./src/group-session-contract.js";
 
 export function hasPersistedAuthState(params: {
-  cfg: import("civitas/plugin-sdk/config-runtime").OpenClawConfig;
+  cfg: import("civitas/plugin-sdk/config-runtime").CIVITASConfig;
 }): boolean {
   return hasAnyWhatsAppAuth(params.cfg);
 }

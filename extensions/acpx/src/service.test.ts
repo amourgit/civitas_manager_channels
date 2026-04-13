@@ -8,7 +8,7 @@ import {
   requireAcpRuntimeBackend,
 } from "civitas/plugin-sdk/acp-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { AcpRuntime, OpenClawPluginServiceContext } from "../runtime-api.js";
+import type { AcpRuntime, CIVITASPluginServiceContext } from "../runtime-api.js";
 import { ACPX_BUNDLED_BIN, ACPX_PINNED_VERSION } from "./config.js";
 import { createAcpxRuntimeService } from "./service.js";
 
@@ -112,8 +112,8 @@ function createRetryingRuntimeStub(
 }
 
 function createServiceContext(
-  overrides: Partial<OpenClawPluginServiceContext> = {},
-): OpenClawPluginServiceContext {
+  overrides: Partial<CIVITASPluginServiceContext> = {},
+): CIVITASPluginServiceContext {
   return {
     config: {},
     workspaceDir: "/tmp/workspace",

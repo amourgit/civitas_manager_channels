@@ -7,7 +7,7 @@ import type { ImageContent } from "@mariozechner/pi-ai";
 import { KeyedAsyncQueue } from "civitas/plugin-sdk/keyed-async-queue";
 import { isClaudeCliProvider } from "../../../extensions/anthropic/api.js";
 import type { ThinkLevel } from "../../auto-reply/thinking.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { CIVITASConfig } from "../../config/config.js";
 import type { CliBackendConfig } from "../../config/types.js";
 import { MAX_IMAGE_BYTES } from "../../media/constants.js";
 import { buildTtsSystemPromptHint } from "../../tts/tts.js";
@@ -54,7 +54,7 @@ export function resolveCliRunQueueKey(params: {
 
 export function buildSystemPrompt(params: {
   workspaceDir: string;
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
   defaultThinkLevel?: ThinkLevel;
   extraSystemPrompt?: string;
   ownerNumbers?: string[];

@@ -1,4 +1,4 @@
-import type { ChannelPlugin, OpenClawPluginApi } from "civitas/plugin-sdk/core";
+import type { ChannelPlugin, CIVITASPluginApi } from "civitas/plugin-sdk/core";
 import { defineChannelPluginEntry } from "civitas/plugin-sdk/core";
 import { qqbotPlugin } from "./src/channel.js";
 import { resolveQQBotAccount } from "./src/config.js";
@@ -17,7 +17,7 @@ export default defineChannelPluginEntry({
   description: "QQ Bot channel plugin",
   plugin: qqbotPlugin as ChannelPlugin,
   setRuntime: setQQBotRuntime,
-  registerFull(api: OpenClawPluginApi) {
+  registerFull(api: CIVITASPluginApi) {
     registerChannelTool(api);
     registerRemindTool(api);
 

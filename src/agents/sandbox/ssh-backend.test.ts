@@ -6,7 +6,7 @@ import {
   createSandboxPruneConfig,
   createSandboxSshConfig,
 } from "../../../test/helpers/sandbox-fixtures.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { CIVITASConfig } from "../../config/config.js";
 import type { SandboxConfig } from "./types.js";
 
 const sshMocks = vi.hoisted(() => ({
@@ -31,7 +31,7 @@ vi.mock("./ssh.js", async () => {
 
 const { createSshSandboxBackend, sshSandboxBackendManager } = await import("./ssh-backend.js");
 
-function createConfig(): OpenClawConfig {
+function createConfig(): CIVITASConfig {
   return {
     agents: {
       defaults: {

@@ -1,5 +1,5 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
-import type { OpenClawPluginApi } from "civitas/plugin-sdk/plugin-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASPluginApi } from "civitas/plugin-sdk/plugin-runtime";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import plugin from "../index.js";
 import {
@@ -23,10 +23,10 @@ vi.mock("./tavily-client.js", () => ({
   runTavilyExtract,
 }));
 
-function fakeApi(): OpenClawPluginApi {
+function fakeApi(): CIVITASPluginApi {
   return {
     config: {},
-  } as OpenClawPluginApi;
+  } as CIVITASPluginApi;
 }
 
 describe("tavily tools", () => {
@@ -214,7 +214,7 @@ describe("tavily tools", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     expect(resolveTavilySearchConfig(cfg)).toEqual({
       apiKey: "plugin-key",
@@ -230,7 +230,7 @@ describe("tavily tools", () => {
 
     expect(resolveTavilyApiKey()).toBe("env-key");
     expect(resolveTavilyBaseUrl()).toBe("https://env.tavily.test");
-    expect(resolveTavilyBaseUrl({} as OpenClawConfig)).not.toBe(DEFAULT_TAVILY_BASE_URL);
+    expect(resolveTavilyBaseUrl({} as CIVITASConfig)).not.toBe(DEFAULT_TAVILY_BASE_URL);
     expect(resolveTavilySearchTimeoutSeconds()).toBe(DEFAULT_TAVILY_SEARCH_TIMEOUT_SECONDS);
     expect(resolveTavilyExtractTimeoutSeconds()).toBe(DEFAULT_TAVILY_EXTRACT_TIMEOUT_SECONDS);
   });

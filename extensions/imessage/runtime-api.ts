@@ -1,10 +1,10 @@
-import type { OpenClawConfig as RuntimeApiOpenClawConfig } from "civitas/plugin-sdk/core";
+import type { CIVITASConfig as RuntimeApiCIVITASConfig } from "civitas/plugin-sdk/core";
 
 export {
   DEFAULT_ACCOUNT_ID,
   getChatChannelMeta,
   type ChannelPlugin,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "civitas/plugin-sdk/core";
 export { buildChannelConfigSchema, IMessageConfigSchema } from "./config-api.js";
 export { PAIRING_APPROVED_MESSAGE } from "civitas/plugin-sdk/channel-status";
@@ -32,6 +32,6 @@ export { sendMessageIMessage } from "./src/send.js";
 export { chunkTextForOutbound } from "./src/channel-api.js";
 
 export type IMessageAccountConfig = Omit<
-  NonNullable<NonNullable<RuntimeApiOpenClawConfig["channels"]>["imessage"]>,
+  NonNullable<NonNullable<RuntimeApiCIVITASConfig["channels"]>["imessage"]>,
   "accounts" | "defaultAccount"
 >;

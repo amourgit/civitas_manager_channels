@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { SignalReactionNotificationMode } from "civitas/plugin-sdk/config-runtime";
 import { loadConfig } from "civitas/plugin-sdk/config-runtime";
 import {
@@ -44,7 +44,7 @@ export type MonitorSignalOpts = {
   abortSignal?: AbortSignal;
   account?: string;
   accountId?: string;
-  config?: OpenClawConfig;
+  config?: CIVITASConfig;
   baseUrl?: string;
   autoStart?: boolean;
   startupTimeoutMs?: number;

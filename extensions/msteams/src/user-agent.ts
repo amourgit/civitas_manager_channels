@@ -13,7 +13,7 @@ function resolveTeamsSdkVersion(): string {
   }
 }
 
-function resolveOpenClawVersion(): string {
+function resolveCIVITASVersion(): string {
   try {
     return getMSTeamsRuntime().version;
   } catch {
@@ -23,10 +23,10 @@ function resolveOpenClawVersion(): string {
 
 /**
  * Build a combined User-Agent string that preserves the Teams SDK identity
- * and appends the OpenClaw version.
+ * and appends the CIVITAS version.
  *
- * Format: "teams.ts[apps]/<sdk-version> OpenClaw/<civitas-version>"
- * Example: "teams.ts[apps]/2.0.5 OpenClaw/2026.3.22"
+ * Format: "teams.ts[apps]/<sdk-version> CIVITAS/<civitas-version>"
+ * Example: "teams.ts[apps]/2.0.5 CIVITAS/2026.3.22"
  *
  * This lets the Teams backend track SDK usage while also identifying the
  * host application.
@@ -40,7 +40,7 @@ export function buildUserAgent(): string {
   if (cachedUserAgent) {
     return cachedUserAgent;
   }
-  cachedUserAgent = `teams.ts[apps]/${resolveTeamsSdkVersion()} OpenClaw/${resolveOpenClawVersion()}`;
+  cachedUserAgent = `teams.ts[apps]/${resolveTeamsSdkVersion()} CIVITAS/${resolveCIVITASVersion()}`;
   return cachedUserAgent;
 }
 

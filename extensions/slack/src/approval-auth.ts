@@ -2,12 +2,12 @@ import {
   createResolvedApproverActionAuthAdapter,
   resolveApprovalApprovers,
 } from "civitas/plugin-sdk/approval-auth-runtime";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { resolveSlackAccount } from "./accounts.js";
 import { normalizeSlackApproverId } from "./exec-approvals.js";
 
 export function getSlackApprovalApprovers(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
 }): string[] {
   const account = resolveSlackAccount(params).config;
@@ -21,7 +21,7 @@ export function getSlackApprovalApprovers(params: {
 }
 
 export function isSlackApprovalAuthorizedSender(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
   senderId?: string | null;
 }): boolean {

@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import * as imageGenerationRuntime from "../image-generation/runtime.js";
-import { createOpenClawTools } from "./civitas-tools.js";
+import { createCIVITASTools } from "./civitas-tools.js";
 
 vi.mock("../plugins/tools.js", () => ({
   resolvePluginTools: () => [],
@@ -9,8 +9,8 @@ vi.mock("../plugins/tools.js", () => ({
   getPluginToolMeta: () => undefined,
 }));
 
-function asConfig(value: unknown): OpenClawConfig {
-  return value as OpenClawConfig;
+function asConfig(value: unknown): CIVITASConfig {
+  return value as CIVITASConfig;
 }
 
 function stubImageGenerationProviders() {
@@ -51,7 +51,7 @@ describe("civitas tools image generation registration", () => {
   });
 
   it("registers image_generate when image-generation config is present", () => {
-    const tools = createOpenClawTools({
+    const tools = createCIVITASTools({
       config: asConfig({
         agents: {
           defaults: {
@@ -71,7 +71,7 @@ describe("civitas tools image generation registration", () => {
     stubImageGenerationProviders();
     vi.stubEnv("OPENAI_API_KEY", "openai-test");
 
-    const tools = createOpenClawTools({
+    const tools = createCIVITASTools({
       config: asConfig({}),
       agentDir: "/tmp/civitas-agent-main",
     });
@@ -82,7 +82,7 @@ describe("civitas tools image generation registration", () => {
   it("omits image_generate when config is absent and no compatible provider auth exists", () => {
     stubImageGenerationProviders();
 
-    const tools = createOpenClawTools({
+    const tools = createCIVITASTools({
       config: asConfig({}),
       agentDir: "/tmp/civitas-agent-main",
     });

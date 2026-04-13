@@ -11,13 +11,13 @@ export type {
   ChannelOutboundAdapter,
   ChannelPlugin,
   HistoryEntry,
-  OpenClawConfig,
-  OpenClawPluginApi,
+  CIVITASConfig,
+  CIVITASPluginApi,
   OutboundIdentity,
   PluginRuntime,
   ReplyPayload,
 } from "civitas/plugin-sdk/core";
-export type { OpenClawConfig as ClawdbotConfig } from "civitas/plugin-sdk/core";
+export type { CIVITASConfig as ChanneldbotConfig } from "civitas/plugin-sdk/core";
 export type { RuntimeEnv } from "civitas/plugin-sdk/runtime";
 export type { GroupToolPolicyConfig } from "civitas/plugin-sdk/config-runtime";
 export {

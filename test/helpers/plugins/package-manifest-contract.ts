@@ -73,7 +73,7 @@ export function describePackageManifestContract(params: PackageManifestContractP
 
         expect(
           isAtLeast(minimum, baseline),
-          `${packagePath} should require at least OpenClaw ${minHostVersionBaseline}`,
+          `${packagePath} should require at least CIVITAS ${minHostVersionBaseline}`,
         ).toBe(true);
       });
     }

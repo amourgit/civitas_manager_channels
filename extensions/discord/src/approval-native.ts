@@ -1,4 +1,4 @@
-import type { DiscordExecApprovalConfig, OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { DiscordExecApprovalConfig, CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { ExecApprovalRequest, PluginApprovalRequest } from "civitas/plugin-sdk/infra-runtime";
 import { listDiscordAccountIds, resolveDiscordAccount } from "./accounts.js";
 import {
@@ -53,7 +53,7 @@ function normalizeDiscordOriginChannelId(value?: string | null): string | null {
 }
 
 export function shouldHandleDiscordApprovalRequest(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
   request: ApprovalRequest;
   configOverride?: DiscordExecApprovalConfig | null;

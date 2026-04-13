@@ -10,7 +10,7 @@ import {
   type ChannelSetupDmPolicy,
   type ChannelSetupWizard,
   type DmPolicy,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "civitas/plugin-sdk/setup";
 import {
   listZalouserAccountIds,
@@ -43,25 +43,25 @@ function parseZalouserEntries(raw: string): string[] {
 }
 
 function setZalouserAccountScopedConfig(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId: string,
   defaultPatch: Record<string, unknown>,
   accountPatch: Record<string, unknown> = defaultPatch,
-): OpenClawConfig {
+): CIVITASConfig {
   return patchScopedAccountConfig({
     cfg,
     channelKey: channel,
     accountId,
     patch: defaultPatch,
     accountPatch,
-  }) as OpenClawConfig;
+  }) as CIVITASConfig;
 }
 
 function setZalouserDmPolicy(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId: string,
   policy: DmPolicy,
-): OpenClawConfig {
+): CIVITASConfig {
   const resolvedAccountId = normalizeAccountId(accountId) ?? DEFAULT_ACCOUNT_ID;
   const resolved = resolveZalouserAccountSync({ cfg, accountId: resolvedAccountId });
   return setZalouserAccountScopedConfig(
@@ -79,20 +79,20 @@ function setZalouserDmPolicy(
 }
 
 function setZalouserGroupPolicy(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId: string,
   groupPolicy: "open" | "allowlist" | "disabled",
-): OpenClawConfig {
+): CIVITASConfig {
   return setZalouserAccountScopedConfig(cfg, accountId, {
     groupPolicy,
   });
 }
 
 function setZalouserGroupAllowlist(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId: string,
   groupKeys: string[],
-): OpenClawConfig {
+): CIVITASConfig {
   const groups = Object.fromEntries(
     groupKeys.map((key) => [key, { enabled: true, requireMention: true }]),
   );
@@ -101,8 +101,8 @@ function setZalouserGroupAllowlist(
   });
 }
 
-function ensureZalouserPluginEnabled(cfg: OpenClawConfig): OpenClawConfig {
-  const next: OpenClawConfig = {
+function ensureZalouserPluginEnabled(cfg: CIVITASConfig): CIVITASConfig {
+  const next: CIVITASConfig = {
     ...cfg,
     plugins: {
       ...cfg.plugins,
@@ -144,10 +144,10 @@ async function noteZalouserHelp(
 }
 
 async function promptZalouserAllowFrom(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   prompter: Parameters<NonNullable<ChannelSetupDmPolicy["promptAllowFrom"]>>[0]["prompter"];
   accountId: string;
-}): Promise<OpenClawConfig> {
+}): Promise<CIVITASConfig> {
   const { cfg, prompter, accountId } = params;
   const resolved = resolveZalouserAccountSync({ cfg, accountId });
   const existingAllowFrom = resolved.config.allowFrom ?? [];
@@ -212,10 +212,10 @@ const zalouserDmPolicy: ChannelSetupDmPolicy = {
   policyKey: "channels.zalouser.dmPolicy",
   allowFromKey: "channels.zalouser.allowFrom",
   resolveConfigKeys: (cfg, accountId) =>
-    (accountId ?? resolveDefaultZalouserAccountId(cfg as OpenClawConfig)) !== DEFAULT_ACCOUNT_ID
+    (accountId ?? resolveDefaultZalouserAccountId(cfg as CIVITASConfig)) !== DEFAULT_ACCOUNT_ID
       ? {
-          policyKey: `channels.zalouser.accounts.${accountId ?? resolveDefaultZalouserAccountId(cfg as OpenClawConfig)}.dmPolicy`,
-          allowFromKey: `channels.zalouser.accounts.${accountId ?? resolveDefaultZalouserAccountId(cfg as OpenClawConfig)}.allowFrom`,
+          policyKey: `channels.zalouser.accounts.${accountId ?? resolveDefaultZalouserAccountId(cfg as CIVITASConfig)}.dmPolicy`,
+          allowFromKey: `channels.zalouser.accounts.${accountId ?? resolveDefaultZalouserAccountId(cfg as CIVITASConfig)}.allowFrom`,
         }
       : {
           policyKey: "channels.zalouser.dmPolicy",
@@ -224,21 +224,21 @@ const zalouserDmPolicy: ChannelSetupDmPolicy = {
   getCurrent: (cfg, accountId) =>
     resolveZalouserAccountSync({
       cfg,
-      accountId: accountId ?? resolveDefaultZalouserAccountId(cfg as OpenClawConfig),
+      accountId: accountId ?? resolveDefaultZalouserAccountId(cfg as CIVITASConfig),
     }).config.dmPolicy ?? "pairing",
   setPolicy: (cfg, policy, accountId) =>
     setZalouserDmPolicy(
-      cfg as OpenClawConfig,
-      accountId ?? resolveDefaultZalouserAccountId(cfg as OpenClawConfig),
+      cfg as CIVITASConfig,
+      accountId ?? resolveDefaultZalouserAccountId(cfg as CIVITASConfig),
       policy,
     ),
   promptAllowFrom: async ({ cfg, prompter, accountId }) => {
     const id =
       accountId && normalizeAccountId(accountId)
         ? (normalizeAccountId(accountId) ?? DEFAULT_ACCOUNT_ID)
-        : resolveDefaultZalouserAccountId(cfg as OpenClawConfig);
+        : resolveDefaultZalouserAccountId(cfg as CIVITASConfig);
     return await promptZalouserAllowFrom({
-      cfg: cfg as OpenClawConfig,
+      cfg: cfg as CIVITASConfig,
       prompter,
       accountId: id,
     });
@@ -246,10 +246,10 @@ const zalouserDmPolicy: ChannelSetupDmPolicy = {
 };
 
 async function promptZalouserQuickstartDmPolicy(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   prompter: Parameters<NonNullable<ChannelSetupWizard["prepare"]>>[0]["prompter"];
   accountId: string;
-}): Promise<OpenClawConfig> {
+}): Promise<CIVITASConfig> {
   const { cfg, prompter, accountId } = params;
   const resolved = resolveZalouserAccountSync({ cfg, accountId });
   const existingPolicy = resolved.config.dmPolicy ?? "pairing";
@@ -416,7 +416,7 @@ export const zalouserSetupWizard: ChannelSetupWizard = {
     updatePrompt: ({ cfg, accountId }) =>
       Boolean(resolveZalouserAccountSync({ cfg, accountId }).config.groups),
     setPolicy: ({ cfg, accountId, policy }) =>
-      setZalouserGroupPolicy(cfg as OpenClawConfig, accountId, policy),
+      setZalouserGroupPolicy(cfg as CIVITASConfig, accountId, policy),
     resolveAllowlist: async ({ cfg, accountId, entries, prompter }) => {
       if (entries.length === 0) {
         await prompter.note(
@@ -430,7 +430,7 @@ export const zalouserSetupWizard: ChannelSetupWizard = {
         );
         return [];
       }
-      const updatedAccount = resolveZalouserAccountSync({ cfg: cfg as OpenClawConfig, accountId });
+      const updatedAccount = resolveZalouserAccountSync({ cfg: cfg as CIVITASConfig, accountId });
       try {
         const resolved = await resolveZaloGroupsByEntries({
           profile: updatedAccount.profile,
@@ -458,7 +458,7 @@ export const zalouserSetupWizard: ChannelSetupWizard = {
       }
     },
     applyAllowlist: ({ cfg, accountId, resolved }) =>
-      setZalouserGroupAllowlist(cfg as OpenClawConfig, accountId, resolved as string[]),
+      setZalouserGroupAllowlist(cfg as CIVITASConfig, accountId, resolved as string[]),
   },
   finalize: async ({ cfg, accountId, forceAllowFrom, options, prompter }) => {
     let next = cfg;

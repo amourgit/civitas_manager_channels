@@ -1,5 +1,5 @@
 import type { StreamFn } from "@mariozechner/pi-agent-core";
-import type { OpenClawPluginApi } from "civitas/plugin-sdk/plugin-entry";
+import type { CIVITASPluginApi } from "civitas/plugin-sdk/plugin-entry";
 import { buildProviderReplayFamilyHooks } from "civitas/plugin-sdk/provider-model-shared";
 import {
   createBedrockNoCacheWrapper,
@@ -44,7 +44,7 @@ function createGuardrailWrapStreamFn(
   };
 }
 
-export function registerAmazonBedrockPlugin(api: OpenClawPluginApi): void {
+export function registerAmazonBedrockPlugin(api: CIVITASPluginApi): void {
   // Keep registration-local constants inside the function so partial module
   // initialization during test bootstrap cannot trip TDZ reads.
   const providerId = "amazon-bedrock";

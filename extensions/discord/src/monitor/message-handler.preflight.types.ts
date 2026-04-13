@@ -21,7 +21,7 @@ export type DiscordMessageEvent = import("./listeners.js").DiscordMessageEvent;
 type DiscordMessagePreflightSharedFields = {
   cfg: LoadedConfig;
   discordConfig: NonNullable<
-    import("civitas/plugin-sdk/config-runtime").OpenClawConfig["channels"]
+    import("civitas/plugin-sdk/config-runtime").CIVITASConfig["channels"]
   >["discord"];
   accountId: string;
   token: string;

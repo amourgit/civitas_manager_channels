@@ -47,7 +47,7 @@ import {
   normalizeGoogleChatTarget,
   type ChannelMessageActionAdapter,
   type ChannelStatusIssue,
-  type OpenClawConfig,
+  type CIVITASConfig,
   type ResolvedGoogleChatAccount,
 } from "./channel.deps.runtime.js";
 import { collectGoogleChatMutableAllowlistWarnings } from "./doctor.js";
@@ -121,7 +121,7 @@ const collectGoogleChatGroupPolicyWarnings =
 const collectGoogleChatSecurityWarnings = composeAccountWarningCollectors<
   ResolvedGoogleChatAccount,
   {
-    cfg: OpenClawConfig;
+    cfg: CIVITASConfig;
     account: ResolvedGoogleChatAccount;
   }
 >(

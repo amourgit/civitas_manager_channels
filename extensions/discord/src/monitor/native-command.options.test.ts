@@ -1,5 +1,5 @@
 import { ChannelType } from "discord-api-types/v10";
-import type { OpenClawConfig, loadConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig, loadConfig } from "civitas/plugin-sdk/config-runtime";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const { logVerboseMock } = vi.hoisted(() => ({
@@ -34,7 +34,7 @@ function createNativeCommand(
   name: string,
   opts?: {
     cfg?: ReturnType<typeof loadConfig>;
-    discordConfig?: NonNullable<OpenClawConfig["channels"]>["discord"];
+    discordConfig?: NonNullable<CIVITASConfig["channels"]>["discord"];
   },
 ): ReturnType<typeof import("./native-command.js").createDiscordNativeCommand> {
   const command = listNativeCommandSpecs({ provider: "discord" }).find(
@@ -45,7 +45,7 @@ function createNativeCommand(
   }
   const baseCfg = (opts?.cfg ?? {}) as ReturnType<typeof loadConfig>;
   const discordConfig = (opts?.discordConfig ?? baseCfg.channels?.discord ?? {}) as NonNullable<
-    OpenClawConfig["channels"]
+    CIVITASConfig["channels"]
   >["discord"];
   const cfg =
     opts?.discordConfig === undefined
@@ -217,7 +217,7 @@ describe("createDiscordNativeCommand option wiring", () => {
         groupEnabled: true,
         groupChannels: ["allowed-group"],
       },
-    } satisfies NonNullable<OpenClawConfig["channels"]>["discord"];
+    } satisfies NonNullable<CIVITASConfig["channels"]>["discord"];
     const command = createNativeCommand("think", {
       cfg: {
         commands: {
@@ -263,7 +263,7 @@ describe("createDiscordNativeCommand option wiring", () => {
   it("truncates Discord command and option descriptions to Discord's limit", () => {
     const longDescription = "x".repeat(140);
     const cfg = {} as ReturnType<typeof loadConfig>;
-    const discordConfig = {} as NonNullable<OpenClawConfig["channels"]>["discord"];
+    const discordConfig = {} as NonNullable<CIVITASConfig["channels"]>["discord"];
     const command = createDiscordNativeCommand({
       command: {
         name: "longdesc",

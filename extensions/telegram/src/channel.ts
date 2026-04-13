@@ -13,7 +13,7 @@ import {
   projectCredentialSnapshotFields,
   resolveConfiguredFromCredentialStatuses,
 } from "civitas/plugin-sdk/channel-status";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { createChatChannelPlugin } from "civitas/plugin-sdk/core";
 import { clearAccountEntryFields } from "civitas/plugin-sdk/core";
 import { createChannelDirectoryAdapter } from "civitas/plugin-sdk/directory-runtime";
@@ -146,7 +146,7 @@ function resolveTelegramTokenHelper() {
 }
 
 function buildTelegramSendOptions(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   mediaUrl?: string | null;
   mediaLocalRoots?: readonly string[] | null;
   accountId?: string | null;
@@ -173,7 +173,7 @@ function buildTelegramSendOptions(params: {
 }
 
 async function sendTelegramOutbound(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   to: string;
   text: string;
   mediaUrl?: string | null;
@@ -436,7 +436,7 @@ function shouldStripTelegramThreadFromAnnounceOrigin(params: {
 }
 
 function buildTelegramBaseSessionKey(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   agentId: string;
   accountId?: string | null;
   peer: RoutePeer;
@@ -445,7 +445,7 @@ function buildTelegramBaseSessionKey(params: {
 }
 
 function resolveTelegramOutboundSessionRoute(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   agentId: string;
   accountId?: string | null;
   target: string;
@@ -496,7 +496,7 @@ function resolveTelegramOutboundSessionRoute(params: {
 }
 
 async function resolveTelegramTargets(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
   inputs: string[];
   kind: "user" | "group";
@@ -909,7 +909,7 @@ export const telegramPlugin = createChatChannelPlugin({
       },
       logoutAccount: async ({ accountId, cfg }) => {
         const envToken = process.env.TELEGRAM_BOT_TOKEN?.trim() ?? "";
-        const nextCfg = { ...cfg } as OpenClawConfig;
+        const nextCfg = { ...cfg } as CIVITASConfig;
         const nextTelegram = cfg.channels?.telegram ? { ...cfg.channels.telegram } : undefined;
         let cleared = false;
         let changed = false;

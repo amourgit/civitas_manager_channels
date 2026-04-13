@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { OpenClawConfig } from "civitas/plugin-sdk/memory-core-host-engine-foundation";
+import type { CIVITASConfig } from "civitas/plugin-sdk/memory-core-host-engine-foundation";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import type { MemoryIndexManager } from "./index.js";
 import { getRequiredMemoryIndexManager } from "./test-manager-helpers.js";
@@ -57,7 +57,7 @@ describe("memory manager session reindex gating", () => {
         },
         list: [{ id: "main", default: true }],
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     manager = await getRequiredMemoryIndexManager({ cfg, agentId: "main" });
 

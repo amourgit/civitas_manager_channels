@@ -1,5 +1,5 @@
 import type { RequestClient } from "@buape/carbon";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { RetryConfig } from "civitas/plugin-sdk/retry-runtime";
 
 export class DiscordSendError extends Error {
@@ -29,12 +29,12 @@ export type DiscordSendResult = {
 };
 
 export type DiscordRuntimeAccountContext = {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
 };
 
 export type DiscordReactOpts = {
-  cfg?: OpenClawConfig;
+  cfg?: CIVITASConfig;
   accountId?: string;
   token?: string;
   rest?: RequestClient;

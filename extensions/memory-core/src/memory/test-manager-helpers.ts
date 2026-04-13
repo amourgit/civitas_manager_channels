@@ -1,8 +1,8 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/memory-core-host-engine-foundation";
+import type { CIVITASConfig } from "civitas/plugin-sdk/memory-core-host-engine-foundation";
 import type { MemoryIndexManager } from "./index.js";
 
 export async function getRequiredMemoryIndexManager(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   agentId?: string;
   purpose?: "default" | "status";
 }): Promise<MemoryIndexManager> {

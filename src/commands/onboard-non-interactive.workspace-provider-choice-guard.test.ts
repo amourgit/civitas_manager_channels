@@ -76,17 +76,17 @@ async function withOnboardEnv(
     await withEnvAsync(
       {
         HOME: tempHome,
-        OPENCLAW_STATE_DIR: tempHome,
-        OPENCLAW_CONFIG_PATH: configPath,
-        OPENCLAW_SKIP_CHANNELS: "1",
-        OPENCLAW_SKIP_GMAIL_WATCHER: "1",
-        OPENCLAW_SKIP_CRON: "1",
-        OPENCLAW_SKIP_CANVAS_HOST: "1",
-        OPENCLAW_GATEWAY_TOKEN: undefined,
-        OPENCLAW_GATEWAY_PASSWORD: undefined,
-        OPENCLAW_DISABLE_CONFIG_CACHE: "1",
-        OPENCLAW_DISABLE_PLUGIN_DISCOVERY_CACHE: "1",
-        OPENCLAW_DISABLE_PLUGIN_MANIFEST_CACHE: "1",
+        CIVITAS_STATE_DIR: tempHome,
+        CIVITAS_CONFIG_PATH: configPath,
+        CIVITAS_SKIP_CHANNELS: "1",
+        CIVITAS_SKIP_GMAIL_WATCHER: "1",
+        CIVITAS_SKIP_CRON: "1",
+        CIVITAS_SKIP_CANVAS_HOST: "1",
+        CIVITAS_GATEWAY_TOKEN: undefined,
+        CIVITAS_GATEWAY_PASSWORD: undefined,
+        CIVITAS_DISABLE_CONFIG_CACHE: "1",
+        CIVITAS_DISABLE_PLUGIN_DISCOVERY_CACHE: "1",
+        CIVITAS_DISABLE_PLUGIN_MANIFEST_CACHE: "1",
       },
       async () => {
         await run({ configPath, runtime, tempHome });

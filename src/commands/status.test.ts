@@ -8,8 +8,8 @@ import { captureEnv } from "../test-utils/env.js";
 let envSnapshot: ReturnType<typeof captureEnv>;
 
 beforeAll(() => {
-  envSnapshot = captureEnv(["OPENCLAW_PROFILE"]);
-  process.env.OPENCLAW_PROFILE = "isolated";
+  envSnapshot = captureEnv(["CIVITAS_PROFILE"]);
+  process.env.CIVITAS_PROFILE = "isolated";
 });
 
 afterAll(() => {
@@ -434,7 +434,7 @@ vi.mock("../gateway/call.js", () => ({
       if (token && typeof token === "object" && "source" in token) {
         throw new GatewaySecretRefUnavailableError("gateway.auth.token");
       }
-      const envToken = process.env.OPENCLAW_GATEWAY_TOKEN?.trim();
+      const envToken = process.env.CIVITAS_GATEWAY_TOKEN?.trim();
       return envToken ? { token: envToken } : {};
     },
   ),
@@ -443,8 +443,8 @@ vi.mock("../gateway/agent-list.js", () => ({
   listGatewayAgentsBasic: mocks.listGatewayAgentsBasic,
 }));
 vi.mock("../infra/civitas-root.js", () => ({
-  resolveOpenClawPackageRoot: vi.fn().mockResolvedValue("/tmp/civitas"),
-  resolveOpenClawPackageRootSync: vi.fn(() => "/tmp/civitas"),
+  resolveCIVITASPackageRoot: vi.fn().mockResolvedValue("/tmp/civitas"),
+  resolveCIVITASPackageRootSync: vi.fn(() => "/tmp/civitas"),
 }));
 vi.mock("../infra/os-summary.js", () => ({
   resolveOsSummary: () => ({
@@ -563,7 +563,7 @@ vi.mock("./status.daemon.js", () => ({
       label: service.label,
       installed: Boolean(command) || runtime?.status === "running",
       loaded,
-      managedByOpenClaw: Boolean(command),
+      managedByCIVITAS: Boolean(command),
       externallyManaged: !command && runtime?.status === "running",
       loadedText: loaded ? service.loadedText : service.notLoadedText,
       runtimeShort: runtime?.pid ? `pid ${runtime.pid}` : null,
@@ -578,7 +578,7 @@ vi.mock("./status.daemon.js", () => ({
       label: service.label,
       installed: Boolean(command) || runtime?.status === "running",
       loaded,
-      managedByOpenClaw: Boolean(command),
+      managedByCIVITAS: Boolean(command),
       externallyManaged: !command && runtime?.status === "running",
       loadedText: loaded ? service.loadedText : service.notLoadedText,
       runtimeShort: runtime?.pid ? `pid ${runtime.pid}` : null,
@@ -762,7 +762,7 @@ describe("statusCommand", () => {
     ]);
     const logs = await runStatusAndGetLogs();
     for (const token of [
-      "OpenClaw status",
+      "CIVITAS status",
       "Overview",
       "Security audit",
       "Summary:",
@@ -923,7 +923,7 @@ describe("statusCommand", () => {
       session: {},
       channels: { whatsapp: { allowFrom: ["*"] } },
     });
-    await withEnvVar("OPENCLAW_GATEWAY_TOKEN", "abcd1234", async () => {
+    await withEnvVar("CIVITAS_GATEWAY_TOKEN", "abcd1234", async () => {
       mockProbeGatewayResult({
         ok: true,
         connectLatencyMs: 123,

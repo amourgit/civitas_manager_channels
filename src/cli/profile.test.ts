@@ -102,30 +102,30 @@ describe("applyCliProfileEnv", () => {
       homedir: () => "/home/peter",
     });
     const expectedStateDir = path.join(path.resolve("/home/peter"), ".civitas-dev");
-    expect(env.OPENCLAW_PROFILE).toBe("dev");
-    expect(env.OPENCLAW_STATE_DIR).toBe(expectedStateDir);
-    expect(env.OPENCLAW_CONFIG_PATH).toBe(path.join(expectedStateDir, "civitas.json"));
-    expect(env.OPENCLAW_GATEWAY_PORT).toBe("19001");
+    expect(env.CIVITAS_PROFILE).toBe("dev");
+    expect(env.CIVITAS_STATE_DIR).toBe(expectedStateDir);
+    expect(env.CIVITAS_CONFIG_PATH).toBe(path.join(expectedStateDir, "civitas.json"));
+    expect(env.CIVITAS_GATEWAY_PORT).toBe("19001");
   });
 
   it("does not override explicit env values", () => {
     const env: Record<string, string | undefined> = {
-      OPENCLAW_STATE_DIR: "/custom",
-      OPENCLAW_GATEWAY_PORT: "19099",
+      CIVITAS_STATE_DIR: "/custom",
+      CIVITAS_GATEWAY_PORT: "19099",
     };
     applyCliProfileEnv({
       profile: "dev",
       env,
       homedir: () => "/home/peter",
     });
-    expect(env.OPENCLAW_STATE_DIR).toBe("/custom");
-    expect(env.OPENCLAW_GATEWAY_PORT).toBe("19099");
-    expect(env.OPENCLAW_CONFIG_PATH).toBe(path.join("/custom", "civitas.json"));
+    expect(env.CIVITAS_STATE_DIR).toBe("/custom");
+    expect(env.CIVITAS_GATEWAY_PORT).toBe("19099");
+    expect(env.CIVITAS_CONFIG_PATH).toBe(path.join("/custom", "civitas.json"));
   });
 
-  it("uses OPENCLAW_HOME when deriving profile state dir", () => {
+  it("uses CIVITAS_HOME when deriving profile state dir", () => {
     const env: Record<string, string | undefined> = {
-      OPENCLAW_HOME: "/srv/civitas-home",
+      CIVITAS_HOME: "/srv/civitas-home",
       HOME: "/home/other",
     };
     applyCliProfileEnv({
@@ -135,8 +135,8 @@ describe("applyCliProfileEnv", () => {
     });
 
     const resolvedHome = path.resolve("/srv/civitas-home");
-    expect(env.OPENCLAW_STATE_DIR).toBe(path.join(resolvedHome, ".civitas-work"));
-    expect(env.OPENCLAW_CONFIG_PATH).toBe(
+    expect(env.CIVITAS_STATE_DIR).toBe(path.join(resolvedHome, ".civitas-work"));
+    expect(env.CIVITAS_CONFIG_PATH).toBe(
       path.join(resolvedHome, ".civitas-work", "civitas.json"),
     );
   });
@@ -153,31 +153,31 @@ describe("formatCliCommand", () => {
     {
       name: "profile is default",
       cmd: "civitas doctor --fix",
-      env: { OPENCLAW_PROFILE: "default" },
+      env: { CIVITAS_PROFILE: "default" },
       expected: "civitas doctor --fix",
     },
     {
       name: "profile is Default (case-insensitive)",
       cmd: "civitas doctor --fix",
-      env: { OPENCLAW_PROFILE: "Default" },
+      env: { CIVITAS_PROFILE: "Default" },
       expected: "civitas doctor --fix",
     },
     {
       name: "profile is invalid",
       cmd: "civitas doctor --fix",
-      env: { OPENCLAW_PROFILE: "bad profile" },
+      env: { CIVITAS_PROFILE: "bad profile" },
       expected: "civitas doctor --fix",
     },
     {
       name: "--profile is already present",
       cmd: "civitas --profile work doctor --fix",
-      env: { OPENCLAW_PROFILE: "work" },
+      env: { CIVITAS_PROFILE: "work" },
       expected: "civitas --profile work doctor --fix",
     },
     {
       name: "--dev is already present",
       cmd: "civitas --dev doctor",
-      env: { OPENCLAW_PROFILE: "dev" },
+      env: { CIVITAS_PROFILE: "dev" },
       expected: "civitas --dev doctor",
     },
   ])("returns command unchanged when $name", ({ cmd, env, expected }) => {
@@ -185,50 +185,50 @@ describe("formatCliCommand", () => {
   });
 
   it("inserts --profile flag when profile is set", () => {
-    expect(formatCliCommand("civitas doctor --fix", { OPENCLAW_PROFILE: "work" })).toBe(
+    expect(formatCliCommand("civitas doctor --fix", { CIVITAS_PROFILE: "work" })).toBe(
       "civitas --profile work doctor --fix",
     );
   });
 
   it("trims whitespace from profile", () => {
-    expect(formatCliCommand("civitas doctor --fix", { OPENCLAW_PROFILE: "  jbcivitas  " })).toBe(
+    expect(formatCliCommand("civitas doctor --fix", { CIVITAS_PROFILE: "  jbcivitas  " })).toBe(
       "civitas --profile jbcivitas doctor --fix",
     );
   });
 
   it("handles command with no args after civitas", () => {
-    expect(formatCliCommand("civitas", { OPENCLAW_PROFILE: "test" })).toBe(
+    expect(formatCliCommand("civitas", { CIVITAS_PROFILE: "test" })).toBe(
       "civitas --profile test",
     );
   });
 
   it("handles pnpm wrapper", () => {
-    expect(formatCliCommand("pnpm civitas doctor", { OPENCLAW_PROFILE: "work" })).toBe(
+    expect(formatCliCommand("pnpm civitas doctor", { CIVITAS_PROFILE: "work" })).toBe(
       "pnpm civitas --profile work doctor",
     );
   });
 
   it("inserts --container when a container hint is set", () => {
     expect(
-      formatCliCommand("civitas gateway status --deep", { OPENCLAW_CONTAINER_HINT: "demo" }),
+      formatCliCommand("civitas gateway status --deep", { CIVITAS_CONTAINER_HINT: "demo" }),
     ).toBe("civitas --container demo gateway status --deep");
   });
 
   it("preserves both --container and --profile hints", () => {
     expect(
       formatCliCommand("civitas doctor", {
-        OPENCLAW_CONTAINER_HINT: "demo",
-        OPENCLAW_PROFILE: "work",
+        CIVITAS_CONTAINER_HINT: "demo",
+        CIVITAS_PROFILE: "work",
       }),
     ).toBe("civitas --container demo doctor");
   });
 
   it("does not prepend --container for update commands", () => {
-    expect(formatCliCommand("civitas update", { OPENCLAW_CONTAINER_HINT: "demo" })).toBe(
+    expect(formatCliCommand("civitas update", { CIVITAS_CONTAINER_HINT: "demo" })).toBe(
       "civitas update",
     );
     expect(
-      formatCliCommand("pnpm civitas update --channel beta", { OPENCLAW_CONTAINER_HINT: "demo" }),
+      formatCliCommand("pnpm civitas update --channel beta", { CIVITAS_CONTAINER_HINT: "demo" }),
     ).toBe("pnpm civitas update --channel beta");
   });
 });

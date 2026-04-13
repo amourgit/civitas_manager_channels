@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { DEFAULT_ACCOUNT_ID } from "civitas/plugin-sdk/setup";
 import { describe, expect, it, vi } from "vitest";
 import {
@@ -9,7 +9,7 @@ import {
 import { resolveTelegramAllowFromEntries } from "./setup-core.js";
 import { telegramSetupWizard } from "./setup-surface.js";
 
-async function runPrepare(cfg: OpenClawConfig, accountId: string) {
+async function runPrepare(cfg: CIVITASConfig, accountId: string) {
   return await runSetupWizardPrepare({
     prepare: telegramSetupWizard.prepare,
     cfg,
@@ -18,7 +18,7 @@ async function runPrepare(cfg: OpenClawConfig, accountId: string) {
   });
 }
 
-async function runFinalize(cfg: OpenClawConfig, accountId: string) {
+async function runFinalize(cfg: CIVITASConfig, accountId: string) {
   const note = vi.fn(async () => undefined);
 
   await runSetupWizardFinalize({
@@ -33,7 +33,7 @@ async function runFinalize(cfg: OpenClawConfig, accountId: string) {
 
 function expectPreparedResult(
   prepared: Awaited<ReturnType<typeof runPrepare>>,
-): { cfg: OpenClawConfig } & Exclude<Awaited<ReturnType<typeof runPrepare>>, void | undefined> {
+): { cfg: CIVITASConfig } & Exclude<Awaited<ReturnType<typeof runPrepare>>, void | undefined> {
   expect(prepared).toBeDefined();
   if (
     !prepared ||
@@ -43,7 +43,7 @@ function expectPreparedResult(
   ) {
     throw new Error("Expected prepare result with cfg");
   }
-  return prepared as { cfg: OpenClawConfig } & Exclude<
+  return prepared as { cfg: CIVITASConfig } & Exclude<
     Awaited<ReturnType<typeof runPrepare>>,
     void | undefined
   >;
@@ -192,7 +192,7 @@ describe("telegramSetupWizard.dmPolicy", () => {
   });
 
   it("uses configured defaultAccount for omitted DM policy account context", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: CIVITASConfig = {
       channels: {
         telegram: {
           defaultAccount: "alerts",
@@ -220,7 +220,7 @@ describe("telegramSetupWizard.dmPolicy", () => {
   });
 
   it('writes open policy state to the named account and preserves inherited allowFrom with "*"', () => {
-    const cfg: OpenClawConfig = {
+    const cfg: CIVITASConfig = {
       channels: {
         telegram: {
           allowFrom: ["123"],

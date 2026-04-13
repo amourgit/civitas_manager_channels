@@ -1,5 +1,5 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { ClawdbotConfig } from "../runtime-api.js";
+import type { ChanneldbotConfig } from "../runtime-api.js";
 import { buildMarkdownCard } from "./send.js";
 
 const {
@@ -114,7 +114,7 @@ describe("getMessageFeishu", () => {
     });
 
     const result = await sendMessageFeishu({
-      cfg: {} as ClawdbotConfig,
+      cfg: {} as ChanneldbotConfig,
       to: "oc_send",
       text: "hello",
     });
@@ -150,7 +150,7 @@ describe("getMessageFeishu", () => {
     });
 
     const result = await getMessageFeishu({
-      cfg: {} as ClawdbotConfig,
+      cfg: {} as ChanneldbotConfig,
       messageId: "om_1",
     });
 
@@ -187,7 +187,7 @@ describe("getMessageFeishu", () => {
     });
 
     const result = await getMessageFeishu({
-      cfg: {} as ClawdbotConfig,
+      cfg: {} as ChanneldbotConfig,
       messageId: "om_post",
     });
 
@@ -219,7 +219,7 @@ describe("getMessageFeishu", () => {
     });
 
     const result = await getMessageFeishu({
-      cfg: {} as ClawdbotConfig,
+      cfg: {} as ChanneldbotConfig,
       messageId: "om_file",
     });
 
@@ -247,7 +247,7 @@ describe("getMessageFeishu", () => {
     });
 
     const result = await getMessageFeishu({
-      cfg: {} as ClawdbotConfig,
+      cfg: {} as ChanneldbotConfig,
       messageId: "om_single",
     });
 
@@ -306,7 +306,7 @@ describe("getMessageFeishu", () => {
     });
 
     const result = await listFeishuThreadMessages({
-      cfg: {} as ClawdbotConfig,
+      cfg: {} as ChanneldbotConfig,
       threadId: "omt_1",
       rootMessageId: "om_root",
     });
@@ -352,7 +352,7 @@ describe("editMessageFeishu", () => {
     mockClientPatch.mockResolvedValueOnce({ code: 0 });
 
     const result = await editMessageFeishu({
-      cfg: {} as ClawdbotConfig,
+      cfg: {} as ChanneldbotConfig,
       messageId: "om_edit",
       text: "updated body",
     });
@@ -381,7 +381,7 @@ describe("editMessageFeishu", () => {
     mockClientPatch.mockResolvedValueOnce({ code: 0 });
 
     const result = await editMessageFeishu({
-      cfg: {} as ClawdbotConfig,
+      cfg: {} as ChanneldbotConfig,
       messageId: "om_card",
       card: { schema: "2.0" },
     });

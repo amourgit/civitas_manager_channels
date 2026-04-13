@@ -1,5 +1,5 @@
 import { DEFAULT_ACCOUNT_ID } from "civitas/plugin-sdk/account-id";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { clearAccountEntryFields } from "civitas/plugin-sdk/core";
 import type { RuntimeEnv } from "civitas/plugin-sdk/runtime-env";
 import { resolveTelegramAccount } from "./accounts.js";
@@ -45,7 +45,7 @@ async function resolveTelegramMonitor() {
 export const telegramGateway = {
   startAccount: async (ctx: {
     account: ResolvedTelegramAccount;
-    cfg: OpenClawConfig;
+    cfg: CIVITASConfig;
     runtime: RuntimeEnv;
     abortSignal: AbortSignal;
     log?: {
@@ -103,9 +103,9 @@ export const telegramGateway = {
       webhookCertPath: account.config.webhookCertPath,
     });
   },
-  logoutAccount: async ({ accountId, cfg }: { accountId: string; cfg: OpenClawConfig }) => {
+  logoutAccount: async ({ accountId, cfg }: { accountId: string; cfg: CIVITASConfig }) => {
     const envToken = process.env.TELEGRAM_BOT_TOKEN?.trim() ?? "";
-    const nextCfg = { ...cfg } as OpenClawConfig;
+    const nextCfg = { ...cfg } as CIVITASConfig;
     const nextTelegram = cfg.channels?.telegram ? { ...cfg.channels.telegram } : undefined;
     let cleared = false;
     let changed = false;

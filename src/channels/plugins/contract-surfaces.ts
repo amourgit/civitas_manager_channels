@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createJiti } from "jiti";
-import { discoverOpenClawPlugins } from "../../plugins/discovery.js";
+import { discoverCIVITASPlugins } from "../../plugins/discovery.js";
 import { loadPluginManifestRegistry } from "../../plugins/manifest-registry.js";
 import {
   buildPluginLoaderAliasMap,
@@ -18,7 +18,7 @@ const CONTRACT_SURFACE_BASENAMES = [
   "contract-api.js",
 ] as const;
 const PUBLIC_SURFACE_SOURCE_EXTENSIONS = [".ts", ".mts", ".js", ".mjs", ".cts", ".cjs"] as const;
-const OPENCLAW_PACKAGE_ROOT =
+const CIVITAS_PACKAGE_ROOT =
   resolveLoaderPackageRoot({
     modulePath: fileURLToPath(import.meta.url),
     moduleUrl: import.meta.url,
@@ -124,7 +124,7 @@ function resolveSourceFirstContractSurfaceModulePaths(params: {
   }
 
   const dirName = path.basename(path.resolve(params.rootDir));
-  const sourceRoot = path.resolve(OPENCLAW_PACKAGE_ROOT, "extensions", dirName);
+  const sourceRoot = path.resolve(CIVITAS_PACKAGE_ROOT, "extensions", dirName);
   const modulePaths: string[] = [];
 
   for (const basename of CONTRACT_SURFACE_BASENAMES) {
@@ -164,7 +164,7 @@ function loadBundledChannelContractSurfaceEntries(): Array<{
   surface: unknown;
 }> {
   const env = getContractSurfaceDiscoveryEnv();
-  const discovery = discoverOpenClawPlugins({ cache: false, env });
+  const discovery = discoverCIVITASPlugins({ cache: false, env });
   const manifestRegistry = loadPluginManifestRegistry({
     cache: false,
     env,
@@ -217,7 +217,7 @@ export function getBundledChannelContractSurfaceModule<T = unknown>(params: {
     return (cachedPreferredSurfaceModules.get(cacheKey) ?? null) as T | null;
   }
   const env = getContractSurfaceDiscoveryEnv();
-  const discovery = discoverOpenClawPlugins({ cache: false, env });
+  const discovery = discoverCIVITASPlugins({ cache: false, env });
   const manifestRegistry = loadPluginManifestRegistry({
     cache: false,
     env,

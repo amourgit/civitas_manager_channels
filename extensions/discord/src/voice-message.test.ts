@@ -5,7 +5,7 @@ const runFfmpegMock = vi.hoisted(() => vi.fn<(...args: unknown[]) => Promise<voi
 
 vi.mock("civitas/plugin-sdk/temp-path", async () => {
   return {
-    resolvePreferredOpenClawTmpDir: () => "/tmp",
+    resolvePreferredCIVITASTmpDir: () => "/tmp",
   };
 });
 

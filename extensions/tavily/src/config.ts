@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import {
   normalizeResolvedSecretInputString,
   normalizeSecretInput,
@@ -22,7 +22,7 @@ type PluginEntryConfig = {
   };
 };
 
-export function resolveTavilySearchConfig(cfg?: OpenClawConfig): TavilySearchConfig {
+export function resolveTavilySearchConfig(cfg?: CIVITASConfig): TavilySearchConfig {
   const pluginConfig = cfg?.plugins?.entries?.tavily?.config as PluginEntryConfig;
   const pluginWebSearch = pluginConfig?.webSearch;
   if (pluginWebSearch && typeof pluginWebSearch === "object" && !Array.isArray(pluginWebSearch)) {
@@ -40,7 +40,7 @@ function normalizeConfiguredSecret(value: unknown, path: string): string | undef
   );
 }
 
-export function resolveTavilyApiKey(cfg?: OpenClawConfig): string | undefined {
+export function resolveTavilyApiKey(cfg?: CIVITASConfig): string | undefined {
   const search = resolveTavilySearchConfig(cfg);
   return (
     normalizeConfiguredSecret(search?.apiKey, "plugins.entries.tavily.config.webSearch.apiKey") ||
@@ -49,7 +49,7 @@ export function resolveTavilyApiKey(cfg?: OpenClawConfig): string | undefined {
   );
 }
 
-export function resolveTavilyBaseUrl(cfg?: OpenClawConfig): string {
+export function resolveTavilyBaseUrl(cfg?: CIVITASConfig): string {
   const search = resolveTavilySearchConfig(cfg);
   const configured =
     (typeof search?.baseUrl === "string" ? search.baseUrl.trim() : "") ||

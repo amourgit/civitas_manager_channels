@@ -2,7 +2,7 @@
   "name": "@civitas/github-copilot-provider",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw GitHub Copilot provider plugin",
+  "description": "CIVITAS GitHub Copilot provider plugin",
   "type": "module",
   "civitas": {
     "extensions": [

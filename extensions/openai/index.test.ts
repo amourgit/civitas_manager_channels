@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import * as providerAuth from "civitas/plugin-sdk/provider-auth-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createTestPluginApi } from "../../test/helpers/plugins/plugin-api.js";
@@ -216,7 +216,7 @@ describe("openai plugin", () => {
               },
             },
           },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
       }),
     ).rejects.toThrow("Blocked hostname or private/internal/special-use IP address");
 

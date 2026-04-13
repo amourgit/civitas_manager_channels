@@ -1,9 +1,9 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { describe, expect, it, vi } from "vitest";
 import { telegramPairingText } from "./pairing-text.js";
 import { clearTelegramRuntime, setTelegramRuntime } from "./runtime.js";
 
-function createCfg(): OpenClawConfig {
+function createCfg(): CIVITASConfig {
   return {
     channels: {
       telegram: {
@@ -13,7 +13,7 @@ function createCfg(): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as CIVITASConfig;
 }
 
 describe("telegramPairingText", () => {

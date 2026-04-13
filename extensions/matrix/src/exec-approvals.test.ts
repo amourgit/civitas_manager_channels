@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   getMatrixExecApprovalApprovers,
@@ -30,9 +30,9 @@ function createTempDir(): string {
 }
 
 function buildConfig(
-  execApprovals?: NonNullable<NonNullable<OpenClawConfig["channels"]>["matrix"]>["execApprovals"],
-  channelOverrides?: Partial<NonNullable<NonNullable<OpenClawConfig["channels"]>["matrix"]>>,
-): OpenClawConfig {
+  execApprovals?: NonNullable<NonNullable<CIVITASConfig["channels"]>["matrix"]>["execApprovals"],
+  channelOverrides?: Partial<NonNullable<NonNullable<CIVITASConfig["channels"]>["matrix"]>>,
+): CIVITASConfig {
   return {
     channels: {
       matrix: {
@@ -43,7 +43,7 @@ function buildConfig(
         execApprovals,
       },
     },
-  } as OpenClawConfig;
+  } as CIVITASConfig;
 }
 
 describe("matrix exec approvals", () => {
@@ -112,7 +112,7 @@ describe("matrix exec approvals", () => {
           ],
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     expect(isMatrixExecApprovalTargetRecipient({ cfg, senderId: "@target:example.org" })).toBe(
       true,
@@ -313,7 +313,7 @@ describe("matrix exec approvals", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const request = {
       id: "req-3",
       request: {
@@ -369,7 +369,7 @@ describe("matrix exec approvals", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const request = {
       id: "req-4",
       request: {
@@ -425,7 +425,7 @@ describe("matrix exec approvals", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const request = {
       id: "req-5",
       request: {
@@ -483,7 +483,7 @@ describe("matrix exec approvals", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const request = {
       id: "req-6",
       request: {
@@ -540,7 +540,7 @@ describe("matrix exec approvals", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const request = {
       id: "req-7",
       request: {

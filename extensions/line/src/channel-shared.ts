@@ -5,7 +5,7 @@ import {
   normalizeAccountId,
   resolveLineAccount,
   type ChannelPlugin,
-  type OpenClawConfig,
+  type CIVITASConfig,
   type ResolvedLineAccount,
 } from "./channel-api.js";
 import { lineConfigAdapter } from "./config-adapter.js";
@@ -54,7 +54,7 @@ export const lineChannelPluginCommon = {
   "meta" | "capabilities" | "reload" | "configSchema" | "config"
 >;
 
-export function isLineConfigured(cfg: OpenClawConfig, accountId: string): boolean {
+export function isLineConfigured(cfg: CIVITASConfig, accountId: string): boolean {
   return hasLineCredentials(resolveLineAccount({ cfg, accountId }));
 }
 

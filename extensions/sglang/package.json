@@ -2,7 +2,7 @@
   "name": "@civitas/sglang-provider",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw SGLang provider plugin",
+  "description": "CIVITAS SGLang provider plugin",
   "type": "module",
   "civitas": {
     "extensions": [

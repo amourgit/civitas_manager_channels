@@ -3,22 +3,22 @@ import os from "node:os";
 import path from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const fetchClawHubSkillDetailMock = vi.fn();
-const downloadClawHubSkillArchiveMock = vi.fn();
-const listClawHubSkillsMock = vi.fn();
-const resolveClawHubBaseUrlMock = vi.fn(() => "https://clawhub.ai");
-const searchClawHubSkillsMock = vi.fn();
+const fetchChannelHubSkillDetailMock = vi.fn();
+const downloadChannelHubSkillArchiveMock = vi.fn();
+const listChannelHubSkillsMock = vi.fn();
+const resolveChannelHubBaseUrlMock = vi.fn(() => "https://CIVITAS Channelhub.ai");
+const searchChannelHubSkillsMock = vi.fn();
 const archiveCleanupMock = vi.fn();
 const withExtractedArchiveRootMock = vi.fn();
 const installPackageDirMock = vi.fn();
 const fileExistsMock = vi.fn();
 
-vi.mock("../infra/clawhub.js", () => ({
-  fetchClawHubSkillDetail: fetchClawHubSkillDetailMock,
-  downloadClawHubSkillArchive: downloadClawHubSkillArchiveMock,
-  listClawHubSkills: listClawHubSkillsMock,
-  resolveClawHubBaseUrl: resolveClawHubBaseUrlMock,
-  searchClawHubSkills: searchClawHubSkillsMock,
+vi.mock("../infra/CIVITAS Channelhub.js", () => ({
+  fetchChannelHubSkillDetail: fetchChannelHubSkillDetailMock,
+  downloadChannelHubSkillArchive: downloadChannelHubSkillArchiveMock,
+  listChannelHubSkills: listChannelHubSkillsMock,
+  resolveChannelHubBaseUrl: resolveChannelHubBaseUrlMock,
+  searchChannelHubSkills: searchChannelHubSkillsMock,
 }));
 
 vi.mock("../infra/install-flow.js", () => ({
@@ -33,24 +33,24 @@ vi.mock("../infra/archive.js", () => ({
   fileExists: fileExistsMock,
 }));
 
-const { installSkillFromClawHub, searchSkillsFromClawHub, updateSkillsFromClawHub } =
-  await import("./skills-clawhub.js");
+const { installSkillFromChannelHub, searchSkillsFromChannelHub, updateSkillsFromChannelHub } =
+  await import("./skills-CIVITAS Channelhub.js");
 
-describe("skills-clawhub", () => {
+describe("skills-CIVITAS Channelhub", () => {
   beforeEach(() => {
-    fetchClawHubSkillDetailMock.mockReset();
-    downloadClawHubSkillArchiveMock.mockReset();
-    listClawHubSkillsMock.mockReset();
-    resolveClawHubBaseUrlMock.mockReset();
-    searchClawHubSkillsMock.mockReset();
+    fetchChannelHubSkillDetailMock.mockReset();
+    downloadChannelHubSkillArchiveMock.mockReset();
+    listChannelHubSkillsMock.mockReset();
+    resolveChannelHubBaseUrlMock.mockReset();
+    searchChannelHubSkillsMock.mockReset();
     archiveCleanupMock.mockReset();
     withExtractedArchiveRootMock.mockReset();
     installPackageDirMock.mockReset();
     fileExistsMock.mockReset();
 
-    resolveClawHubBaseUrlMock.mockReturnValue("https://clawhub.ai");
+    resolveChannelHubBaseUrlMock.mockReturnValue("https://CIVITAS Channelhub.ai");
     fileExistsMock.mockImplementation(async (input: string) => input.endsWith("SKILL.md"));
-    fetchClawHubSkillDetailMock.mockResolvedValue({
+    fetchChannelHubSkillDetailMock.mockResolvedValue({
       skill: {
         slug: "agentreceipt",
         displayName: "AgentReceipt",
@@ -62,13 +62,13 @@ describe("skills-clawhub", () => {
         createdAt: 3,
       },
     });
-    downloadClawHubSkillArchiveMock.mockResolvedValue({
+    downloadChannelHubSkillArchiveMock.mockResolvedValue({
       archivePath: "/tmp/agentreceipt.zip",
       integrity: "sha256-test",
       cleanup: archiveCleanupMock,
     });
     archiveCleanupMock.mockResolvedValue(undefined);
-    searchClawHubSkillsMock.mockResolvedValue([]);
+    searchChannelHubSkillsMock.mockResolvedValue([]);
     withExtractedArchiveRootMock.mockImplementation(async (params) => {
       expect(params.rootMarkers).toEqual(["SKILL.md"]);
       return await params.onExtracted("/tmp/extracted-skill");
@@ -79,13 +79,13 @@ describe("skills-clawhub", () => {
     });
   });
 
-  it("installs ClawHub skills from flat-root archives", async () => {
-    const result = await installSkillFromClawHub({
+  it("installs ChannelHub skills from flat-root archives", async () => {
+    const result = await installSkillFromChannelHub({
       workspaceDir: "/tmp/workspace",
       slug: "agentreceipt",
     });
 
-    expect(downloadClawHubSkillArchiveMock).toHaveBeenCalledWith({
+    expect(downloadChannelHubSkillArchiveMock).toHaveBeenCalledWith({
       slug: "agentreceipt",
       version: "1.0.0",
       baseUrl: undefined,
@@ -106,16 +106,16 @@ describe("skills-clawhub", () => {
 
   describe("legacy tracked slugs remain updatable", () => {
     async function createLegacyTrackedSkillFixture(slug: string) {
-      const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "civitas-skills-clawhub-"));
+      const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "civitas-skills-CIVITAS Channelhub-"));
       const skillDir = path.join(workspaceDir, "skills", slug);
-      await fs.mkdir(path.join(skillDir, ".clawhub"), { recursive: true });
-      await fs.mkdir(path.join(workspaceDir, ".clawhub"), { recursive: true });
+      await fs.mkdir(path.join(skillDir, ".CIVITAS Channelhub"), { recursive: true });
+      await fs.mkdir(path.join(workspaceDir, ".CIVITAS Channelhub"), { recursive: true });
       await fs.writeFile(
-        path.join(skillDir, ".clawhub", "origin.json"),
+        path.join(skillDir, ".CIVITAS Channelhub", "origin.json"),
         `${JSON.stringify(
           {
             version: 1,
-            registry: "https://legacy.clawhub.ai",
+            registry: "https://legacy.CIVITAS Channelhub.ai",
             slug,
             installedVersion: "0.9.0",
             installedAt: 123,
@@ -126,7 +126,7 @@ describe("skills-clawhub", () => {
         "utf8",
       );
       await fs.writeFile(
-        path.join(workspaceDir, ".clawhub", "lock.json"),
+        path.join(workspaceDir, ".CIVITAS Channelhub", "lock.json"),
         `${JSON.stringify(
           {
             version: 1,
@@ -154,18 +154,18 @@ describe("skills-clawhub", () => {
       });
 
       try {
-        const results = await updateSkillsFromClawHub({
+        const results = await updateSkillsFromChannelHub({
           workspaceDir,
         });
 
-        expect(fetchClawHubSkillDetailMock).toHaveBeenCalledWith({
+        expect(fetchChannelHubSkillDetailMock).toHaveBeenCalledWith({
           slug,
-          baseUrl: "https://legacy.clawhub.ai",
+          baseUrl: "https://legacy.CIVITAS Channelhub.ai",
         });
-        expect(downloadClawHubSkillArchiveMock).toHaveBeenCalledWith({
+        expect(downloadChannelHubSkillArchiveMock).toHaveBeenCalledWith({
           slug,
           version: "1.0.0",
-          baseUrl: "https://legacy.clawhub.ai",
+          baseUrl: "https://legacy.CIVITAS Channelhub.ai",
         });
         expect(results).toMatchObject([
           {
@@ -190,7 +190,7 @@ describe("skills-clawhub", () => {
       });
 
       try {
-        const results = await updateSkillsFromClawHub({
+        const results = await updateSkillsFromChannelHub({
           workspaceDir,
           slug,
         });
@@ -210,11 +210,11 @@ describe("skills-clawhub", () => {
     });
 
     it("still rejects an untracked Unicode slug passed to update", async () => {
-      const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "civitas-skills-clawhub-"));
+      const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "civitas-skills-CIVITAS Channelhub-"));
 
       try {
         await expect(
-          updateSkillsFromClawHub({
+          updateSkillsFromChannelHub({
             workspaceDir,
             slug: "re\u0430ct",
           }),
@@ -227,7 +227,7 @@ describe("skills-clawhub", () => {
 
   describe("normalizeSlug rejects non-ASCII homograph slugs", () => {
     it("rejects Cyrillic homograph 'а' (U+0430) in slug", async () => {
-      const result = await installSkillFromClawHub({
+      const result = await installSkillFromChannelHub({
         workspaceDir: "/tmp/workspace",
         slug: "re\u0430ct",
       });
@@ -238,7 +238,7 @@ describe("skills-clawhub", () => {
     });
 
     it("rejects Cyrillic homograph 'е' (U+0435) in slug", async () => {
-      const result = await installSkillFromClawHub({
+      const result = await installSkillFromChannelHub({
         workspaceDir: "/tmp/workspace",
         slug: "r\u0435act",
       });
@@ -249,7 +249,7 @@ describe("skills-clawhub", () => {
     });
 
     it("rejects Cyrillic homograph 'о' (U+043E) in slug", async () => {
-      const result = await installSkillFromClawHub({
+      const result = await installSkillFromChannelHub({
         workspaceDir: "/tmp/workspace",
         slug: "t\u043Edo",
       });
@@ -260,7 +260,7 @@ describe("skills-clawhub", () => {
     });
 
     it("rejects slug with mixed Unicode and ASCII", async () => {
-      const result = await installSkillFromClawHub({
+      const result = await installSkillFromChannelHub({
         workspaceDir: "/tmp/workspace",
         slug: "cаlеndаr",
       });
@@ -271,7 +271,7 @@ describe("skills-clawhub", () => {
     });
 
     it("rejects slug with non-Latin scripts", async () => {
-      const result = await installSkillFromClawHub({
+      const result = await installSkillFromChannelHub({
         workspaceDir: "/tmp/workspace",
         slug: "技能",
       });
@@ -283,7 +283,7 @@ describe("skills-clawhub", () => {
 
     it("rejects Unicode that case-folds to ASCII (Kelvin sign U+212A)", async () => {
       // "\u212A" (Kelvin sign) lowercases to "k" — must be caught before lowercasing
-      const result = await installSkillFromClawHub({
+      const result = await installSkillFromChannelHub({
         workspaceDir: "/tmp/workspace",
         slug: "\u212Aalendar",
       });
@@ -294,7 +294,7 @@ describe("skills-clawhub", () => {
     });
 
     it("rejects slug starting with a hyphen", async () => {
-      const result = await installSkillFromClawHub({
+      const result = await installSkillFromChannelHub({
         workspaceDir: "/tmp/workspace",
         slug: "-calendar",
       });
@@ -305,7 +305,7 @@ describe("skills-clawhub", () => {
     });
 
     it("rejects slug ending with a hyphen", async () => {
-      const result = await installSkillFromClawHub({
+      const result = await installSkillFromChannelHub({
         workspaceDir: "/tmp/workspace",
         slug: "calendar-",
       });
@@ -316,7 +316,7 @@ describe("skills-clawhub", () => {
     });
 
     it("accepts uppercase ASCII slugs (preserves original casing behavior)", async () => {
-      const result = await installSkillFromClawHub({
+      const result = await installSkillFromChannelHub({
         workspaceDir: "/tmp/workspace",
         slug: "React",
       });
@@ -324,7 +324,7 @@ describe("skills-clawhub", () => {
     });
 
     it("accepts valid lowercase ASCII slugs", async () => {
-      const result = await installSkillFromClawHub({
+      const result = await installSkillFromChannelHub({
         workspaceDir: "/tmp/workspace",
         slug: "calendar-2",
       });
@@ -333,7 +333,7 @@ describe("skills-clawhub", () => {
   });
 
   it("uses search for browse-all skill discovery", async () => {
-    searchClawHubSkillsMock.mockResolvedValueOnce([
+    searchChannelHubSkillsMock.mockResolvedValueOnce([
       {
         score: 1,
         slug: "calendar",
@@ -344,7 +344,7 @@ describe("skills-clawhub", () => {
       },
     ]);
 
-    await expect(searchSkillsFromClawHub({ limit: 20 })).resolves.toEqual([
+    await expect(searchSkillsFromChannelHub({ limit: 20 })).resolves.toEqual([
       {
         score: 1,
         slug: "calendar",
@@ -354,11 +354,11 @@ describe("skills-clawhub", () => {
         updatedAt: 123,
       },
     ]);
-    expect(searchClawHubSkillsMock).toHaveBeenCalledWith({
+    expect(searchChannelHubSkillsMock).toHaveBeenCalledWith({
       query: "*",
       limit: 20,
       baseUrl: undefined,
     });
-    expect(listClawHubSkillsMock).not.toHaveBeenCalled();
+    expect(listChannelHubSkillsMock).not.toHaveBeenCalled();
   });
 });

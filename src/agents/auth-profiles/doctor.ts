@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../config/config.js";
+import type { CIVITASConfig } from "../../config/config.js";
 import { buildProviderAuthDoctorHintWithPlugin } from "../../plugins/provider-runtime.runtime.js";
 import { normalizeProviderId } from "../model-selection.js";
 import type { AuthProfileStore } from "./types.js";
@@ -13,7 +13,7 @@ const DEPRECATED_PROVIDER_MIGRATION_HINTS: Record<string, string> = {
 };
 
 export async function formatAuthDoctorHint(params: {
-  cfg?: OpenClawConfig;
+  cfg?: CIVITASConfig;
   store: AuthProfileStore;
   provider: string;
   profileId?: string;

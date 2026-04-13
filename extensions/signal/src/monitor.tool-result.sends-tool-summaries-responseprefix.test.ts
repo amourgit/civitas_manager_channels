@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { resolveAgentRoute } from "civitas/plugin-sdk/routing";
 import { normalizeE164 } from "civitas/plugin-sdk/text-runtime";
 import { describe, expect, it, vi } from "vitest";
@@ -32,7 +32,7 @@ type MonitorSignalProviderOptions = Parameters<typeof monitorSignalProvider>[0];
 
 async function runMonitorWithMocks(opts: MonitorSignalProviderOptions) {
   return monitorSignalProvider({
-    config: config as OpenClawConfig,
+    config: config as CIVITASConfig,
     waitForTransportReady: waitForTransportReadyMock as any,
     ...opts,
   });
@@ -65,7 +65,7 @@ async function receiveSignalPayloads(params: {
 
 function hasQueuedReactionEventFor(sender: string) {
   const route = resolveAgentRoute({
-    cfg: config as OpenClawConfig,
+    cfg: config as CIVITASConfig,
     channel: "signal",
     accountId: "default",
     peer: { kind: "direct", id: normalizeE164(sender) },

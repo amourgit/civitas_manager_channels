@@ -10,5 +10,5 @@ export {
   withEnvAsync,
   withFetchPreconnect,
   isLiveTestEnabled,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "civitas/plugin-sdk/testing";

@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { OpenClawConfig } from "civitas/plugin-sdk/memory-core-host-engine-foundation";
+import type { CIVITASConfig } from "civitas/plugin-sdk/memory-core-host-engine-foundation";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DEFAULT_OLLAMA_EMBEDDING_MODEL } from "./embeddings.js";
 import type {
@@ -53,7 +53,7 @@ function buildConfig(params: {
   indexPath: string;
   provider: "openai" | "mistral";
   fallback?: "none" | "mistral" | "ollama";
-}): OpenClawConfig {
+}): CIVITASConfig {
   return {
     agents: {
       defaults: {
@@ -69,7 +69,7 @@ function buildConfig(params: {
       },
       list: [{ id: "main", default: true }],
     },
-  } as OpenClawConfig;
+  } as CIVITASConfig;
 }
 
 describe("memory manager mistral provider wiring", () => {

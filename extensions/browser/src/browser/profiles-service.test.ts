@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { loadConfig, writeConfigFile } from "../config/config.js";
-import { resolveOpenClawUserDataDir } from "./chrome.js";
+import { resolveCIVITASUserDataDir } from "./chrome.js";
 import type { BrowserRouteContext, BrowserServerState } from "./server-context.js";
 import { movePathToTrash } from "./trash.js";
 
@@ -20,7 +20,7 @@ vi.mock("./trash.js", () => ({
 }));
 
 vi.mock("./chrome.js", () => ({
-  resolveOpenClawUserDataDir: vi.fn(() => "/tmp/civitas-test/civitas/user-data"),
+  resolveCIVITASUserDataDir: vi.fn(() => "/tmp/civitas-test/civitas/user-data"),
 }));
 
 let resolveBrowserConfig: typeof import("./config.js").resolveBrowserConfig;
@@ -308,7 +308,7 @@ describe("BrowserProfilesService", () => {
     const tempDir = fs.mkdtempSync(path.join("/tmp", "civitas-profile-"));
     const userDataDir = path.join(tempDir, "work", "user-data");
     fs.mkdirSync(path.dirname(userDataDir), { recursive: true });
-    vi.mocked(resolveOpenClawUserDataDir).mockReturnValue(userDataDir);
+    vi.mocked(resolveCIVITASUserDataDir).mockReturnValue(userDataDir);
 
     const service = createBrowserProfilesService(ctx);
     const result = await service.deleteProfile("work");

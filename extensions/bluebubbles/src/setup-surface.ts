@@ -6,7 +6,7 @@ import {
   formatDocsLink,
   type ChannelSetupDmPolicy,
   type ChannelSetupWizard,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "civitas/plugin-sdk/setup";
 import {
   listBlueBubblesAccountIds,
@@ -94,14 +94,14 @@ function validateBlueBubblesServerUrlInput(value: unknown): string | undefined {
 }
 
 function applyBlueBubblesSetupPatch(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   accountId: string,
   patch: {
     serverUrl?: string;
     password?: unknown;
     webhookPath?: string;
   },
-): OpenClawConfig {
+): CIVITASConfig {
   return applyBlueBubblesConnectionConfig({
     cfg,
     accountId,
@@ -111,11 +111,11 @@ function applyBlueBubblesSetupPatch(
   });
 }
 
-function resolveBlueBubblesServerUrl(cfg: OpenClawConfig, accountId: string): string | undefined {
+function resolveBlueBubblesServerUrl(cfg: CIVITASConfig, accountId: string): string | undefined {
   return resolveBlueBubblesAccount({ cfg, accountId }).config.serverUrl?.trim() || undefined;
 }
 
-function resolveBlueBubblesWebhookPath(cfg: OpenClawConfig, accountId: string): string | undefined {
+function resolveBlueBubblesWebhookPath(cfg: CIVITASConfig, accountId: string): string | undefined {
   return resolveBlueBubblesAccount({ cfg, accountId }).config.webhookPath?.trim() || undefined;
 }
 
@@ -259,7 +259,7 @@ export const blueBubblesSetupWizard: ChannelSetupWizard = {
     lines: [
       "Configure the webhook URL in BlueBubbles Server:",
       "1. Open BlueBubbles Server -> Settings -> Webhooks",
-      "2. Add your OpenClaw gateway URL + webhook path",
+      "2. Add your CIVITAS gateway URL + webhook path",
       `   Example: https://your-gateway-host:3000${DEFAULT_WEBHOOK_PATH}`,
       "3. Enable the webhook and save",
       "",

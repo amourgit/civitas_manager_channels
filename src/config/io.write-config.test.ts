@@ -4,7 +4,7 @@ import path from "node:path";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import type { PluginManifestRecord, PluginManifestRegistry } from "../plugins/manifest-registry.js";
 import { createConfigIO } from "./io.js";
-import type { OpenClawConfig } from "./types.js";
+import type { CIVITASConfig } from "./types.js";
 
 // Mock the plugin manifest registry so we can register a fake channel whose
 // AJV JSON Schema carries a `default` value.  This lets the #56772 regression
@@ -236,7 +236,7 @@ describe("config io write", () => {
     },
   );
 
-  it("keeps writes inside an OPENCLAW_STATE_DIR override even when the real home config exists", async () => {
+  it("keeps writes inside an CIVITAS_STATE_DIR override even when the real home config exists", async () => {
     await withSuiteHome(async (home) => {
       const liveConfigPath = path.join(home, ".civitas", "civitas.json");
       await fs.mkdir(path.dirname(liveConfigPath), { recursive: true });
@@ -247,7 +247,7 @@ describe("config io write", () => {
       );
 
       const overrideDir = path.join(home, "isolated-state");
-      const env = { OPENCLAW_STATE_DIR: overrideDir } as NodeJS.ProcessEnv;
+      const env = { CIVITAS_STATE_DIR: overrideDir } as NodeJS.ProcessEnv;
       const io = createConfigIO({
         env,
         homedir: () => home,
@@ -284,14 +284,14 @@ describe("config io write", () => {
         logger: silentLogger,
       });
 
-      const invalidConfig: OpenClawConfig = {
+      const invalidConfig: CIVITASConfig = {
         channels: {
           telegram: {
             dmPolicy: "open",
             allowFrom: [],
           },
         },
-      } satisfies OpenClawConfig;
+      } satisfies CIVITASConfig;
 
       await expect(io.writeConfigFile(invalidConfig)).rejects.toThrow(
         "civitas config set channels.telegram.allowFrom '[\"*\"]'",
@@ -716,7 +716,7 @@ describe("config io write", () => {
         env: {
           HOME: "undefined",
           USERPROFILE: "null",
-          OPENCLAW_HOME: "undefined",
+          CIVITAS_HOME: "undefined",
         } as NodeJS.ProcessEnv,
       });
       expect(lines.length).toBeGreaterThan(0);
@@ -736,9 +736,9 @@ describe("config io write", () => {
         initialConfig: { gateway: { mode: "local" } },
         gatewayPatch: { bind: "loopback" },
         env: {
-          OPENCLAW_WATCH_MODE: "1",
-          OPENCLAW_WATCH_SESSION: "watch-session-1",
-          OPENCLAW_WATCH_COMMAND: "gateway --force",
+          CIVITAS_WATCH_MODE: "1",
+          CIVITAS_WATCH_SESSION: "watch-session-1",
+          CIVITAS_WATCH_COMMAND: "gateway --force",
         } as NodeJS.ProcessEnv,
       });
       expect(last.watchMode).toBe(true);

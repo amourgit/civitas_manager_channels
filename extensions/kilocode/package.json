@@ -2,7 +2,7 @@
   "name": "@civitas/kilocode-provider",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw Kilo Gateway provider plugin",
+  "description": "CIVITAS Kilo Gateway provider plugin",
   "type": "module",
   "civitas": {
     "extensions": [

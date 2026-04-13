@@ -1,7 +1,7 @@
 import { describeAccountSnapshot } from "civitas/plugin-sdk/account-helpers";
 import { DEFAULT_ACCOUNT_ID } from "civitas/plugin-sdk/account-id";
 import { createHybridChannelConfigAdapter } from "civitas/plugin-sdk/channel-config-helpers";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { createChatChannelPlugin, type ChannelPlugin } from "civitas/plugin-sdk/core";
 import { createLazyRuntimeModule } from "civitas/plugin-sdk/lazy-runtime";
 import { createRuntimeOutboundDelegates } from "civitas/plugin-sdk/outbound-runtime";

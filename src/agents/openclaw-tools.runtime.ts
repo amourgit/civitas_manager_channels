@@ -1,1 +1,1 @@
-export { createOpenClawTools } from "./civitas-tools.js";
+export { createCIVITASTools } from "./civitas-tools.js";

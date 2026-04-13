@@ -2,7 +2,7 @@ import type { ImageGenerationProvider } from "civitas/plugin-sdk/image-generatio
 import type { MediaUnderstandingProvider } from "civitas/plugin-sdk/media-understanding";
 import {
   definePluginEntry,
-  type OpenClawPluginApi,
+  type CIVITASPluginApi,
   type ProviderAuthContext,
   type ProviderFetchUsageSnapshotContext,
 } from "civitas/plugin-sdk/plugin-entry";
@@ -27,8 +27,8 @@ const GOOGLE_GEMINI_CLI_PROVIDER_ID = "google-gemini-cli";
 const GOOGLE_GEMINI_CLI_PROVIDER_LABEL = "Gemini CLI OAuth";
 const GOOGLE_GEMINI_CLI_DEFAULT_MODEL = "google-gemini-cli/gemini-3.1-pro-preview";
 const GOOGLE_GEMINI_CLI_ENV_VARS = [
-  "OPENCLAW_GEMINI_OAUTH_CLIENT_ID",
-  "OPENCLAW_GEMINI_OAUTH_CLIENT_SECRET",
+  "CIVITAS_GEMINI_OAUTH_CLIENT_ID",
+  "CIVITAS_GEMINI_OAUTH_CLIENT_SECRET",
   "GEMINI_CLI_OAUTH_CLIENT_ID",
   "GEMINI_CLI_OAUTH_CLIENT_SECRET",
 ] as const;
@@ -64,7 +64,7 @@ async function loadGoogleGeminiCliProvider(): Promise<ProviderPlugin> {
         registerProvider(entry) {
           provider = entry;
         },
-      } as Pick<OpenClawPluginApi, "registerProvider"> as OpenClawPluginApi);
+      } as Pick<CIVITASPluginApi, "registerProvider"> as CIVITASPluginApi);
       if (!provider) {
         throw new Error("google gemini cli provider missing provider registration");
       }

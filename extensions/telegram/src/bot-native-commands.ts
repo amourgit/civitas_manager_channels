@@ -13,7 +13,7 @@ import {
   resolveCommandArgMenu,
   type CommandArgs,
 } from "civitas/plugin-sdk/command-auth-native";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { ChannelGroupPolicy } from "civitas/plugin-sdk/config-runtime";
 import type {
   ReplyToMode,
@@ -170,7 +170,7 @@ async function cleanupTelegramProgressPlaceholder(params: {
 }
 
 export type RegisterTelegramHandlerParams = {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
   bot: Bot;
   mediaMaxBytes: number;
@@ -215,7 +215,7 @@ export function parseTelegramNativeCommandCallbackData(data?: string | null): st
 
 export type RegisterTelegramNativeCommandsParams = {
   bot: Bot;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   runtime: RuntimeEnv;
   accountId: string;
   telegramCfg: TelegramAccountConfig;
@@ -240,7 +240,7 @@ export type RegisterTelegramNativeCommandsParams = {
 async function resolveTelegramCommandAuth(params: {
   msg: NonNullable<TelegramNativeCommandContext["message"]>;
   bot: Bot;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
   telegramCfg: TelegramAccountConfig;
   readChannelAllowFromStore: TelegramBotDeps["readChannelAllowFromStore"];
@@ -525,8 +525,8 @@ export const registerTelegramNativeCommands = ({
   for (const issue of pluginCatalog.issues) {
     runtime.error?.(danger(issue));
   }
-  const loadFreshRuntimeConfig = (): OpenClawConfig => telegramDeps.loadConfig();
-  const resolveFreshTelegramConfig = (runtimeCfg: OpenClawConfig): TelegramAccountConfig => {
+  const loadFreshRuntimeConfig = (): CIVITASConfig => telegramDeps.loadConfig();
+  const resolveFreshTelegramConfig = (runtimeCfg: CIVITASConfig): TelegramAccountConfig => {
     try {
       return resolveTelegramAccount({
         cfg: runtimeCfg,
@@ -585,7 +585,7 @@ export const registerTelegramNativeCommands = ({
 
   const resolveCommandRuntimeContext = async (params: {
     msg: NonNullable<TelegramNativeCommandContext["message"]>;
-    runtimeCfg: OpenClawConfig;
+    runtimeCfg: CIVITASConfig;
     isGroup: boolean;
     isForum: boolean;
     resolvedThreadId?: number;

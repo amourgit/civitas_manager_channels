@@ -5,7 +5,7 @@ import {
   readReactionParams,
   readStringParam,
 } from "civitas/plugin-sdk/channel-actions";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { resolveAuthorizedWhatsAppOutboundTarget } from "./action-runtime-target-auth.js";
 import { resolveWhatsAppReactionLevel } from "./reaction-level.js";
 import { sendReactionWhatsApp } from "./send.js";
@@ -17,7 +17,7 @@ export const whatsAppActionRuntime = {
 
 export async function handleWhatsAppAction(
   params: Record<string, unknown>,
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
 ): Promise<AgentToolResult<unknown>> {
   const action = readStringParam(params, "action", { required: true });
   const whatsAppConfig = cfg.channels?.whatsapp;

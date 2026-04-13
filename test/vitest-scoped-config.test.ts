@@ -56,9 +56,9 @@ describe("resolveVitestIsolation", () => {
   });
 
   it("ignores the legacy isolation escape hatches", () => {
-    expect(resolveVitestIsolation({ OPENCLAW_TEST_ISOLATE: "1" })).toBe(false);
-    expect(resolveVitestIsolation({ OPENCLAW_TEST_NO_ISOLATE: "0" })).toBe(false);
-    expect(resolveVitestIsolation({ OPENCLAW_TEST_NO_ISOLATE: "false" })).toBe(false);
+    expect(resolveVitestIsolation({ CIVITAS_TEST_ISOLATE: "1" })).toBe(false);
+    expect(resolveVitestIsolation({ CIVITAS_TEST_NO_ISOLATE: "0" })).toBe(false);
+    expect(resolveVitestIsolation({ CIVITAS_TEST_NO_ISOLATE: "false" })).toBe(false);
   });
 });
 
@@ -190,7 +190,7 @@ describe("scoped vitest configs", () => {
     expect(defaultChannelsConfig.test?.include).toEqual(["src/channels/**/*.test.ts"]);
   });
 
-  it("loads channel include overrides from OPENCLAW_VITEST_INCLUDE_FILE", () => {
+  it("loads channel include overrides from CIVITAS_VITEST_INCLUDE_FILE", () => {
     const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "civitas-vitest-channels-"));
     try {
       const includeFile = path.join(tempDir, "include.json");
@@ -206,7 +206,7 @@ describe("scoped vitest configs", () => {
       );
 
       const config = createChannelsVitestConfig({
-        OPENCLAW_VITEST_INCLUDE_FILE: includeFile,
+        CIVITAS_VITEST_INCLUDE_FILE: includeFile,
       });
 
       expect(config.test?.include).toEqual([

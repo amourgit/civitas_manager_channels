@@ -11,7 +11,7 @@ import {
   collectZalouserSecurityAuditFindings,
 } from "../../test/helpers/channels/security-audit-contract.js";
 import type { ChannelPlugin } from "../channels/plugins/types.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import { saveExecApprovals } from "../infra/exec-approvals.js";
 import { createEmptyPluginRegistry } from "../plugins/registry-empty.js";
 import { getActivePluginRegistry, setActivePluginRegistry } from "../plugins/runtime.js";
@@ -29,9 +29,9 @@ const pathResolutionEnvKeys = [
   "USERPROFILE",
   "HOMEDRIVE",
   "HOMEPATH",
-  "OPENCLAW_HOME",
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_BUNDLED_PLUGINS_DIR",
+  "CIVITAS_HOME",
+  "CIVITAS_STATE_DIR",
+  "CIVITAS_BUNDLED_PLUGINS_DIR",
 ] as const;
 const execDockerRawUnavailable: NonNullable<SecurityAuditOptions["execDockerRawFn"]> = async () => {
   return {
@@ -44,15 +44,15 @@ const execDockerRawUnavailable: NonNullable<SecurityAuditOptions["execDockerRawF
 function stubChannelPlugin(params: {
   id: "discord" | "feishu" | "slack" | "synology-chat" | "telegram" | "zalouser";
   label: string;
-  resolveAccount: (cfg: OpenClawConfig, accountId: string | null | undefined) => unknown;
-  inspectAccount?: (cfg: OpenClawConfig, accountId: string | null | undefined) => unknown;
-  listAccountIds?: (cfg: OpenClawConfig) => string[];
-  isConfigured?: (account: unknown, cfg: OpenClawConfig) => boolean;
-  isEnabled?: (account: unknown, cfg: OpenClawConfig) => boolean;
+  resolveAccount: (cfg: CIVITASConfig, accountId: string | null | undefined) => unknown;
+  inspectAccount?: (cfg: CIVITASConfig, accountId: string | null | undefined) => unknown;
+  listAccountIds?: (cfg: CIVITASConfig) => string[];
+  isConfigured?: (account: unknown, cfg: CIVITASConfig) => boolean;
+  isEnabled?: (account: unknown, cfg: CIVITASConfig) => boolean;
   collectAuditFindings?: NonNullable<ChannelPlugin["security"]>["collectAuditFindings"];
   commands?: ChannelPlugin["commands"];
 }): ChannelPlugin {
-  const channelConfigured = (cfg: OpenClawConfig) =>
+  const channelConfigured = (cfg: CIVITASConfig) =>
     Boolean((cfg.channels as Record<string, unknown> | undefined)?.[params.id]);
   const defaultCollectAuditFindings =
     params.collectAuditFindings ??
@@ -272,7 +272,7 @@ function successfulProbeResult(url: string) {
 }
 
 async function audit(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   extra?: Omit<SecurityAuditOptions, "config"> & { preserveExecApprovals?: boolean },
 ): Promise<SecurityAuditReport> {
   if (!extra?.preserveExecApprovals) {
@@ -299,7 +299,7 @@ async function runAuditCases<T>(
   );
 }
 
-async function runConfigAuditCases<T extends { cfg: OpenClawConfig }>(
+async function runConfigAuditCases<T extends { cfg: CIVITASConfig }>(
   cases: readonly T[],
   assert: (res: SecurityAuditReport, testCase: T) => void,
   options?: (
@@ -362,7 +362,7 @@ async function expectSeverityByExposureCases(params: {
   checkId: string;
   cases: Array<{
     name: string;
-    cfg: OpenClawConfig;
+    cfg: CIVITASConfig;
     expectedSeverity: "warn" | "critical";
   }>;
 }) {
@@ -375,7 +375,7 @@ async function expectSeverityByExposureCases(params: {
 }
 
 async function runChannelSecurityAudit(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   plugins: ChannelPlugin[],
 ): Promise<SecurityAuditReport> {
   return withActiveAuditChannelPlugins(plugins, () =>
@@ -408,7 +408,7 @@ async function withActiveAuditChannelPlugins<T>(
 }
 
 async function runInstallMetadataAudit(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   stateDir: string,
 ): Promise<SecurityAuditReport> {
   return runSecurityAudit({
@@ -455,7 +455,7 @@ describe("security audit", () => {
     const credentialsDir = path.join(sharedChannelSecurityStateDir, "credentials");
     await fs.rm(credentialsDir, { recursive: true, force: true }).catch(() => undefined);
     await fs.mkdir(credentialsDir, { recursive: true, mode: 0o700 });
-    await withEnvAsync({ OPENCLAW_STATE_DIR: sharedChannelSecurityStateDir }, () =>
+    await withEnvAsync({ CIVITAS_STATE_DIR: sharedChannelSecurityStateDir }, () =>
       fn(sharedChannelSecurityStateDir),
     );
   };
@@ -469,7 +469,7 @@ describe("security audit", () => {
     }
   };
 
-  const runSharedExtensionsAudit = async (config: OpenClawConfig) => {
+  const runSharedExtensionsAudit = async (config: CIVITASConfig) => {
     return runSecurityAudit({
       config,
       includeFilesystem: true,
@@ -482,7 +482,7 @@ describe("security audit", () => {
   beforeAll(async () => {
     fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "civitas-security-audit-"));
     isolatedHome = path.join(fixtureRoot, "home");
-    const isolatedEnv = createPathResolutionEnv(isolatedHome, { OPENCLAW_HOME: isolatedHome });
+    const isolatedEnv = createPathResolutionEnv(isolatedHome, { CIVITAS_HOME: isolatedHome });
     for (const key of pathResolutionEnvKeys) {
       previousPathResolutionEnv[key] = process.env[key];
       const value = isolatedEnv[key];
@@ -527,7 +527,7 @@ describe("security audit", () => {
   });
 
   it("includes an attack surface summary (info)", async () => {
-    const cfg: OpenClawConfig = {
+    const cfg: CIVITASConfig = {
       channels: { whatsapp: { groupPolicy: "open" }, telegram: { groupPolicy: "allowlist" } },
       tools: { elevated: { enabled: true, allowFrom: { whatsapp: ["+1"] } } },
       hooks: { enabled: true },
@@ -552,8 +552,8 @@ describe("security audit", () => {
         run: async () =>
           withEnvAsync(
             {
-              OPENCLAW_GATEWAY_TOKEN: undefined,
-              OPENCLAW_GATEWAY_PASSWORD: undefined,
+              CIVITAS_GATEWAY_TOKEN: undefined,
+              CIVITAS_GATEWAY_PASSWORD: undefined,
             },
             async () =>
               audit({
@@ -578,7 +578,7 @@ describe("security audit", () => {
                   password: {
                     source: "env",
                     provider: "default",
-                    id: "OPENCLAW_GATEWAY_PASSWORD",
+                    id: "CIVITAS_GATEWAY_PASSWORD",
                   },
                 },
               },
@@ -592,14 +592,14 @@ describe("security audit", () => {
       {
         name: "does not flag missing gateway auth when read-only scrubbed config omits unavailable auth SecretRefs",
         run: async () => {
-          const sourceConfig: OpenClawConfig = {
+          const sourceConfig: CIVITASConfig = {
             gateway: {
               bind: "lan",
               auth: {
                 token: {
                   source: "env",
                   provider: "default",
-                  id: "OPENCLAW_GATEWAY_TOKEN",
+                  id: "CIVITAS_GATEWAY_TOKEN",
                 },
               },
             },
@@ -609,7 +609,7 @@ describe("security audit", () => {
               },
             },
           };
-          const resolvedConfig: OpenClawConfig = {
+          const resolvedConfig: CIVITASConfig = {
             gateway: {
               bind: "lan",
               auth: {},
@@ -672,7 +672,7 @@ describe("security audit", () => {
   it("scores dangerous gateway.tools.allow over HTTP by exposure", async () => {
     const cases: Array<{
       name: string;
-      cfg: OpenClawConfig;
+      cfg: CIVITASConfig;
       expectedSeverity: "warn" | "critical";
     }> = [
       {
@@ -724,7 +724,7 @@ describe("security audit", () => {
   it("warns when sandbox exec host is selected while sandbox mode is off", async () => {
     const cases: Array<{
       name: string;
-      cfg: OpenClawConfig;
+      cfg: CIVITASConfig;
       checkId:
         | "tools.exec.host_sandbox_no_sandbox_defaults"
         | "tools.exec.host_sandbox_no_sandbox_agents";
@@ -784,7 +784,7 @@ describe("security audit", () => {
   it("warns for interpreter safeBins only when explicit profiles are missing", async () => {
     const cases: Array<{
       name: string;
-      cfg: OpenClawConfig;
+      cfg: CIVITASConfig;
       expected: boolean;
     }> = [
       {
@@ -855,7 +855,7 @@ describe("security audit", () => {
   it("warns when risky broad-behavior bins are explicitly added to safeBins", async () => {
     const cases: Array<{
       name: string;
-      cfg: OpenClawConfig;
+      cfg: CIVITASConfig;
       expected: boolean;
     }> = [
       {
@@ -914,7 +914,7 @@ describe("security audit", () => {
               },
             ],
           },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         assert: (res: SecurityAuditReport) => {
           const finding = res.findings.find(
             (f) => f.checkId === "tools.exec.safe_bin_trusted_dirs_risky",
@@ -933,7 +933,7 @@ describe("security audit", () => {
               safeBinTrustedDirs: ["/usr/libexec"],
             },
           },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         assert: (res: SecurityAuditReport) => {
           expectNoFinding(res, "tools.exec.safe_bin_trusted_dirs_risky");
         },
@@ -1047,7 +1047,7 @@ describe("security audit", () => {
   it("evaluates loopback control UI and logging exposure findings", async () => {
     const cases: Array<{
       name: string;
-      cfg: OpenClawConfig;
+      cfg: CIVITASConfig;
       checkId:
         | "gateway.trusted_proxies_missing"
         | "gateway.loopback_no_auth"
@@ -1468,7 +1468,7 @@ describe("security audit", () => {
   it("scores small-model risk by tool/sandbox exposure", async () => {
     const cases: Array<{
       name: string;
-      cfg: OpenClawConfig;
+      cfg: CIVITASConfig;
       expectedSeverity: "info" | "critical";
       detailIncludes: string[];
     }> = [
@@ -1519,7 +1519,7 @@ describe("security audit", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as CIVITASConfig,
         expectedFindings: [{ checkId: "sandbox.docker_config_mode_off" }],
       },
       {
@@ -1534,7 +1534,7 @@ describe("security audit", () => {
             },
             list: [{ id: "ops", sandbox: { mode: "all" } }],
           },
-        } as OpenClawConfig,
+        } as CIVITASConfig,
         expectedFindings: [],
         expectedAbsent: ["sandbox.docker_config_mode_off"],
       },
@@ -1554,7 +1554,7 @@ describe("security audit", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as CIVITASConfig,
         expectedFindings: [
           { checkId: "sandbox.dangerous_bind_mount", severity: "critical" },
           { checkId: "sandbox.dangerous_network_mode", severity: "critical" },
@@ -1575,7 +1575,7 @@ describe("security audit", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as CIVITASConfig,
         expectedFindings: [
           {
             checkId: "sandbox.dangerous_bind_mount",
@@ -1597,7 +1597,7 @@ describe("security audit", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as CIVITASConfig,
         expectedFindings: [
           {
             checkId: "sandbox.dangerous_network_mode",
@@ -1634,7 +1634,7 @@ describe("security audit", () => {
               denyCommands: ["system.*", "system.runx"],
             },
           },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         detailIncludes: ["system.*", "system.runx", "did you mean", "system.run"],
       },
       {
@@ -1645,7 +1645,7 @@ describe("security audit", () => {
               denyCommands: ["system.run.prep"],
             },
           },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         detailIncludes: ["system.run.prep", "did you mean", "system.run.prepare"],
       },
       {
@@ -1656,7 +1656,7 @@ describe("security audit", () => {
               denyCommands: ["zzzzzzzzzzzzzz"],
             },
           },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         detailIncludes: ["zzzzzzzzzzzzzz"],
         detailExcludes: ["did you mean"],
       },
@@ -1685,7 +1685,7 @@ describe("security audit", () => {
             bind: "loopback",
             nodes: { allowCommands: ["camera.snap", "screen.record"] },
           },
-        } as OpenClawConfig,
+        } as CIVITASConfig,
         expectedSeverity: "warn" as const,
       },
       {
@@ -1695,7 +1695,7 @@ describe("security audit", () => {
             bind: "lan",
             nodes: { allowCommands: ["camera.snap", "screen.record"] },
           },
-        } as OpenClawConfig,
+        } as CIVITASConfig,
         expectedSeverity: "critical" as const,
       },
       {
@@ -1707,7 +1707,7 @@ describe("security audit", () => {
               denyCommands: ["camera.snap", "screen.record"],
             },
           },
-        } as OpenClawConfig,
+        } as CIVITASConfig,
         expectedAbsent: true,
       },
     ] as const;
@@ -1736,7 +1736,7 @@ describe("security audit", () => {
   });
 
   it("flags agent profile overrides when global tools.profile is minimal", async () => {
-    const cfg: OpenClawConfig = {
+    const cfg: CIVITASConfig = {
       tools: {
         profile: "minimal",
       },
@@ -1756,7 +1756,7 @@ describe("security audit", () => {
   });
 
   it("flags tools.elevated allowFrom wildcard as critical", async () => {
-    const cfg: OpenClawConfig = {
+    const cfg: CIVITASConfig = {
       tools: {
         elevated: {
           allowFrom: { whatsapp: ["*"] },
@@ -1780,7 +1780,7 @@ describe("security audit", () => {
         browser: {
           enabled: true,
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       expectedFinding: { checkId: "browser.control_no_auth", severity: "critical" },
     },
     {
@@ -1793,7 +1793,7 @@ describe("security audit", () => {
         browser: {
           enabled: true,
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       expectedNoFinding: "browser.control_no_auth",
     },
     {
@@ -1805,14 +1805,14 @@ describe("security audit", () => {
             password: {
               source: "env",
               provider: "default",
-              id: "OPENCLAW_GATEWAY_PASSWORD",
+              id: "CIVITAS_GATEWAY_PASSWORD",
             },
           },
         },
         browser: {
           enabled: true,
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       expectedNoFinding: "browser.control_no_auth",
     },
     {
@@ -1823,7 +1823,7 @@ describe("security audit", () => {
             remote: { cdpUrl: "http://example.com:9222", color: "#0066CC" },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       expectedFinding: { checkId: "browser.remote_cdp_http", severity: "warn" },
     },
     {
@@ -1838,7 +1838,7 @@ describe("security audit", () => {
             },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       expectedFinding: {
         checkId: "browser.remote_cdp_private_host",
         severity: "warn",
@@ -1866,7 +1866,7 @@ describe("security audit", () => {
           gateway: {
             controlUi: { allowInsecureAuth: true },
           },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         expectedFinding: {
           checkId: "gateway.control_ui.insecure_auth",
           severity: "warn",
@@ -1879,7 +1879,7 @@ describe("security audit", () => {
           gateway: {
             controlUi: { dangerouslyDisableDeviceAuth: true },
           },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         expectedFinding: {
           checkId: "gateway.control_ui.device_auth_disabled",
           severity: "critical",
@@ -1900,7 +1900,7 @@ describe("security audit", () => {
               },
             },
           },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         expectedDangerousDetails: [
           "hooks.gmail.allowUnsafeExternalContent=true",
           "hooks.mappings[0].allowUnsafeExternalContent=true",
@@ -1920,7 +1920,7 @@ describe("security audit", () => {
               },
             },
           },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         expectedDangerousDetails: ["plugins.entries.acpx.config.permissionMode=approve-all"],
       },
     ] as const;
@@ -1950,7 +1950,7 @@ describe("security audit", () => {
           bind: "lan",
           auth: { mode: "token", token: "very-long-browser-token-0123456789" },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       expectedFinding: {
         checkId: "gateway.control_ui.allowed_origins_required",
         severity: "critical",
@@ -1963,7 +1963,7 @@ describe("security audit", () => {
           bind: "loopback",
           controlUi: { allowedOrigins: ["*"] },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       expectedFinding: {
         checkId: "gateway.control_ui.allowed_origins_wildcard",
         severity: "warn",
@@ -1977,7 +1977,7 @@ describe("security audit", () => {
           auth: { mode: "token", token: "very-long-browser-token-0123456789" },
           controlUi: { allowedOrigins: ["*"] },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       expectedFinding: {
         checkId: "gateway.control_ui.allowed_origins_wildcard",
         severity: "critical",
@@ -1995,7 +1995,7 @@ describe("security audit", () => {
   });
 
   it("flags dangerous host-header origin fallback and suppresses missing allowed-origins finding", async () => {
-    const cfg: OpenClawConfig = {
+    const cfg: CIVITASConfig = {
       gateway: {
         bind: "lan",
         auth: { mode: "token", token: "very-long-browser-token-0123456789" },
@@ -2024,7 +2024,7 @@ describe("security audit", () => {
             appSecret: "secret_test", // pragma: allowlist secret
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       expectedFinding: "channels.feishu.doc_owner_open_id",
     },
     {
@@ -2040,7 +2040,7 @@ describe("security audit", () => {
             },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       expectedFinding: "channels.feishu.doc_owner_open_id",
     },
     {
@@ -2053,7 +2053,7 @@ describe("security audit", () => {
             tools: { doc: false },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       expectedNoFinding: "channels.feishu.doc_owner_open_id",
     },
   ])("$name", async (testCase) => {
@@ -2067,7 +2067,7 @@ describe("security audit", () => {
   });
 
   it("scores X-Real-IP fallback risk by gateway exposure", async () => {
-    const trustedProxyCfg = (trustedProxies: string[]): OpenClawConfig => ({
+    const trustedProxyCfg = (trustedProxies: string[]): CIVITASConfig => ({
       gateway: {
         bind: "loopback",
         allowRealIpFallback: true,
@@ -2083,7 +2083,7 @@ describe("security audit", () => {
 
     const cases: Array<{
       name: string;
-      cfg: OpenClawConfig;
+      cfg: CIVITASConfig;
       expectedSeverity: "warn" | "critical";
     }> = [
       {
@@ -2147,7 +2147,7 @@ describe("security audit", () => {
   it("scores mDNS full mode risk by gateway bind mode", async () => {
     const cases: Array<{
       name: string;
-      cfg: OpenClawConfig;
+      cfg: CIVITASConfig;
       expectedSeverity: "warn" | "critical";
     }> = [
       {
@@ -2193,7 +2193,7 @@ describe("security audit", () => {
   it("evaluates trusted-proxy auth guardrails", async () => {
     const cases: Array<{
       name: string;
-      cfg: OpenClawConfig;
+      cfg: CIVITASConfig;
       expectedCheckId: string;
       expectedSeverity: "warn" | "critical";
       suppressesGenericSharedSecretFindings?: boolean;
@@ -2280,7 +2280,7 @@ describe("security audit", () => {
   });
 
   it("warns when multiple DM senders share the main session", async () => {
-    const cfg: OpenClawConfig = {
+    const cfg: CIVITASConfig = {
       session: { dmScope: "main" },
       channels: { whatsapp: { enabled: true } },
     };
@@ -2352,7 +2352,7 @@ describe("security audit", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as CIVITASConfig,
         expectFinding: true,
       },
       {
@@ -2373,7 +2373,7 @@ describe("security audit", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as CIVITASConfig,
         expectFinding: false,
       },
     ] as const;
@@ -2416,7 +2416,7 @@ describe("security audit", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as CIVITASConfig,
         resolvedConfig: {
           channels: {
             discord: {
@@ -2431,7 +2431,7 @@ describe("security audit", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as CIVITASConfig,
         plugin: () =>
           stubChannelPlugin({
             id: "discord",
@@ -2481,7 +2481,7 @@ describe("security audit", () => {
               slashCommand: { enabled: true },
             },
           },
-        } as OpenClawConfig,
+        } as CIVITASConfig,
         resolvedConfig: {
           channels: {
             slack: {
@@ -2491,8 +2491,8 @@ describe("security audit", () => {
               slashCommand: { enabled: true },
             },
           },
-        } as OpenClawConfig,
-        plugin: (sourceConfig: OpenClawConfig) =>
+        } as CIVITASConfig,
+        plugin: (sourceConfig: CIVITASConfig) =>
           stubChannelPlugin({
             id: "slack",
             label: "Slack",
@@ -2539,7 +2539,7 @@ describe("security audit", () => {
               slashCommand: { enabled: true },
             },
           },
-        } as OpenClawConfig,
+        } as CIVITASConfig,
         resolvedConfig: {
           channels: {
             slack: {
@@ -2549,8 +2549,8 @@ describe("security audit", () => {
               slashCommand: { enabled: true },
             },
           },
-        } as OpenClawConfig,
-        plugin: (sourceConfig: OpenClawConfig) =>
+        } as CIVITASConfig,
+        plugin: (sourceConfig: CIVITASConfig) =>
           stubChannelPlugin({
             id: "slack",
             label: "Slack",
@@ -2621,7 +2621,7 @@ describe("security audit", () => {
       },
     });
 
-    const cfg: OpenClawConfig = {
+    const cfg: CIVITASConfig = {
       channels: {
         zalouser: {
           enabled: true,
@@ -2674,7 +2674,7 @@ describe("security audit", () => {
             },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       plugins: [discordPlugin],
       expectNameBasedSeverity: "warn",
       detailIncludes: [
@@ -2696,7 +2696,7 @@ describe("security audit", () => {
             allowFrom: ["Alice#1234"],
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       plugins: [discordPlugin],
       expectNameBasedSeverity: "info",
       detailIncludes: ["out-of-scope"],
@@ -2721,7 +2721,7 @@ describe("security audit", () => {
             },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       plugins: [discordPlugin],
       expectNoNameBasedFinding: true,
       expectFindingMatch: {
@@ -2749,7 +2749,7 @@ describe("security audit", () => {
             },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       plugins: [discordPlugin],
       expectNameBasedSeverity: "warn",
       detailIncludes: ["channels.discord.accounts.beta.allowFrom:Alice#1234"],
@@ -2780,7 +2780,7 @@ describe("security audit", () => {
             },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       plugins: [discordPlugin],
       expectNoNameBasedFinding: true,
     },
@@ -2830,7 +2830,7 @@ describe("security audit", () => {
             dangerouslyAllowNameMatching: true,
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       expectedMatch: {
         checkId: "channels.synology-chat.reply.dangerous_name_matching_enabled",
         severity: "info",
@@ -2857,7 +2857,7 @@ describe("security audit", () => {
             },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       expectedMatch: {
         checkId: "channels.synology-chat.reply.dangerous_name_matching_enabled",
         severity: "info",
@@ -2875,7 +2875,7 @@ describe("security audit", () => {
 
   it("does not treat prototype properties as explicit Discord account config paths", async () => {
     await withChannelSecurityStateDir(async () => {
-      const cfg: OpenClawConfig = {
+      const cfg: CIVITASConfig = {
         channels: {
           discord: {
             enabled: true,
@@ -2933,7 +2933,7 @@ describe("security audit", () => {
             },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       expectedSeverity: "warn",
       detailIncludes: ["channels.zalouser.groups:Ops Room"],
       detailExcludes: ["group:g-123"],
@@ -2950,7 +2950,7 @@ describe("security audit", () => {
             },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       expectedSeverity: "info",
       detailIncludes: ["out-of-scope"],
       expectFindingMatch: {
@@ -3000,7 +3000,7 @@ describe("security audit", () => {
             },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       plugins: [discordPlugin],
       expectedFinding: {
         checkId: "channels.discord.commands.native.unrestricted",
@@ -3019,7 +3019,7 @@ describe("security audit", () => {
             slashCommand: { enabled: true },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       plugins: [slackPlugin],
       expectedFinding: {
         checkId: "channels.slack.commands.slash.no_allowlists",
@@ -3039,7 +3039,7 @@ describe("security audit", () => {
             slashCommand: { enabled: true },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       plugins: [slackPlugin],
       expectedFinding: {
         checkId: "channels.slack.commands.slash.useAccessGroups_off",
@@ -3057,7 +3057,7 @@ describe("security audit", () => {
             groups: { "-100123": {} },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       plugins: [telegramPlugin],
       expectedFinding: {
         checkId: "channels.telegram.groups.allowFrom.missing",
@@ -3076,7 +3076,7 @@ describe("security audit", () => {
             groups: { "-100123": {} },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       plugins: [telegramPlugin],
       expectedFinding: {
         checkId: "channels.telegram.allowFrom.invalid_entries",
@@ -3094,7 +3094,7 @@ describe("security audit", () => {
   });
 
   it("adds probe_failed warnings for deep probe failure modes", async () => {
-    const cfg: OpenClawConfig = { gateway: { mode: "local" } };
+    const cfg: CIVITASConfig = { gateway: { mode: "local" } };
     const cases: Array<{
       name: string;
       probeGatewayFn: NonNullable<SecurityAuditOptions["probeGatewayFn"]>;
@@ -3170,7 +3170,7 @@ describe("security audit", () => {
         ...testCase,
         cfg: {
           agents: { defaults: { model: { primary: testCase.model } } },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
       })),
       (res, testCase) => {
         for (const expected of testCase.expectedFindings ?? []) {
@@ -3188,17 +3188,17 @@ describe("security audit", () => {
       enabled: true,
       token: "shared-gateway-token-1234567890",
       defaultSessionKey: "hook:ingress",
-    } satisfies NonNullable<OpenClawConfig["hooks"]>;
+    } satisfies NonNullable<CIVITASConfig["hooks"]>;
     const requestSessionKeyHooks = {
       ...unrestrictedBaseHooks,
       allowRequestSessionKey: true,
-    } satisfies NonNullable<OpenClawConfig["hooks"]>;
+    } satisfies NonNullable<CIVITASConfig["hooks"]>;
     const cases = [
       {
         name: "warns when hooks token looks short",
         cfg: {
           hooks: { enabled: true, token: "short" },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         expectedFinding: "hooks.token_too_short",
         expectedSeverity: "warn" as const,
       },
@@ -3206,9 +3206,9 @@ describe("security audit", () => {
         name: "flags hooks token reuse of the gateway env token as critical",
         cfg: {
           hooks: { enabled: true, token: "shared-gateway-token-1234567890" },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         env: {
-          OPENCLAW_GATEWAY_TOKEN: "shared-gateway-token-1234567890",
+          CIVITAS_GATEWAY_TOKEN: "shared-gateway-token-1234567890",
         },
         expectedFinding: "hooks.token_reuse_gateway_token",
         expectedSeverity: "critical" as const,
@@ -3217,7 +3217,7 @@ describe("security audit", () => {
         name: "warns when hooks.defaultSessionKey is unset",
         cfg: {
           hooks: { enabled: true, token: "shared-gateway-token-1234567890" },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         expectedFinding: "hooks.default_session_key_unset",
         expectedSeverity: "warn" as const,
       },
@@ -3230,25 +3230,25 @@ describe("security audit", () => {
             defaultSessionKey: "hook:ingress",
             allowedAgentIds: ["*"],
           },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         expectedFinding: "hooks.allowed_agent_ids_unrestricted",
         expectedSeverity: "warn" as const,
       },
       {
         name: "scores unrestricted hooks.allowedAgentIds by local exposure",
-        cfg: { hooks: unrestrictedBaseHooks } satisfies OpenClawConfig,
+        cfg: { hooks: unrestrictedBaseHooks } satisfies CIVITASConfig,
         expectedFinding: "hooks.allowed_agent_ids_unrestricted",
         expectedSeverity: "warn" as const,
       },
       {
         name: "scores unrestricted hooks.allowedAgentIds by remote exposure",
-        cfg: { gateway: { bind: "lan" }, hooks: unrestrictedBaseHooks } satisfies OpenClawConfig,
+        cfg: { gateway: { bind: "lan" }, hooks: unrestrictedBaseHooks } satisfies CIVITASConfig,
         expectedFinding: "hooks.allowed_agent_ids_unrestricted",
         expectedSeverity: "critical" as const,
       },
       {
         name: "scores hooks request sessionKey override by local exposure",
-        cfg: { hooks: requestSessionKeyHooks } satisfies OpenClawConfig,
+        cfg: { hooks: requestSessionKeyHooks } satisfies CIVITASConfig,
         expectedFinding: "hooks.request_session_key_enabled",
         expectedSeverity: "warn" as const,
         expectedExtraFinding: {
@@ -3261,7 +3261,7 @@ describe("security audit", () => {
         cfg: {
           gateway: { bind: "lan" },
           hooks: requestSessionKeyHooks,
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         expectedFinding: "hooks.request_session_key_enabled",
         expectedSeverity: "critical" as const,
       },
@@ -3295,7 +3295,7 @@ describe("security audit", () => {
           auth: { mode: "none" },
           http: { endpoints: { chatCompletions: { enabled: true } } },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       expectedFinding: { checkId: "gateway.http.no_auth", severity: "warn" },
       detailIncludes: ["/tools/invoke", "/v1/chat/completions"],
       auditOptions: { env: {} },
@@ -3308,7 +3308,7 @@ describe("security audit", () => {
           auth: { mode: "none" },
           http: { endpoints: { responses: { enabled: true } } },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       expectedFinding: { checkId: "gateway.http.no_auth", severity: "critical" },
       auditOptions: { env: {} },
     },
@@ -3325,7 +3325,7 @@ describe("security audit", () => {
             },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       expectedNoFinding: "gateway.http.no_auth",
       auditOptions: { env: {} },
     },
@@ -3340,7 +3340,7 @@ describe("security audit", () => {
             },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies CIVITASConfig,
       expectedFinding: { checkId: "gateway.http.session_key_override_enabled", severity: "info" },
     },
   ])("$name", async (testCase) => {
@@ -3365,7 +3365,7 @@ describe("security audit", () => {
   });
 
   it("warns when state/config look like a synced folder", async () => {
-    const cfg: OpenClawConfig = {};
+    const cfg: CIVITASConfig = {};
 
     const res = await audit(cfg, {
       stateDir: "/Users/test/Dropbox/.civitas",
@@ -3394,7 +3394,7 @@ describe("security audit", () => {
     await fs.writeFile(configPath, `{ "$include": "./extra.json5" }\n`, "utf-8");
     await fs.chmod(configPath, 0o600);
 
-    const cfg: OpenClawConfig = { logging: { redactSensitive: "off" } };
+    const cfg: CIVITASConfig = { logging: { redactSensitive: "off" } };
     const user = "DESKTOP-TEST\\Tester";
     const execIcacls = isWindows
       ? async (_cmd: string, args: string[]) => {
@@ -3461,7 +3461,7 @@ describe("security audit", () => {
                   },
                 },
               },
-            } satisfies OpenClawConfig,
+            } satisfies CIVITASConfig,
             sharedInstallMetadataStateDir,
           ),
         expectedPresent: [
@@ -3496,7 +3496,7 @@ describe("security audit", () => {
                   },
                 },
               },
-            } satisfies OpenClawConfig,
+            } satisfies CIVITASConfig,
             sharedInstallMetadataStateDir,
           ),
         expectedAbsent: [
@@ -3577,7 +3577,7 @@ describe("security audit", () => {
     const cases = [
       {
         name: "flags extensions without plugins.allow",
-        cfg: {} satisfies OpenClawConfig,
+        cfg: {} satisfies CIVITASConfig,
         assert: (res: SecurityAuditReport) => {
           expect(res.findings).toEqual(
             expect.arrayContaining([
@@ -3593,7 +3593,7 @@ describe("security audit", () => {
         name: "flags enabled extensions when tool policy can expose plugin tools",
         cfg: {
           plugins: { allow: ["some-plugin"] },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         assert: (res: SecurityAuditReport) => {
           expect(res.findings).toEqual(
             expect.arrayContaining([
@@ -3610,7 +3610,7 @@ describe("security audit", () => {
         cfg: {
           plugins: { allow: ["some-plugin"] },
           tools: { profile: "coding" },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         assert: (res: SecurityAuditReport) => {
           expect(
             res.findings.some((f) => f.checkId === "plugins.tools_reachable_permissive_policy"),
@@ -3623,7 +3623,7 @@ describe("security audit", () => {
           channels: {
             discord: { enabled: true, token: "t" },
           },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         assert: (res: SecurityAuditReport) => {
           expect(res.findings).toEqual(
             expect.arrayContaining([
@@ -3648,7 +3648,7 @@ describe("security audit", () => {
               } as unknown as string,
             },
           },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         assert: (res: SecurityAuditReport) => {
           expect(res.findings).toEqual(
             expect.arrayContaining([
@@ -3717,7 +3717,7 @@ describe("security audit", () => {
         cfg: {
           tools: { elevated: { enabled: true, allowFrom: { whatsapp: ["+1"] } } },
           channels: { whatsapp: { groupPolicy: "open" } },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         assert: (res: SecurityAuditReport) => {
           expect(res.findings).toEqual(
             expect.arrayContaining([
@@ -3734,7 +3734,7 @@ describe("security audit", () => {
         cfg: {
           channels: { whatsapp: { groupPolicy: "open" } },
           tools: { elevated: { enabled: false } },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         assert: (res: SecurityAuditReport) => {
           expect(res.findings).toEqual(
             expect.arrayContaining([
@@ -3759,7 +3759,7 @@ describe("security audit", () => {
               sandbox: { mode: "all" },
             },
           },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         assert: (res: SecurityAuditReport) => {
           expect(
             res.findings.some(
@@ -3778,7 +3778,7 @@ describe("security audit", () => {
             deny: ["group:runtime"],
             fs: { workspaceOnly: true },
           },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         assert: (res: SecurityAuditReport) => {
           expect(
             res.findings.some(
@@ -3803,7 +3803,7 @@ describe("security audit", () => {
             },
           },
           tools: { elevated: { enabled: false } },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         assert: (res: SecurityAuditReport) => {
           const finding = res.findings.find(
             (f) => f.checkId === "security.trust_model.multi_user_heuristic",
@@ -3825,7 +3825,7 @@ describe("security audit", () => {
             },
           },
           tools: { elevated: { enabled: false } },
-        } satisfies OpenClawConfig,
+        } satisfies CIVITASConfig,
         assert: (res: SecurityAuditReport) => {
           expectNoFinding(res, "security.trust_model.multi_user_heuristic");
         },
@@ -3858,10 +3858,10 @@ describe("security audit", () => {
     const makeProbeEnv = (env?: { token?: string; password?: string }) => {
       const probeEnv: NodeJS.ProcessEnv = {};
       if (env?.token !== undefined) {
-        probeEnv.OPENCLAW_GATEWAY_TOKEN = env.token;
+        probeEnv.CIVITAS_GATEWAY_TOKEN = env.token;
       }
       if (env?.password !== undefined) {
-        probeEnv.OPENCLAW_GATEWAY_PASSWORD = env.password;
+        probeEnv.CIVITAS_GATEWAY_PASSWORD = env.password;
       }
       return probeEnv;
     };
@@ -3869,7 +3869,7 @@ describe("security audit", () => {
     it("applies gateway auth precedence across local/remote modes", async () => {
       const cases: Array<{
         name: string;
-        cfg: OpenClawConfig;
+        cfg: CIVITASConfig;
         env?: { token?: string; password?: string };
         expectedAuth: { token?: string; password?: string };
       }> = [
@@ -3966,7 +3966,7 @@ describe("security audit", () => {
     });
 
     it("adds warning finding when probe auth SecretRef is unavailable", async () => {
-      const cfg: OpenClawConfig = {
+      const cfg: CIVITASConfig = {
         gateway: {
           mode: "local",
           auth: {

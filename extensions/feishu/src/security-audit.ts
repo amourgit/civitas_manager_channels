@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { hasConfiguredSecretInput } from "civitas/plugin-sdk/setup";
 
 function asRecord(value: unknown): Record<string, unknown> | undefined {
@@ -12,7 +12,7 @@ function hasNonEmptyString(value: unknown): boolean {
   return typeof value === "string" && value.trim().length > 0;
 }
 
-function isFeishuDocToolEnabled(cfg: OpenClawConfig): boolean {
+function isFeishuDocToolEnabled(cfg: CIVITASConfig): boolean {
   const channels = asRecord(cfg.channels);
   const feishu = asRecord(channels?.feishu);
   if (!feishu || feishu.enabled === false) {
@@ -52,7 +52,7 @@ function isFeishuDocToolEnabled(cfg: OpenClawConfig): boolean {
   return false;
 }
 
-export function collectFeishuSecurityAuditFindings(params: { cfg: OpenClawConfig }) {
+export function collectFeishuSecurityAuditFindings(params: { cfg: CIVITASConfig }) {
   if (!isFeishuDocToolEnabled(params.cfg)) {
     return [];
   }

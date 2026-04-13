@@ -1,17 +1,17 @@
-# @openclaw/zalo
+# @CIVITAS/zalo
 
-Zalo channel plugin for OpenClaw (Bot API).
+Zalo channel plugin for CIVITAS (Bot API).
 
 ## Install (local checkout)
 
 ```bash
-openclaw plugins install ./path/to/local/zalo-plugin
+CIVITAS plugins install ./path/to/local/zalo-plugin
 ```
 
 ## Install (npm)
 
 ```bash
-openclaw plugins install @openclaw/zalo
+CIVITAS plugins install @CIVITAS/zalo
 ```
 
 Onboarding: select Zalo and confirm the install prompt to fetch the plugin automatically.

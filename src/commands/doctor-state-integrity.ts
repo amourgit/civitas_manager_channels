@@ -4,7 +4,7 @@ import path from "node:path";
 import { resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { listBundledChannelPlugins } from "../channels/plugins/bundled.js";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import { resolveOAuthDir, resolveStateDir } from "../config/paths.js";
 import {
   formatSessionArchiveTimestamp,
@@ -368,7 +368,7 @@ export function formatLinuxSdBackedStateDirWarning(
   return [
     `- State directory appears to be on SD/eMMC storage (${displayStateDir}; device ${safeSource}, fs ${safeFsType}, mount ${safeMountPoint}).`,
     "- SD/eMMC media can be slower for random I/O and wear faster under session/log churn.",
-    "- For better startup and state durability, prefer SSD/NVMe (or USB SSD on Raspberry Pi) for OPENCLAW_STATE_DIR.",
+    "- For better startup and state durability, prefer SSD/NVMe (or USB SSD on Raspberry Pi) for CIVITAS_STATE_DIR.",
   ].join("\n");
 }
 
@@ -389,7 +389,7 @@ export function detectMacCloudSyncedStateDir(
   }
 
   // Cloud-sync roots should always be anchored to the OS account home on macOS.
-  // OPENCLAW_HOME can relocate app data defaults, but iCloud/CloudStorage remain under the OS home.
+  // CIVITAS_HOME can relocate app data defaults, but iCloud/CloudStorage remain under the OS home.
   const homedir = deps?.homedir ?? os.homedir();
   const roots = [
     {
@@ -455,8 +455,8 @@ function isSlashRoutingSessionKey(sessionKey: string): boolean {
   return /^[^:]+:slash:[^:]+(?:$|:)/.test(scoped);
 }
 
-function shouldRequireOAuthDir(cfg: OpenClawConfig, env: NodeJS.ProcessEnv): boolean {
-  if (env.OPENCLAW_OAUTH_DIR?.trim()) {
+function shouldRequireOAuthDir(cfg: CIVITASConfig, env: NodeJS.ProcessEnv): boolean {
+  if (env.CIVITAS_OAUTH_DIR?.trim()) {
     return true;
   }
   const channels = cfg.channels;
@@ -480,13 +480,13 @@ function shouldRequireOAuthDir(cfg: OpenClawConfig, env: NodeJS.ProcessEnv): boo
   return false;
 }
 
-function shouldSuppressOrphanTranscriptWarning(cfg: OpenClawConfig, agentId: string): boolean {
+function shouldSuppressOrphanTranscriptWarning(cfg: CIVITASConfig, agentId: string): boolean {
   const backendConfig = resolveMemoryBackendConfig({ cfg, agentId });
   return backendConfig?.backend === "qmd" && backendConfig.qmd?.sessions.enabled === true;
 }
 
 export async function noteStateIntegrity(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   prompter: DoctorPrompterLike,
   configPath?: string,
 ) {
@@ -518,7 +518,7 @@ export async function noteStateIntegrity(
         `- State directory is under macOS cloud-synced storage (${displayStateDir}; ${cloudSyncedStateDir.storage}).`,
         "- This can cause slow I/O and sync/lock races for sessions and credentials.",
         "- Prefer a local non-synced state dir (for example: ~/.civitas).",
-        `  Set locally: OPENCLAW_STATE_DIR=~/.civitas ${formatCliCommand("civitas doctor")}`,
+        `  Set locally: CIVITAS_STATE_DIR=~/.civitas ${formatCliCommand("civitas doctor")}`,
       ].join("\n"),
     );
   }

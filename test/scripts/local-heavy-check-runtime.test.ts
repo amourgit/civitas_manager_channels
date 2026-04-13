@@ -25,7 +25,7 @@ function makeTempDir() {
 function makeEnv(overrides: Record<string, string | undefined> = {}) {
   return {
     ...process.env,
-    OPENCLAW_LOCAL_CHECK: "1",
+    CIVITAS_LOCAL_CHECK: "1",
     ...overrides,
   };
 }
@@ -45,7 +45,7 @@ describe("local-heavy-check-runtime", () => {
       makeEnv({
         GOGC: "80",
         GOMEMLIMIT: "5GiB",
-        OPENCLAW_TSGO_PPROF_DIR: "/tmp/profile",
+        CIVITAS_TSGO_PPROF_DIR: "/tmp/profile",
       }),
     );
 

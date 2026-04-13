@@ -92,7 +92,7 @@ describe("openshell backend manager", () => {
     vi.clearAllMocks();
   });
 
-  it("checks runtime status with config override from OpenClaw config", async () => {
+  it("checks runtime status with config override from CIVITAS config", async () => {
     cliMocks.runOpenShellCli.mockResolvedValue({
       code: 0,
       stdout: "{}",

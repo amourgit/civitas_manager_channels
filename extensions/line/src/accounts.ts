@@ -3,7 +3,7 @@ import {
   normalizeAccountId as normalizeSharedAccountId,
   normalizeOptionalAccountId,
 } from "civitas/plugin-sdk/account-id";
-import type { OpenClawConfig } from "civitas/plugin-sdk/account-resolution";
+import type { CIVITASConfig } from "civitas/plugin-sdk/account-resolution";
 import { resolveAccountEntry } from "civitas/plugin-sdk/account-resolution";
 import { tryReadSecretFileSync } from "civitas/plugin-sdk/core";
 import type {
@@ -90,7 +90,7 @@ function resolveSecret(params: {
 }
 
 export function resolveLineAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string;
 }): ResolvedLineAccount {
   const cfg = params.cfg;
@@ -143,7 +143,7 @@ export function resolveLineAccount(params: {
   };
 }
 
-export function listLineAccountIds(cfg: OpenClawConfig): string[] {
+export function listLineAccountIds(cfg: CIVITASConfig): string[] {
   const lineConfig = cfg.channels?.line as LineConfig | undefined;
   const accounts = lineConfig?.accounts;
   const ids = new Set<string>();
@@ -165,7 +165,7 @@ export function listLineAccountIds(cfg: OpenClawConfig): string[] {
   return Array.from(ids);
 }
 
-export function resolveDefaultLineAccountId(cfg: OpenClawConfig): string {
+export function resolveDefaultLineAccountId(cfg: CIVITASConfig): string {
   const preferred = normalizeOptionalAccountId(
     (cfg.channels?.line as LineConfig | undefined)?.defaultAccount,
   );

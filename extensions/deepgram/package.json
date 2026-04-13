@@ -2,7 +2,7 @@
   "name": "@civitas/deepgram-provider",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw Deepgram media-understanding provider",
+  "description": "CIVITAS Deepgram media-understanding provider",
   "type": "module",
   "civitas": {
     "extensions": [

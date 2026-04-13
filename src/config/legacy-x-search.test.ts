@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "./config.js";
+import type { CIVITASConfig } from "./config.js";
 import { listLegacyXSearchConfigPaths, migrateLegacyXSearchConfig } from "./legacy-x-search.js";
 
 describe("legacy x_search config migration", () => {
@@ -14,7 +14,7 @@ describe("legacy x_search config migration", () => {
           },
         } as Record<string, unknown>,
       },
-    } as OpenClawConfig);
+    } as CIVITASConfig);
 
     expect((res.config.tools?.web as Record<string, unknown> | undefined)?.x_search).toEqual({
       enabled: true,
@@ -60,7 +60,7 @@ describe("legacy x_search config migration", () => {
           },
         },
       },
-    } as OpenClawConfig);
+    } as CIVITASConfig);
 
     expect((res.config.tools?.web as Record<string, unknown> | undefined)?.x_search).toEqual({
       enabled: true,
@@ -87,7 +87,7 @@ describe("legacy x_search config migration", () => {
           },
         } as Record<string, unknown>,
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     const res = migrateLegacyXSearchConfig(config);
 
@@ -107,7 +107,7 @@ describe("legacy x_search config migration", () => {
             },
           } as Record<string, unknown>,
         },
-      } as OpenClawConfig),
+      } as CIVITASConfig),
     ).toEqual(["tools.web.x_search.apiKey"]);
   });
 });

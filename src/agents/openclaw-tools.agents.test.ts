@@ -16,7 +16,7 @@ vi.mock("../config/config.js", async () => {
 
 import "./test-helpers/fast-core-tools.js";
 
-let createOpenClawTools: typeof import("./civitas-tools.js").createOpenClawTools;
+let createCIVITASTools: typeof import("./civitas-tools.js").createCIVITASTools;
 
 describe("agents_list", () => {
   type AgentConfig = NonNullable<NonNullable<typeof configOverride.agents>["list"]>[number];
@@ -31,7 +31,7 @@ describe("agents_list", () => {
   }
 
   function requireAgentsListTool() {
-    const tool = createOpenClawTools({
+    const tool = createCIVITASTools({
       agentSessionKey: "main",
     }).find((candidate) => candidate.name === "agents_list");
     if (!tool) {
@@ -51,7 +51,7 @@ describe("agents_list", () => {
       session: createPerSenderSessionConfig(),
     };
     await import("./test-helpers/fast-core-tools.js");
-    ({ createOpenClawTools } = await import("./civitas-tools.js"));
+    ({ createCIVITASTools } = await import("./civitas-tools.js"));
   });
 
   it("defaults to the requester agent only", async () => {

@@ -1,5 +1,5 @@
 import { buildPluginApprovalPendingReplyPayload } from "civitas/plugin-sdk/approval-reply-runtime";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import {
   createChannelNativeApprovalRuntime,
   resolveExecApprovalRequestAllowedDecisions,
@@ -42,7 +42,7 @@ type TelegramPendingDelivery = {
 export type TelegramExecApprovalHandlerOpts = {
   token: string;
   accountId: string;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   gatewayUrl?: string;
   runtime?: RuntimeEnv;
 };
@@ -54,7 +54,7 @@ export type TelegramExecApprovalHandlerDeps = {
   editReplyMarkup?: typeof editMessageReplyMarkupTelegram;
 };
 
-function isHandlerConfigured(params: { cfg: OpenClawConfig; accountId: string }): boolean {
+function isHandlerConfigured(params: { cfg: CIVITASConfig; accountId: string }): boolean {
   return isTelegramExecApprovalHandlerConfigured(params);
 }
 

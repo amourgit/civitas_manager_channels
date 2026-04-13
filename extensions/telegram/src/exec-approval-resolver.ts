@@ -1,10 +1,10 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { isApprovalNotFoundError } from "civitas/plugin-sdk/error-runtime";
 import { createOperatorApprovalsGatewayClient } from "civitas/plugin-sdk/gateway-runtime";
 import type { ExecApprovalReplyDecision } from "civitas/plugin-sdk/infra-runtime";
 
 export type ResolveTelegramExecApprovalParams = {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   approvalId: string;
   decision: ExecApprovalReplyDecision;
   senderId?: string | null;

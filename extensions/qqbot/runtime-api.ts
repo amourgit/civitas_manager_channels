@@ -1,8 +1,8 @@
-export type { ChannelPlugin, OpenClawPluginApi, PluginRuntime } from "civitas/plugin-sdk/core";
-export type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+export type { ChannelPlugin, CIVITASPluginApi, PluginRuntime } from "civitas/plugin-sdk/core";
+export type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 export type {
-  OpenClawPluginService,
-  OpenClawPluginServiceContext,
+  CIVITASPluginService,
+  CIVITASPluginServiceContext,
   PluginLogger,
 } from "civitas/plugin-sdk/core";
 export type { ResolvedQQBotAccount, QQBotAccountConfig } from "./src/types.js";

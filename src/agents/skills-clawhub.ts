@@ -3,22 +3,22 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileExists } from "../infra/archive.js";
 import {
-  downloadClawHubSkillArchive,
-  fetchClawHubSkillDetail,
-  resolveClawHubBaseUrl,
-  searchClawHubSkills,
-  type ClawHubSkillDetail,
-  type ClawHubSkillSearchResult,
-} from "../infra/clawhub.js";
+  downloadChannelHubSkillArchive,
+  fetchChannelHubSkillDetail,
+  resolveChannelHubBaseUrl,
+  searchChannelHubSkills,
+  type ChannelHubSkillDetail,
+  type ChannelHubSkillSearchResult,
+} from "../infra/CIVITAS Channelhub.js";
 import { withExtractedArchiveRoot } from "../infra/install-flow.js";
 import { installPackageDir } from "../infra/install-package-dir.js";
 import { resolveSafeInstallDir } from "../infra/install-safe-path.js";
 
-const DOT_DIR = ".clawhub";
-const LEGACY_DOT_DIR = ".clawdhub";
+const DOT_DIR = ".CIVITAS Channelhub";
+const LEGACY_DOT_DIR = ".CIVITAS Channeldhub";
 const SKILL_ORIGIN_RELATIVE_PATH = path.join(DOT_DIR, "origin.json");
 
-export type ClawHubSkillOrigin = {
+export type ChannelHubSkillOrigin = {
   version: 1;
   registry: string;
   slug: string;
@@ -26,7 +26,7 @@ export type ClawHubSkillOrigin = {
   installedAt: number;
 };
 
-export type ClawHubSkillsLockfile = {
+export type ChannelHubSkillsLockfile = {
   version: 1;
   skills: Record<
     string,
@@ -37,17 +37,17 @@ export type ClawHubSkillsLockfile = {
   >;
 };
 
-export type InstallClawHubSkillResult =
+export type InstallChannelHubSkillResult =
   | {
       ok: true;
       slug: string;
       version: string;
       targetDir: string;
-      detail: ClawHubSkillDetail;
+      detail: ChannelHubSkillDetail;
     }
   | { ok: false; error: string };
 
-export type UpdateClawHubSkillResult =
+export type UpdateChannelHubSkillResult =
   | {
       ok: true;
       slug: string;
@@ -85,18 +85,18 @@ function validateRequestedSlug(raw: string): string {
 async function resolveRequestedUpdateSlug(params: {
   workspaceDir: string;
   requestedSlug: string;
-  lock: ClawHubSkillsLockfile;
+  lock: ChannelHubSkillsLockfile;
 }): Promise<string> {
   const trackedSlug = normalizeTrackedSlug(params.requestedSlug);
   const trackedTargetDir = resolveSkillInstallDir(params.workspaceDir, trackedSlug);
-  const trackedOrigin = await readClawHubSkillOrigin(trackedTargetDir);
+  const trackedOrigin = await readChannelHubSkillOrigin(trackedTargetDir);
   if (trackedOrigin || params.lock.skills[trackedSlug]) {
     return trackedSlug;
   }
   return validateRequestedSlug(params.requestedSlug);
 }
 
-type ClawHubInstallParams = {
+type ChannelHubInstallParams = {
   workspaceDir: string;
   slug: string;
   version?: string;
@@ -140,9 +140,9 @@ async function ensureSkillRoot(rootDir: string): Promise<void> {
   throw new Error("downloaded archive is missing SKILL.md");
 }
 
-export async function readClawHubSkillsLockfile(
+export async function readChannelHubSkillsLockfile(
   workspaceDir: string,
-): Promise<ClawHubSkillsLockfile> {
+): Promise<ChannelHubSkillsLockfile> {
   const candidates = [
     path.join(workspaceDir, DOT_DIR, "lock.json"),
     path.join(workspaceDir, LEGACY_DOT_DIR, "lock.json"),
@@ -151,7 +151,7 @@ export async function readClawHubSkillsLockfile(
     try {
       const raw = JSON.parse(
         await fs.readFile(candidate, "utf8"),
-      ) as Partial<ClawHubSkillsLockfile>;
+      ) as Partial<ChannelHubSkillsLockfile>;
       if (raw.version === 1 && raw.skills && typeof raw.skills === "object") {
         return {
           version: 1,
@@ -165,23 +165,23 @@ export async function readClawHubSkillsLockfile(
   return { version: 1, skills: {} };
 }
 
-export async function writeClawHubSkillsLockfile(
+export async function writeChannelHubSkillsLockfile(
   workspaceDir: string,
-  lockfile: ClawHubSkillsLockfile,
+  lockfile: ChannelHubSkillsLockfile,
 ): Promise<void> {
   const targetPath = path.join(workspaceDir, DOT_DIR, "lock.json");
   await fs.mkdir(path.dirname(targetPath), { recursive: true });
   await fs.writeFile(targetPath, `${JSON.stringify(lockfile, null, 2)}\n`, "utf8");
 }
 
-export async function readClawHubSkillOrigin(skillDir: string): Promise<ClawHubSkillOrigin | null> {
+export async function readChannelHubSkillOrigin(skillDir: string): Promise<ChannelHubSkillOrigin | null> {
   const candidates = [
     path.join(skillDir, DOT_DIR, "origin.json"),
     path.join(skillDir, LEGACY_DOT_DIR, "origin.json"),
   ];
   for (const candidate of candidates) {
     try {
-      const raw = JSON.parse(await fs.readFile(candidate, "utf8")) as Partial<ClawHubSkillOrigin>;
+      const raw = JSON.parse(await fs.readFile(candidate, "utf8")) as Partial<ChannelHubSkillOrigin>;
       if (
         raw.version === 1 &&
         typeof raw.registry === "string" &&
@@ -189,7 +189,7 @@ export async function readClawHubSkillOrigin(skillDir: string): Promise<ClawHubS
         typeof raw.installedVersion === "string" &&
         typeof raw.installedAt === "number"
       ) {
-        return raw as ClawHubSkillOrigin;
+        return raw as ChannelHubSkillOrigin;
       }
     } catch {
       // ignore
@@ -198,21 +198,21 @@ export async function readClawHubSkillOrigin(skillDir: string): Promise<ClawHubS
   return null;
 }
 
-export async function writeClawHubSkillOrigin(
+export async function writeChannelHubSkillOrigin(
   skillDir: string,
-  origin: ClawHubSkillOrigin,
+  origin: ChannelHubSkillOrigin,
 ): Promise<void> {
   const targetPath = path.join(skillDir, SKILL_ORIGIN_RELATIVE_PATH);
   await fs.mkdir(path.dirname(targetPath), { recursive: true });
   await fs.writeFile(targetPath, `${JSON.stringify(origin, null, 2)}\n`, "utf8");
 }
 
-export async function searchSkillsFromClawHub(params: {
+export async function searchSkillsFromChannelHub(params: {
   query?: string;
   limit?: number;
   baseUrl?: string;
-}): Promise<ClawHubSkillSearchResult[]> {
-  return await searchClawHubSkills({
+}): Promise<ChannelHubSkillSearchResult[]> {
+  return await searchChannelHubSkills({
     query: params.query?.trim() || "*",
     limit: params.limit,
     baseUrl: params.baseUrl,
@@ -223,13 +223,13 @@ async function resolveInstallVersion(params: {
   slug: string;
   version?: string;
   baseUrl?: string;
-}): Promise<{ detail: ClawHubSkillDetail; version: string }> {
-  const detail = await fetchClawHubSkillDetail({
+}): Promise<{ detail: ChannelHubSkillDetail; version: string }> {
+  const detail = await fetchChannelHubSkillDetail({
     slug: params.slug,
     baseUrl: params.baseUrl,
   });
   if (!detail.skill) {
-    throw new Error(`Skill "${params.slug}" not found on ClawHub.`);
+    throw new Error(`Skill "${params.slug}" not found on ChannelHub.`);
   }
   const resolvedVersion = params.version ?? detail.latestVersion?.version;
   if (!resolvedVersion) {
@@ -266,9 +266,9 @@ async function installExtractedSkill(params: {
   return { ok: true, targetDir };
 }
 
-async function performClawHubSkillInstall(
-  params: ClawHubInstallParams,
-): Promise<InstallClawHubSkillResult> {
+async function performChannelHubSkillInstall(
+  params: ChannelHubInstallParams,
+): Promise<InstallChannelHubSkillResult> {
   try {
     const { detail, version } = await resolveInstallVersion({
       slug: params.slug,
@@ -283,8 +283,8 @@ async function performClawHubSkillInstall(
       };
     }
 
-    params.logger?.info?.(`Downloading ${params.slug}@${version} from ClawHub…`);
-    const archive = await downloadClawHubSkillArchive({
+    params.logger?.info?.(`Downloading ${params.slug}@${version} from ChannelHub…`);
+    const archive = await downloadChannelHubSkillArchive({
       slug: params.slug,
       version,
       baseUrl: params.baseUrl,
@@ -292,7 +292,7 @@ async function performClawHubSkillInstall(
     try {
       const install = await withExtractedArchiveRoot({
         archivePath: archive.archivePath,
-        tempDirPrefix: "civitas-skill-clawhub-",
+        tempDirPrefix: "civitas-skill-CIVITAS Channelhub-",
         timeoutMs: 120_000,
         rootMarkers: ["SKILL.md"],
         onExtracted: async (rootDir) =>
@@ -309,19 +309,19 @@ async function performClawHubSkillInstall(
       }
 
       const installedAt = Date.now();
-      await writeClawHubSkillOrigin(install.targetDir, {
+      await writeChannelHubSkillOrigin(install.targetDir, {
         version: 1,
-        registry: resolveClawHubBaseUrl(params.baseUrl),
+        registry: resolveChannelHubBaseUrl(params.baseUrl),
         slug: params.slug,
         installedVersion: version,
         installedAt,
       });
-      const lock = await readClawHubSkillsLockfile(params.workspaceDir);
+      const lock = await readChannelHubSkillsLockfile(params.workspaceDir);
       lock.skills[params.slug] = {
         version,
         installedAt,
       };
-      await writeClawHubSkillsLockfile(params.workspaceDir, lock);
+      await writeChannelHubSkillsLockfile(params.workspaceDir, lock);
 
       return {
         ok: true,
@@ -341,11 +341,11 @@ async function performClawHubSkillInstall(
   }
 }
 
-async function installRequestedSkillFromClawHub(
-  params: ClawHubInstallParams,
-): Promise<InstallClawHubSkillResult> {
+async function installRequestedSkillFromChannelHub(
+  params: ChannelHubInstallParams,
+): Promise<InstallChannelHubSkillResult> {
   try {
-    return await performClawHubSkillInstall({
+    return await performChannelHubSkillInstall({
       ...params,
       slug: validateRequestedSlug(params.slug),
     });
@@ -357,11 +357,11 @@ async function installRequestedSkillFromClawHub(
   }
 }
 
-async function installTrackedSkillFromClawHub(
-  params: ClawHubInstallParams,
-): Promise<InstallClawHubSkillResult> {
+async function installTrackedSkillFromChannelHub(
+  params: ChannelHubInstallParams,
+): Promise<InstallChannelHubSkillResult> {
   try {
-    return await performClawHubSkillInstall({
+    return await performChannelHubSkillInstall({
       ...params,
       slug: normalizeTrackedSlug(params.slug),
     });
@@ -376,16 +376,16 @@ async function installTrackedSkillFromClawHub(
 async function resolveTrackedUpdateTarget(params: {
   workspaceDir: string;
   slug: string;
-  lock: ClawHubSkillsLockfile;
+  lock: ChannelHubSkillsLockfile;
   baseUrl?: string;
 }): Promise<TrackedUpdateTarget> {
   const targetDir = resolveSkillInstallDir(params.workspaceDir, params.slug);
-  const origin = (await readClawHubSkillOrigin(targetDir)) ?? null;
+  const origin = (await readChannelHubSkillOrigin(targetDir)) ?? null;
   if (!origin && !params.lock.skills[params.slug]) {
     return {
       ok: false,
       slug: params.slug,
-      error: `Skill "${params.slug}" is not tracked as a ClawHub install.`,
+      error: `Skill "${params.slug}" is not tracked as a ChannelHub install.`,
     };
   }
   return {
@@ -396,24 +396,24 @@ async function resolveTrackedUpdateTarget(params: {
   };
 }
 
-export async function installSkillFromClawHub(params: {
+export async function installSkillFromChannelHub(params: {
   workspaceDir: string;
   slug: string;
   version?: string;
   baseUrl?: string;
   force?: boolean;
   logger?: Logger;
-}): Promise<InstallClawHubSkillResult> {
-  return await installRequestedSkillFromClawHub(params);
+}): Promise<InstallChannelHubSkillResult> {
+  return await installRequestedSkillFromChannelHub(params);
 }
 
-export async function updateSkillsFromClawHub(params: {
+export async function updateSkillsFromChannelHub(params: {
   workspaceDir: string;
   slug?: string;
   baseUrl?: string;
   logger?: Logger;
-}): Promise<UpdateClawHubSkillResult[]> {
-  const lock = await readClawHubSkillsLockfile(params.workspaceDir);
+}): Promise<UpdateChannelHubSkillResult[]> {
+  const lock = await readChannelHubSkillsLockfile(params.workspaceDir);
   const slugs = params.slug
     ? [
         await resolveRequestedUpdateSlug({
@@ -423,7 +423,7 @@ export async function updateSkillsFromClawHub(params: {
         }),
       ]
     : Object.keys(lock.skills).map((slug) => normalizeTrackedSlug(slug));
-  const results: UpdateClawHubSkillResult[] = [];
+  const results: UpdateChannelHubSkillResult[] = [];
   for (const slug of slugs) {
     const tracked = await resolveTrackedUpdateTarget({
       workspaceDir: params.workspaceDir,
@@ -438,7 +438,7 @@ export async function updateSkillsFromClawHub(params: {
       });
       continue;
     }
-    const install = await installTrackedSkillFromClawHub({
+    const install = await installTrackedSkillFromChannelHub({
       workspaceDir: params.workspaceDir,
       slug: tracked.slug,
       baseUrl: tracked.baseUrl,
@@ -461,8 +461,8 @@ export async function updateSkillsFromClawHub(params: {
   return results;
 }
 
-export async function readTrackedClawHubSkillSlugs(workspaceDir: string): Promise<string[]> {
-  const lock = await readClawHubSkillsLockfile(workspaceDir);
+export async function readTrackedChannelHubSkillSlugs(workspaceDir: string): Promise<string[]> {
+  const lock = await readChannelHubSkillsLockfile(workspaceDir);
   return Object.keys(lock.skills).toSorted();
 }
 

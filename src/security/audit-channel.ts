@@ -7,7 +7,7 @@ import type { listChannelPlugins } from "../channels/plugins/index.js";
 import type { ChannelId } from "../channels/plugins/types.js";
 import { inspectReadOnlyChannelAccount } from "../channels/read-only-account-inspect.js";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import { isDangerousNameMatchingEnabled } from "../config/dangerous-name-matching.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import type { SecurityAuditFinding, SecurityAuditSeverity } from "./audit.js";
@@ -52,7 +52,7 @@ function dedupeFindings(findings: SecurityAuditFinding[]): SecurityAuditFinding[
 }
 
 function hasExplicitProviderAccountConfig(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   provider: string,
   accountId: string,
 ): boolean {
@@ -78,8 +78,8 @@ function formatChannelAccountNote(params: {
 }
 
 export async function collectChannelSecurityFindings(params: {
-  cfg: OpenClawConfig;
-  sourceConfig?: OpenClawConfig;
+  cfg: CIVITASConfig;
+  sourceConfig?: CIVITASConfig;
   plugins: ReturnType<typeof listChannelPlugins>;
 }): Promise<SecurityAuditFinding[]> {
   const findings: SecurityAuditFinding[] = [];
@@ -87,7 +87,7 @@ export async function collectChannelSecurityFindings(params: {
 
   const inspectChannelAccount = async (
     plugin: (typeof params.plugins)[number],
-    cfg: OpenClawConfig,
+    cfg: CIVITASConfig,
     accountId: string,
   ) =>
     plugin.config.inspectAccount?.(cfg, accountId) ??

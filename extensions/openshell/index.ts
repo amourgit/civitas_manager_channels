@@ -1,4 +1,4 @@
-import type { OpenClawPluginApi } from "civitas/plugin-sdk/core";
+import type { CIVITASPluginApi } from "civitas/plugin-sdk/core";
 import { registerSandboxBackend } from "civitas/plugin-sdk/sandbox";
 import {
   createOpenShellSandboxBackendFactory,
@@ -11,7 +11,7 @@ const plugin = {
   name: "OpenShell Sandbox",
   description: "OpenShell-backed sandbox runtime for agent exec and file tools.",
   configSchema: createOpenShellPluginConfigSchema(),
-  register(api: OpenClawPluginApi) {
+  register(api: CIVITASPluginApi) {
     if (api.registrationMode !== "full") {
       return;
     }

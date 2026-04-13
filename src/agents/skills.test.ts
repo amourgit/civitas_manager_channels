@@ -4,7 +4,7 @@ import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import {
   clearRuntimeConfigSnapshot,
   setRuntimeConfigSnapshot,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "../config/config.js";
 import { createFixtureSuite } from "../test-utils/fixture-suite.js";
 import { createTempHomeEnv, type TempHomeEnv } from "../test-utils/temp-home.js";
@@ -193,7 +193,7 @@ describe("buildWorkspaceSkillCommandSpecs", () => {
     expect(commands.map((entry) => entry.skillName)).toEqual(["alpha-skill"]);
   });
 
-  it("includes enabled Claude bundle markdown commands as native OpenClaw slash commands", async () => {
+  it("includes enabled Claude bundle markdown commands as native CIVITAS slash commands", async () => {
     const workspaceDir = await makeWorkspace();
     const pluginRoot = path.join(tempHome!.home, ".civitas", "extensions", "compound-bundle");
     await fs.mkdir(path.join(pluginRoot, ".claude-plugin"), { recursive: true });
@@ -431,7 +431,7 @@ describe("applySkillEnvOverrides", () => {
     await writeEnvSkill(workspaceDir);
 
     const entries = loadWorkspaceSkillEntries(workspaceDir, resolveTestSkillDirs(workspaceDir));
-    const sourceConfig: OpenClawConfig = {
+    const sourceConfig: CIVITASConfig = {
       skills: {
         entries: {
           "env-skill": {
@@ -444,7 +444,7 @@ describe("applySkillEnvOverrides", () => {
         },
       },
     };
-    const runtimeConfig: OpenClawConfig = {
+    const runtimeConfig: CIVITASConfig = {
       skills: {
         entries: {
           "env-skill": {

@@ -1,5 +1,5 @@
 import { Type } from "@sinclair/typebox";
-import type { OpenClawPluginApi } from "civitas/plugin-sdk/plugin-runtime";
+import type { CIVITASPluginApi } from "civitas/plugin-sdk/plugin-runtime";
 import {
   jsonResult,
   readNumberParam,
@@ -61,7 +61,7 @@ const FirecrawlScrapeToolSchema = Type.Object(
   { additionalProperties: false },
 );
 
-export function createFirecrawlScrapeTool(api: OpenClawPluginApi) {
+export function createFirecrawlScrapeTool(api: CIVITASPluginApi) {
   return {
     name: "firecrawl_scrape",
     label: "Firecrawl Scrape",

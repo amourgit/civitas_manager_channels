@@ -1,7 +1,7 @@
 export { definePluginEntry } from "civitas/plugin-sdk/plugin-entry";
 export type {
-  OpenClawPluginApi,
-  OpenClawPluginCommandDefinition,
+  CIVITASPluginApi,
+  CIVITASPluginCommandDefinition,
   PluginCommandContext,
-  OpenClawPluginService,
+  CIVITASPluginService,
 } from "civitas/plugin-sdk/plugin-entry";

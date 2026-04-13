@@ -6,7 +6,7 @@ import {
   createChannelApproverDmTargetResolver,
   createChannelNativeOriginTargetResolver,
 } from "civitas/plugin-sdk/approval-native-runtime";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { ExecApprovalRequest, PluginApprovalRequest } from "civitas/plugin-sdk/infra-runtime";
 import { listSlackAccountIds } from "./accounts.js";
 import { isSlackApprovalAuthorizedSender } from "./approval-auth.js";

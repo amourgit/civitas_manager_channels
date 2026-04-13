@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { ChannelPlugin } from "civitas/plugin-sdk/core";
 import {
   applyAccountNameToChannelSection,
@@ -55,10 +55,10 @@ export function validateQQBotSetupInput(params: {
 }
 
 export function applyQQBotSetupAccountConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
   input: ChannelSetupInput;
-}): OpenClawConfig {
+}): CIVITASConfig {
   if (params.input.useEnv && params.accountId !== DEFAULT_ACCOUNT_ID) {
     return params.cfg;
   }

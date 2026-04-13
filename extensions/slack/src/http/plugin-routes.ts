@@ -1,5 +1,5 @@
 import { DEFAULT_ACCOUNT_ID } from "civitas/plugin-sdk/account-id";
-import type { OpenClawPluginApi } from "civitas/plugin-sdk/core";
+import type { CIVITASPluginApi } from "civitas/plugin-sdk/core";
 import { listSlackAccountIds, resolveSlackAccount } from "../accounts.js";
 import { normalizeSlackWebhookPath } from "./paths.js";
 
@@ -10,7 +10,7 @@ async function loadSlackHttpHandlerRuntime() {
   return await slackHttpHandlerRuntimePromise;
 }
 
-export function registerSlackPluginHttpRoutes(api: OpenClawPluginApi): void {
+export function registerSlackPluginHttpRoutes(api: CIVITASPluginApi): void {
   const accountIds = new Set<string>([DEFAULT_ACCOUNT_ID, ...listSlackAccountIds(api.config)]);
   const registeredPaths = new Set<string>();
   for (const accountId of accountIds) {

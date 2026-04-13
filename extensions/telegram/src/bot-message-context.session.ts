@@ -5,7 +5,7 @@ import {
   type NormalizedLocation,
 } from "civitas/plugin-sdk/channel-inbound";
 import { normalizeCommandBody } from "civitas/plugin-sdk/command-surface";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { resolveChannelContextVisibilityMode } from "civitas/plugin-sdk/config-runtime";
 import type {
   TelegramDirectConfig,
@@ -43,7 +43,7 @@ type FinalizedTelegramInboundContext = ReturnType<
 >;
 
 export async function buildTelegramInboundContextPayload(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   primaryCtx: TelegramContext;
   msg: TelegramContext["message"];
   allMedia: TelegramMediaRef[];

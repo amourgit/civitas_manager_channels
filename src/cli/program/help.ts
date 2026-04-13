@@ -51,7 +51,7 @@ export function configureProgramHelp(program: Command, ctx: ProgramContext) {
     .version(ctx.programVersion)
     .option(
       "--container <name>",
-      "Run the CLI inside a running Podman/Docker container named <name> (default: env OPENCLAW_CONTAINER)",
+      "Run the CLI inside a running Podman/Docker container named <name> (default: env CIVITAS_CONTAINER)",
     )
     .option(
       "--dev",
@@ -59,7 +59,7 @@ export function configureProgramHelp(program: Command, ctx: ProgramContext) {
     )
     .option(
       "--profile <name>",
-      "Use a named profile (isolates OPENCLAW_STATE_DIR/OPENCLAW_CONFIG_PATH under ~/.civitas-<name>)",
+      "Use a named profile (isolates CIVITAS_STATE_DIR/CIVITAS_CONFIG_PATH under ~/.civitas-<name>)",
     )
     .option(
       "--log-level <level>",
@@ -116,7 +116,7 @@ export function configureProgramHelp(program: Command, ctx: ProgramContext) {
   ) {
     const commit = resolveCommitHash({ moduleUrl: import.meta.url });
     console.log(
-      commit ? `OpenClaw ${ctx.programVersion} (${commit})` : `OpenClaw ${ctx.programVersion}`,
+      commit ? `CIVITAS ${ctx.programVersion} (${commit})` : `CIVITAS ${ctx.programVersion}`,
     );
     process.exit(0);
   }

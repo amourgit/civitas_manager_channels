@@ -110,9 +110,9 @@ export async function runMatrixStartupMaintenance(
     const deviceHealth = runtimeDeps.summarizeMatrixDeviceHealth(
       await params.client.listOwnDevices(),
     );
-    if (deviceHealth.staleOpenClawDevices.length > 0) {
+    if (deviceHealth.staleCIVITASDevices.length > 0) {
       params.logger.warn(
-        `matrix: stale OpenClaw devices detected for ${params.auth.userId}: ${deviceHealth.staleOpenClawDevices.map((device) => device.deviceId).join(", ")}. Run 'civitas matrix devices prune-stale --account ${params.effectiveAccountId}' to keep encrypted-room trust healthy.`,
+        `matrix: stale CIVITAS devices detected for ${params.auth.userId}: ${deviceHealth.staleCIVITASDevices.map((device) => device.deviceId).join(", ")}. Run 'civitas matrix devices prune-stale --account ${params.effectiveAccountId}' to keep encrypted-room trust healthy.`,
       );
     }
   } catch (err) {

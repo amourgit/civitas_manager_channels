@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   getTelegramExecApprovalApprovers,
@@ -30,9 +30,9 @@ function createTempDir(): string {
 }
 
 function buildConfig(
-  execApprovals?: NonNullable<NonNullable<OpenClawConfig["channels"]>["telegram"]>["execApprovals"],
-  channelOverrides?: Partial<NonNullable<NonNullable<OpenClawConfig["channels"]>["telegram"]>>,
-): OpenClawConfig {
+  execApprovals?: NonNullable<NonNullable<CIVITASConfig["channels"]>["telegram"]>["execApprovals"],
+  channelOverrides?: Partial<NonNullable<NonNullable<CIVITASConfig["channels"]>["telegram"]>>,
+): CIVITASConfig {
   return {
     channels: {
       telegram: {
@@ -41,7 +41,7 @@ function buildConfig(
         execApprovals,
       },
     },
-  } as OpenClawConfig;
+  } as CIVITASConfig;
 }
 
 describe("telegram exec approvals", () => {
@@ -161,7 +161,7 @@ describe("telegram exec approvals", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const request = {
       id: "req-2",
       request: {
@@ -212,7 +212,7 @@ describe("telegram exec approvals", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const request = {
       id: "req-3",
       request: {
@@ -263,7 +263,7 @@ describe("telegram exec approvals", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const request = {
       id: "req-4",
       request: {
@@ -316,7 +316,7 @@ describe("telegram exec approvals", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const request = {
       id: "req-5",
       request: {
@@ -368,7 +368,7 @@ describe("telegram exec approvals", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
     const request = {
       id: "req-6",
       request: {
@@ -419,7 +419,7 @@ describe("telegram exec approvals", () => {
           execApprovals: { enabled: true, approvers: ["123"], target: "dm" },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     expect(shouldEnableTelegramExecApprovalButtons({ cfg, to: "123" })).toBe(true);
   });
@@ -433,7 +433,7 @@ describe("telegram exec approvals", () => {
           execApprovals: { enabled: true, approvers: ["123"], target: "dm" },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     expect(shouldEnableTelegramExecApprovalButtons({ cfg, to: "123" })).toBe(false);
   });
@@ -441,11 +441,11 @@ describe("telegram exec approvals", () => {
   describe("isTelegramExecApprovalTargetRecipient", () => {
     function buildTargetConfig(
       targets: Array<{ channel: string; to: string; accountId?: string }>,
-    ): OpenClawConfig {
+    ): CIVITASConfig {
       return {
         channels: { telegram: { botToken: "tok" } },
         approvals: { exec: { enabled: true, mode: "targets", targets } },
-      } as OpenClawConfig;
+      } as CIVITASConfig;
     }
 
     it("accepts sender who is a DM target", () => {
@@ -522,7 +522,7 @@ describe("telegram exec approvals", () => {
             targets: [{ channel: "telegram", to: "12345" }],
           },
         },
-      } as OpenClawConfig;
+      } as CIVITASConfig;
       expect(isTelegramExecApprovalTargetRecipient({ cfg, senderId: "12345" })).toBe(false);
     });
 
@@ -560,7 +560,7 @@ describe("telegram exec approvals", () => {
             targets: [{ channel: "telegram", to: "12345" }],
           },
         },
-      } as OpenClawConfig;
+      } as CIVITASConfig;
       expect(isTelegramExecApprovalAuthorizedSender({ cfg, senderId: "12345" })).toBe(true);
     });
   });

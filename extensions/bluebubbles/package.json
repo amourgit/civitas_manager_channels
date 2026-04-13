@@ -1,7 +1,7 @@
 {
   "name": "@civitas/bluebubbles",
   "version": "2026.4.4",
-  "description": "OpenClaw BlueBubbles channel plugin",
+  "description": "CIVITAS BlueBubbles channel plugin",
   "type": "module",
   "devDependencies": {
     "civitas": "workspace:*"
@@ -48,7 +48,7 @@
       "civitasVersion": "2026.4.4"
     },
     "release": {
-      "publishToClawHub": true,
+      "publishToChannelHub": true,
       "publishToNpm": true
     }
   }

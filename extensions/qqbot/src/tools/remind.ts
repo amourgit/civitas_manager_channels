@@ -1,4 +1,4 @@
-import type { OpenClawPluginApi } from "civitas/plugin-sdk/core";
+import type { CIVITASPluginApi } from "civitas/plugin-sdk/core";
 
 interface RemindParams {
   action: "add" | "list" | "remove";
@@ -174,7 +174,7 @@ function formatDelay(ms: number): string {
   return `${hours}h${minutes}m`;
 }
 
-export function registerRemindTool(api: OpenClawPluginApi): void {
+export function registerRemindTool(api: CIVITASPluginApi): void {
   api.registerTool(
     {
       name: "qqbot_remind",

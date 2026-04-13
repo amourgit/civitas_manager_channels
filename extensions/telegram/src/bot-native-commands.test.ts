@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { TelegramAccountConfig } from "civitas/plugin-sdk/config-runtime";
 import type { RuntimeEnv } from "civitas/plugin-sdk/runtime-env";
 import { STATE_DIR } from "civitas/plugin-sdk/state-paths";
@@ -32,7 +32,7 @@ describe("registerTelegramNativeCommands", () => {
   });
 
   it("scopes skill commands when account binding exists", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: CIVITASConfig = {
       agents: {
         list: [{ id: "main", default: true }, { id: "butler" }],
       },
@@ -53,7 +53,7 @@ describe("registerTelegramNativeCommands", () => {
   });
 
   it("scopes skill commands to default agent without a matching binding (#15599)", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: CIVITASConfig = {
       agents: {
         list: [{ id: "main", default: true }, { id: "butler" }],
       },
@@ -68,7 +68,7 @@ describe("registerTelegramNativeCommands", () => {
   });
 
   it("truncates Telegram command registration to 100 commands", async () => {
-    const cfg: OpenClawConfig = {
+    const cfg: CIVITASConfig = {
       commands: { native: false },
     };
     const customCommands = Array.from({ length: 120 }, (_, index) => ({
@@ -192,7 +192,7 @@ describe("registerTelegramNativeCommands", () => {
   it("passes agent-scoped media roots for plugin command replies with media", async () => {
     const commandHandlers = new Map<string, (ctx: unknown) => Promise<void>>();
     const sendMessage = vi.fn().mockResolvedValue(undefined);
-    const cfg: OpenClawConfig = {
+    const cfg: CIVITASConfig = {
       agents: {
         list: [{ id: "main", default: true }, { id: "work" }],
       },
@@ -492,7 +492,7 @@ describe("registerTelegramNativeCommands", () => {
 
   it("sends plugin command error replies silently when silentErrorReplies is enabled", async () => {
     const commandHandlers = new Map<string, (ctx: unknown) => Promise<void>>();
-    const cfg: OpenClawConfig = {
+    const cfg: CIVITASConfig = {
       channels: {
         telegram: {
           silentErrorReplies: true,

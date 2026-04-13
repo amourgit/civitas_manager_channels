@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import "./test-helpers/fast-coding-tools.js";
-import { createOpenClawCodingTools } from "./pi-tools.js";
+import { createCIVITASCodingTools } from "./pi-tools.js";
 
-const defaultTools = createOpenClawCodingTools({ senderIsOwner: true });
+const defaultTools = createCIVITASCodingTools({ senderIsOwner: true });
 
-describe("createOpenClawCodingTools", () => {
+describe("createCIVITASCodingTools", () => {
   it("preserves action enums in normalized schemas", () => {
     const toolNames = ["canvas", "nodes", "cron", "gateway", "message"];
     const missingNames = toolNames.filter(
@@ -59,61 +59,61 @@ describe("createOpenClawCodingTools", () => {
     expect(defaultTools.some((tool) => tool.name === "process")).toBe(true);
     expect(defaultTools.some((tool) => tool.name === "apply_patch")).toBe(false);
 
-    const openAiTools = createOpenClawCodingTools({
+    const openAiTools = createCIVITASCodingTools({
       modelProvider: "openai",
       modelId: "gpt-5.4",
     });
     expect(openAiTools.some((tool) => tool.name === "apply_patch")).toBe(true);
 
-    const codexTools = createOpenClawCodingTools({
+    const codexTools = createCIVITASCodingTools({
       modelProvider: "openai-codex",
       modelId: "gpt-5.4",
     });
     expect(codexTools.some((tool) => tool.name === "apply_patch")).toBe(true);
 
-    const disabledConfig: OpenClawConfig = {
+    const disabledConfig: CIVITASConfig = {
       tools: {
         exec: {
           applyPatch: { enabled: false },
         },
       },
     };
-    const disabledOpenAiTools = createOpenClawCodingTools({
+    const disabledOpenAiTools = createCIVITASCodingTools({
       config: disabledConfig,
       modelProvider: "openai",
       modelId: "gpt-5.4",
     });
     expect(disabledOpenAiTools.some((tool) => tool.name === "apply_patch")).toBe(false);
 
-    const anthropicTools = createOpenClawCodingTools({
+    const anthropicTools = createCIVITASCodingTools({
       config: disabledConfig,
       modelProvider: "anthropic",
       modelId: "claude-opus-4-6",
     });
     expect(anthropicTools.some((tool) => tool.name === "apply_patch")).toBe(false);
 
-    const allowModelsConfig: OpenClawConfig = {
+    const allowModelsConfig: CIVITASConfig = {
       tools: {
         exec: {
           applyPatch: { allowModels: ["gpt-5.4"] },
         },
       },
     };
-    const allowed = createOpenClawCodingTools({
+    const allowed = createCIVITASCodingTools({
       config: allowModelsConfig,
       modelProvider: "openai",
       modelId: "gpt-5.4",
     });
     expect(allowed.some((tool) => tool.name === "apply_patch")).toBe(true);
 
-    const denied = createOpenClawCodingTools({
+    const denied = createCIVITASCodingTools({
       config: allowModelsConfig,
       modelProvider: "openai",
       modelId: "gpt-5.4-mini",
     });
     expect(denied.some((tool) => tool.name === "apply_patch")).toBe(false);
 
-    const oauthTools = createOpenClawCodingTools({
+    const oauthTools = createCIVITASCodingTools({
       modelProvider: "anthropic",
       modelAuthMode: "oauth",
     });
@@ -125,7 +125,7 @@ describe("createOpenClawCodingTools", () => {
     expect(names.has("apply_patch")).toBe(false);
   });
   it("provides top-level object schemas for all tools", () => {
-    const tools = createOpenClawCodingTools();
+    const tools = createCIVITASCodingTools();
     const offenders = tools
       .map((tool) => {
         const schema =

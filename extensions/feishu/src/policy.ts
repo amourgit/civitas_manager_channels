@@ -2,7 +2,7 @@ import {
   normalizeAccountId,
   resolveMergedAccountConfig,
 } from "civitas/plugin-sdk/account-resolution";
-import type { OpenClawConfig } from "civitas/plugin-sdk/core";
+import type { CIVITASConfig } from "civitas/plugin-sdk/core";
 import { evaluateSenderGroupAccessForPolicy } from "civitas/plugin-sdk/group-access";
 import type { AllowlistMatch, ChannelGroupContext, GroupToolPolicyConfig } from "../runtime-api.js";
 import { normalizeFeishuTarget } from "./targets.js";
@@ -110,7 +110,7 @@ export function isFeishuGroupAllowed(params: {
 
 export function resolveFeishuReplyPolicy(params: {
   isDirectMessage: boolean;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
   groupId?: string | null;
   /**

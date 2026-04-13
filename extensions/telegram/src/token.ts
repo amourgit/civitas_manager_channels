@@ -1,6 +1,6 @@
 import { resolveNormalizedAccountEntry } from "civitas/plugin-sdk/account-core";
 import type { BaseTokenResolution } from "civitas/plugin-sdk/channel-contract";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { TelegramAccountConfig } from "civitas/plugin-sdk/config-runtime";
 import { tryReadSecretFileSync } from "civitas/plugin-sdk/core";
 import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "civitas/plugin-sdk/routing";
@@ -19,7 +19,7 @@ type ResolveTelegramTokenOpts = {
 };
 
 export function resolveTelegramToken(
-  cfg?: OpenClawConfig,
+  cfg?: CIVITASConfig,
   opts: ResolveTelegramTokenOpts = {},
 ): TelegramTokenResolution {
   const accountId = normalizeAccountId(opts.accountId);

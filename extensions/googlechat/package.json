@@ -2,7 +2,7 @@
   "name": "@civitas/googlechat",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw Google Chat channel plugin",
+  "description": "CIVITAS Google Chat channel plugin",
   "type": "module",
   "dependencies": {
     "google-auth-library": "^10.6.2"

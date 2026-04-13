@@ -1,5 +1,5 @@
 import { Type } from "@sinclair/typebox";
-import type { OpenClawConfig } from "civitas/plugin-sdk/plugin-entry";
+import type { CIVITASConfig } from "civitas/plugin-sdk/plugin-entry";
 import { defineSingleProviderPluginEntry } from "civitas/plugin-sdk/provider-entry";
 import { buildProviderReplayFamilyHooks } from "civitas/plugin-sdk/provider-model-shared";
 import { jsonResult, readProviderEnvValue } from "civitas/plugin-sdk/provider-web-search";
@@ -25,7 +25,7 @@ const OPENAI_COMPATIBLE_REPLAY_HOOKS = buildProviderReplayFamilyHooks({
 
 function hasResolvableXaiApiKey(config: unknown): boolean {
   return Boolean(
-    resolveFallbackXaiAuth(config as OpenClawConfig | undefined)?.apiKey ||
+    resolveFallbackXaiAuth(config as CIVITASConfig | undefined)?.apiKey ||
     readProviderEnvValue(["XAI_API_KEY"]),
   );
 }
@@ -209,7 +209,7 @@ export default defineSingleProviderPluginEntry({
     // private config layout. Callers may receive a real key from the active
     // runtime snapshot or a non-secret SecretRef marker from source config.
     resolveSyntheticAuth: ({ config }) => {
-      const fallbackAuth = resolveFallbackXaiAuth(config as OpenClawConfig | undefined);
+      const fallbackAuth = resolveFallbackXaiAuth(config as CIVITASConfig | undefined);
       if (!fallbackAuth) {
         return undefined;
       }

@@ -1,5 +1,5 @@
 import { resolveNativeSkillsEnabled } from "civitas/plugin-sdk/config-runtime";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { readChannelAllowFromStore } from "civitas/plugin-sdk/conversation-runtime";
 import type { ResolvedTelegramAccount } from "./accounts.js";
 import { isNumericTelegramUserId, normalizeTelegramAllowFromEntry } from "./allow-from.js";
@@ -20,7 +20,7 @@ function collectInvalidTelegramAllowFromEntries(params: { entries: unknown; targ
 }
 
 export async function collectTelegramSecurityAuditFindings(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
   account: ResolvedTelegramAccount;
 }) {

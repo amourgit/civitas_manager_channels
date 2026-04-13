@@ -4,7 +4,7 @@ import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import { VERSION } from "../version.js";
 import { createConfigIO } from "./io.js";
-import { parseOpenClawVersion } from "./version.js";
+import { parseCIVITASVersion } from "./version.js";
 
 async function withTempHome(run: (home: string) => Promise<void>): Promise<void> {
   const home = await fs.mkdtemp(path.join(os.tmpdir(), "civitas-config-"));
@@ -59,7 +59,7 @@ async function expectNoNewerVersionWarning(touchedVersion: string) {
     io.loadConfig();
 
     expect(logger.warn).not.toHaveBeenCalledWith(
-      expect.stringContaining("Config was last written by a newer OpenClaw"),
+      expect.stringContaining("Config was last written by a newer CIVITAS"),
     );
     expect(io.configPath).toBe(configPath);
   });
@@ -82,20 +82,20 @@ describe("config io paths", () => {
     });
   });
 
-  it("uses OPENCLAW_HOME for default config path", async () => {
+  it("uses CIVITAS_HOME for default config path", async () => {
     await withTempHome(async (home) => {
       const io = createConfigIO({
-        env: { OPENCLAW_HOME: path.join(home, "svc-home") } as NodeJS.ProcessEnv,
+        env: { CIVITAS_HOME: path.join(home, "svc-home") } as NodeJS.ProcessEnv,
         homedir: () => path.join(home, "ignored-home"),
       });
       expect(io.configPath).toBe(path.join(home, "svc-home", ".civitas", "civitas.json"));
     });
   });
 
-  it("honors explicit OPENCLAW_CONFIG_PATH override", async () => {
+  it("honors explicit CIVITAS_CONFIG_PATH override", async () => {
     await withTempHome(async (home) => {
       const customPath = await writeConfig(home, ".civitas", 20002, "custom.json");
-      const io = createIoForHome(home, { OPENCLAW_CONFIG_PATH: customPath } as NodeJS.ProcessEnv);
+      const io = createIoForHome(home, { CIVITAS_CONFIG_PATH: customPath } as NodeJS.ProcessEnv);
       expect(io.configPath).toBe(customPath);
       expect(io.loadConfig().gateway?.port).toBe(20002);
     });
@@ -191,7 +191,7 @@ describe("config io paths", () => {
   });
 
   it("does not warn when config was last touched by a same-base correction publish", async () => {
-    const parsedVersion = parseOpenClawVersion(VERSION);
+    const parsedVersion = parseCIVITASVersion(VERSION);
     if (!parsedVersion) {
       throw new Error(`Unable to parse VERSION: ${VERSION}`);
     }
@@ -200,7 +200,7 @@ describe("config io paths", () => {
   });
 
   it("does not warn for same-base prerelease configs when current version is newer", async () => {
-    const parsedVersion = parseOpenClawVersion(VERSION);
+    const parsedVersion = parseCIVITASVersion(VERSION);
     if (!parsedVersion) {
       throw new Error(`Unable to parse VERSION: ${VERSION}`);
     }

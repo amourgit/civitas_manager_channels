@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { ClawdbotConfig } from "../runtime-api.js";
+import type { ChanneldbotConfig } from "../runtime-api.js";
 
 const createFeishuClientMock = vi.hoisted(() => vi.fn());
 
@@ -15,7 +15,7 @@ const {
   listFeishuDirectoryPeersLive,
 } = await import(freshDirectoryModulePath);
 
-function makeStaticCfg(): ClawdbotConfig {
+function makeStaticCfg(): ChanneldbotConfig {
   return {
     channels: {
       feishu: {
@@ -29,10 +29,10 @@ function makeStaticCfg(): ClawdbotConfig {
         groupAllowFrom: ["chat-2"],
       },
     },
-  } as ClawdbotConfig;
+  } as ChanneldbotConfig;
 }
 
-function makeConfiguredCfg(): ClawdbotConfig {
+function makeConfiguredCfg(): ChanneldbotConfig {
   return {
     channels: {
       feishu: {
@@ -41,7 +41,7 @@ function makeConfiguredCfg(): ClawdbotConfig {
         appSecret: "cli_test_app_secret",
       },
     },
-  } as ClawdbotConfig;
+  } as ChanneldbotConfig;
 }
 
 describe("feishu directory (config-backed)", () => {
@@ -69,7 +69,7 @@ describe("feishu directory (config-backed)", () => {
           groupAllowFrom: [],
         },
       },
-    } as ClawdbotConfig;
+    } as ChanneldbotConfig;
 
     const peers = await listFeishuDirectoryPeers({ cfg });
     expect(peers).toEqual([

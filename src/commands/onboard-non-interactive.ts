@@ -1,5 +1,5 @@
 import { formatCliCommand } from "../cli/command-format.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import { readConfigFileSnapshot } from "../config/config.js";
 import type { RuntimeEnv } from "../runtime.js";
 import { defaultRuntime } from "../runtime.js";
@@ -20,7 +20,7 @@ export async function runNonInteractiveSetup(
     return;
   }
 
-  const baseConfig: OpenClawConfig = snapshot.valid
+  const baseConfig: CIVITASConfig = snapshot.valid
     ? snapshot.exists
       ? (snapshot.sourceConfig ?? snapshot.config)
       : {}

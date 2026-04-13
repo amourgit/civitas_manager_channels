@@ -7,7 +7,7 @@ import {
   modelSupportsVision,
 } from "civitas/plugin-sdk/agent-runtime";
 import { resolveDefaultModelForAgent } from "civitas/plugin-sdk/agent-runtime";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { loadJsonFile, saveJsonFile } from "civitas/plugin-sdk/json-store";
 import { resolveAutoImageModel } from "civitas/plugin-sdk/media-runtime";
 import {
@@ -149,7 +149,7 @@ const STICKER_DESCRIPTION_PROMPT =
 
 export interface DescribeStickerParams {
   imagePath: string;
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   agentDir?: string;
   agentId?: string;
 }

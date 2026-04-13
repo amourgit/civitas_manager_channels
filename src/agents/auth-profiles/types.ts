@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../config/config.js";
+import type { CIVITASConfig } from "../../config/config.js";
 import type { SecretRef } from "../../config/types.secrets.js";
 
 export type OAuthProvider = string;
@@ -29,7 +29,7 @@ export type ApiKeyCredential = {
 export type TokenCredential = {
   /**
    * Static bearer-style token (often OAuth access token / PAT).
-   * Not refreshable by OpenClaw (unlike `type: "oauth"`).
+   * Not refreshable by CIVITAS (unlike `type: "oauth"`).
    */
   type: "token";
   provider: string;
@@ -49,7 +49,7 @@ export type OAuthCredential = OAuthCredentials & {
   displayName?: string;
   /**
    * When set, another CLI owns refresh-token rotation for this credential.
-   * OpenClaw should prefer that external source as canonical storage and avoid
+   * CIVITAS should prefer that external source as canonical storage and avoid
    * persisting copied secrets into auth-profiles.json.
    */
   managedBy?: ExternalOAuthManager;
@@ -97,7 +97,7 @@ export type AuthProfileStore = {
 };
 
 export type AuthProfileIdRepairResult = {
-  config: OpenClawConfig;
+  config: CIVITASConfig;
   changes: string[];
   migrated: boolean;
   fromProfileId?: string;

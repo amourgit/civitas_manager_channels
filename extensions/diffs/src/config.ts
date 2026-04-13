@@ -1,6 +1,6 @@
 import { buildPluginConfigSchema } from "civitas/plugin-sdk/core";
 import { z } from "civitas/plugin-sdk/zod";
-import type { OpenClawPluginConfigSchema } from "../api.js";
+import type { CIVITASPluginConfigSchema } from "../api.js";
 import {
   DIFF_IMAGE_QUALITY_PRESETS,
   DIFF_INDICATORS,
@@ -192,7 +192,7 @@ const diffsPluginConfigSchemaBase = buildPluginConfigSchema(DiffsPluginJsonSchem
   },
 });
 
-export const diffsPluginConfigSchema: OpenClawPluginConfigSchema = {
+export const diffsPluginConfigSchema: CIVITASPluginConfigSchema = {
   ...diffsPluginConfigSchemaBase,
   jsonSchema: {
     ...diffsPluginConfigSchemaBase.jsonSchema,

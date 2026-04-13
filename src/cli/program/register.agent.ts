@@ -219,7 +219,7 @@ ${theme.muted("Docs:")} ${formatDocsLink("/cli/agent", "docs.civitas.ai/cli/agen
         `
 ${theme.heading("Examples:")}
 ${formatHelpExamples([
-  ['civitas agents set-identity --agent main --name "OpenClaw" --emoji "🦞"', "Set name + emoji."],
+  ['civitas agents set-identity --agent main --name "CIVITAS" --emoji "🦞"', "Set name + emoji."],
   ["civitas agents set-identity --agent main --avatar avatars/civitas.png", "Set avatar path."],
   [
     "civitas agents set-identity --workspace ~/.civitas/workspace --from-identity",

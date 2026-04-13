@@ -2,9 +2,9 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import "./test-helpers/fast-core-tools.js";
-import { createOpenClawTools } from "./civitas-tools.js";
+import { createCIVITASTools } from "./civitas-tools.js";
 
 async function withTempAgentDir<T>(run: (agentDir: string) => Promise<T>): Promise<T> {
   const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "civitas-tools-pdf-"));
@@ -15,10 +15,10 @@ async function withTempAgentDir<T>(run: (agentDir: string) => Promise<T>): Promi
   }
 }
 
-describe("createOpenClawTools PDF registration", () => {
+describe("createCIVITASTools PDF registration", () => {
   it("includes pdf tool when pdfModel is configured", async () => {
     await withTempAgentDir(async (agentDir) => {
-      const cfg: OpenClawConfig = {
+      const cfg: CIVITASConfig = {
         agents: {
           defaults: {
             pdfModel: { primary: "openai/gpt-5.4-mini" },
@@ -26,7 +26,7 @@ describe("createOpenClawTools PDF registration", () => {
         },
       };
 
-      const tools = createOpenClawTools({ config: cfg, agentDir });
+      const tools = createCIVITASTools({ config: cfg, agentDir });
       expect(tools.some((tool) => tool.name === "pdf")).toBe(true);
     });
   });

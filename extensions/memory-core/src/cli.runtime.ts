@@ -20,7 +20,7 @@ import {
   shortenHomeInString,
   shortenHomePath,
   theme,
-  type OpenClawConfig,
+  type CIVITASConfig,
   withManager,
   withProgress,
   withProgressTotals,
@@ -61,7 +61,7 @@ type MemorySourceScan = {
 };
 
 type LoadedMemoryCommandConfig = {
-  config: OpenClawConfig;
+  config: CIVITASConfig;
   diagnostics: string[];
 };
 
@@ -109,12 +109,12 @@ function emitMemorySecretResolveDiagnostics(
   }
 }
 
-function resolveMemoryPluginConfig(cfg: OpenClawConfig): Record<string, unknown> {
+function resolveMemoryPluginConfig(cfg: CIVITASConfig): Record<string, unknown> {
   const entry = asRecord(cfg.plugins?.entries?.["memory-core"]);
   return asRecord(entry?.config) ?? {};
 }
 
-function formatDreamingSummary(cfg: OpenClawConfig): string {
+function formatDreamingSummary(cfg: CIVITASConfig): string {
   const pluginConfig = resolveMemoryPluginConfig(cfg);
   const dreaming = resolveShortTermPromotionDreamingConfig({ pluginConfig, cfg });
   if (!dreaming.enabled) {
@@ -175,7 +175,7 @@ function formatSourceLabel(source: string, workspaceDir: string, agentId: string
   return source;
 }
 
-function resolveAgent(cfg: OpenClawConfig, agent?: string) {
+function resolveAgent(cfg: CIVITASConfig, agent?: string) {
   const trimmed = agent?.trim();
   if (trimmed) {
     return trimmed;
@@ -192,7 +192,7 @@ function buildCliMemorySearchSessionKey(agentId: string): string {
   });
 }
 
-function resolveAgentIds(cfg: OpenClawConfig, agent?: string): string[] {
+function resolveAgentIds(cfg: CIVITASConfig, agent?: string): string[] {
   const trimmed = agent?.trim();
   if (trimmed) {
     return [trimmed];
@@ -209,7 +209,7 @@ function formatExtraPaths(workspaceDir: string, extraPaths: string[]): string[] 
 }
 
 async function withMemoryManagerForAgent(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   agentId: string;
   purpose?: MemoryManagerPurpose;
   run: (manager: MemoryManager) => Promise<void>;

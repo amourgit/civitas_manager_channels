@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createJiti } from "jiti";
 import { z, type ZodType } from "zod";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { CIVITASConfig } from "../../config/config.js";
 import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "../../routing/session-key.js";
 import type { ChannelSetupAdapter } from "./types.adapters.js";
 import type { ChannelSetupInput } from "./types.core.js";
@@ -54,14 +54,14 @@ type ChannelSectionBase = {
   accounts?: Record<string, Record<string, unknown>>;
 };
 
-function channelHasAccounts(cfg: OpenClawConfig, channelKey: string): boolean {
+function channelHasAccounts(cfg: CIVITASConfig, channelKey: string): boolean {
   const channels = cfg.channels as Record<string, unknown> | undefined;
   const base = channels?.[channelKey] as ChannelSectionBase | undefined;
   return Boolean(base?.accounts && Object.keys(base.accounts).length > 0);
 }
 
 function shouldStoreNameInAccounts(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   channelKey: string;
   accountId: string;
   alwaysUseAccounts?: boolean;
@@ -76,12 +76,12 @@ function shouldStoreNameInAccounts(params: {
 }
 
 export function applyAccountNameToChannelSection(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   channelKey: string;
   accountId: string;
   name?: string;
   alwaysUseAccounts?: boolean;
-}): OpenClawConfig {
+}): CIVITASConfig {
   const trimmed = params.name?.trim();
   if (!trimmed) {
     return params.cfg;
@@ -108,7 +108,7 @@ export function applyAccountNameToChannelSection(params: {
           name: trimmed,
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
   }
   const baseAccounts: Record<string, Record<string, unknown>> = base?.accounts ?? {};
   const existingAccount = baseAccounts[accountId] ?? {};
@@ -131,14 +131,14 @@ export function applyAccountNameToChannelSection(params: {
         },
       },
     },
-  } as OpenClawConfig;
+  } as CIVITASConfig;
 }
 
 export function migrateBaseNameToDefaultAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   channelKey: string;
   alwaysUseAccounts?: boolean;
-}): OpenClawConfig {
+}): CIVITASConfig {
   if (params.alwaysUseAccounts) {
     return params.cfg;
   }
@@ -165,17 +165,17 @@ export function migrateBaseNameToDefaultAccount(params: {
         accounts,
       },
     },
-  } as OpenClawConfig;
+  } as CIVITASConfig;
 }
 
 export function prepareScopedSetupConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   channelKey: string;
   accountId: string;
   name?: string;
   alwaysUseAccounts?: boolean;
   migrateBaseName?: boolean;
-}): OpenClawConfig {
+}): CIVITASConfig {
   const namedConfig = applyAccountNameToChannelSection({
     cfg: params.cfg,
     channelKey: params.channelKey,
@@ -194,11 +194,11 @@ export function prepareScopedSetupConfig(params: {
 }
 
 export function applySetupAccountConfigPatch(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   channelKey: string;
   accountId: string;
   patch: Record<string, unknown>;
-}): OpenClawConfig {
+}): CIVITASConfig {
   return patchScopedAccountConfig({
     cfg: params.cfg,
     channelKey: params.channelKey,
@@ -252,7 +252,7 @@ export function createPatchedAccountSetupAdapter(params: {
 
 export function createZodSetupInputValidator<T extends ChannelSetupInput>(params: {
   schema: ZodType<T>;
-  validate?: (params: { cfg: OpenClawConfig; accountId: string; input: T }) => string | null;
+  validate?: (params: { cfg: CIVITASConfig; accountId: string; input: T }) => string | null;
 }): NonNullable<ChannelSetupAdapter["validateInput"]> {
   return (inputParams) => {
     const parsed = params.schema.safeParse(inputParams.input);
@@ -290,7 +290,7 @@ export function createSetupInputPresenceValidator(params: {
   defaultAccountOnlyEnvError?: string;
   whenNotUseEnv?: SetupInputPresenceRequirement[];
   validate?: (params: {
-    cfg: OpenClawConfig;
+    cfg: CIVITASConfig;
     accountId: string;
     input: ChannelSetupInput;
   }) => string | null;
@@ -349,7 +349,7 @@ export function createEnvPatchedAccountSetupAdapter(params: {
 }
 
 export function patchScopedAccountConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   channelKey: string;
   accountId: string;
   patch: Record<string, unknown>;
@@ -357,7 +357,7 @@ export function patchScopedAccountConfig(params: {
   ensureChannelEnabled?: boolean;
   ensureAccountEnabled?: boolean;
   scopeDefaultToAccounts?: boolean;
-}): OpenClawConfig {
+}): CIVITASConfig {
   const accountId = normalizeAccountId(params.accountId);
   const channels = params.cfg.channels as Record<string, unknown> | undefined;
   const channelConfig = channels?.[params.channelKey];
@@ -382,7 +382,7 @@ export function patchScopedAccountConfig(params: {
           ...patch,
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
   }
 
   const accounts = base?.accounts ?? {};
@@ -409,7 +409,7 @@ export function patchScopedAccountConfig(params: {
         },
       },
     },
-  } as OpenClawConfig;
+  } as CIVITASConfig;
 }
 
 type ChannelSectionRecord = Record<string, unknown> & {
@@ -542,14 +542,14 @@ function cloneIfObject<T>(value: T): T {
 }
 
 function moveSingleAccountKeysIntoAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   channelKey: string;
   channel: ChannelSectionRecord;
   accounts: Record<string, Record<string, unknown>>;
   keysToMove: string[];
   targetAccountId: string;
   baseAccount?: Record<string, unknown>;
-}): OpenClawConfig {
+}): CIVITASConfig {
   const nextAccount: Record<string, unknown> = { ...params.baseAccount };
   for (const key of params.keysToMove) {
     nextAccount[key] = cloneIfObject(params.channel[key]);
@@ -570,7 +570,7 @@ function moveSingleAccountKeysIntoAccount(params: {
         },
       },
     },
-  } as OpenClawConfig;
+  } as CIVITASConfig;
 }
 
 function resolveExistingAccountKey(
@@ -589,9 +589,9 @@ function resolveExistingAccountKey(
 // move top-level account settings into accounts.default so the original
 // account keeps working without duplicate account values at channel root.
 export function moveSingleAccountChannelSectionToDefaultAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   channelKey: string;
-}): OpenClawConfig {
+}): CIVITASConfig {
   const channels = params.cfg.channels as Record<string, unknown> | undefined;
   const baseConfig = channels?.[params.channelKey];
   const base =

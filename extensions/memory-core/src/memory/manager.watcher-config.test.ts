@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import type {
   MemorySearchConfig,
-  OpenClawConfig,
+  CIVITASConfig,
 } from "civitas/plugin-sdk/memory-core-host-engine-foundation";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { MemoryIndexManager } from "./index.js";
@@ -86,8 +86,8 @@ describe("memory watcher config", () => {
     await fs.writeFile(path.join(extraDir, seedFile.name), seedFile.contents);
   }
 
-  function createWatcherConfig(overrides?: Partial<MemorySearchConfig>): OpenClawConfig {
-    const defaults: NonNullable<NonNullable<OpenClawConfig["agents"]>["defaults"]> = {
+  function createWatcherConfig(overrides?: Partial<MemorySearchConfig>): CIVITASConfig {
+    const defaults: NonNullable<NonNullable<CIVITASConfig["agents"]>["defaults"]> = {
       workspace: workspaceDir,
       memorySearch: {
         provider: "openai",
@@ -104,10 +104,10 @@ describe("memory watcher config", () => {
         defaults,
         list: [{ id: "main", default: true }],
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
   }
 
-  async function expectWatcherManager(cfg: OpenClawConfig) {
+  async function expectWatcherManager(cfg: CIVITASConfig) {
     const result = await getMemorySearchManager({ cfg, agentId: "main" });
     expect(result.manager).not.toBeNull();
     if (!result.manager) {

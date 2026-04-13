@@ -5,7 +5,7 @@ import {
   DEFAULT_ACCOUNT_ID,
   getChatChannelMeta,
   type ChannelPlugin,
-  type OpenClawConfig,
+  type CIVITASConfig,
 } from "civitas/plugin-sdk/core";
 import { resolveChannelMediaMaxBytes } from "civitas/plugin-sdk/media-runtime";
 import { collectStatusIssuesFromLastError } from "civitas/plugin-sdk/status-helpers";
@@ -28,7 +28,7 @@ export {
   resolveIMessageConfigDefaultTo,
 };
 
-export type { ChannelPlugin, ChannelStatusIssue, OpenClawConfig };
+export type { ChannelPlugin, ChannelStatusIssue, CIVITASConfig };
 
 export function chunkTextForOutbound(text: string, limit: number): string[] {
   const chunks: string[] = [];

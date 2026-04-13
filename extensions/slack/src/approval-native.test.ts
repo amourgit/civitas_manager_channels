@@ -1,14 +1,14 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { describe, expect, it } from "vitest";
 import { clearSessionStoreCacheForTest } from "../../../src/config/sessions.js";
 import { slackNativeApprovalAdapter } from "./approval-native.js";
 
 function buildConfig(
-  overrides?: Partial<NonNullable<NonNullable<OpenClawConfig["channels"]>["slack"]>>,
-): OpenClawConfig {
+  overrides?: Partial<NonNullable<NonNullable<CIVITASConfig["channels"]>["slack"]>>,
+): CIVITASConfig {
   return {
     channels: {
       slack: {
@@ -22,7 +22,7 @@ function buildConfig(
         ...overrides,
       },
     },
-  } as OpenClawConfig;
+  } as CIVITASConfig;
 }
 
 const STORE_PATH = path.join(os.tmpdir(), "civitas-slack-approval-native-test.json");

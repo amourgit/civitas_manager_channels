@@ -1,4 +1,4 @@
-import { loadConfig, type OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import { loadConfig, type CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { resolveMarkdownTableMode } from "civitas/plugin-sdk/config-runtime";
 import { kindFromMime } from "civitas/plugin-sdk/media-runtime";
 import { resolveOutboundAttachmentFromUrl } from "civitas/plugin-sdk/media-runtime";
@@ -8,7 +8,7 @@ import { markdownToSignalText, type SignalTextStyleRange } from "./format.js";
 import { resolveSignalRpcContext } from "./rpc-context.js";
 
 export type SignalSendOpts = {
-  cfg?: OpenClawConfig;
+  cfg?: CIVITASConfig;
   baseUrl?: string;
   account?: string;
   accountId?: string;

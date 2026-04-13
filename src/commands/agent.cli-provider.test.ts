@@ -9,7 +9,7 @@ import { FailoverError } from "../agents/failover-error.js";
 import { loadModelCatalog } from "../agents/model-catalog.js";
 import * as modelSelectionModule from "../agents/model-selection.js";
 import { runEmbeddedPiAgent } from "../agents/pi-embedded.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { CIVITASConfig } from "../config/config.js";
 import * as configModule from "../config/config.js";
 import { clearSessionStoreCacheForTest } from "../config/sessions.js";
 import { resetAgentEventsForTest, resetAgentRunContextForTest } from "../infra/agent-events.js";
@@ -71,7 +71,7 @@ async function withTempHome<T>(fn: (home: string) => Promise<T>): Promise<T> {
 function mockConfig(
   home: string,
   storePath: string,
-  agentOverrides?: Partial<NonNullable<NonNullable<OpenClawConfig["agents"]>["defaults"]>>,
+  agentOverrides?: Partial<NonNullable<NonNullable<CIVITASConfig["agents"]>["defaults"]>>,
 ) {
   const cfg = {
     agents: {
@@ -83,7 +83,7 @@ function mockConfig(
       },
     },
     session: { store: storePath, mainKey: "main" },
-  } as OpenClawConfig;
+  } as CIVITASConfig;
   configSpy.mockReturnValue(cfg);
   return cfg;
 }
@@ -129,7 +129,7 @@ beforeEach(() => {
   vi.mocked(loadModelCatalog).mockResolvedValue([]);
   vi.mocked(modelSelectionModule.isCliProvider).mockImplementation(() => false);
   readConfigFileSnapshotForWriteSpy.mockResolvedValue({
-    snapshot: { valid: false, resolved: {} as OpenClawConfig },
+    snapshot: { valid: false, resolved: {} as CIVITASConfig },
     writeOptions: {},
   } as Awaited<ReturnType<typeof configModule.readConfigFileSnapshotForWrite>>);
 });

@@ -1,5 +1,5 @@
 import { adaptScopedAccountAccessor } from "civitas/plugin-sdk/channel-config-helpers";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { DEFAULT_ACCOUNT_ID } from "civitas/plugin-sdk/routing";
 import { describe, expect, it, vi } from "vitest";
 import {
@@ -204,7 +204,7 @@ describe("bluebubbles setup surface", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as CIVITASConfig;
 
     expect(blueBubblesSetupWizard.dmPolicy?.getCurrent(cfg)).toBe("allowlist");
     expect(blueBubblesSetupWizard.dmPolicy?.resolveConfigKeys?.(cfg)).toEqual({
@@ -236,7 +236,7 @@ describe("bluebubbles setup surface", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
     });
 
     expect(resolved.accountId).toBe("work");
@@ -267,7 +267,7 @@ describe("bluebubbles setup surface", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as CIVITASConfig,
     });
 
     expect(configured).toBe(false);

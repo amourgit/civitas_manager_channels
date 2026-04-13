@@ -16,7 +16,7 @@ import {
 } from "../bootstrap-files.js";
 import { resolveCliBackendConfig } from "../cli-backends.js";
 import { hashCliSessionText, resolveCliSessionReuse } from "../cli-session.js";
-import { resolveOpenClawDocsPath } from "../docs-path.js";
+import { resolveCIVITASDocsPath } from "../docs-path.js";
 import {
   resolveBootstrapMaxChars,
   resolveBootstrapPromptTruncationWarningMode,
@@ -116,11 +116,11 @@ export async function prepareCliRunContext(
       : undefined,
     env: mcpLoopbackRuntime
       ? {
-          OPENCLAW_MCP_TOKEN: mcpLoopbackRuntime.token,
-          OPENCLAW_MCP_AGENT_ID: sessionAgentId ?? "",
-          OPENCLAW_MCP_ACCOUNT_ID: params.agentAccountId ?? "",
-          OPENCLAW_MCP_SESSION_KEY: params.sessionKey ?? "",
-          OPENCLAW_MCP_MESSAGE_CHANNEL: params.messageProvider ?? "",
+          CIVITAS_MCP_TOKEN: mcpLoopbackRuntime.token,
+          CIVITAS_MCP_AGENT_ID: sessionAgentId ?? "",
+          CIVITAS_MCP_ACCOUNT_ID: params.agentAccountId ?? "",
+          CIVITAS_MCP_SESSION_KEY: params.sessionKey ?? "",
+          CIVITAS_MCP_MESSAGE_CHANNEL: params.messageProvider ?? "",
         }
       : undefined,
     warn: (message) => cliBackendLog.warn(message),
@@ -142,7 +142,7 @@ export async function prepareCliRunContext(
     sessionAgentId === defaultAgentId
       ? resolveHeartbeatPrompt(params.config?.agents?.defaults?.heartbeat?.prompt)
       : undefined;
-  const docsPath = await resolveOpenClawDocsPath({
+  const docsPath = await resolveCIVITASDocsPath({
     workspaceDir,
     argv1: process.argv[1],
     cwd: process.cwd(),

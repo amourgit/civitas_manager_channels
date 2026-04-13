@@ -1,15 +1,15 @@
 import { hasMeaningfulChannelConfig } from "../channels/config-presence.js";
 import { getBundledChannelContractSurfaceModule } from "../channels/plugins/contract-surfaces.js";
 import { isRecord } from "../utils.js";
-import type { OpenClawConfig } from "./config.js";
+import type { CIVITASConfig } from "./config.js";
 
 type ChannelConfiguredSurface = {
-  hasConfiguredState?: (params: { cfg: OpenClawConfig; env?: NodeJS.ProcessEnv }) => boolean;
-  hasPersistedAuthState?: (params: { cfg: OpenClawConfig; env?: NodeJS.ProcessEnv }) => boolean;
+  hasConfiguredState?: (params: { cfg: CIVITASConfig; env?: NodeJS.ProcessEnv }) => boolean;
+  hasPersistedAuthState?: (params: { cfg: CIVITASConfig; env?: NodeJS.ProcessEnv }) => boolean;
 };
 
 function resolveChannelConfig(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   channelId: string,
 ): Record<string, unknown> | null {
   const channels = cfg.channels as Record<string, unknown> | undefined;
@@ -17,7 +17,7 @@ function resolveChannelConfig(
   return isRecord(entry) ? entry : null;
 }
 
-function isGenericChannelConfigured(cfg: OpenClawConfig, channelId: string): boolean {
+function isGenericChannelConfigured(cfg: CIVITASConfig, channelId: string): boolean {
   const entry = resolveChannelConfig(cfg, channelId);
   return hasMeaningfulChannelConfig(entry);
 }
@@ -30,7 +30,7 @@ function getChannelConfiguredSurface(channelId: string): ChannelConfiguredSurfac
 }
 
 export function isChannelConfigured(
-  cfg: OpenClawConfig,
+  cfg: CIVITASConfig,
   channelId: string,
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {

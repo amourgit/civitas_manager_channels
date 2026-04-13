@@ -5,10 +5,10 @@ import Ajv from "ajv";
 import {
   formatXHighModelHint,
   normalizeThinkLevel,
-  resolvePreferredOpenClawTmpDir,
+  resolvePreferredCIVITASTmpDir,
   supportsXHighThinking,
 } from "../api.js";
-import type { OpenClawPluginApi } from "../api.js";
+import type { CIVITASPluginApi } from "../api.js";
 
 const AjvCtor = Ajv as unknown as typeof import("ajv").default;
 
@@ -49,7 +49,7 @@ type PluginCfg = {
 const INVALID_THINKING_LEVELS_HINT =
   "off, minimal, low, medium, high, adaptive, and xhigh where supported";
 
-export function createLlmTaskTool(api: OpenClawPluginApi) {
+export function createLlmTaskTool(api: CIVITASPluginApi) {
   return {
     name: "llm-task",
     label: "LLM Task",
@@ -177,7 +177,7 @@ export function createLlmTaskTool(api: OpenClawPluginApi) {
       let tmpDir: string | null = null;
       try {
         tmpDir = await fs.mkdtemp(
-          path.join(resolvePreferredOpenClawTmpDir(), "civitas-llm-task-"),
+          path.join(resolvePreferredCIVITASTmpDir(), "civitas-llm-task-"),
         );
         const sessionId = `llm-task-${Date.now()}`;
         const sessionFile = path.join(tmpDir, "session.json");

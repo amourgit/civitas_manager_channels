@@ -53,9 +53,9 @@ describe("getBlockedBindReason", () => {
     }
   });
 
-  it("still blocks OS-home credential paths when OPENCLAW_HOME points elsewhere", () => {
+  it("still blocks OS-home credential paths when CIVITAS_HOME points elsewhere", () => {
     vi.stubEnv("HOME", "/home/tester");
-    vi.stubEnv("OPENCLAW_HOME", "/srv/civitas-home");
+    vi.stubEnv("CIVITAS_HOME", "/srv/civitas-home");
 
     expect(getBlockedBindReason("/home/tester/.gnupg/secring.gpg:/mnt/gnupg:ro")).toEqual(
       expect.objectContaining({

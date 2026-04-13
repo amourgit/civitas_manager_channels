@@ -4,11 +4,11 @@ import {
   resolveThreadSessionKeys,
   type RoutePeer,
 } from "civitas/plugin-sdk/routing";
-import type { OpenClawConfig } from "./runtime-api.js";
+import type { CIVITASConfig } from "./runtime-api.js";
 import { parseDiscordTarget } from "./target-parsing.js";
 
 export type ResolveDiscordOutboundSessionRouteParams = {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   agentId: string;
   accountId?: string | null;
   target: string;

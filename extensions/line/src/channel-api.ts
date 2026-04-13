@@ -1,6 +1,6 @@
 export { clearAccountEntryFields } from "civitas/plugin-sdk/core";
 import { DEFAULT_ACCOUNT_ID } from "civitas/plugin-sdk/account-id";
-import type { OpenClawConfig } from "civitas/plugin-sdk/account-resolution";
+import type { CIVITASConfig } from "civitas/plugin-sdk/account-resolution";
 import type { ChannelPlugin } from "civitas/plugin-sdk/core";
 import {
   listLineAccountIds,
@@ -20,4 +20,4 @@ export {
   resolveLineAccount,
 };
 
-export type { ChannelPlugin, LineConfig, OpenClawConfig, ResolvedLineAccount };
+export type { ChannelPlugin, LineConfig, CIVITASConfig, ResolvedLineAccount };

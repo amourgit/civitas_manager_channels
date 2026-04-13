@@ -2,13 +2,13 @@
  * Signal reactions via signal-cli JSON-RPC API
  */
 
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import { resolveSignalAccount } from "./accounts.js";
 import { signalRpcRequest } from "./client.js";
 import { resolveSignalRpcContext } from "./rpc-context.js";
 
 export type SignalReactionOpts = {
-  cfg?: OpenClawConfig;
+  cfg?: CIVITASConfig;
   baseUrl?: string;
   account?: string;
   accountId?: string;

@@ -2,7 +2,7 @@
   "name": "@civitas/duckduckgo-plugin",
   "version": "2026.4.4",
   "private": true,
-  "description": "OpenClaw DuckDuckGo plugin",
+  "description": "CIVITAS DuckDuckGo plugin",
   "type": "module",
   "civitas": {
     "extensions": [

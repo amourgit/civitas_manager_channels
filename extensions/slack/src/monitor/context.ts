@@ -1,7 +1,7 @@
 import type { App } from "@slack/bolt";
 import { formatAllowlistMatchMeta } from "civitas/plugin-sdk/allow-from";
 import type {
-  OpenClawConfig,
+  CIVITASConfig,
   SlackReactionNotificationMode,
 } from "civitas/plugin-sdk/config-runtime";
 import type { SessionScope } from "civitas/plugin-sdk/config-runtime";
@@ -23,7 +23,7 @@ import { isSlackChannelAllowedByPolicy } from "./policy.js";
 export { inferSlackChannelType, normalizeSlackChannelType } from "./channel-type.js";
 
 export type SlackMonitorContext = {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
   botToken: string;
   app: App;
@@ -89,7 +89,7 @@ export type SlackMonitorContext = {
 };
 
 export function createSlackMonitorContext(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId: string;
   botToken: string;
   app: App;

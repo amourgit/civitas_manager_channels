@@ -1,7 +1,7 @@
 {
   "name": "@civitas/mattermost",
   "version": "2026.4.4",
-  "description": "OpenClaw Mattermost channel plugin",
+  "description": "CIVITAS Mattermost channel plugin",
   "type": "module",
   "dependencies": {
     "@sinclair/typebox": "0.34.49",

@@ -4,7 +4,7 @@
 
 export type { NormalizedLocation, PluginRuntime, RuntimeLogger } from "civitas/plugin-sdk/core";
 export type { BlockReplyContext, ReplyPayload } from "civitas/plugin-sdk/reply-runtime";
-export type { MarkdownTableMode, OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+export type { MarkdownTableMode, CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 export type { RuntimeEnv } from "civitas/plugin-sdk/runtime";
 export { ensureConfiguredAcpBindingReady } from "civitas/plugin-sdk/core";
 export {

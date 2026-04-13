@@ -1,13 +1,13 @@
 import { DEFAULT_ACCOUNT_ID } from "civitas/plugin-sdk/account-id";
 import type { ChannelDoctorConfigMutation } from "civitas/plugin-sdk/channel-contract";
 import { readChannelAllowFromStore } from "civitas/plugin-sdk/channel-pairing";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 
 function applyGroupAllowFromFromStore(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   storeAllowFrom: string[];
   changes: string[];
-}): OpenClawConfig {
+}): CIVITASConfig {
   const next = structuredClone(params.cfg ?? {});
   const section = next.channels?.whatsapp as Record<string, unknown> | undefined;
   if (!section || typeof section !== "object" || params.storeAllowFrom.length === 0) {
@@ -48,7 +48,7 @@ function applyGroupAllowFromFromStore(params: {
 }
 
 export async function applyWhatsAppSecurityConfigFixes(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   env: NodeJS.ProcessEnv;
 }): Promise<ChannelDoctorConfigMutation> {
   const fromStore = await readChannelAllowFromStore(

@@ -43,8 +43,8 @@ const serviceReadCommand = vi.fn<
 >(async (_env?: NodeJS.ProcessEnv) => ({
   programArguments: ["/bin/node", "cli", "gateway", "--port", "19001"],
   environment: {
-    OPENCLAW_STATE_DIR: "/tmp/civitas-daemon",
-    OPENCLAW_CONFIG_PATH: "/tmp/civitas-daemon/civitas.json",
+    CIVITAS_STATE_DIR: "/tmp/civitas-daemon",
+    CIVITAS_CONFIG_PATH: "/tmp/civitas-daemon/civitas.json",
   },
 }));
 const resolveGatewayBindHost = vi.fn(
@@ -53,10 +53,10 @@ const resolveGatewayBindHost = vi.fn(
 const pickPrimaryTailnetIPv4 = vi.fn(() => "100.64.0.9");
 const resolveGatewayPort = vi.fn((_cfg?: unknown, _env?: unknown) => 18789);
 const resolveStateDir = vi.fn(
-  (env: NodeJS.ProcessEnv) => env.OPENCLAW_STATE_DIR ?? "/tmp/civitas-cli",
+  (env: NodeJS.ProcessEnv) => env.CIVITAS_STATE_DIR ?? "/tmp/civitas-cli",
 );
 const resolveConfigPath = vi.fn((env: NodeJS.ProcessEnv, stateDir: string) => {
-  return env.OPENCLAW_CONFIG_PATH ?? `${stateDir}/civitas.json`;
+  return env.CIVITAS_CONFIG_PATH ?? `${stateDir}/civitas.json`;
 });
 const readConfigFileSnapshotCalls = vi.fn((configPath: string) => configPath);
 const loadConfigCalls = vi.fn((configPath: string) => configPath);
@@ -153,17 +153,17 @@ describe("gatherDaemonStatus", () => {
 
   beforeEach(() => {
     envSnapshot = captureEnv([
-      "OPENCLAW_STATE_DIR",
-      "OPENCLAW_CONFIG_PATH",
-      "OPENCLAW_GATEWAY_TOKEN",
-      "OPENCLAW_GATEWAY_PASSWORD",
+      "CIVITAS_STATE_DIR",
+      "CIVITAS_CONFIG_PATH",
+      "CIVITAS_GATEWAY_TOKEN",
+      "CIVITAS_GATEWAY_PASSWORD",
       "DAEMON_GATEWAY_TOKEN",
       "DAEMON_GATEWAY_PASSWORD",
     ]);
-    process.env.OPENCLAW_STATE_DIR = "/tmp/civitas-cli";
-    process.env.OPENCLAW_CONFIG_PATH = "/tmp/civitas-cli/civitas.json";
-    delete process.env.OPENCLAW_GATEWAY_TOKEN;
-    delete process.env.OPENCLAW_GATEWAY_PASSWORD;
+    process.env.CIVITAS_STATE_DIR = "/tmp/civitas-cli";
+    process.env.CIVITAS_CONFIG_PATH = "/tmp/civitas-cli/civitas.json";
+    delete process.env.CIVITAS_GATEWAY_TOKEN;
+    delete process.env.CIVITAS_GATEWAY_PASSWORD;
     delete process.env.DAEMON_GATEWAY_TOKEN;
     delete process.env.DAEMON_GATEWAY_PASSWORD;
     callGatewayStatusProbe.mockClear();
@@ -293,14 +293,14 @@ describe("gatherDaemonStatus", () => {
     serviceReadCommand.mockResolvedValueOnce({
       programArguments: ["/bin/node", "cli", "gateway", "--port", "19001"],
       environment: {
-        OPENCLAW_GATEWAY_PORT: "19001",
-        OPENCLAW_CONFIG_PATH: "/tmp/civitas-daemon/civitas.json",
-        OPENCLAW_STATE_DIR: "/tmp/civitas-daemon",
+        CIVITAS_GATEWAY_PORT: "19001",
+        CIVITAS_CONFIG_PATH: "/tmp/civitas-daemon/civitas.json",
+        CIVITAS_STATE_DIR: "/tmp/civitas-daemon",
       } as Record<string, string>,
     });
     serviceReadRuntime.mockImplementationOnce(async (env?: NodeJS.ProcessEnv) => ({
-      status: env?.OPENCLAW_GATEWAY_PORT === "19001" ? "running" : "unknown",
-      detail: env?.OPENCLAW_GATEWAY_PORT ?? "missing-port",
+      status: env?.CIVITAS_GATEWAY_PORT === "19001" ? "running" : "unknown",
+      detail: env?.CIVITAS_GATEWAY_PORT ?? "missing-port",
     }));
 
     const status = await gatherDaemonStatus({
@@ -311,7 +311,7 @@ describe("gatherDaemonStatus", () => {
 
     expect(serviceReadRuntime).toHaveBeenCalledWith(
       expect.objectContaining({
-        OPENCLAW_GATEWAY_PORT: "19001",
+        CIVITAS_GATEWAY_PORT: "19001",
       }),
     );
     expect(status.service.runtime).toMatchObject({
@@ -493,8 +493,8 @@ describe("gatherDaemonStatus", () => {
         },
       },
     };
-    process.env.OPENCLAW_GATEWAY_TOKEN = "env-token";
-    process.env.OPENCLAW_GATEWAY_PASSWORD = "env-password"; // pragma: allowlist secret
+    process.env.CIVITAS_GATEWAY_TOKEN = "env-token";
+    process.env.CIVITAS_GATEWAY_PASSWORD = "env-password"; // pragma: allowlist secret
 
     await gatherDaemonStatus({
       rpc: {},

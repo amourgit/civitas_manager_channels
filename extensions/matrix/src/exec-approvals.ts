@@ -7,7 +7,7 @@ import {
   matchesApprovalRequestFilters,
 } from "civitas/plugin-sdk/approval-client-runtime";
 import { resolveApprovalRequestChannelAccountId } from "civitas/plugin-sdk/approval-native-runtime";
-import type { OpenClawConfig } from "civitas/plugin-sdk/config-runtime";
+import type { CIVITASConfig } from "civitas/plugin-sdk/config-runtime";
 import type { ExecApprovalRequest, PluginApprovalRequest } from "civitas/plugin-sdk/infra-runtime";
 import type { ReplyPayload } from "civitas/plugin-sdk/reply-runtime";
 import { normalizeAccountId } from "civitas/plugin-sdk/routing";
@@ -27,7 +27,7 @@ function normalizeMatrixExecApproverId(value: string | number): string | undefin
 }
 
 function resolveMatrixExecApprovalConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
 }) {
   const account = resolveMatrixAccount(params);
@@ -42,7 +42,7 @@ function resolveMatrixExecApprovalConfig(params: {
 }
 
 function countMatrixExecApprovalEligibleAccounts(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   request: ApprovalRequest;
 }): number {
   return listMatrixAccountIds(params.cfg).filter((accountId) => {
@@ -78,7 +78,7 @@ function countMatrixExecApprovalEligibleAccounts(params: {
 }
 
 function matchesMatrixRequestAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
   request: ApprovalRequest;
 }): boolean {
@@ -104,7 +104,7 @@ function matchesMatrixRequestAccount(params: {
 }
 
 export function getMatrixExecApprovalApprovers(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
 }): string[] {
   const account = resolveMatrixAccount(params).config;
@@ -116,7 +116,7 @@ export function getMatrixExecApprovalApprovers(params: {
 }
 
 export function isMatrixExecApprovalTargetRecipient(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   senderId?: string | null;
   accountId?: string | null;
 }): boolean {
@@ -159,7 +159,7 @@ function buildFilterCheckRequest(params: {
 }
 
 export function shouldSuppressLocalMatrixExecApprovalPrompt(params: {
-  cfg: OpenClawConfig;
+  cfg: CIVITASConfig;
   accountId?: string | null;
   payload: ReplyPayload;
 }): boolean {
