@@ -1,30 +1,30 @@
 # CIVITAS Channel Manager
 
-Complete channel management system extracted from CIVITAS, customized for CIVITAS infrastructure.
+Système complet de gestion de canaux de communication développé par CIVITAS, conçu pour une intégration transparente avec l'infrastructure CIVITAS.
 
-## Overview
+## Présentation
 
-This repository contains the surgically extracted channel management components from CIVITAS, providing a standalone Channel Manager that can be integrated with custom gateways and agents.
+CIVITAS Channel Manager est une solution propriétaire complète pour la gestion multi-canaux, développée et maintenue par CIVITAS. Ce système offre une architecture robuste et évolutive pour gérer toutes les communications sur différentes plateformes de messagerie.
 
-## Features
+## Fonctionnalités Principales
 
-- **Complete Channel Management**: All channel types, configurations, and runtime management
-- **Extensible Plugin System**: Support for multiple channel extensions (Slack, Discord, Telegram, WhatsApp, etc.)
-- **Channel Configuration**: Advanced channel setup, authentication, and policy management
-- **Testing Suite**: Comprehensive tests for all channel functionality
-- **CIVITAS Branded**: Fully customized and branded for CIVITAS infrastructure
+- **Gestion Complète des Canaux** : Support de tous les types de canaux avec configurations avancées
+- **Système de Plugins Extensible** : Architecture modulaire supportant de multiples plateformes (Slack, Discord, Telegram, WhatsApp, etc.)
+- **Configuration Avancée** : Setup sophistiqué des canaux avec authentification et gestion des politiques
+- **Suite de Tests Complète** : Couverture de test exhaustive pour toutes les fonctionnalités
+- **Conception CIVITAS** : Entièrement conçu et optimisé pour l'écosystème CIVITAS
 
 ## Architecture
 
-The Channel Manager includes:
+Le Channel Manager CIVITAS comprend :
 
-- `src/channels/` - Core channel management logic
-- `src/agents/` - Channel-specific agent tools
-- `src/cli/` - Command-line interface for channel management
-- `src/commands/` - Channel setup and configuration commands
-- `src/plugin-sdk/` - Plugin development SDK
-- `extensions/` - Channel extensions (Slack, Discord, Telegram, etc.)
-- `test/` - Comprehensive test suite
+- `src/channels/` - Logique de gestion principale des canaux
+- `src/agents/` - Outils spécialisés pour les agents CIVITAS
+- `src/cli/` - Interface en ligne de commande pour la gestion
+- `src/commands/` - Commandes de configuration et setup
+- `src/plugin-sdk/` - Kit de développement pour extensions
+- `extensions/` - Extensions de canaux natives (Slack, Discord, Telegram, etc.)
+- `test/` - Suite de tests complète
 
 ## Installation
 
@@ -32,84 +32,108 @@ The Channel Manager includes:
 npm install
 ```
 
-## Usage
+## Utilisation
 
-### CLI Commands
+### Commandes CLI
 
 ```bash
-# List available channels
+# Lister les canaux disponibles
 npm run civitas-channels list
 
-# Setup a new channel
-npm run civitas-channels setup <channel-type>
+# Configurer un nouveau canal
+npm run civitas-channels setup <type-canal>
 
-# Configure channel settings
-npm run civitas-channels config <channel-id>
+# Paramétrer un canal existant
+npm run civitas-channels config <id-canal>
 ```
 
-### Programmatic API
+### API Programmatique
 
 ```typescript
-import { ChannelManager } from './src/channels/manager';
+import { CivitasChannelManager } from './src/index';
 
-const manager = new ChannelManager();
+const manager = new CivitasChannelManager();
 await manager.initialize();
 ```
 
-## Supported Channels
+## Canaux Supportés
 
-- Slack
-- Discord
-- Telegram
-- WhatsApp
-- Microsoft Teams
-- Matrix
-- IRC
-- And many more...
+- **Slack** : Intégration complète avec workspaces Slack
+- **Discord** : Support des serveurs et canaux Discord
+- **Telegram** : Communication via bots Telegram
+- **WhatsApp** : Intégration WhatsApp Business API
+- **Microsoft Teams** : Support complet Teams
+- **Matrix** : Communication décentralisée Matrix
+- **IRC** : Support des protocoles IRC traditionnels
+- **Et bien d'autres...**
 
-## Development
+## Développement
 
 ```bash
-# Install dependencies
+# Installer les dépendances
 pnpm install
 
-# Run tests
+# Exécuter les tests
 pnpm test
 
-# Build
+# Compiler le projet
 pnpm build
 
-# Development mode
+# Mode développement
 pnpm dev
 ```
 
-## Testing
+## Tests
 
-The project includes comprehensive tests:
+Le projet inclut une suite de tests complète :
 
 ```bash
-# Run all tests
+# Exécuter tous les tests
 pnpm test
 
-# Run channel-specific tests
+# Tests spécifiques aux canaux
 pnpm test:channels
 
-# Run extension tests
+# Tests des extensions
 pnpm test:extensions
 ```
 
-## Integration
+## Intégration
 
-This Channel Manager is designed to integrate with:
+CIVITAS Channel Manager est conçu pour s'intégrer parfaitement avec :
 
-- Custom CIVITAS Gateway
-- Custom CIVITAS Agents
-- Existing infrastructure
+- **Gateway CIVITAS** : Intégration native avec notre gateway propriétaire
+- **Agents CIVITAS** : Optimisé pour nos agents intelligents
+- **Infrastructure Existante** : Compatible avec les systèmes déjà déployés
 
-## License
+## Caractéristiques Techniques
 
-MIT License - see LICENSE file for details.
+### Performance et Fiabilité
+- **Haute Disponibilité** : Architecture conçue pour la production 24/7
+- **Scalabilité** : Support de milliers de connexions simultanées
+- **Surveillance** : Monitoring intégré et métriques détaillées
 
-## Contributing
+### Sécurité
+- **Authentification Forte** : Support des méthodes d'auth modernes
+- **Chiffrement** : Communications sécurisées de bout en bout
+- **Contrôle d'Accès** : Gestion fine des permissions
 
-This is a CIVITAS proprietary project. All contributions should follow CIVITAS development guidelines.
+### Extensibilité
+- **SDK Complet** : Documentation et outils pour développeurs
+- **Plugins Personnalisés** : Création d'extensions sur mesure
+- **API Ouverte** : Intégration avec des systèmes tiers
+
+## Licence
+
+MIT License - voir fichier LICENSE pour les détails.
+
+## Contribution
+
+CIVITAS Channel Manager est un projet propriétaire de CIVITAS. Toute contribution doit respecter les directives de développement CIVITAS et être approuvée par l'équipe CIVITAS.
+
+## Support CIVITAS
+
+Pour toute question technique ou besoin d'assistance :
+- **Documentation** : `/docs`
+- **Support** : contact@civitas.tech
+- **Community** : community.civitas.tech
