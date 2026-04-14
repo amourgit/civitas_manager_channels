@@ -2,7 +2,12 @@
   "name": "civitas_manager_channels",
   "version": "1.0.0",
   "description": "CIVITAS Channel Manager - Complete channel management system extracted from CIVITAS",
-  "keywords": ["civitas", "channels", "messaging", "manager"],
+  "keywords": [
+    "civitas",
+    "channels",
+    "messaging",
+    "manager"
+  ],
   "homepage": "https://github.com/amourgit/civitas_manager_channels#readme",
   "bugs": {
     "url": "https://github.com/amourgit/civitas_manager_channels/issues"
@@ -1251,7 +1256,7 @@
     "express": "^5.2.1",
     "file-type": "22.0.0",
     "gaxios": "7.1.4",
-    "hono": "4.12.10",
+    "hono": "^4.12.12",
     "ipaddr.js": "^2.3.0",
     "jiti": "^2.6.1",
     "json5": "^2.2.3",
