@@ -12,10 +12,10 @@
     "music-metadata": "^11.12.3"
   },
   "devDependencies": {
-    "civitas": "workspace:*"
+    "civitas_manager_channels": "workspace:*"
   },
   "peerDependencies": {
-    "civitas": ">=2026.4.4"
+    "civitas": ">=1.0.0"
   },
   "peerDependenciesMeta": {
     "civitas": {
