@@ -1,7 +1,0 @@
-{
-  "name": "@civitas/image-generation-core",
-  "version": "2026.4.4",
-  "private": true,
-  "description": "CIVITAS image generation runtime package",
-  "type": "module"
-}

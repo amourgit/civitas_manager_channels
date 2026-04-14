@@ -1,25 +1,39 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { CIVITASConfig } from "../config/config.js";
 import { resolveAgentModelFallbackValues } from "../config/model-input.js";
-import { resolveStateDir } from "../config/paths.js";
-import { createSubsystemLogger } from "../logging/subsystem.js";
+import type { AgentDefaultsConfig } from "../config/types.agent-defaults.js";
+import type { OpenClawConfig } from "../config/types.js";
 import {
-  DEFAULT_AGENT_ID,
   normalizeAgentId,
   parseAgentSessionKey,
   resolveAgentIdFromSessionKey,
 } from "../routing/session-key.js";
+import {
+  lowercasePreservingWhitespace,
+  normalizeLowercaseStringOrEmpty,
+  normalizeOptionalString,
+  resolvePrimaryStringValue,
+} from "../shared/string-coerce.js";
 import { resolveUserPath } from "../utils.js";
+import {
+  listAgentEntries,
+  listAgentIds,
+  resolveAgentConfig,
+  resolveAgentDir,
+  resolveAgentWorkspaceDir,
+  resolveDefaultAgentId,
+  type ResolvedAgentConfig,
+} from "./agent-scope-config.js";
 import { resolveEffectiveAgentSkillFilter } from "./skills/agent-filter.js";
-import { resolveDefaultAgentWorkspaceDir } from "./workspace.js";
-
-let log: ReturnType<typeof createSubsystemLogger> | null = null;
-
-function getLog(): ReturnType<typeof createSubsystemLogger> {
-  log ??= createSubsystemLogger("agent-scope");
-  return log;
-}
+export {
+  listAgentEntries,
+  listAgentIds,
+  resolveAgentConfig,
+  resolveAgentDir,
+  resolveAgentWorkspaceDir,
+  resolveDefaultAgentId,
+  type ResolvedAgentConfig,
+} from "./agent-scope-config.js";
 
 /** Strip null bytes from paths to prevent ENOTDIR errors. */
 function stripNullBytes(s: string): string {
@@ -29,83 +43,19 @@ function stripNullBytes(s: string): string {
 
 export { resolveAgentIdFromSessionKey };
 
-type AgentEntry = NonNullable<NonNullable<CIVITASConfig["agents"]>["list"]>[number];
-
-type ResolvedAgentConfig = {
-  name?: string;
-  workspace?: string;
-  agentDir?: string;
-  model?: AgentEntry["model"];
-  thinkingDefault?: AgentEntry["thinkingDefault"];
-  reasoningDefault?: AgentEntry["reasoningDefault"];
-  fastModeDefault?: AgentEntry["fastModeDefault"];
-  skills?: AgentEntry["skills"];
-  memorySearch?: AgentEntry["memorySearch"];
-  humanDelay?: AgentEntry["humanDelay"];
-  heartbeat?: AgentEntry["heartbeat"];
-  identity?: AgentEntry["identity"];
-  groupChat?: AgentEntry["groupChat"];
-  subagents?: AgentEntry["subagents"];
-  sandbox?: AgentEntry["sandbox"];
-  tools?: AgentEntry["tools"];
-};
-
-let defaultAgentWarned = false;
-
-export function listAgentEntries(cfg: CIVITASConfig): AgentEntry[] {
-  const list = cfg.agents?.list;
-  if (!Array.isArray(list)) {
-    return [];
-  }
-  return list.filter((entry): entry is AgentEntry => Boolean(entry && typeof entry === "object"));
-}
-
-export function listAgentIds(cfg: CIVITASConfig): string[] {
-  const agents = listAgentEntries(cfg);
-  if (agents.length === 0) {
-    return [DEFAULT_AGENT_ID];
-  }
-  const seen = new Set<string>();
-  const ids: string[] = [];
-  for (const entry of agents) {
-    const id = normalizeAgentId(entry?.id);
-    if (seen.has(id)) {
-      continue;
-    }
-    seen.add(id);
-    ids.push(id);
-  }
-  return ids.length > 0 ? ids : [DEFAULT_AGENT_ID];
-}
-
-export function resolveDefaultAgentId(cfg: CIVITASConfig): string {
-  const agents = listAgentEntries(cfg);
-  if (agents.length === 0) {
-    return DEFAULT_AGENT_ID;
-  }
-  const defaults = agents.filter((agent) => agent?.default);
-  if (defaults.length > 1 && !defaultAgentWarned) {
-    defaultAgentWarned = true;
-    getLog().warn("Multiple agents marked default=true; using the first entry as default.");
-  }
-  const chosen = (defaults[0] ?? agents[0])?.id?.trim();
-  return normalizeAgentId(chosen || DEFAULT_AGENT_ID);
-}
-
 export function resolveSessionAgentIds(params: {
   sessionKey?: string;
-  config?: CIVITASConfig;
+  config?: OpenClawConfig;
   agentId?: string;
 }): {
   defaultAgentId: string;
   sessionAgentId: string;
 } {
   const defaultAgentId = resolveDefaultAgentId(params.config ?? {});
-  const explicitAgentIdRaw =
-    typeof params.agentId === "string" ? params.agentId.trim().toLowerCase() : "";
+  const explicitAgentIdRaw = normalizeLowercaseStringOrEmpty(params.agentId);
   const explicitAgentId = explicitAgentIdRaw ? normalizeAgentId(explicitAgentIdRaw) : null;
   const sessionKey = params.sessionKey?.trim();
-  const normalizedSessionKey = sessionKey ? sessionKey.toLowerCase() : undefined;
+  const normalizedSessionKey = sessionKey ? normalizeLowercaseStringOrEmpty(sessionKey) : undefined;
   const parsed = normalizedSessionKey ? parseAgentSessionKey(normalizedSessionKey) : null;
   const sessionAgentId =
     explicitAgentId ?? (parsed?.agentId ? normalizeAgentId(parsed.agentId) : defaultAgentId);
@@ -114,96 +64,55 @@ export function resolveSessionAgentIds(params: {
 
 export function resolveSessionAgentId(params: {
   sessionKey?: string;
-  config?: CIVITASConfig;
+  config?: OpenClawConfig;
 }): string {
   return resolveSessionAgentIds(params).sessionAgentId;
 }
 
-function resolveAgentEntry(cfg: CIVITASConfig, agentId: string): AgentEntry | undefined {
-  const id = normalizeAgentId(agentId);
-  return listAgentEntries(cfg).find((entry) => normalizeAgentId(entry.id) === id);
-}
-
-export function resolveAgentConfig(
-  cfg: CIVITASConfig,
-  agentId: string,
-): ResolvedAgentConfig | undefined {
-  const id = normalizeAgentId(agentId);
-  const entry = resolveAgentEntry(cfg, id);
-  if (!entry) {
-    return undefined;
+export function resolveAgentExecutionContract(
+  cfg: OpenClawConfig | undefined,
+  agentId?: string | null,
+): NonNullable<NonNullable<AgentDefaultsConfig["embeddedPi"]>["executionContract"]> | undefined {
+  const defaultContract = cfg?.agents?.defaults?.embeddedPi?.executionContract;
+  if (!cfg || !agentId) {
+    return defaultContract;
   }
-  return {
-    name: typeof entry.name === "string" ? entry.name : undefined,
-    workspace: typeof entry.workspace === "string" ? entry.workspace : undefined,
-    agentDir: typeof entry.agentDir === "string" ? entry.agentDir : undefined,
-    model:
-      typeof entry.model === "string" || (entry.model && typeof entry.model === "object")
-        ? entry.model
-        : undefined,
-    thinkingDefault: entry.thinkingDefault,
-    reasoningDefault: entry.reasoningDefault,
-    fastModeDefault: entry.fastModeDefault,
-    skills: Array.isArray(entry.skills) ? entry.skills : undefined,
-    memorySearch: entry.memorySearch,
-    humanDelay: entry.humanDelay,
-    heartbeat: entry.heartbeat,
-    identity: entry.identity,
-    groupChat: entry.groupChat,
-    subagents: typeof entry.subagents === "object" && entry.subagents ? entry.subagents : undefined,
-    sandbox: entry.sandbox,
-    tools: entry.tools,
-  };
+  const agentContract = resolveAgentConfig(cfg, agentId)?.embeddedPi?.executionContract;
+  return agentContract ?? defaultContract;
 }
 
 export function resolveAgentSkillsFilter(
-  cfg: CIVITASConfig,
+  cfg: OpenClawConfig,
   agentId: string,
 ): string[] | undefined {
   return resolveEffectiveAgentSkillFilter(cfg, agentId);
 }
 
-function resolveModelPrimary(raw: unknown): string | undefined {
-  if (typeof raw === "string") {
-    const trimmed = raw.trim();
-    return trimmed || undefined;
-  }
-  if (!raw || typeof raw !== "object") {
-    return undefined;
-  }
-  const primary = (raw as { primary?: unknown }).primary;
-  if (typeof primary !== "string") {
-    return undefined;
-  }
-  const trimmed = primary.trim();
-  return trimmed || undefined;
-}
-
 export function resolveAgentExplicitModelPrimary(
-  cfg: CIVITASConfig,
+  cfg: OpenClawConfig,
   agentId: string,
 ): string | undefined {
   const raw = resolveAgentConfig(cfg, agentId)?.model;
-  return resolveModelPrimary(raw);
+  return resolvePrimaryStringValue(raw);
 }
 
 export function resolveAgentEffectiveModelPrimary(
-  cfg: CIVITASConfig,
+  cfg: OpenClawConfig,
   agentId: string,
 ): string | undefined {
   return (
     resolveAgentExplicitModelPrimary(cfg, agentId) ??
-    resolveModelPrimary(cfg.agents?.defaults?.model)
+    resolvePrimaryStringValue(cfg.agents?.defaults?.model)
   );
 }
 
 // Backward-compatible alias. Prefer explicit/effective helpers at new call sites.
-export function resolveAgentModelPrimary(cfg: CIVITASConfig, agentId: string): string | undefined {
+export function resolveAgentModelPrimary(cfg: OpenClawConfig, agentId: string): string | undefined {
   return resolveAgentExplicitModelPrimary(cfg, agentId);
 }
 
 export function resolveAgentModelFallbacksOverride(
-  cfg: CIVITASConfig,
+  cfg: OpenClawConfig,
   agentId: string,
 ): string[] | undefined {
   const raw = resolveAgentConfig(cfg, agentId)?.model;
@@ -221,7 +130,7 @@ export function resolveFallbackAgentId(params: {
   agentId?: string | null;
   sessionKey?: string | null;
 }): string {
-  const explicitAgentId = typeof params.agentId === "string" ? params.agentId.trim() : "";
+  const explicitAgentId = normalizeOptionalString(params.agentId) ?? "";
   if (explicitAgentId) {
     return normalizeAgentId(explicitAgentId);
   }
@@ -229,7 +138,7 @@ export function resolveFallbackAgentId(params: {
 }
 
 export function resolveRunModelFallbacksOverride(params: {
-  cfg: CIVITASConfig | undefined;
+  cfg: OpenClawConfig | undefined;
   agentId?: string | null;
   sessionKey?: string | null;
 }): string[] | undefined {
@@ -243,7 +152,7 @@ export function resolveRunModelFallbacksOverride(params: {
 }
 
 export function hasConfiguredModelFallbacks(params: {
-  cfg: CIVITASConfig | undefined;
+  cfg: OpenClawConfig | undefined;
   agentId?: string | null;
   sessionKey?: string | null;
 }): boolean {
@@ -253,7 +162,7 @@ export function hasConfiguredModelFallbacks(params: {
 }
 
 export function resolveEffectiveModelFallbacks(params: {
-  cfg: CIVITASConfig;
+  cfg: OpenClawConfig;
   agentId: string;
   hasSessionModelOverride: boolean;
 }): string[] | undefined {
@@ -263,29 +172,6 @@ export function resolveEffectiveModelFallbacks(params: {
   }
   const defaultFallbacks = resolveAgentModelFallbackValues(params.cfg.agents?.defaults?.model);
   return agentFallbacksOverride ?? defaultFallbacks;
-}
-
-export function resolveAgentWorkspaceDir(cfg: CIVITASConfig, agentId: string) {
-  const id = normalizeAgentId(agentId);
-  const configured = resolveAgentConfig(cfg, id)?.workspace?.trim();
-  if (configured) {
-    return stripNullBytes(resolveUserPath(configured));
-  }
-  const defaultAgentId = resolveDefaultAgentId(cfg);
-  const fallback = cfg.agents?.defaults?.workspace?.trim();
-  if (id === defaultAgentId) {
-    if (fallback) {
-      return stripNullBytes(resolveUserPath(fallback));
-    }
-    return stripNullBytes(resolveDefaultAgentWorkspaceDir(process.env));
-  }
-  // Non-default agents: use the configured default workspace as a base so that
-  // agents.defaults.workspace is respected for all agents, not just the default.
-  if (fallback) {
-    return stripNullBytes(path.join(resolveUserPath(fallback), id));
-  }
-  const stateDir = resolveStateDir(process.env);
-  return stripNullBytes(path.join(stateDir, `workspace-${id}`));
 }
 
 function normalizePathForComparison(input: string): string {
@@ -299,7 +185,7 @@ function normalizePathForComparison(input: string): string {
     // Keep lexical path for non-existent directories.
   }
   if (process.platform === "win32") {
-    return normalized.toLowerCase();
+    return lowercasePreservingWhitespace(normalized);
   }
   return normalized;
 }
@@ -310,7 +196,7 @@ function isPathWithinRoot(candidatePath: string, rootPath: string): boolean {
 }
 
 export function resolveAgentIdsByWorkspacePath(
-  cfg: CIVITASConfig,
+  cfg: OpenClawConfig,
   workspacePath: string,
 ): string[] {
   const normalizedWorkspacePath = normalizePathForComparison(workspacePath);
@@ -338,22 +224,8 @@ export function resolveAgentIdsByWorkspacePath(
 }
 
 export function resolveAgentIdByWorkspacePath(
-  cfg: CIVITASConfig,
+  cfg: OpenClawConfig,
   workspacePath: string,
 ): string | undefined {
   return resolveAgentIdsByWorkspacePath(cfg, workspacePath)[0];
-}
-
-export function resolveAgentDir(
-  cfg: CIVITASConfig,
-  agentId: string,
-  env: NodeJS.ProcessEnv = process.env,
-) {
-  const id = normalizeAgentId(agentId);
-  const configured = resolveAgentConfig(cfg, id)?.agentDir?.trim();
-  if (configured) {
-    return resolveUserPath(configured, env);
-  }
-  const root = resolveStateDir(env);
-  return path.join(root, "agents", id, "agent");
 }

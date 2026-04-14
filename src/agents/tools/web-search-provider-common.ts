@@ -1,5 +1,6 @@
-import type { CIVITASConfig } from "../../config/config.js";
+import type { OpenClawConfig } from "../../config/types.openclaw.js";
 import { normalizeResolvedSecretInputString } from "../../config/types.secrets.js";
+import { normalizeLowercaseStringOrEmpty } from "../../shared/string-coerce.js";
 import { normalizeSecretInput } from "../../utils/normalize-secret-input.js";
 import { withTrustedWebToolsEndpoint } from "./web-guarded-fetch.js";
 import {
@@ -14,7 +15,7 @@ import {
   writeCache,
 } from "./web-shared.js";
 
-export type SearchConfigRecord = (NonNullable<CIVITASConfig["tools"]>["web"] extends infer Web
+export type SearchConfigRecord = (NonNullable<OpenClawConfig["tools"]>["web"] extends infer Web
   ? Web extends { search?: infer Search }
     ? Search
     : never
@@ -208,7 +209,7 @@ export function parseIsoDateRange(params: {
       message: string;
       docs: string;
     } {
-  const docs = params.docs ?? "https://docs.civitas.ai/tools/web";
+  const docs = params.docs ?? "https://docs.openclaw.ai/tools/web";
   const dateAfter = params.rawDateAfter ? normalizeToIsoDate(params.rawDateAfter) : undefined;
   if (params.rawDateAfter && !dateAfter) {
     return {
@@ -250,7 +251,7 @@ export function normalizeFreshness(
     return undefined;
   }
 
-  const lower = trimmed.toLowerCase();
+  const lower = normalizeLowercaseStringOrEmpty(trimmed);
   if (BRAVE_FRESHNESS_SHORTCUTS.has(lower)) {
     return provider === "brave" ? lower : FRESHNESS_TO_RECENCY[lower];
   }
@@ -314,12 +315,13 @@ function describeUnsupportedSearchFilter(name: UnsupportedWebSearchFilterName): 
     case "date_before":
       return "date_after/date_before filtering";
   }
+  throw new Error("Unsupported web search filter");
 }
 
 export function buildUnsupportedSearchFilterResponse(
   params: Record<string, unknown>,
   provider: string,
-  docs = "https://docs.civitas.ai/tools/web",
+  docs = "https://docs.openclaw.ai/tools/web",
 ):
   | {
       error: string;

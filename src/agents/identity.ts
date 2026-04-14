@@ -1,17 +1,18 @@
-import type { CIVITASConfig, HumanDelayConfig, IdentityConfig } from "../config/config.js";
+import type { HumanDelayConfig, IdentityConfig } from "../config/types.base.js";
+import type { OpenClawConfig } from "../config/types.openclaw.js";
 import { resolveAgentConfig } from "./agent-scope.js";
 
 const DEFAULT_ACK_REACTION = "👀";
 
 export function resolveAgentIdentity(
-  cfg: CIVITASConfig,
+  cfg: OpenClawConfig,
   agentId: string,
 ): IdentityConfig | undefined {
   return resolveAgentConfig(cfg, agentId)?.identity;
 }
 
 export function resolveAckReaction(
-  cfg: CIVITASConfig,
+  cfg: OpenClawConfig,
   agentId: string,
   opts?: { channel?: string; accountId?: string },
 ): string {
@@ -46,7 +47,7 @@ export function resolveAckReaction(
 }
 
 export function resolveIdentityNamePrefix(
-  cfg: CIVITASConfig,
+  cfg: OpenClawConfig,
   agentId: string,
 ): string | undefined {
   const name = resolveAgentIdentity(cfg, agentId)?.name?.trim();
@@ -56,13 +57,8 @@ export function resolveIdentityNamePrefix(
   return `[${name}]`;
 }
 
-/** Returns just the identity name (without brackets) for template context. */
-export function resolveIdentityName(cfg: CIVITASConfig, agentId: string): string | undefined {
-  return resolveAgentIdentity(cfg, agentId)?.name?.trim() || undefined;
-}
-
 export function resolveMessagePrefix(
-  cfg: CIVITASConfig,
+  cfg: OpenClawConfig,
   agentId: string,
   opts?: { configured?: string; hasAllowFrom?: boolean; fallback?: string },
 ): string {
@@ -76,12 +72,12 @@ export function resolveMessagePrefix(
     return "";
   }
 
-  return resolveIdentityNamePrefix(cfg, agentId) ?? opts?.fallback ?? "[civitas]";
+  return resolveIdentityNamePrefix(cfg, agentId) ?? opts?.fallback ?? "[openclaw]";
 }
 
 /** Helper to extract a channel config value by dynamic key. */
 function getChannelConfig(
-  cfg: CIVITASConfig,
+  cfg: OpenClawConfig,
   channel: string,
 ): Record<string, unknown> | undefined {
   const channels = cfg.channels as Record<string, unknown> | undefined;
@@ -92,7 +88,7 @@ function getChannelConfig(
 }
 
 export function resolveResponsePrefix(
-  cfg: CIVITASConfig,
+  cfg: OpenClawConfig,
   agentId: string,
   opts?: { channel?: string; accountId?: string },
 ): string | undefined {
@@ -133,7 +129,7 @@ export function resolveResponsePrefix(
 }
 
 export function resolveEffectiveMessagesConfig(
-  cfg: CIVITASConfig,
+  cfg: OpenClawConfig,
   agentId: string,
   opts?: {
     hasAllowFrom?: boolean;
@@ -155,7 +151,7 @@ export function resolveEffectiveMessagesConfig(
 }
 
 export function resolveHumanDelayConfig(
-  cfg: CIVITASConfig,
+  cfg: OpenClawConfig,
   agentId: string,
 ): HumanDelayConfig | undefined {
   const defaults = cfg.agents?.defaults?.humanDelay;

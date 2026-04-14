@@ -1,8 +1,9 @@
 import path from "node:path";
 import { type Api, type Model } from "@mariozechner/pi-ai";
 import { formatCliCommand } from "../cli/command-format.js";
-import { getRuntimeConfigSnapshot, type CIVITASConfig } from "../config/config.js";
+import { getRuntimeConfigSnapshot } from "../config/config.js";
 import type { ModelProviderAuthMode, ModelProviderConfig } from "../config/types.js";
+import type { OpenClawConfig } from "../config/types.openclaw.js";
 import { coerceSecretRef } from "../config/types.secrets.js";
 import { getShellEnvAppliedKeys } from "../infra/shell-env.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
@@ -12,6 +13,10 @@ import {
   shouldDeferProviderSyntheticProfileAuthWithPlugin,
 } from "../plugins/provider-runtime.js";
 import { resolveOwningPluginIdsForProvider } from "../plugins/providers.js";
+import {
+  normalizeLowercaseStringOrEmpty,
+  normalizeOptionalLowercaseString,
+} from "../shared/string-coerce.js";
 import { normalizeOptionalSecretInput } from "../utils/normalize-secret-input.js";
 import {
   type AuthProfileStore,
@@ -38,10 +43,11 @@ import { normalizeProviderId } from "./model-selection.js";
 export { ensureAuthProfileStore, resolveAuthProfileOrder } from "./auth-profiles.js";
 export { requireApiKey, resolveAwsSdkEnvVarName } from "./model-auth-runtime-shared.js";
 export type { ResolvedProviderAuth } from "./model-auth-runtime-shared.js";
+export type ProviderCredentialPrecedence = "profile-first" | "env-first";
 
 const log = createSubsystemLogger("model-auth");
 function resolveProviderConfig(
-  cfg: CIVITASConfig | undefined,
+  cfg: OpenClawConfig | undefined,
   provider: string,
 ): ModelProviderConfig | undefined {
   const providers = cfg?.models?.providers ?? {};
@@ -63,7 +69,7 @@ function resolveProviderConfig(
 }
 
 export function getCustomProviderApiKey(
-  cfg: CIVITASConfig | undefined,
+  cfg: OpenClawConfig | undefined,
   provider: string,
 ): string | undefined {
   const entry = resolveProviderConfig(cfg, provider);
@@ -76,7 +82,7 @@ type ResolvedCustomProviderApiKey = {
 };
 
 export function resolveUsableCustomProviderApiKey(params: {
-  cfg: CIVITASConfig | undefined;
+  cfg: OpenClawConfig | undefined;
   provider: string;
   env?: NodeJS.ProcessEnv;
 }): ResolvedCustomProviderApiKey | null {
@@ -106,7 +112,7 @@ export function resolveUsableCustomProviderApiKey(params: {
 }
 
 export function hasUsableCustomProviderApiKey(
-  cfg: CIVITASConfig | undefined,
+  cfg: OpenClawConfig | undefined,
   provider: string,
   env?: NodeJS.ProcessEnv,
 ): boolean {
@@ -114,7 +120,7 @@ export function hasUsableCustomProviderApiKey(
 }
 
 export function shouldPreferExplicitConfigApiKeyAuth(
-  cfg: CIVITASConfig | undefined,
+  cfg: OpenClawConfig | undefined,
   provider: string,
 ): boolean {
   const providerConfig = resolveProviderConfig(cfg, provider);
@@ -126,7 +132,7 @@ export function shouldPreferExplicitConfigApiKeyAuth(
 }
 
 function resolveProviderAuthOverride(
-  cfg: CIVITASConfig | undefined,
+  cfg: OpenClawConfig | undefined,
   provider: string,
 ): ModelProviderAuthMode | undefined {
   const entry = resolveProviderConfig(cfg, provider);
@@ -139,7 +145,7 @@ function resolveProviderAuthOverride(
 
 function isLocalBaseUrl(baseUrl: string): boolean {
   try {
-    const host = new URL(baseUrl).hostname.toLowerCase();
+    const host = normalizeLowercaseStringOrEmpty(new URL(baseUrl).hostname);
     return (
       host === "localhost" ||
       host === "127.0.0.1" ||
@@ -181,11 +187,11 @@ type SyntheticProviderAuthResolution = {
 };
 
 function resolveProviderSyntheticRuntimeAuth(params: {
-  cfg: CIVITASConfig | undefined;
+  cfg: OpenClawConfig | undefined;
   provider: string;
 }): SyntheticProviderAuthResolution {
   const resolveFromConfig = (
-    config: CIVITASConfig | undefined,
+    config: OpenClawConfig | undefined,
   ): ResolvedProviderAuth | undefined => {
     const providerConfig = resolveProviderConfig(config, params.provider);
     return resolveProviderSyntheticAuthWithPlugin({
@@ -223,7 +229,7 @@ function resolveProviderSyntheticRuntimeAuth(params: {
 }
 
 function resolveSyntheticLocalProviderAuth(params: {
-  cfg: CIVITASConfig | undefined;
+  cfg: OpenClawConfig | undefined;
   provider: string;
 }): ResolvedProviderAuth | null {
   const syntheticProviderAuth = resolveProviderSyntheticRuntimeAuth(params);
@@ -318,7 +324,7 @@ function resolveAwsSdkAuthInfo(): { mode: "aws-sdk"; source: string } {
 }
 
 function shouldDeferSyntheticProfileAuth(params: {
-  cfg: CIVITASConfig | undefined;
+  cfg: OpenClawConfig | undefined;
   provider: string;
   resolvedApiKey: string | undefined;
 }): boolean {
@@ -339,7 +345,7 @@ function shouldDeferSyntheticProfileAuth(params: {
 
 export async function resolveApiKeyForProvider(params: {
   provider: string;
-  cfg?: CIVITASConfig;
+  cfg?: OpenClawConfig;
   profileId?: string;
   preferredProfile?: string;
   store?: AuthProfileStore;
@@ -347,11 +353,12 @@ export async function resolveApiKeyForProvider(params: {
   /** When true, treat profileId as a user-locked selection that must not be
    *  silently overridden by env/config credentials (e.g. ollama-local). */
   lockedProfile?: boolean;
+  credentialPrecedence?: ProviderCredentialPrecedence;
 }): Promise<ResolvedProviderAuth> {
   const { provider, cfg, profileId, preferredProfile } = params;
-  const store = params.store ?? ensureAuthProfileStore(params.agentDir);
 
   if (profileId) {
+    const store = params.store ?? ensureAuthProfileStore(params.agentDir);
     const resolved = await resolveApiKeyForProfile({
       cfg,
       store,
@@ -401,8 +408,27 @@ export async function resolveApiKeyForProvider(params: {
       };
     }
   }
+  const normalized = normalizeProviderId(provider);
+  if (authOverride === undefined && normalized === "amazon-bedrock") {
+    return resolveAwsSdkAuthInfo();
+  }
+
+  if (params.credentialPrecedence === "env-first") {
+    const envResolved = resolveEnvApiKey(provider);
+    if (envResolved) {
+      const resolvedMode: ResolvedProviderAuth["mode"] = envResolved.source.includes("OAUTH_TOKEN")
+        ? "oauth"
+        : "api-key";
+      return {
+        apiKey: envResolved.apiKey,
+        source: envResolved.source,
+        mode: resolvedMode,
+      };
+    }
+  }
 
   const providerConfig = resolveProviderConfig(cfg, provider);
+  const store = params.store ?? ensureAuthProfileStore(params.agentDir);
   const order = resolveAuthProfileOrder({
     cfg,
     store,
@@ -473,11 +499,6 @@ export async function resolveApiKeyForProvider(params: {
     return syntheticLocalAuth;
   }
 
-  const normalized = normalizeProviderId(provider);
-  if (authOverride === undefined && normalized === "amazon-bedrock") {
-    return resolveAwsSdkAuthInfo();
-  }
-
   const hasInlineConfiguredModels =
     Array.isArray(providerConfig?.models) && providerConfig.models.length > 0;
   const owningPluginIds = !hasInlineConfiguredModels
@@ -509,7 +530,7 @@ export async function resolveApiKeyForProvider(params: {
     [
       `No API key found for provider "${provider}".`,
       `Auth store: ${authStorePath} (agentDir: ${resolvedAgentDir}).`,
-      `Configure auth for this agent (${formatCliCommand("civitas agents add <id>")}) or copy auth-profiles.json from the main agentDir.`,
+      `Configure auth for this agent (${formatCliCommand("openclaw agents add <id>")}) or copy auth-profiles.json from the main agentDir.`,
     ].join(" "),
   );
 }
@@ -521,7 +542,7 @@ export type { EnvApiKeyResult } from "./model-auth-env.js";
 
 export function resolveModelAuthMode(
   provider?: string,
-  cfg?: CIVITASConfig,
+  cfg?: OpenClawConfig,
   store?: AuthProfileStore,
 ): ModelAuthMode | undefined {
   const resolved = provider?.trim();
@@ -577,19 +598,31 @@ export function resolveModelAuthMode(
 
 export async function hasAvailableAuthForProvider(params: {
   provider: string;
-  cfg?: CIVITASConfig;
+  cfg?: OpenClawConfig;
   preferredProfile?: string;
   store?: AuthProfileStore;
   agentDir?: string;
 }): Promise<boolean> {
   const { provider, cfg, preferredProfile } = params;
-  const store = params.store ?? ensureAuthProfileStore(params.agentDir);
 
   const authOverride = resolveProviderAuthOverride(cfg, provider);
   if (authOverride === "aws-sdk") {
     return true;
   }
+  if (resolveEnvApiKey(provider)) {
+    return true;
+  }
+  if (resolveUsableCustomProviderApiKey({ cfg, provider })) {
+    return true;
+  }
+  if (resolveSyntheticLocalProviderAuth({ cfg, provider })) {
+    return true;
+  }
+  if (authOverride === undefined && normalizeProviderId(provider) === "amazon-bedrock") {
+    return true;
+  }
 
+  const store = params.store ?? ensureAuthProfileStore(params.agentDir);
   const order = resolveAuthProfileOrder({
     cfg,
     store,
@@ -611,28 +644,18 @@ export async function hasAvailableAuthForProvider(params: {
       log.debug?.(`auth profile "${candidate}" failed for provider "${provider}": ${String(err)}`);
     }
   }
-
-  if (resolveEnvApiKey(provider)) {
-    return true;
-  }
-  if (resolveUsableCustomProviderApiKey({ cfg, provider })) {
-    return true;
-  }
-  if (resolveSyntheticLocalProviderAuth({ cfg, provider })) {
-    return true;
-  }
-
-  return authOverride === undefined && normalizeProviderId(provider) === "amazon-bedrock";
+  return false;
 }
 
 export async function getApiKeyForModel(params: {
   model: Model<Api>;
-  cfg?: CIVITASConfig;
+  cfg?: OpenClawConfig;
   profileId?: string;
   preferredProfile?: string;
   store?: AuthProfileStore;
   agentDir?: string;
   lockedProfile?: boolean;
+  credentialPrecedence?: ProviderCredentialPrecedence;
 }): Promise<ResolvedProviderAuth> {
   return resolveApiKeyForProvider({
     provider: params.model.provider,
@@ -642,6 +665,7 @@ export async function getApiKeyForModel(params: {
     store: params.store,
     agentDir: params.agentDir,
     lockedProfile: params.lockedProfile,
+    credentialPrecedence: params.credentialPrecedence,
   });
 }
 
@@ -680,7 +704,7 @@ export function applyLocalNoAuthHeaderOverride<T extends Model<Api>>(
 export function applyAuthHeaderOverride<T extends Model<Api>>(
   model: T,
   auth: ResolvedProviderAuth | null | undefined,
-  cfg: CIVITASConfig | undefined,
+  cfg: OpenClawConfig | undefined,
 ): T {
   if (!auth?.apiKey) {
     return model;
@@ -699,7 +723,7 @@ export function applyAuthHeaderOverride<T extends Model<Api>>(
   const headers: Record<string, string> = {};
   if (model.headers) {
     for (const [key, value] of Object.entries(model.headers)) {
-      if (key.toLowerCase() !== "authorization") {
+      if (normalizeOptionalLowercaseString(key) !== "authorization") {
         headers[key] = value;
       }
     }

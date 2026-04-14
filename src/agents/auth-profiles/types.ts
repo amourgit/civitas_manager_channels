@@ -1,4 +1,4 @@
-import type { CIVITASConfig } from "../../config/config.js";
+import type { OpenClawConfig } from "../../config/types.openclaw.js";
 import type { SecretRef } from "../../config/types.secrets.js";
 
 export type OAuthProvider = string;
@@ -29,7 +29,7 @@ export type ApiKeyCredential = {
 export type TokenCredential = {
   /**
    * Static bearer-style token (often OAuth access token / PAT).
-   * Not refreshable by CIVITAS (unlike `type: "oauth"`).
+   * Not refreshable by OpenClaw (unlike `type: "oauth"`).
    */
   type: "token";
   provider: string;
@@ -48,9 +48,11 @@ export type OAuthCredential = OAuthCredentials & {
   email?: string;
   displayName?: string;
   /**
-   * When set, another CLI owns refresh-token rotation for this credential.
-   * CIVITAS should prefer that external source as canonical storage and avoid
-   * persisting copied secrets into auth-profiles.json.
+   * Compatibility/runtime metadata for CLI-managed OAuth entries.
+   *
+   * Core routing should prefer external-auth overlay contracts over direct
+   * branching on this field. Persisted stores may still carry it while older
+   * CLI sync paths remain supported.
    */
   managedBy?: ExternalOAuthManager;
 };
@@ -82,9 +84,7 @@ export type ProfileUsageStats = {
   lastFailureAt?: number;
 };
 
-export type AuthProfileStore = {
-  version: number;
-  profiles: Record<string, AuthProfileCredential>;
+export type AuthProfileState = {
   /**
    * Optional per-agent preferred profile order overrides.
    * This lets you lock/override auth rotation for a specific agent without
@@ -96,8 +96,19 @@ export type AuthProfileStore = {
   usageStats?: Record<string, ProfileUsageStats>;
 };
 
+export type AuthProfileSecretsStore = {
+  version: number;
+  profiles: Record<string, AuthProfileCredential>;
+};
+
+export type AuthProfileStateStore = {
+  version: number;
+} & AuthProfileState;
+
+export type AuthProfileStore = AuthProfileSecretsStore & AuthProfileState;
+
 export type AuthProfileIdRepairResult = {
-  config: CIVITASConfig;
+  config: OpenClawConfig;
   changes: string[];
   migrated: boolean;
   fromProfileId?: string;

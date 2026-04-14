@@ -1,3 +1,7 @@
+import {
+  normalizeOptionalLowercaseString,
+  normalizeOptionalString,
+} from "../shared/string-coerce.js";
 import type { RuntimeVersionEnv } from "../version.js";
 import { resolveRuntimeServiceVersion } from "../version.js";
 import { normalizeProviderId } from "./provider-id.js";
@@ -105,8 +109,8 @@ export type ProviderRequestCapabilities = ProviderRequestPolicyResolution & {
   compatibilityFamily?: ProviderRequestCompatibilityFamily;
 };
 
-const CIVITAS_ATTRIBUTION_PRODUCT = "CIVITAS";
-const CIVITAS_ATTRIBUTION_ORIGINATOR = "civitas";
+const OPENCLAW_ATTRIBUTION_PRODUCT = "OpenClaw";
+const OPENCLAW_ATTRIBUTION_ORIGINATOR = "openclaw";
 
 const LOCAL_ENDPOINT_HOSTS = new Set(["localhost", "127.0.0.1", "::1", "[::1]"]);
 const MOONSHOT_NATIVE_BASE_URLS = new Set([
@@ -123,13 +127,13 @@ const OPENAI_RESPONSES_APIS = new Set(["openai-responses", "azure-openai-respons
 const OPENAI_RESPONSES_PROVIDERS = new Set(["openai", "azure-openai", "azure-openai-responses"]);
 const MOONSHOT_COMPAT_PROVIDERS = new Set(["moonshot", "kimi"]);
 
-function formatCIVITASUserAgent(version: string): string {
-  return `${CIVITAS_ATTRIBUTION_ORIGINATOR}/${version}`;
+function formatOpenClawUserAgent(version: string): string {
+  return `${OPENCLAW_ATTRIBUTION_ORIGINATOR}/${version}`;
 }
 
 function tryParseHostname(value: string): string | undefined {
   try {
-    return new URL(value).hostname.toLowerCase();
+    return normalizeOptionalLowercaseString(new URL(value).hostname);
   } catch {
     return undefined;
   }
@@ -140,11 +144,10 @@ function isSchemelessHostnameCandidate(value: string): boolean {
 }
 
 function resolveUrlHostname(value: unknown): string | undefined {
-  if (typeof value !== "string" || !value.trim()) {
+  const trimmed = normalizeOptionalString(value);
+  if (!trimmed) {
     return undefined;
   }
-
-  const trimmed = value.trim();
   const parsedHostname = tryParseHostname(trimmed);
   if (parsedHostname) {
     return parsedHostname;
@@ -156,7 +159,7 @@ function resolveUrlHostname(value: unknown): string | undefined {
 }
 
 function normalizeComparableBaseUrl(value: string): string | undefined {
-  const trimmed = value.trim();
+  const trimmed = normalizeOptionalString(value);
   if (!trimmed) {
     return undefined;
   }
@@ -172,7 +175,7 @@ function normalizeComparableBaseUrl(value: string): string | undefined {
     }
     url.hash = "";
     url.search = "";
-    return url.toString().replace(/\/+$/, "").toLowerCase();
+    return normalizeOptionalLowercaseString(url.toString().replace(/\/+$/, ""));
   } catch {
     return undefined;
   }
@@ -238,7 +241,7 @@ export function resolveProviderEndpoint(
   if (host === "openrouter.ai" || host.endsWith(".openrouter.ai")) {
     return { endpointClass: "openrouter", hostname: host };
   }
-  if (host === "api.x.ai") {
+  if (host === "api.x.ai" || host === "api.grok.x.ai") {
     return { endpointClass: "xai-native", hostname: host };
   }
   if (host === "api.z.ai") {
@@ -317,7 +320,7 @@ export function resolveProviderAttributionIdentity(
   env: RuntimeVersionEnv = process.env as RuntimeVersionEnv,
 ): ProviderAttributionIdentity {
   return {
-    product: CIVITAS_ATTRIBUTION_PRODUCT,
+    product: OPENCLAW_ATTRIBUTION_PRODUCT,
     version: resolveRuntimeServiceVersion(env),
   };
 }
@@ -332,10 +335,10 @@ function buildOpenRouterAttributionPolicy(
     verification: "vendor-documented",
     hook: "request-headers",
     docsUrl: "https://openrouter.ai/docs/app-attribution",
-    reviewNote: "Documented app attribution headers. Verified in CIVITAS runtime wrapper.",
+    reviewNote: "Documented app attribution headers. Verified in OpenClaw runtime wrapper.",
     ...identity,
     headers: {
-      "HTTP-Referer": "https://civitas.ai",
+      "HTTP-Referer": "https://openclaw.ai",
       "X-OpenRouter-Title": identity.product,
       "X-OpenRouter-Categories": "cli-agent",
     },
@@ -355,9 +358,9 @@ function buildOpenAIAttributionPolicy(
       "OpenAI native traffic supports hidden originator/User-Agent attribution. Verified against the Codex wire contract.",
     ...identity,
     headers: {
-      originator: CIVITAS_ATTRIBUTION_ORIGINATOR,
+      originator: OPENCLAW_ATTRIBUTION_ORIGINATOR,
       version: identity.version,
-      "User-Agent": formatCIVITASUserAgent(identity.version),
+      "User-Agent": formatOpenClawUserAgent(identity.version),
     },
   };
 }
@@ -375,9 +378,9 @@ function buildOpenAICodexAttributionPolicy(
       "OpenAI Codex ChatGPT-backed traffic supports the same hidden originator/User-Agent attribution contract.",
     ...identity,
     headers: {
-      originator: CIVITAS_ATTRIBUTION_ORIGINATOR,
+      originator: OPENCLAW_ATTRIBUTION_ORIGINATOR,
       version: identity.version,
-      "User-Agent": formatCIVITASUserAgent(identity.version),
+      "User-Agent": formatOpenClawUserAgent(identity.version),
     },
   };
 }
@@ -465,7 +468,7 @@ export function resolveProviderRequestPolicy(
   const policy = resolveProviderAttributionPolicy(provider, env);
   const endpointResolution = resolveProviderEndpoint(input.baseUrl);
   const endpointClass = endpointResolution.endpointClass;
-  const api = input.api?.trim().toLowerCase();
+  const api = normalizeOptionalLowercaseString(input.api);
   const usesConfiguredBaseUrl = endpointClass !== "default";
   const usesKnownNativeOpenAIEndpoint =
     endpointClass === "openai-public" ||
@@ -535,8 +538,8 @@ export function resolveProviderRequestCapabilities(
 ): ProviderRequestCapabilities {
   const policy = resolveProviderRequestPolicy(input, env);
   const provider = policy.provider;
-  const api = input.api?.trim().toLowerCase();
-  const normalizedModelId = input.modelId?.trim().toLowerCase();
+  const api = normalizeOptionalLowercaseString(input.api);
+  const normalizedModelId = normalizeOptionalLowercaseString(input.modelId);
   const endpointClass = policy.endpointClass;
   const isKnownNativeEndpoint =
     endpointClass === "anthropic-public" ||
@@ -612,4 +615,59 @@ export function resolveProviderRequestCapabilities(
       endpointClass === "moonshot-native" || endpointClass === "modelstudio-native",
     compatibilityFamily,
   };
+}
+
+function describeProviderRequestRoutingPolicy(
+  policy: ProviderRequestPolicyResolution,
+): "hidden" | "documented" | "sdk-hook-only" | "none" {
+  if (!policy.attributionProvider) {
+    return "none";
+  }
+  switch (policy.policy?.verification) {
+    case "vendor-hidden-api-spec":
+      return "hidden";
+    case "vendor-documented":
+      return "documented";
+    case "vendor-sdk-hook-only":
+      return "sdk-hook-only";
+    default:
+      return "none";
+  }
+}
+
+function describeProviderRequestRouteClass(
+  policy: ProviderRequestPolicyResolution,
+): "default" | "native" | "proxy-like" | "local" | "invalid" {
+  if (policy.endpointClass === "default") {
+    return "default";
+  }
+  if (policy.endpointClass === "invalid") {
+    return "invalid";
+  }
+  if (policy.endpointClass === "local") {
+    return "local";
+  }
+  if (policy.endpointClass === "custom" || policy.endpointClass === "openrouter") {
+    return "proxy-like";
+  }
+  return "native";
+}
+
+export function describeProviderRequestRoutingSummary(
+  input: ProviderRequestPolicyInput,
+  env: RuntimeVersionEnv = process.env as RuntimeVersionEnv,
+): string {
+  const policy = resolveProviderRequestPolicy(input, env);
+  const api = normalizeOptionalLowercaseString(input.api) ?? "unknown";
+  const provider = policy.provider ?? "unknown";
+  const routeClass = describeProviderRequestRouteClass(policy);
+  const routingPolicy = describeProviderRequestRoutingPolicy(policy);
+
+  return [
+    `provider=${provider}`,
+    `api=${api}`,
+    `endpoint=${policy.endpointClass}`,
+    `route=${routeClass}`,
+    `policy=${routingPolicy}`,
+  ].join(" ");
 }
