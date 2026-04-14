@@ -9,10 +9,10 @@
     "express": "^5.2.1"
   },
   "devDependencies": {
-    "civitas": "workspace:*"
+    "civitas_manager_channels": "workspace:*"
   },
   "peerDependencies": {
-    "civitas": ">=2026.4.4"
+    "civitas": ">=1.0.0"
   },
   "peerDependenciesMeta": {
     "civitas": {
