@@ -1340,7 +1340,8 @@
       "@sinclair/typebox": "0.34.49",
       "tar": "7.5.13",
       "tough-cookie": "4.1.3",
-      "yauzl": "3.2.1"
+      "yauzl": "3.2.1",
+      "@whiskeysockets/libsignal-node": "file:./vendor-local/whiskeysockets-libsignal-node-2.0.1.tgz"
     },
     "onlyBuiltDependencies": [
       "@lydell/node-pty",
