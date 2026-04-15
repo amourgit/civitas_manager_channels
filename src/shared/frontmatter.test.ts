@@ -1,14 +1,14 @@
 import { describe, expect, it, test } from "vitest";
 import {
-  applyCIVITASManifestInstallCommonFields,
+  applyOpenClawManifestInstallCommonFields,
   getFrontmatterString,
   normalizeStringList,
   parseFrontmatterBool,
-  parseCIVITASManifestInstallBase,
-  resolveCIVITASManifestBlock,
-  resolveCIVITASManifestInstall,
-  resolveCIVITASManifestOs,
-  resolveCIVITASManifestRequires,
+  parseOpenClawManifestInstallBase,
+  resolveOpenClawManifestBlock,
+  resolveOpenClawManifestInstall,
+  resolveOpenClawManifestOs,
+  resolveOpenClawManifestRequires,
 } from "./frontmatter.js";
 
 describe("shared/frontmatter", () => {
@@ -30,62 +30,62 @@ describe("shared/frontmatter", () => {
     expect(parseFrontmatterBool("maybe", false)).toBe(false);
   });
 
-  test("resolveCIVITASManifestBlock reads current manifest keys and custom metadata fields", () => {
+  test("resolveOpenClawManifestBlock reads current manifest keys and custom metadata fields", () => {
     expect(
-      resolveCIVITASManifestBlock({
+      resolveOpenClawManifestBlock({
         frontmatter: {
-          metadata: "{ civitas: { foo: 1, bar: 'baz' } }",
+          metadata: "{ openclaw: { foo: 1, bar: 'baz' } }",
         },
       }),
     ).toEqual({ foo: 1, bar: "baz" });
 
     expect(
-      resolveCIVITASManifestBlock({
+      resolveOpenClawManifestBlock({
         frontmatter: {
-          pluginMeta: "{ civitas: { foo: 2 } }",
+          pluginMeta: "{ openclaw: { foo: 2 } }",
         },
         key: "pluginMeta",
       }),
     ).toEqual({ foo: 2 });
   });
 
-  test("resolveCIVITASManifestBlock returns undefined for invalid input", () => {
-    expect(resolveCIVITASManifestBlock({ frontmatter: {} })).toBeUndefined();
+  test("resolveOpenClawManifestBlock returns undefined for invalid input", () => {
+    expect(resolveOpenClawManifestBlock({ frontmatter: {} })).toBeUndefined();
     expect(
-      resolveCIVITASManifestBlock({ frontmatter: { metadata: "not-json5" } }),
+      resolveOpenClawManifestBlock({ frontmatter: { metadata: "not-json5" } }),
     ).toBeUndefined();
-    expect(resolveCIVITASManifestBlock({ frontmatter: { metadata: "123" } })).toBeUndefined();
-    expect(resolveCIVITASManifestBlock({ frontmatter: { metadata: "[]" } })).toBeUndefined();
+    expect(resolveOpenClawManifestBlock({ frontmatter: { metadata: "123" } })).toBeUndefined();
+    expect(resolveOpenClawManifestBlock({ frontmatter: { metadata: "[]" } })).toBeUndefined();
     expect(
-      resolveCIVITASManifestBlock({ frontmatter: { metadata: "{ nope: { a: 1 } }" } }),
+      resolveOpenClawManifestBlock({ frontmatter: { metadata: "{ nope: { a: 1 } }" } }),
     ).toBeUndefined();
   });
 
   it("normalizes manifest requirement and os lists", () => {
     expect(
-      resolveCIVITASManifestRequires({
+      resolveOpenClawManifestRequires({
         requires: {
           bins: "bun, node",
           anyBins: [" ffmpeg ", ""],
-          env: ["CIVITAS_TOKEN", " CIVITAS_URL "],
+          env: ["OPENCLAW_TOKEN", " OPENCLAW_URL "],
           config: null,
         },
       }),
     ).toEqual({
       bins: ["bun", "node"],
       anyBins: ["ffmpeg"],
-      env: ["CIVITAS_TOKEN", "CIVITAS_URL"],
+      env: ["OPENCLAW_TOKEN", "OPENCLAW_URL"],
       config: [],
     });
-    expect(resolveCIVITASManifestRequires({})).toBeUndefined();
-    expect(resolveCIVITASManifestOs({ os: [" darwin ", "linux", ""] })).toEqual([
+    expect(resolveOpenClawManifestRequires({})).toBeUndefined();
+    expect(resolveOpenClawManifestOs({ os: [" darwin ", "linux", ""] })).toEqual([
       "darwin",
       "linux",
     ]);
   });
 
   it("parses and applies install common fields", () => {
-    const parsed = parseCIVITASManifestInstallBase(
+    const parsed = parseOpenClawManifestInstallBase(
       {
         type: " Brew ",
         id: "brew.git",
@@ -107,9 +107,9 @@ describe("shared/frontmatter", () => {
       label: "Git",
       bins: ["git", "git"],
     });
-    expect(parseCIVITASManifestInstallBase({ kind: "bad" }, ["brew"])).toBeUndefined();
+    expect(parseOpenClawManifestInstallBase({ kind: "bad" }, ["brew"])).toBeUndefined();
     expect(
-      applyCIVITASManifestInstallCommonFields<{
+      applyOpenClawManifestInstallCommonFields<{
         extra: boolean;
         id?: string;
         label?: string;
@@ -124,7 +124,7 @@ describe("shared/frontmatter", () => {
   });
 
   it("prefers explicit kind, ignores invalid common fields, and leaves missing ones untouched", () => {
-    const parsed = parseCIVITASManifestInstallBase(
+    const parsed = parseOpenClawManifestInstallBase(
       {
         kind: " npm ",
         type: "brew",
@@ -146,7 +146,7 @@ describe("shared/frontmatter", () => {
       kind: "npm",
     });
     expect(
-      applyCIVITASManifestInstallCommonFields(
+      applyOpenClawManifestInstallCommonFields(
         { id: "keep", label: "Keep", bins: ["bun"] },
         parsed!,
       ),
@@ -159,7 +159,7 @@ describe("shared/frontmatter", () => {
 
   it("maps install entries through the parser and filters rejected specs", () => {
     expect(
-      resolveCIVITASManifestInstall(
+      resolveOpenClawManifestInstall(
         {
           install: [{ id: "keep" }, { id: "drop" }, "bad"],
         },

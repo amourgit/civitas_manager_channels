@@ -21,25 +21,25 @@ const ROOT_COMMANDS_HINT =
   "Hint: commands suffixed with * have subcommands. Run <command> --help for details.";
 
 const EXAMPLES = [
-  ["civitas models --help", "Show detailed help for the models command."],
+  ["openclaw models --help", "Show detailed help for the models command."],
   [
-    "civitas channels login --verbose",
+    "openclaw channels login --verbose",
     "Link personal WhatsApp Web and show QR + connection logs.",
   ],
   [
-    'civitas message send --target +15555550123 --message "Hi" --json',
+    'openclaw message send --target +15555550123 --message "Hi" --json',
     "Send via your web session and print JSON result.",
   ],
-  ["civitas gateway --port 18789", "Run the WebSocket Gateway locally."],
-  ["civitas --dev gateway", "Run a dev Gateway (isolated state/config) on ws://127.0.0.1:19001."],
-  ["civitas gateway --force", "Kill anything bound to the default gateway port, then start it."],
-  ["civitas gateway ...", "Gateway control via WebSocket."],
+  ["openclaw gateway --port 18789", "Run the WebSocket Gateway locally."],
+  ["openclaw --dev gateway", "Run a dev Gateway (isolated state/config) on ws://127.0.0.1:19001."],
+  ["openclaw gateway --force", "Kill anything bound to the default gateway port, then start it."],
+  ["openclaw gateway ...", "Gateway control via WebSocket."],
   [
-    'civitas agent --to +15555550123 --message "Run summary" --deliver',
+    'openclaw agent --to +15555550123 --message "Run summary" --deliver',
     "Talk directly to the agent using the Gateway; optionally send the WhatsApp reply.",
   ],
   [
-    'civitas message send --channel telegram --target @mychat --message "Hi"',
+    'openclaw message send --channel telegram --target @mychat --message "Hi"',
     "Send via your Telegram bot.",
   ],
 ] as const;
@@ -51,15 +51,15 @@ export function configureProgramHelp(program: Command, ctx: ProgramContext) {
     .version(ctx.programVersion)
     .option(
       "--container <name>",
-      "Run the CLI inside a running Podman/Docker container named <name> (default: env CIVITAS_CONTAINER)",
+      "Run the CLI inside a running Podman/Docker container named <name> (default: env OPENCLAW_CONTAINER)",
     )
     .option(
       "--dev",
-      "Dev profile: isolate state under ~/.civitas-dev, default gateway port 19001, and shift derived ports (browser/canvas)",
+      "Dev profile: isolate state under ~/.openclaw-dev, default gateway port 19001, and shift derived ports (browser/canvas)",
     )
     .option(
       "--profile <name>",
-      "Use a named profile (isolates CIVITAS_STATE_DIR/CIVITAS_CONFIG_PATH under ~/.civitas-<name>)",
+      "Use a named profile (isolates OPENCLAW_STATE_DIR/OPENCLAW_CONFIG_PATH under ~/.openclaw-<name>)",
     )
     .option(
       "--log-level <level>",
@@ -116,7 +116,7 @@ export function configureProgramHelp(program: Command, ctx: ProgramContext) {
   ) {
     const commit = resolveCommitHash({ moduleUrl: import.meta.url });
     console.log(
-      commit ? `CIVITAS ${ctx.programVersion} (${commit})` : `CIVITAS ${ctx.programVersion}`,
+      commit ? `OpenClaw ${ctx.programVersion} (${commit})` : `OpenClaw ${ctx.programVersion}`,
     );
     process.exit(0);
   }
@@ -138,7 +138,7 @@ export function configureProgramHelp(program: Command, ctx: ProgramContext) {
     if (command !== program) {
       return "";
     }
-    const docs = formatDocsLink("/cli", "docs.civitas.ai/cli");
+    const docs = formatDocsLink("/cli", "docs.openclaw.ai/cli");
     return `\n${theme.heading("Examples:")}\n${fmtExamples}\n\n${theme.muted("Docs:")} ${docs}\n`;
   });
 }

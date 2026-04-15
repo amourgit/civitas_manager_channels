@@ -31,7 +31,7 @@ export function parseFrontmatterBool(value: string | undefined, fallback: boolea
   return parsed === undefined ? fallback : parsed;
 }
 
-export function resolveCIVITASManifestBlock(params: {
+export function resolveOpenClawManifestBlock(params: {
   frontmatter: Record<string, unknown>;
   key?: string;
 }): Record<string, unknown> | undefined {
@@ -59,16 +59,16 @@ export function resolveCIVITASManifestBlock(params: {
   }
 }
 
-export type CIVITASManifestRequires = {
+export type OpenClawManifestRequires = {
   bins: string[];
   anyBins: string[];
   env: string[];
   config: string[];
 };
 
-export function resolveCIVITASManifestRequires(
+export function resolveOpenClawManifestRequires(
   metadataObj: Record<string, unknown>,
-): CIVITASManifestRequires | undefined {
+): OpenClawManifestRequires | undefined {
   const requiresRaw =
     typeof metadataObj.requires === "object" && metadataObj.requires !== null
       ? (metadataObj.requires as Record<string, unknown>)
@@ -84,7 +84,7 @@ export function resolveCIVITASManifestRequires(
   };
 }
 
-export function resolveCIVITASManifestInstall<T>(
+export function resolveOpenClawManifestInstall<T>(
   metadataObj: Record<string, unknown>,
   parseInstallSpec: (input: unknown) => T | undefined,
 ): T[] {
@@ -94,11 +94,11 @@ export function resolveCIVITASManifestInstall<T>(
     .filter((entry): entry is T => Boolean(entry));
 }
 
-export function resolveCIVITASManifestOs(metadataObj: Record<string, unknown>): string[] {
+export function resolveOpenClawManifestOs(metadataObj: Record<string, unknown>): string[] {
   return normalizeStringList(metadataObj.os);
 }
 
-export type ParsedCIVITASManifestInstallBase = {
+export type ParsedOpenClawManifestInstallBase = {
   raw: Record<string, unknown>;
   kind: string;
   id?: string;
@@ -106,10 +106,10 @@ export type ParsedCIVITASManifestInstallBase = {
   bins?: string[];
 };
 
-export function parseCIVITASManifestInstallBase(
+export function parseOpenClawManifestInstallBase(
   input: unknown,
   allowedKinds: readonly string[],
-): ParsedCIVITASManifestInstallBase | undefined {
+): ParsedOpenClawManifestInstallBase | undefined {
   if (!input || typeof input !== "object") {
     return undefined;
   }
@@ -121,7 +121,7 @@ export function parseCIVITASManifestInstallBase(
     return undefined;
   }
 
-  const spec: ParsedCIVITASManifestInstallBase = {
+  const spec: ParsedOpenClawManifestInstallBase = {
     raw,
     kind,
   };
@@ -138,9 +138,9 @@ export function parseCIVITASManifestInstallBase(
   return spec;
 }
 
-export function applyCIVITASManifestInstallCommonFields<
+export function applyOpenClawManifestInstallCommonFields<
   T extends { id?: string; label?: string; bins?: string[] },
->(spec: T, parsed: Pick<ParsedCIVITASManifestInstallBase, "id" | "label" | "bins">): T {
+>(spec: T, parsed: Pick<ParsedOpenClawManifestInstallBase, "id" | "label" | "bins">): T {
   if (parsed.id) {
     spec.id = parsed.id;
   }

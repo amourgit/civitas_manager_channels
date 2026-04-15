@@ -43,11 +43,11 @@ describe("root help", () => {
     const config = {
       agents: {
         defaults: {
-          workspace: "/tmp/civitas-root-help-workspace",
+          workspace: "/tmp/openclaw-root-help-workspace",
         },
       },
     };
-    const env = { CIVITAS_STATE_DIR: "/tmp/civitas-root-help-state" } as NodeJS.ProcessEnv;
+    const env = { OPENCLAW_STATE_DIR: "/tmp/openclaw-root-help-state" } as NodeJS.ProcessEnv;
 
     await renderRootHelpText({ config, env, pluginSdkResolution: "src" });
 

@@ -47,20 +47,20 @@ describe("shared/node-match", () => {
     ).toBe("mac-studio");
   });
 
-  it("prefers a unique current CIVITAS client over a legacy CIVITAS Channeldbot client", () => {
+  it("prefers a unique current OpenClaw client over a legacy clawdbot client", () => {
     expect(
       resolveNodeIdFromCandidates(
         [
           {
             nodeId: "legacy-mac",
             displayName: "Peter’s Mac Studio",
-            clientId: "CIVITAS Channeldbot-macos",
+            clientId: "clawdbot-macos",
             connected: false,
           },
           {
             nodeId: "current-mac",
             displayName: "Peter’s Mac Studio",
-            clientId: "civitas-macos",
+            clientId: "openclaw-macos",
             connected: false,
           },
         ],
@@ -112,26 +112,26 @@ describe("shared/node-match", () => {
           {
             nodeId: "legacy-mac",
             displayName: "Peter’s Mac Studio",
-            clientId: "CIVITAS Channeldbot-macos",
+            clientId: "clawdbot-macos",
             connected: true,
           },
           {
             nodeId: "other-mac",
             displayName: "Peter’s Mac Studio",
-            clientId: "civitas-macos",
+            clientId: "openclaw-macos",
             connected: true,
           },
           {
             nodeId: "third-mac",
             displayName: "Peter’s Mac Studio",
-            clientId: "civitas-macos",
+            clientId: "openclaw-macos",
             connected: true,
           },
         ],
         "Peter's Mac Studio",
       ),
     ).toThrow(
-      /ambiguous node: Peter's Mac Studio.*node=other-mac.*client=civitas-macos.*node=third-mac.*client=civitas-macos/,
+      /ambiguous node: Peter's Mac Studio.*node=other-mac.*client=openclaw-macos.*node=third-mac.*client=openclaw-macos/,
     );
   });
 

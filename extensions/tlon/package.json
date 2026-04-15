@@ -12,15 +12,7 @@
   "devDependencies": {
     "civitas_manager_channels": "workspace:*"
   },
-  "peerDependencies": {
-    "civitas": ">=1.0.0"
-  },
-  "peerDependenciesMeta": {
     "civitas": {
-      "optional": true
-    }
-  },
-  "civitas": {
     "extensions": [
       "./index.ts"
     ],

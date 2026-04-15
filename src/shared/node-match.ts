@@ -36,24 +36,24 @@ function formatNodeCandidateLabel(node: NodeMatchCandidate): string {
   return `${label} [${details.join(", ")}]`;
 }
 
-function isCurrentCIVITASClient(clientId: string | undefined): boolean {
+function isCurrentOpenClawClient(clientId: string | undefined): boolean {
   const normalized = clientId?.trim().toLowerCase() ?? "";
-  return normalized.startsWith("civitas-");
+  return normalized.startsWith("openclaw-");
 }
 
-function isLegacyChanneldbotClient(clientId: string | undefined): boolean {
+function isLegacyClawdbotClient(clientId: string | undefined): boolean {
   const normalized = clientId?.trim().toLowerCase() ?? "";
-  return normalized.startsWith("CIVITAS Channeldbot-") || normalized.startsWith("moldbot-");
+  return normalized.startsWith("clawdbot-") || normalized.startsWith("moldbot-");
 }
 
 function pickPreferredLegacyMigrationMatch(
   matches: NodeMatchCandidate[],
 ): NodeMatchCandidate | undefined {
-  const current = matches.filter((match) => isCurrentCIVITASClient(match.clientId));
+  const current = matches.filter((match) => isCurrentOpenClawClient(match.clientId));
   if (current.length !== 1) {
     return undefined;
   }
-  const legacyCount = matches.filter((match) => isLegacyChanneldbotClient(match.clientId)).length;
+  const legacyCount = matches.filter((match) => isLegacyClawdbotClient(match.clientId)).length;
   if (legacyCount === 0 || current.length + legacyCount !== matches.length) {
     return undefined;
   }
@@ -86,9 +86,9 @@ function scoreNodeCandidate(node: NodeMatchCandidate, matchScore: number): numbe
   if (node.connected === true) {
     score += 100;
   }
-  if (isCurrentCIVITASClient(node.clientId)) {
+  if (isCurrentOpenClawClient(node.clientId)) {
     score += 10;
-  } else if (isLegacyChanneldbotClient(node.clientId)) {
+  } else if (isLegacyClawdbotClient(node.clientId)) {
     score -= 10;
   }
   return score;

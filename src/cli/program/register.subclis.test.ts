@@ -34,7 +34,7 @@ vi.mock("../../config/config.js", () => configModule);
 
 describe("registerSubCliCommands", () => {
   const originalArgv = process.argv;
-  const originalDisableLazySubcommands = process.env.CIVITAS_DISABLE_LAZY_SUBCOMMANDS;
+  const originalDisableLazySubcommands = process.env.OPENCLAW_DISABLE_LAZY_SUBCOMMANDS;
 
   const createRegisteredProgram = (argv: string[], name?: string) => {
     process.argv = argv;
@@ -48,9 +48,9 @@ describe("registerSubCliCommands", () => {
 
   beforeEach(() => {
     if (originalDisableLazySubcommands === undefined) {
-      delete process.env.CIVITAS_DISABLE_LAZY_SUBCOMMANDS;
+      delete process.env.OPENCLAW_DISABLE_LAZY_SUBCOMMANDS;
     } else {
-      process.env.CIVITAS_DISABLE_LAZY_SUBCOMMANDS = originalDisableLazySubcommands;
+      process.env.OPENCLAW_DISABLE_LAZY_SUBCOMMANDS = originalDisableLazySubcommands;
     }
     registerAcpCli.mockClear();
     acpAction.mockClear();
@@ -63,14 +63,14 @@ describe("registerSubCliCommands", () => {
   afterEach(() => {
     process.argv = originalArgv;
     if (originalDisableLazySubcommands === undefined) {
-      delete process.env.CIVITAS_DISABLE_LAZY_SUBCOMMANDS;
+      delete process.env.OPENCLAW_DISABLE_LAZY_SUBCOMMANDS;
     } else {
-      process.env.CIVITAS_DISABLE_LAZY_SUBCOMMANDS = originalDisableLazySubcommands;
+      process.env.OPENCLAW_DISABLE_LAZY_SUBCOMMANDS = originalDisableLazySubcommands;
     }
   });
 
   it("registers only the primary placeholder and dispatches", async () => {
-    const program = createRegisteredProgram(["node", "civitas", "acp"]);
+    const program = createRegisteredProgram(["node", "openclaw", "acp"]);
 
     expect(program.commands.map((cmd) => cmd.name())).toEqual(["acp"]);
 
@@ -81,12 +81,12 @@ describe("registerSubCliCommands", () => {
   });
 
   it("registers placeholders for all subcommands when no primary", () => {
-    const program = createRegisteredProgram(["node", "civitas"]);
+    const program = createRegisteredProgram(["node", "openclaw"]);
 
     const names = program.commands.map((cmd) => cmd.name());
     expect(names).toContain("acp");
     expect(names).toContain("gateway");
-    expect(names).toContain("CIVITAS Channelbot");
+    expect(names).toContain("clawbot");
     expect(registerAcpCli).not.toHaveBeenCalled();
   });
 
@@ -113,7 +113,7 @@ describe("registerSubCliCommands", () => {
   });
 
   it("re-parses argv for lazy subcommands", async () => {
-    const program = createRegisteredProgram(["node", "civitas", "nodes", "list"], "civitas");
+    const program = createRegisteredProgram(["node", "openclaw", "nodes", "list"], "openclaw");
 
     expect(program.commands.map((cmd) => cmd.name())).toEqual(["nodes"]);
 
@@ -124,7 +124,7 @@ describe("registerSubCliCommands", () => {
   });
 
   it("replaces placeholder when registering a subcommand by name", async () => {
-    const program = createRegisteredProgram(["node", "civitas", "acp", "--help"], "civitas");
+    const program = createRegisteredProgram(["node", "openclaw", "acp", "--help"], "openclaw");
 
     await registerSubCliByName(program, "acp");
 
