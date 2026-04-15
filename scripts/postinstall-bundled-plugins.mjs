@@ -124,6 +124,8 @@ function shouldRunBundledPluginPostinstall(params) {
   return true;
 }
 
+export { isSourceCheckoutRoot };
+
 export function runBundledPluginPostinstall(params = {}) {
   const env = params.env ?? process.env;
   const extensionsDir = params.extensionsDir ?? DEFAULT_EXTENSIONS_DIR;
