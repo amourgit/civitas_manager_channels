@@ -64,7 +64,6 @@
   "windows-spawn",
   "acp-runtime",
   "lazy-runtime",
-  "testing",
   "temp-path",
   "logging-core",
   "markdown-table-runtime",
