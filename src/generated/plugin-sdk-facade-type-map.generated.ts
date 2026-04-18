@@ -17,6 +17,9 @@ type AnyModule = Record<string, any>;
 
 type FacadeEntry<T extends AnyModule = AnyModule> = {
   module: T;
+  // "types" field: provides type-level access to module exports for plugin-sdk facades
+  // Used by browser-runtime.ts, browser-host-inspection.ts etc. via FacadeEntry["types"]["X"]
+  types: T;
 };
 
 /**

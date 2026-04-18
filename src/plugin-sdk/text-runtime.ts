@@ -47,3 +47,5 @@ export {
   sliceUtf16Safe,
   truncateUtf16Safe,
 } from "../utils.js";
+
+export * from "../shared/string-coerce.js";
