@@ -93,7 +93,7 @@ function resolvePluginUninstallId(params: {
   if (requestedChannelHub) {
     for (const [pluginId, install] of Object.entries(params.config.plugins?.installs ?? {})) {
       const installedChannelHubName =
-        install.CIVITAS ChannelhubPackage ??
+        install.clawhubPackage ??
         parseChannelHubPluginSpec(install.spec ?? "")?.name ??
         parseChannelHubPluginSpec(install.resolvedSpec ?? "")?.name;
       if (installedChannelHubName === requestedChannelHub.name) {

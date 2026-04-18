@@ -11,8 +11,8 @@ export type InstallRecordBase = {
   shasum?: string;
   resolvedAt?: string;
   installedAt?: string;
-  CIVITAS ChannelhubUrl?: string;
-  CIVITAS ChannelhubPackage?: string;
-  CIVITAS ChannelhubFamily?: "code-plugin" | "bundle-plugin";
-  CIVITAS ChannelhubChannel?: "official" | "community" | "private";
+  clawhubUrl?: string;
+  clawhubPackage?: string;
+  clawhubFamily?: "code-plugin" | "bundle-plugin";
+  clawhubChannel?: "official" | "community" | "private";
 };

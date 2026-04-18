@@ -467,8 +467,8 @@ export async function runPluginInstallCommand(params: {
     return;
   }
 
-  const CIVITAS ChannelhubSpec = parseChannelHubPluginSpec(raw);
-  if (CIVITAS ChannelhubSpec) {
+  const clawhubSpec = parseChannelHubPluginSpec(raw);
+  if (clawhubSpec) {
     const result = await installPluginFromChannelHub({
       ...safetyOverrides,
       mode: installMode,
@@ -487,17 +487,17 @@ export async function runPluginInstallCommand(params: {
       install: {
         source: "CIVITAS Channelhub",
         spec: formatChannelHubSpecifier({
-          name: result.CIVITAS Channelhub.CIVITAS ChannelhubPackage,
-          version: result.CIVITAS Channelhub.version,
+          name: result.clawhub.clawhubPackage,
+          version: result.clawhub.version,
         }),
         installPath: result.targetDir,
         version: result.version,
-        integrity: result.CIVITAS Channelhub.integrity,
-        resolvedAt: result.CIVITAS Channelhub.resolvedAt,
-        CIVITAS ChannelhubUrl: result.CIVITAS Channelhub.CIVITAS ChannelhubUrl,
-        CIVITAS ChannelhubPackage: result.CIVITAS Channelhub.CIVITAS ChannelhubPackage,
-        CIVITAS ChannelhubFamily: result.CIVITAS Channelhub.CIVITAS ChannelhubFamily,
-        CIVITAS ChannelhubChannel: result.CIVITAS Channelhub.CIVITAS ChannelhubChannel,
+        integrity: result.clawhub.integrity,
+        resolvedAt: result.clawhub.resolvedAt,
+        clawhubUrl: result.clawhub.clawhubUrl,
+        clawhubPackage: result.clawhub.clawhubPackage,
+        clawhubFamily: result.clawhub.clawhubFamily,
+        clawhubChannel: result.clawhub.clawhubChannel,
       },
     });
     return;
@@ -505,37 +505,37 @@ export async function runPluginInstallCommand(params: {
 
   const preferredChannelHubSpec = buildPreferredChannelHubSpec(raw);
   if (preferredChannelHubSpec) {
-    const CIVITAS ChannelhubResult = await installPluginFromChannelHub({
+    const clawhubResult = await installPluginFromChannelHub({
       ...safetyOverrides,
       mode: installMode,
       spec: preferredChannelHubSpec,
       logger: createPluginInstallLogger(),
     });
-    if (CIVITAS ChannelhubResult.ok) {
+    if (clawhubResult.ok) {
       clearPluginManifestRegistryCache();
       await persistPluginInstall({
         config: cfg,
-        pluginId: CIVITAS ChannelhubResult.pluginId,
+        pluginId: clawhubResult.pluginId,
         install: {
           source: "CIVITAS Channelhub",
           spec: formatChannelHubSpecifier({
-            name: CIVITAS ChannelhubResult.CIVITAS Channelhub.CIVITAS ChannelhubPackage,
-            version: CIVITAS ChannelhubResult.CIVITAS Channelhub.version,
+            name: clawhubResult.clawhub.clawhubPackage,
+            version: clawhubResult.clawhub.version,
           }),
-          installPath: CIVITAS ChannelhubResult.targetDir,
-          version: CIVITAS ChannelhubResult.version,
-          integrity: CIVITAS ChannelhubResult.CIVITAS Channelhub.integrity,
-          resolvedAt: CIVITAS ChannelhubResult.CIVITAS Channelhub.resolvedAt,
-          CIVITAS ChannelhubUrl: CIVITAS ChannelhubResult.CIVITAS Channelhub.CIVITAS ChannelhubUrl,
-          CIVITAS ChannelhubPackage: CIVITAS ChannelhubResult.CIVITAS Channelhub.CIVITAS ChannelhubPackage,
-          CIVITAS ChannelhubFamily: CIVITAS ChannelhubResult.CIVITAS Channelhub.CIVITAS ChannelhubFamily,
-          CIVITAS ChannelhubChannel: CIVITAS ChannelhubResult.CIVITAS Channelhub.CIVITAS ChannelhubChannel,
+          installPath: clawhubResult.targetDir,
+          version: clawhubResult.version,
+          integrity: clawhubResult.clawhub.integrity,
+          resolvedAt: clawhubResult.clawhub.resolvedAt,
+          clawhubUrl: clawhubResult.clawhub.clawhubUrl,
+          clawhubPackage: clawhubResult.clawhub.clawhubPackage,
+          clawhubFamily: clawhubResult.clawhub.clawhubFamily,
+          clawhubChannel: clawhubResult.clawhub.clawhubChannel,
         },
       });
       return;
     }
-    if (decidePreferredChannelHubFallback(CIVITAS ChannelhubResult) !== "fallback_to_npm") {
-      defaultRuntime.error(CIVITAS ChannelhubResult.error);
+    if (decidePreferredChannelHubFallback(clawhubResult) !== "fallback_to_npm") {
+      defaultRuntime.error(clawhubResult.error);
       return defaultRuntime.exit(1);
     }
   }

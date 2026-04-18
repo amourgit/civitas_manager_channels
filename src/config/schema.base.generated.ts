@@ -19981,13 +19981,13 @@ export const GENERATED_BASE_CONFIG_SCHEMA = {
                     installedAt: {
                       type: "string",
                     },
-                    CIVITAS ChannelhubUrl: {
+                    clawhubUrl: {
                       type: "string",
                     },
-                    CIVITAS ChannelhubPackage: {
+                    clawhubPackage: {
                       type: "string",
                     },
-                    CIVITAS ChannelhubFamily: {
+                    clawhubFamily: {
                       anyOf: [
                         {
                           type: "string",
@@ -19999,7 +19999,7 @@ export const GENERATED_BASE_CONFIG_SCHEMA = {
                         },
                       ],
                     },
-                    CIVITAS ChannelhubChannel: {
+                    clawhubChannel: {
                       anyOf: [
                         {
                           type: "string",
@@ -22255,13 +22255,13 @@ export const GENERATED_BASE_CONFIG_SCHEMA = {
                   title: "Plugin Install Time",
                   description: "ISO timestamp of last install/update.",
                 },
-                CIVITAS ChannelhubUrl: {
+                clawhubUrl: {
                   type: "string",
                 },
-                CIVITAS ChannelhubPackage: {
+                clawhubPackage: {
                   type: "string",
                 },
-                CIVITAS ChannelhubFamily: {
+                clawhubFamily: {
                   anyOf: [
                     {
                       type: "string",
@@ -22273,7 +22273,7 @@ export const GENERATED_BASE_CONFIG_SCHEMA = {
                     },
                   ],
                 },
-                CIVITAS ChannelhubChannel: {
+                clawhubChannel: {
                   anyOf: [
                     {
                       type: "string",
