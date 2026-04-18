@@ -43,6 +43,30 @@ function pruneStaleRuntimeSymlinks() {
 
 pruneStaleRuntimeSymlinks();
 
+// npm package imports that are intentionally external (neverBundle) and not installed
+// in this channel-manager scope. These produce warnings but are not fatal.
+const EXTERNAL_NPM_PACKAGE_PREFIXES = [
+  "openclaw/plugin-sdk",   // plugin-sdk subpath — resolved at runtime via package alias
+  "@anthropic-ai/",        // Anthropic SDK — agent-stack only
+  "@mariozechner/",        // Pi agent runtime — agent-stack only
+  "openai",                // OpenAI SDK — agent-stack only
+  "https-proxy-agent",     // proxy agent — optional infra dep
+];
+
+function isExternalNpmPackage(line) {
+  // Extract the module specifier from the warning line
+  const match = line.match(/Could not resolve '([^']+)'/);
+  if (!match) return false;
+  const specifier = match[1];
+  // Bare npm package: no leading ./ or ../ — treat as external
+  if (!specifier.startsWith(".") && !specifier.startsWith("/")) {
+    return EXTERNAL_NPM_PACKAGE_PREFIXES.some((prefix) => specifier.startsWith(prefix)) ||
+      // Any bare package specifier is an npm dep — not a fatal source-level issue
+      !specifier.includes("/") || specifier.startsWith("@");
+  }
+  return false;
+}
+
 function findFatalUnresolvedImport(lines) {
   for (const line of lines) {
     if (!UNRESOLVED_IMPORT_RE.test(line)) {
@@ -52,7 +76,8 @@ function findFatalUnresolvedImport(lines) {
     const normalizedLine = line.replace(ANSI_ESCAPE_RE, "");
     if (
       !normalizedLine.includes(BUNDLED_PLUGIN_PATH_PREFIX) &&
-      !normalizedLine.includes("node_modules/")
+      !normalizedLine.includes("node_modules/") &&
+      !isExternalNpmPackage(normalizedLine)
     ) {
       return normalizedLine;
     }
