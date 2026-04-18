@@ -2020,3 +2020,30 @@ export type OpenClawPluginApi = {
 
 // Plugin hook contracts now live in hook-types.ts so hook runners can import a
 // leaf contract surface instead of pulling the full plugin runtime barrel.
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Aliases: CIVITAS-renamed types → original OpenClaw names
+// (for files copied from openclaw that use CIVITAS-prefixed type names)
+// ─────────────────────────────────────────────────────────────────────────────
+export type CIVITASPluginApi = OpenClawPluginApi;
+export type CIVITASPluginChannelRegistration = OpenClawPluginChannelRegistration;
+export type CIVITASPluginCliCommandDescriptor = OpenClawPluginCliCommandDescriptor;
+export type CIVITASPluginCliContext = OpenClawPluginCliContext;
+export type CIVITASPluginCliRegistrar = OpenClawPluginCliRegistrar;
+export type CIVITASPluginCommandDefinition = OpenClawPluginCommandDefinition;
+export type CIVITASPluginConfigSchema = OpenClawPluginConfigSchema;
+export type CIVITASPluginDefinition = OpenClawPluginDefinition;
+export type CIVITASPluginGatewayMethod = OpenClawPluginGatewayMethod;
+export type CIVITASPluginGatewayRuntimeScopeSurface = OpenClawPluginGatewayRuntimeScopeSurface;
+export type CIVITASPluginHttpRouteAuth = OpenClawPluginHttpRouteAuth;
+export type CIVITASPluginHttpRouteHandler = OpenClawPluginHttpRouteHandler;
+export type CIVITASPluginHttpRouteMatch = OpenClawPluginHttpRouteMatch;
+export type CIVITASPluginHttpRouteParams = OpenClawPluginHttpRouteParams;
+export type CIVITASPluginModule = OpenClawPluginModule;
+export type CIVITASPluginNodeHostCommand = OpenClawPluginNodeHostCommand;
+export type CIVITASPluginReloadRegistration = OpenClawPluginReloadRegistration;
+export type CIVITASPluginSecurityAuditCollector = OpenClawPluginSecurityAuditCollector;
+export type CIVITASPluginSecurityAuditContext = OpenClawPluginSecurityAuditContext;
+export type CIVITASPluginService = OpenClawPluginService;
+export type CIVITASPluginServiceContext = OpenClawPluginServiceContext;
+export type CIVITASPluginToolContext = OpenClawPluginToolContext;

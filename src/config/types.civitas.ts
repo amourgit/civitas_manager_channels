@@ -172,3 +172,6 @@ export type ConfigFileSnapshot = {
   warnings: ConfigValidationIssue[];
   legacyIssues: LegacyConfigIssue[];
 };
+
+// Alias: CIVITASConfig → OpenClawConfig (backward compat)
+export type CIVITASConfig = OpenClawConfig;

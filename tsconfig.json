@@ -6,7 +6,12 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": ["DOM", "DOM.Iterable", "ES2023", "ScriptHost"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2023",
+      "ScriptHost"
+    ],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "noEmit": true,
@@ -18,13 +23,43 @@
     "target": "es2023",
     "useDefineForClassFields": false,
     "paths": {
-      "civitas/extension-api": ["./src/extensionAPI.ts"],
-      "civitas/plugin-sdk": ["./src/plugin-sdk/index.ts"],
-      "civitas/plugin-sdk/*": ["./src/plugin-sdk/*.ts"],
-      "civitas/plugin-sdk/account-id": ["./src/plugin-sdk/account-id.ts"],
-      "@civitas/*": ["./extensions/*"]
+      "civitas/extension-api": [
+        "./src/extensionAPI.ts"
+      ],
+      "civitas/plugin-sdk": [
+        "./src/plugin-sdk/index.ts"
+      ],
+      "civitas/plugin-sdk/*": [
+        "./src/plugin-sdk/*.ts"
+      ],
+      "civitas/plugin-sdk/account-id": [
+        "./src/plugin-sdk/account-id.ts"
+      ],
+      "@civitas/*": [
+        "./extensions/*"
+      ],
+      "openclaw/plugin-sdk": [
+        "./src/plugin-sdk/index.ts"
+      ],
+      "openclaw/plugin-sdk/*": [
+        "./src/plugin-sdk/*.ts"
+      ],
+      "openclaw/extension-api": [
+        "./src/extensionAPI.ts"
+      ],
+      "@openclaw/*": [
+        "./extensions/*"
+      ]
     }
   },
-  "include": ["src/**/*", "ui/**/*", "extensions/**/*", "packages/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "src/**/*",
+    "ui/**/*",
+    "extensions/**/*",
+    "packages/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

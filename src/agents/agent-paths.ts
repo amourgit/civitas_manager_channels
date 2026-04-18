@@ -22,3 +22,6 @@ export function ensureOpenClawAgentEnv(): string {
   }
   return dir;
 }
+
+// Alias: resolveCIVITASAgentDir → resolveOpenClawAgentDir
+export const resolveCIVITASAgentDir = resolveOpenClawAgentDir;

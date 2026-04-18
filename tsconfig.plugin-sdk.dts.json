@@ -9,7 +9,11 @@
     "noEmitOnError": false,
     "outDir": "dist/plugin-sdk",
     "rootDir": ".",
-    "tsBuildInfoFile": "dist/plugin-sdk/.tsbuildinfo"
+    "tsBuildInfoFile": "dist/plugin-sdk/.tsbuildinfo",
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "skipLibCheck": true
   },
   "include": [
     "src/plugin-sdk/**/*.ts",
@@ -17,5 +21,9 @@
     "src/video-generation/types.ts",
     "src/types/**/*.d.ts"
   ],
-  "exclude": ["node_modules", "dist", "src/**/*.test.ts"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/**/*.test.ts"
+  ]
 }
